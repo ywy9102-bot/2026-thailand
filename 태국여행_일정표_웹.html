@@ -79,7 +79,7 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
   display:flex;align-items:center;gap:10px;transition:background .15s,border-color .15s;
 }
 .next-card:hover{background:rgba(255,255,255,.12);border-color:rgba(181,138,40,.5)}
-.nc-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;color:var(--gold);
+.nc-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;color:var(--gold);
   background:rgba(181,138,40,.18);padding:3px 8px;border-radius:99px;white-space:nowrap;flex:none}
 .nc-body{flex:1;display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden}
 .nc-e{font-size:16px;flex:none}
@@ -91,7 +91,7 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .stat{background:rgba(14,40,34,.5);padding:15px 10px 17px;text-align:center}
 .stat .n{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:#fff;line-height:1}
 .stat .n small{font-size:12px;font-weight:500;color:#BCCDC4;margin-left:1px}
-.stat .l{font-size:10.5px;color:#A5BAB0;margin-top:5px;letter-spacing:.01em}
+.stat .l{font-size:11.5px;color:#A5BAB0;margin-top:5px;letter-spacing:.01em}
 
 /* ══ NAV (bottom on mobile) ══ */
 nav.tabs{position:sticky;top:0;z-index:50;background:rgba(246,242,232,.94);
@@ -104,7 +104,7 @@ nav.tabs .wrap::-webkit-scrollbar{display:none}
 .tb .ico{font-size:15px;filter:grayscale(40%);opacity:.8;transition:filter .15s,opacity .15s}
 .tb.on{color:var(--jade-d);border-bottom-color:var(--gold)}
 .tb.on .ico{filter:none;opacity:1}
-.tb .badge-n{background:var(--coral);color:#fff;font-size:9.5px;font-weight:700;
+.tb .badge-n{background:var(--coral);color:#fff;font-size:10.5px;font-weight:700;
   padding:1px 6px;border-radius:99px;font-family:'IBM Plex Mono',monospace}
 
 main.wrap{padding-top:36px;min-height:56vh}
@@ -119,15 +119,16 @@ h2.sec .e{font-size:21px;line-height:1}
 .sec-row h2.sec{margin-bottom:0}
 .copy-btn{
   appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink2);
-  font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;padding:7px 13px;border-radius:99px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;padding:9px 15px;border-radius:99px;
   cursor:pointer;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;
+  display:inline-flex;align-items:center;justify-content:center;min-height:40px;
 }
 .copy-btn:hover{border-color:var(--gold);color:var(--jade-d);background:var(--gold-s)}
 .copy-btn.copied{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
 .sub{color:var(--ink2);font-size:13px;margin:0 0 22px;line-height:1.6}
 
 .chip{display:inline-flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;
-  font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px}
+  font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
 .chip.ok{background:var(--ok-s);color:var(--ok)}
 .chip.wait{background:var(--wait-s);color:var(--wait)}
 .chip.todo{background:var(--coral-s);color:var(--coral)}
@@ -139,12 +140,12 @@ h2.sec .e{font-size:21px;line-height:1}
 .fam-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .fam-t{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;
   background:var(--jade);color:#fff;padding:3px 9px;border-radius:6px;letter-spacing:.03em}
-.fam-c{font-size:10.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace}
+.fam-c{font-size:11.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace}
 .fam ul{list-style:none;margin:0;padding:0}
 .fam li{padding:8px 0;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .fam li:first-child{border-top:none}
 .nm{font-weight:600;font-size:14px;display:flex;align-items:center;gap:5px}
-.pd{font-size:10.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace;text-align:right}
+.pd{font-size:11.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace;text-align:right}
 
 /* ══ GOLF ══ */
 .golf-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px}
@@ -159,13 +160,13 @@ h2.sec .e{font-size:21px;line-height:1}
 .g-dt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;margin-bottom:3px}
 .g-nm{font-weight:700;font-size:15px;line-height:1.3}
 .g-price{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--jade-d);text-align:right;white-space:nowrap}
-.g-price small{display:block;font-size:10px;color:var(--ink3);font-weight:500;margin-top:2px}
+.g-price small{display:block;font-size:11px;color:var(--ink3);font-weight:500;margin-top:2px}
 .g-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
 .ppl{display:flex;flex-wrap:wrap;gap:4px}
-.av{font-size:10.5px;font-weight:600;background:var(--jade-s);color:var(--ink2);
-  padding:2px 8px 2px 6px;border-radius:99px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.av{font-size:11.5px;font-weight:600;background:var(--jade-s);color:var(--ink2);
+  padding:3px 9px 3px 7px;border-radius:99px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
 .pdot{width:6px;height:6px;border-radius:50%;flex:none;display:inline-block;box-shadow:0 0 0 1.5px rgba(255,255,255,.6)}
-.tee{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink3);margin-left:auto;white-space:nowrap}
+.tee{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink3);margin-left:auto;white-space:nowrap}
 
 .gcard-head{cursor:pointer}
 .g-toggle{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--gold);font-weight:700;
@@ -177,7 +178,7 @@ h2.sec .e{font-size:21px;line-height:1}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .gd-row{display:flex;gap:10px;align-items:baseline;padding:7px 0;font-size:12px;border-top:1px dashed var(--line)}
 .gd-row:first-child{border-top:none}
-.gd-k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);flex:none;width:52px}
+.gd-k{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);flex:none;width:58px}
 .gd-v{color:var(--ink2);flex:1}
 a.gd-v{color:var(--jade);font-weight:600;text-decoration:none}
 a.gd-v:hover{text-decoration:underline}
@@ -186,14 +187,20 @@ a.gd-v:hover{text-decoration:underline}
 .mx-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
 table.mx{width:100%;border-collapse:collapse;font-size:11.5px}
 table.mx th{background:var(--jade-s);padding:9px 5px;font-weight:700;color:var(--jade-d);
-  font-size:10.5px;text-align:center;border-bottom:1px solid var(--line)}
+  font-size:11px;text-align:center;border-bottom:1px solid var(--line)}
 table.mx th:first-child{text-align:left;padding-left:12px;position:sticky;left:0;background:var(--jade-s);z-index:2}
 table.mx td{padding:8px 5px;text-align:center;border-bottom:1px solid var(--line);font-size:13px}
+table.mx th:first-child,table.mx td:first-child{width:84px}
 table.mx td:first-child{text-align:left;padding-left:12px;font-weight:600;font-size:12px;
   position:sticky;left:0;background:var(--card);z-index:1;white-space:nowrap}
+table.mx .mx-cnt{position:sticky;left:84px;z-index:1;text-align:center;
+  font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;
+  background:var(--card);color:var(--jade-d);box-shadow:1px 0 0 var(--line)}
+table.mx thead .mx-cnt{background:var(--jade-s);z-index:2}
+table.mx tfoot .mx-cnt{background:var(--paper)}
 table.mx tr:last-child td{border-bottom:none}
 table.mx tr:hover td{background:rgba(30,75,65,.035)}
-table.mx tr:hover td:first-child{background:#F7F5EE}
+table.mx tr:hover td:first-child,table.mx tr:hover .mx-cnt{background:#F7F5EE}
 table.mx .no{color:#E0DACC}
 .mdot{display:inline-block;width:14px;height:14px;border-radius:50%;
   box-shadow:0 0 0 1.5px rgba(255,255,255,.7), inset 0 0 0 1px rgba(0,0,0,.05)}
@@ -232,12 +239,12 @@ a.g-nm.maddr:hover{color:var(--jade-d)}
 .day:last-child{border-bottom:none}
 .dbox{text-align:center}
 .dn{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--jade-d);line-height:1}
-.dw{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);margin-top:3px}
+.dw{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);margin-top:3px}
 .day.s-ok .dn{color:var(--ok)} .day.s-wait .dn{color:var(--wait)} .day.s-todo .dn{color:var(--coral)}
 .de{font-size:17px;text-align:center;line-height:1.2}
 .dt{font-size:14px;font-weight:700;line-height:1.4}
-.dloc{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);
-  text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.dloc{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
 .dnote{font-size:12px;color:var(--ink2);margin-top:2px;line-height:1.7}
 .dnote .pdot{margin-right:3px;vertical-align:middle}
 .dx{font-size:11.5px;color:var(--coral);margin-top:5px;line-height:1.5;display:flex;gap:5px}
@@ -265,7 +272,7 @@ a.g-nm.maddr:hover{color:var(--jade-d)}
 .bar-track{height:7px;background:var(--jade-s);border-radius:99px;overflow:hidden}
 .bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--jade) 0%,#3C7D6C 100%);
   transition:width 1s cubic-bezier(.16,1,.3,1)}
-.bar-brk{font-size:10.5px;color:var(--ink3);margin-top:6px;font-family:'IBM Plex Mono',monospace;display:flex;justify-content:space-between;align-items:center}
+.bar-brk{font-size:11.5px;color:var(--ink3);margin-top:6px;font-family:'IBM Plex Mono',monospace;display:flex;justify-content:space-between;align-items:center}
 .bar-brk .chev{font-size:9px;transition:transform .2s ease}
 .bar-row.open .bar-brk .chev{transform:rotate(180deg)}
 .bar-detail{display:none;padding:0 14px 12px;border-top:1px dashed var(--line)}
@@ -276,8 +283,8 @@ a.g-nm.maddr:hover{color:var(--jade-d)}
 .stbl{font-weight:700;font-size:14px;margin:24px 0 9px;display:flex;align-items:center;gap:7px}
 .stbl .i{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:11.5px}
 table.d{width:100%;border-collapse:collapse;font-size:12.5px}
-table.d th{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;
-  letter-spacing:.05em;color:var(--ink2);padding:8px;border-bottom:1.5px solid var(--jade)}
+table.d th{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;
+  letter-spacing:.03em;color:var(--ink2);padding:8px;border-bottom:1.5px solid var(--jade)}
 table.d td{padding:9px 8px;border-bottom:1px solid var(--line)}
 table.d td.n{font-family:'IBM Plex Mono',monospace;text-align:right;white-space:nowrap}
 table.d tr:nth-child(even) td{background:rgba(30,75,65,.02)}
@@ -341,27 +348,27 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 @media (max-width:760px){
   .wrap{padding:0 14px}
   header.hero{padding:calc(env(safe-area-inset-top) + 22px) 0 0}
-  .eyebrow{font-size:10.5px;margin-bottom:10px}
+  .eyebrow{font-size:11px;margin-bottom:10px}
   .dates{gap:7px;margin-bottom:16px}
-  .dates .rng{font-size:11px}
-  .dday{font-size:11px;padding:3px 9px}
+  .dates .rng{font-size:11.5px}
+  .dday{font-size:11.5px;padding:3px 9px}
   .prog-pct{font-size:17px}
   .next-card{padding:10px 12px;margin-bottom:12px;gap:8px}
-  .nc-tag{font-size:9px;padding:2px 7px}
+  .nc-tag{font-size:10px;padding:2px 7px}
   .nc-e{font-size:14px}
-  .nc-t{font-size:11.5px}
-  .nc-arrow{display:none}
+  .nc-t{font-size:12px}
+  .nc-arrow{font-size:9.5px}
   .stats{border-radius:12px 12px 0 0}
   .stat{padding:12px 6px 14px}
   .stat .n{font-size:19px}
-  .stat .l{font-size:9.5px}
+  .stat .l{font-size:11px}
 
   .todo-hero{padding:13px;gap:12px;margin-bottom:18px}
   .th-ring{width:48px;height:48px}
   .th-pct{font-size:11.5px}
   .th-nums{font-size:13.5px}
-  .th-left{font-size:11px}
-  .th-toggle{font-size:11px;gap:5px}
+  .th-left{font-size:11.5px}
+  .th-toggle{font-size:11.5px;gap:5px}
   .th-toggle input{width:30px;height:18px}
   .th-toggle input::after{width:14px;height:14px}
   .th-toggle input:checked::after{transform:translateX(12px)}
@@ -375,24 +382,24 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
     border-bottom:none;border-top:2.5px solid transparent;position:relative;min-height:var(--nav-h)}
   .tb .ico{font-size:18px}
   .tb.on{border-top-color:var(--gold)}
-  .tb .badge-n{position:absolute;top:3px;right:6px;font-size:8.5px;padding:0 4px}
+  .tb .badge-n{position:absolute;top:3px;right:6px;font-size:10px;padding:0 4px}
 
   main.wrap{padding-top:22px}
   h2.sec{font-size:20px}
-  .copy-btn{font-size:10.5px;padding:8px 13px;min-height:32px}
+  .copy-btn{font-size:11.5px;padding:9px 15px;min-height:44px}
   .sub{font-size:12.5px;margin-bottom:18px}
 
   .fams{grid-template-columns:1fr}
   .golf-sum{gap:7px}
   .gs{padding:11px 6px}
   .gs .n{font-size:18px}
-  .gs .l{font-size:9.5px}
+  .gs .l{font-size:11px}
   .g-nm{font-size:14px}
-  .g-price{font-size:12px}
+  .g-price{font-size:12.5px}
   .lg-t{flex-direction:column;gap:5px}
   .day{grid-template-columns:36px 22px 1fr;gap:8px;padding:11px 0}
   .dn{font-size:17px} .de{font-size:15px}
-  .dt{font-size:13px} .dnote{font-size:11.5px} .dx{font-size:11px}
+  .dt{font-size:13.5px} .dnote{font-size:12px} .dx{font-size:11.5px}
   .cost-hero{padding:16px}
   .cost-hero .a{font-size:25px}
 
@@ -406,7 +413,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
     border-bottom:1px dashed var(--line);text-align:right;font-size:12px}
   table.d td:last-child{border-bottom:none}
   table.d td::before{content:attr(data-l);font-weight:700;color:var(--ink2);
-    font-size:10px;font-family:'IBM Plex Mono',monospace;text-align:left;flex:none}
+    font-size:11px;font-family:'IBM Plex Mono',monospace;text-align:left;flex:none}
   table.d tr:nth-child(even) td{background:none}
 
   /* 매트릭스는 가로스크롤 유지(비교가 목적) */
@@ -414,12 +421,13 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   table.mx{min-width:520px}
   .mx-hint{display:block!important}
 }
-.mx-hint{display:none;font-size:10.5px;color:var(--gold);font-family:'IBM Plex Mono',monospace;margin-bottom:7px}
+.mx-hint{display:none;font-size:11.5px;color:var(--gold);font-family:'IBM Plex Mono',monospace;margin-bottom:7px}
 
 @media (max-width:400px){
   h1.title{font-size:25px}
   .stat .n{font-size:17px}
   .tb{font-size:9.5px}
+  .stat .l{font-size:10.5px}
 }
 
 @media print{
@@ -657,7 +665,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 <!-- ✅ TODO -->
 <section class="pnl" id="todo" role="tabpanel" aria-labelledby="tb-todo">
   <h2 class="sec"><span class="e">✅</span>할 일</h2>
-  <p class="sub">탭하면 완료 표시됩니다 (새로고침 시 초기화) · 그룹 제목을 탭하면 접고 펼칠 수 있어요</p>
+  <p class="sub">탭하면 완료 표시됩니다 (이 기기에 자동 저장) · 그룹 제목을 탭하면 접고 펼칠 수 있어요</p>
 
   <div class="todo-hero">
     <div class="th-ring">
@@ -931,12 +939,12 @@ $('stay').addEventListener('keydown', e=>{
     const cells = GOLF.map(g=>g.p.includes(p)
       ? `<td title="${g.d} ${g.c}"><span class="mdot" style="background:${pc(p)}"></span></td>` : `<td class="no">·</td>`).join('');
     const cnt = GOLF.filter(g=>g.p.includes(p)).length;
-    return `<tr><td>${dot(p)}${p}</td>${cells}<td style="font-family:'IBM Plex Mono',monospace;font-weight:700;background:${pcBg(p)};border-radius:8px">${cnt}</td></tr>`;
+    return `<tr><td>${dot(p)}${p}</td><td class="mx-cnt">${cnt}</td>${cells}</tr>`;
   }).join('');
   $('mxTable').innerHTML =
-    `<thead><tr><th>참여자</th>${GOLF.map(g=>`<th>${g.d.replace('12/','')}</th>`).join('')}<th>계</th></tr></thead>
+    `<thead><tr><th>참여자</th><th class="mx-cnt">계</th>${GOLF.map(g=>`<th>${g.d.replace('12/','')}</th>`).join('')}</tr></thead>
      <tbody>${rows}</tbody>
-     <tfoot><tr><td>인원</td>${GOLF.map(g=>`<td>${g.p.length}${g.st==='todo'?'+':''}</td>`).join('')}<td>–</td></tr></tfoot>`;
+     <tfoot><tr><td>인원</td><td class="mx-cnt">–</td>${GOLF.map(g=>`<td>${g.p.length}${g.st==='todo'?'+':''}</td>`).join('')}</tr></tfoot>`;
 })();
 
 // itinerary
@@ -1049,8 +1057,8 @@ $('bars').addEventListener('keydown', e=>{
 $('tStay').innerHTML = `<tr><th>항목</th><th>합계</th><th>윤우열</th><th>정유경</th><th>정유현</th><th>장모님</th><th>김윤후</th></tr>`+
  T_STAY.map(r=>`<tr><td data-l="항목">${r[0]}</td><td class="n" data-l="합계">${r[1]}</td><td class="n" data-l="윤우열">${r[2]}</td><td class="n" data-l="정유경">${r[3]}</td><td class="n" data-l="정유현">${r[4]}</td><td class="n" data-l="장모님">${r[5]}</td><td class="n" data-l="김윤후">${r[6]}</td></tr>`).join('');
 
-$('tGolf').innerHTML = `<tr><th>날짜</th><th>코스</th><th>참여자</th><th>금액</th><th>인당</th></tr>`+
- GOLF.map(g=>`<tr><td data-l="날짜">${g.d}</td><td data-l="코스">${g.c}</td><td data-l="참여자">${g.p.join('·')}${g.st==='todo'?' +1?':''}</td><td class="n" data-l="금액">${g.amt?won(g.amt):'TBD'}</td><td class="n" data-l="인당">${g.per?won(g.per):'TBD'}</td></tr>`).join('');
+$('tGolf').innerHTML = `<tr><th>날짜</th><th>코스</th><th>금액</th><th>인당</th></tr>`+
+ GOLF.map(g=>`<tr><td data-l="날짜">${g.d}</td><td data-l="코스">${g.c}${g.st==='todo'?' <span class="chip todo">견적대기</span>':''}</td><td class="n" data-l="금액">${g.amt?won(g.amt):'TBD'}</td><td class="n" data-l="인당">${g.per?won(g.per):'TBD'}</td></tr>`).join('');
 
 $('tCar').innerHTML = `<tr><th>구분</th><th>내용</th><th>금액</th><th>상태</th></tr>`+
  T_CAR.map(r=>`<tr><td data-l="구분">${r[0]}</td><td data-l="내용">${r[1]}</td><td class="n" data-l="금액">${r[2]}</td><td data-l="상태"><span class="chip ${r[3]}">${r[4]}</span></td></tr>`).join('');
@@ -1085,22 +1093,49 @@ function refresh(){
   $('thLeft').textContent = left ? `${left}개 남았어요` : '전부 완료했어요 🎉';
   $('thRing').style.strokeDashoffset = RING_C - (pct/100)*RING_C;
 }
+// ── 로컬 저장 (체크·필터·접힘 상태를 이 기기에 자동 저장) ──
+const LS_KEY = 'thai2026_todo_v1';
+const store = (()=>{ try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; } })();
+store.done = store.done || {};          // { "<항목 텍스트>": true }
+store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
+store.hideDone = !!store.hideDone;
+function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
+
+// 저장된 체크 상태 복원 + 이벤트 연결
 document.querySelectorAll('.ci').forEach(i=>{
-  const tog=()=>{const d=i.classList.toggle('done');i.setAttribute('aria-checked',d);refresh();};
+  const key = i.querySelector('.tx').textContent;
+  if(store.done[key]){ i.classList.add('done'); i.setAttribute('aria-checked','true'); }
+  const tog=()=>{
+    const d=i.classList.toggle('done');
+    i.setAttribute('aria-checked',d);
+    if(d) store.done[key]=true; else delete store.done[key];
+    saveStore(); refresh();
+  };
   i.addEventListener('click',tog);
   i.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();tog();}});
 });
+// 더 이상 존재하지 않는 항목의 저장값 정리 (일정 데이터 변경 대비)
+const validKeys = new Set([...document.querySelectorAll('.ci .tx')].map(e=>e.textContent));
+Object.keys(store.done).forEach(k=>{ if(!validKeys.has(k)) delete store.done[k]; });
+
 document.querySelectorAll('.cgrp h3').forEach(h=>{
+  const grp = h.closest('.cgrp'), gi = grp.dataset.g;
+  if(store.collapsed[gi]){ grp.classList.add('collapsed'); h.setAttribute('aria-expanded','false'); }
   const tog = ()=>{
-    const collapsed = h.closest('.cgrp').classList.toggle('collapsed');
+    const collapsed = grp.classList.toggle('collapsed');
     h.setAttribute('aria-expanded', !collapsed);
+    if(collapsed) store.collapsed[gi]=true; else delete store.collapsed[gi];
+    saveStore();
   };
   h.addEventListener('click', tog);
   h.addEventListener('keydown', e=>{
     if(e.key===' '||e.key==='Enter'){ e.preventDefault(); tog(); }
   });
 });
-$('hideDone').addEventListener('change', refresh);
+
+$('hideDone').checked = store.hideDone;
+$('hideDone').addEventListener('change', ()=>{ store.hideDone = $('hideDone').checked; saveStore(); refresh(); });
+saveStore();
 refresh();
 
 // copy-to-text
@@ -1134,13 +1169,21 @@ wireCopy('copyItin', buildItinText);
 // tabs
 const tbs=document.querySelectorAll('.tb'), pnls=document.querySelectorAll('.pnl');
 const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function go(b){
+function go(b,noScroll){
   tbs.forEach(x=>{x.classList.remove('on');x.setAttribute('aria-selected','false');});
   pnls.forEach(p=>p.classList.remove('on'));
   b.classList.add('on'); b.setAttribute('aria-selected','true');
   $(b.dataset.t).classList.add('on');
-  if(innerWidth>760) scrollTo({top:document.querySelector('nav.tabs').offsetTop-1,behavior:rm?'auto':'smooth'});
-  else scrollTo({top:0,behavior:rm?'auto':'smooth'});
+  if(('#'+b.dataset.t) !== location.hash){
+    try{ history.replaceState(null,'','#'+b.dataset.t); }catch(e){ location.hash = b.dataset.t; }
+  }
+  if(noScroll) return;
+  if(innerWidth>760){
+    scrollTo({top:document.querySelector('nav.tabs').offsetTop-1,behavior:rm?'auto':'smooth'});
+  } else {
+    const m=document.querySelector('main');
+    scrollTo({top:Math.max(0,m.offsetTop-14),behavior:rm?'auto':'smooth'});
+  }
 }
 tbs.forEach((b,i)=>{
   b.addEventListener('click',()=>go(b));
@@ -1149,6 +1192,10 @@ tbs.forEach((b,i)=>{
       const n=tbs[(i+(e.key==='ArrowRight'?1:-1)+tbs.length)%tbs.length];n.focus();go(n);}
   });
 });
+// URL 해시로 탭 진입/공유 지원 (#golf, #cost …)
+function tabFromHash(){ return [...tbs].find(x=>x.dataset.t === (location.hash||'').slice(1)); }
+(function(){ const t=tabFromHash(); if(t && !t.classList.contains('on')) go(t); })();
+addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.contains('on')) go(t); });
 
 // 스와이프로 탭 전환 (모바일). 가로 스크롤 표(.scr, .mx-wrap) 위에서는 비활성화
 (function(){
