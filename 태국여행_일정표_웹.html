@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0E2822">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="태국골프여행">
+<title>태국 겨울 골프 원정 · 3가족 10명</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛳</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12211E; --ink2:#3D544D; --ink3:#7E9189;
+  --paper:#F6F2E8; --card:#FFFFFF; --line:#E2D9C6;
+  --jade:#1E4B41; --jade-d:#0E2822; --jade-s:#DDE9E3;
+  --gold:#B58A28; --gold-s:#F5E7C0;
+  --coral:#C05B39; --coral-s:#F7E2D8;
+  --ok:#2C6B4C; --ok-s:#DCEFE2;
+  --wait:#8F7118; --wait-s:#F7EDCC;
+  --sh: 0 1px 2px rgba(14,40,34,.05), 0 6px 20px -10px rgba(14,40,34,.16);
+  --nav-h: 62px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth;}
+html,body{margin:0;padding:0;max-width:100%;}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; line-height:1.5;
+  padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 20px);
+  overscroll-behavior-y:contain;
+}
+button,.tb,.copy-btn,.ci,.gcard-head,.next-card,a,.lg-head,.day-head,.bar-head,.cgrp h3{touch-action:manipulation;}
+img,svg{max-width:100%}
+button{font-family:inherit}
+:focus-visible{outline:2.5px solid var(--gold); outline-offset:2px; border-radius:6px;}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px;}
+
+/* ══ HERO ══ */
+header.hero{
+  background:linear-gradient(157deg,var(--jade) 0%,var(--jade-d) 100%);
+  color:#F2EEE0; padding:calc(env(safe-area-inset-top) + 30px) 0 0; position:relative; overflow:hidden;
+}
+header.hero::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 88% 15%,rgba(181,138,40,.22) 0,transparent 42%),
+             radial-gradient(circle at 8% 85%,rgba(255,255,255,.05) 0,transparent 45%);}
+.hero-in{position:relative}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;
+  color:#BCCDC4;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 0 rgba(181,138,40,.7);animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(181,138,40,.6)}70%{box-shadow:0 0 0 9px rgba(181,138,40,0)}100%{box-shadow:0 0 0 0 rgba(181,138,40,0)}}
+h1.title{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(27px,7vw,46px);
+  line-height:1.06;margin:0 0 12px;letter-spacing:-.015em}
+h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
+.dates{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 20px}
+.dates .rng{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#CBDAD3}
+.dday{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;
+  background:var(--gold);color:var(--jade-d);padding:3px 11px;border-radius:99px;white-space:nowrap}
+
+/* progress */
+.prog-wrap{margin:0 0 16px}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.prog-lbl{font-size:11.5px;color:#BCCDC4;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
+.prog-pct{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--gold-s)}
+.prog-bar{height:7px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--gold) 0%,#E3C169 100%);transition:width 1.1s cubic-bezier(.16,1,.3,1)}
+
+.next-card{
+  appearance:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);user-select:none;
+  border-radius:13px;padding:12px 14px;margin:0 0 14px;width:100%;text-align:left;cursor:pointer;
+  display:flex;align-items:center;gap:10px;transition:background .15s,border-color .15s;
+}
+.next-card:hover{background:rgba(255,255,255,.12);border-color:rgba(181,138,40,.5)}
+.nc-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;color:var(--gold);
+  background:rgba(181,138,40,.18);padding:3px 8px;border-radius:99px;white-space:nowrap;flex:none}
+.nc-body{flex:1;display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden}
+.nc-e{font-size:16px;flex:none}
+.nc-t{font-size:12.5px;font-weight:600;color:#F2EEE0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nc-arrow{font-size:10.5px;color:#BCCDC4;white-space:nowrap;flex:none;font-family:'IBM Plex Mono',monospace}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.13);
+  border-radius:14px 14px 0 0;overflow:hidden}
+.stat{background:rgba(14,40,34,.5);padding:15px 10px 17px;text-align:center}
+.stat .n{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:#fff;line-height:1}
+.stat .n small{font-size:12px;font-weight:500;color:#BCCDC4;margin-left:1px}
+.stat .l{font-size:10.5px;color:#A5BAB0;margin-top:5px;letter-spacing:.01em}
+
+/* ══ NAV (bottom on mobile) ══ */
+nav.tabs{position:sticky;top:0;z-index:50;background:rgba(246,242,232,.94);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs .wrap::-webkit-scrollbar{display:none}
+.tb{appearance:none;border:none;background:none;cursor:pointer;font-weight:600;font-size:13.5px;user-select:none;
+  color:var(--ink2);padding:15px 14px 13px;white-space:nowrap;border-bottom:2.5px solid transparent;
+  transition:color .15s,border-color .15s;display:flex;align-items:center;gap:6px}
+.tb .ico{font-size:15px;filter:grayscale(40%);opacity:.8;transition:filter .15s,opacity .15s}
+.tb.on{color:var(--jade-d);border-bottom-color:var(--gold)}
+.tb.on .ico{filter:none;opacity:1}
+.tb .badge-n{background:var(--coral);color:#fff;font-size:9.5px;font-weight:700;
+  padding:1px 6px;border-radius:99px;font-family:'IBM Plex Mono',monospace}
+
+main{padding-top:26px;min-height:56vh}
+section.pnl{display:none}
+section.pnl.on{display:block;animation:fade .32s cubic-bezier(.16,1,.3,1)}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+h2.sec{font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:0 0 5px;
+  color:var(--jade-d);display:flex;align-items:center;gap:9px}
+h2.sec .e{font-size:21px;line-height:1}
+.sec-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:5px}
+.sec-row h2.sec{margin-bottom:0}
+.copy-btn{
+  appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink2);
+  font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;padding:7px 13px;border-radius:99px;
+  cursor:pointer;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;
+}
+.copy-btn:hover{border-color:var(--gold);color:var(--jade-d);background:var(--gold-s)}
+.copy-btn.copied{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
+.sub{color:var(--ink2);font-size:13px;margin:0 0 22px;line-height:1.6}
+
+.chip{display:inline-flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px}
+.chip.ok{background:var(--ok-s);color:var(--ok)}
+.chip.wait{background:var(--wait-s);color:var(--wait)}
+.chip.todo{background:var(--coral-s);color:var(--coral)}
+.chip.info{background:var(--jade-s);color:var(--jade)}
+
+/* ══ PEOPLE ══ */
+.fams{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.fam{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh)}
+.fam-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.fam-t{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;
+  background:var(--jade);color:#fff;padding:3px 9px;border-radius:6px;letter-spacing:.03em}
+.fam-c{font-size:10.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace}
+.fam ul{list-style:none;margin:0;padding:0}
+.fam li{padding:8px 0;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.fam li:first-child{border-top:none}
+.nm{font-weight:600;font-size:14px;display:flex;align-items:center;gap:5px}
+.pd{font-size:10.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace;text-align:right}
+
+/* ══ GOLF ══ */
+.golf-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px}
+.gs{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 10px;text-align:center}
+.gs .n{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--jade-d);line-height:1}
+.gs .l{font-size:10px;color:var(--ink3);margin-top:5px}
+.gcard{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);
+  border-radius:12px;padding:14px 15px;margin-bottom:9px;box-shadow:var(--sh)}
+.gcard.s-todo{border-left-color:var(--coral);background:#FEFAF8}
+.gcard.s-wait{border-left-color:var(--wait)}
+.g-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.g-dt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;margin-bottom:3px}
+.g-nm{font-weight:700;font-size:15px;line-height:1.3}
+.g-price{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--jade-d);text-align:right;white-space:nowrap}
+.g-price small{display:block;font-size:10px;color:var(--ink3);font-weight:500;margin-top:2px}
+.g-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
+.ppl{display:flex;flex-wrap:wrap;gap:4px}
+.av{font-size:10.5px;font-weight:600;background:var(--jade-s);color:var(--ink2);
+  padding:2px 8px 2px 6px;border-radius:99px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.pdot{width:6px;height:6px;border-radius:50%;flex:none;display:inline-block;box-shadow:0 0 0 1.5px rgba(255,255,255,.6)}
+.tee{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink3);margin-left:auto;white-space:nowrap}
+
+.gcard-head{cursor:pointer}
+.g-toggle{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--gold);font-weight:700;
+  margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);user-select:none}
+.chev{display:inline-block;transition:transform .2s ease;font-size:9px}
+.gcard.open .chev{transform:rotate(180deg)}
+.gcard-detail{display:none}
+.gcard.open .gcard-detail{display:block;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.gd-row{display:flex;gap:10px;align-items:baseline;padding:7px 0;font-size:12px;border-top:1px dashed var(--line)}
+.gd-row:first-child{border-top:none}
+.gd-k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);flex:none;width:52px}
+.gd-v{color:var(--ink2);flex:1}
+a.gd-v{color:var(--jade);font-weight:600;text-decoration:none}
+a.gd-v:hover{text-decoration:underline}
+
+/* ══ MATRIX ══ */
+.mx-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
+table.mx{width:100%;border-collapse:collapse;font-size:11.5px}
+table.mx th{background:var(--jade-s);padding:9px 5px;font-weight:700;color:var(--jade-d);
+  font-size:10.5px;text-align:center;border-bottom:1px solid var(--line)}
+table.mx th:first-child{text-align:left;padding-left:12px;position:sticky;left:0;background:var(--jade-s);z-index:2}
+table.mx td{padding:8px 5px;text-align:center;border-bottom:1px solid var(--line);font-size:13px}
+table.mx td:first-child{text-align:left;padding-left:12px;font-weight:600;font-size:12px;
+  position:sticky;left:0;background:var(--card);z-index:1;white-space:nowrap}
+table.mx tr:last-child td{border-bottom:none}
+table.mx tr:hover td{background:rgba(30,75,65,.035)}
+table.mx tr:hover td:first-child{background:#F7F5EE}
+table.mx .no{color:#E0DACC}
+.mdot{display:inline-block;width:14px;height:14px;border-radius:50%;
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.7), inset 0 0 0 1px rgba(0,0,0,.05)}
+table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:11px}
+
+/* ══ LODGING ══ */
+.lg-grp{margin-bottom:24px}
+.lg-loc{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);
+  letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.lg-loc::after{content:"";flex:1;height:1px;background:var(--line)}
+.lg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:9px;box-shadow:var(--sh)}
+.lg-t{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.lg-n{font-weight:700;font-size:14.5px;line-height:1.35}
+.lg-p{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;color:var(--jade-d)}
+.lg-m{font-size:12px;color:var(--ink2);line-height:1.7}
+.lg-head{cursor:pointer}
+.lg-sum{font-size:12px;color:var(--ink2)}
+.lg-detail{display:none}
+.lg.open .lg-detail{display:block;animation:fadeIn .18s ease}
+.lg.open .g-toggle .chev{transform:rotate(180deg)}
+.maddr{color:var(--jade);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:3px}
+.maddr:hover{text-decoration:underline}
+.maddr .mico{font-size:10px;opacity:.7}
+a.g-nm.maddr{color:var(--ink);text-decoration:none}
+a.g-nm.maddr .mico{font-size:11px;color:var(--gold);opacity:.9}
+a.g-nm.maddr:hover{color:var(--jade-d)}
+.lg-m code{background:var(--jade-s);padding:1px 6px;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:10.5px}
+.warn{font-size:12px;color:var(--coral);background:var(--coral-s);border-radius:9px;
+  padding:9px 12px;margin-top:8px;line-height:1.6}
+
+/* ══ ITINERARY ══ */
+.mdiv{font-family:'Fraunces',serif;font-style:italic;font-size:14.5px;color:var(--gold);
+  padding:20px 0 8px;border-bottom:2px solid var(--gold-s);display:flex;align-items:center;gap:8px}
+.day{display:grid;grid-template-columns:46px 26px 1fr;gap:11px;align-items:start;
+  padding:12px 0;border-bottom:1px solid var(--line)}
+.day:last-child{border-bottom:none}
+.dbox{text-align:center}
+.dn{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--jade-d);line-height:1}
+.dw{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);margin-top:3px}
+.day.s-ok .dn{color:var(--ok)} .day.s-wait .dn{color:var(--wait)} .day.s-todo .dn{color:var(--coral)}
+.de{font-size:17px;text-align:center;line-height:1.2}
+.dt{font-size:14px;font-weight:700;line-height:1.4}
+.dloc{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.dnote{font-size:12px;color:var(--ink2);margin-top:2px;line-height:1.7}
+.dnote .pdot{margin-right:3px;vertical-align:middle}
+.dx{font-size:11.5px;color:var(--coral);margin-top:5px;line-height:1.5;display:flex;gap:5px}
+.day-col{min-width:0}
+.day-head{cursor:pointer}
+.day-detail{display:none}
+.day.open .day-detail{display:block;animation:fadeIn .18s ease}
+.day.open .g-toggle .chev{transform:rotate(180deg)}
+.dx::before{content:"↳";color:var(--gold);font-weight:700;flex:none}
+
+/* ══ COST ══ */
+.cost-hero{background:linear-gradient(135deg,var(--jade) 0%,var(--jade-d) 100%);color:#fff;
+  border-radius:14px;padding:20px;margin-bottom:20px}
+.cost-hero .l{font-size:12px;color:#BCCDC4;margin-bottom:4px}
+.cost-hero .a{font-family:'Fraunces',serif;font-size:30px;font-weight:600;line-height:1.1}
+.cost-hero .a small{font-size:14px;font-weight:400;color:#D6E2DC;margin-left:3px}
+.cost-hero .s{font-size:11.5px;color:#A5BAB0;margin-top:7px;line-height:1.6}
+
+.bar-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.bar-row{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:0;overflow:hidden}
+.bar-head{padding:12px 14px;cursor:pointer}
+.bar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.bar-nm{font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
+.bar-amt{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12.5px;color:var(--coral)}
+.bar-track{height:7px;background:var(--jade-s);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--jade) 0%,#3C7D6C 100%);
+  transition:width 1s cubic-bezier(.16,1,.3,1)}
+.bar-brk{font-size:10.5px;color:var(--ink3);margin-top:6px;font-family:'IBM Plex Mono',monospace;display:flex;justify-content:space-between;align-items:center}
+.bar-brk .chev{font-size:9px;transition:transform .2s ease}
+.bar-row.open .bar-brk .chev{transform:rotate(180deg)}
+.bar-detail{display:none;padding:0 14px 12px;border-top:1px dashed var(--line)}
+.bar-row.open .bar-detail{display:block;animation:fadeIn .18s ease}
+.bar-detail .gd-row{padding:6px 0;font-size:11.5px}
+.bar-detail .gd-row:first-child{border-top:none;padding-top:9px}
+
+.stbl{font-weight:700;font-size:14px;margin:24px 0 9px;display:flex;align-items:center;gap:7px}
+.stbl .i{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:11.5px}
+table.d{width:100%;border-collapse:collapse;font-size:12.5px}
+table.d th{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--ink2);padding:8px;border-bottom:1.5px solid var(--jade)}
+table.d td{padding:9px 8px;border-bottom:1px solid var(--line)}
+table.d td.n{font-family:'IBM Plex Mono',monospace;text-align:right;white-space:nowrap}
+table.d tr:nth-child(even) td{background:rgba(30,75,65,.02)}
+.scr{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--line)}
+.scr table.d{min-width:620px}
+
+/* ══ CHECKLIST ══ */
+.cgrp{margin-bottom:22px}
+.cgrp h3{font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--gold);margin:0 0 9px;font-weight:700;display:flex;align-items:center;gap:8px}
+.cnt{font-family:'Inter',sans-serif;text-transform:none;letter-spacing:0;font-weight:600;
+  font-size:10px;color:var(--ink2);background:var(--jade-s);padding:1px 8px;border-radius:99px}
+.ci{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);user-select:none;
+  border-radius:10px;padding:12px 14px;margin-bottom:7px;font-size:13px;line-height:1.55;
+  cursor:pointer;transition:background .12s,border-color .12s,opacity .15s}
+.ci:hover{border-color:var(--gold);background:var(--gold-s)}
+.ci .bx{width:17px;height:17px;border:1.5px solid var(--ink2);border-radius:5px;flex:none;margin-top:1px}
+.ci.done{opacity:.48}
+.ci.done:hover{background:var(--card);border-color:var(--line)}
+.ci.done .tx{text-decoration:line-through}
+.ci.done .bx{background:var(--ok);border-color:var(--ok);position:relative}
+.ci.done .bx::after{content:"✓";position:absolute;inset:0;color:#fff;font-size:11px;text-align:center;line-height:16px}
+
+/* TODO 진행률 히어로 */
+.todo-hero{
+  display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:16px;margin-bottom:22px;box-shadow:var(--sh);flex-wrap:wrap;
+}
+.th-ring{position:relative;width:56px;height:56px;flex:none}
+.th-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.th-bg{fill:none;stroke:var(--jade-s);stroke-width:4}
+.th-fg{fill:none;stroke:var(--gold);stroke-width:4;stroke-linecap:round;
+  stroke-dasharray:113.097;stroke-dashoffset:113.097;transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)}
+.th-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:600;font-size:13px;color:var(--jade-d)}
+.th-info{flex:1;min-width:120px}
+.th-nums{font-weight:700;font-size:15px;color:var(--ink)}
+.th-nums span{font-family:'IBM Plex Mono',monospace}
+.th-left{font-size:11.5px;color:var(--ink2);margin-top:2px}
+.th-toggle{
+  display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink2);
+  cursor:pointer;user-select:none;flex:none;
+}
+.th-toggle input{appearance:none;width:34px;height:20px;border-radius:99px;background:var(--jade-s);
+  position:relative;cursor:pointer;transition:background .2s;flex:none}
+.th-toggle input::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;
+  border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.th-toggle input:checked{background:var(--jade)}
+.th-toggle input:checked::after{transform:translateX(14px)}
+
+.cgrp h3{cursor:pointer}
+.cgrp .chev{font-size:9px;transition:transform .2s ease;margin-left:auto}
+.cgrp.collapsed .chev{transform:rotate(-90deg)}
+.cgrp.collapsed .ci{display:none}
+.ci.hide-done{display:none !important}
+
+footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
+  font-size:11px;color:var(--ink3);font-family:'IBM Plex Mono',monospace;line-height:1.8}
+
+/* ══════ MOBILE ══════ */
+@media (max-width:760px){
+  .wrap{padding:0 14px}
+  header.hero{padding:calc(env(safe-area-inset-top) + 22px) 0 0}
+  .eyebrow{font-size:10.5px;margin-bottom:10px}
+  .dates{gap:7px;margin-bottom:16px}
+  .dates .rng{font-size:11px}
+  .dday{font-size:11px;padding:3px 9px}
+  .prog-pct{font-size:17px}
+  .next-card{padding:10px 12px;margin-bottom:12px;gap:8px}
+  .nc-tag{font-size:9px;padding:2px 7px}
+  .nc-e{font-size:14px}
+  .nc-t{font-size:11.5px}
+  .nc-arrow{display:none}
+  .stats{border-radius:12px 12px 0 0}
+  .stat{padding:12px 6px 14px}
+  .stat .n{font-size:19px}
+  .stat .l{font-size:9.5px}
+
+  .todo-hero{padding:13px;gap:12px;margin-bottom:18px}
+  .th-ring{width:48px;height:48px}
+  .th-pct{font-size:11.5px}
+  .th-nums{font-size:13.5px}
+  .th-left{font-size:11px}
+  .th-toggle{font-size:11px;gap:5px}
+  .th-toggle input{width:30px;height:18px}
+  .th-toggle input::after{width:14px;height:14px}
+  .th-toggle input:checked::after{transform:translateX(12px)}
+
+  /* nav → bottom bar */
+  nav.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;border-bottom:none;
+    border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);
+    box-shadow:0 -3px 16px rgba(14,40,34,.09)}
+  nav.tabs .wrap{padding:0;justify-content:space-around;overflow:visible}
+  .tb{flex-direction:column;gap:3px;padding:8px 2px 7px;font-size:9.5px;flex:1;
+    border-bottom:none;border-top:2.5px solid transparent;position:relative;min-height:var(--nav-h)}
+  .tb .ico{font-size:18px}
+  .tb.on{border-top-color:var(--gold)}
+  .tb .badge-n{position:absolute;top:3px;right:6px;font-size:8.5px;padding:0 4px}
+
+  main{padding-top:20px}
+  h2.sec{font-size:20px}
+  .copy-btn{font-size:10.5px;padding:8px 13px;min-height:32px}
+  .sub{font-size:12.5px;margin-bottom:18px}
+
+  .fams{grid-template-columns:1fr}
+  .golf-sum{gap:7px}
+  .gs{padding:11px 6px}
+  .gs .n{font-size:18px}
+  .gs .l{font-size:9.5px}
+  .g-nm{font-size:14px}
+  .g-price{font-size:12px}
+  .lg-t{flex-direction:column;gap:5px}
+  .day{grid-template-columns:36px 22px 1fr;gap:8px;padding:11px 0}
+  .dn{font-size:17px} .de{font-size:15px}
+  .dt{font-size:13px} .dnote{font-size:11.5px} .dx{font-size:11px}
+  .cost-hero{padding:16px}
+  .cost-hero .a{font-size:25px}
+
+  /* 표 → 카드 */
+  .scr{overflow:visible;border:none;border-radius:0}
+  .scr table.d{min-width:0!important}
+  table.d tr:first-child{display:none}
+  table.d tr{display:block;background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;margin-bottom:8px}
+  table.d td{display:flex;justify-content:space-between;gap:12px;padding:5px 0;
+    border-bottom:1px dashed var(--line);text-align:right;font-size:12px}
+  table.d td:last-child{border-bottom:none}
+  table.d td::before{content:attr(data-l);font-weight:700;color:var(--ink2);
+    font-size:10px;font-family:'IBM Plex Mono',monospace;text-align:left;flex:none}
+  table.d tr:nth-child(even) td{background:none}
+
+  /* 매트릭스는 가로스크롤 유지(비교가 목적) */
+  .mx-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.mx{min-width:520px}
+  .mx-hint{display:block!important}
+}
+.mx-hint{display:none;font-size:10.5px;color:var(--gold);font-family:'IBM Plex Mono',monospace;margin-bottom:7px}
+
+@media (max-width:400px){
+  h1.title{font-size:25px}
+  .stat .n{font-size:17px}
+  .tb{font-size:9.5px}
+}
+
+@media print{
+  nav.tabs{display:none}
+  .next-card{display:none!important}
+  header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
+  header.hero::before{display:none}
+  .eyebrow,.dates .rng{color:var(--ink2)!important}
+  .dday{background:none!important;color:var(--ink)!important;border:1px solid var(--line)}
+  h1.title em{color:var(--jade)!important}
+  .prog-bar,.stats{background:none;border:1px solid var(--line)}
+  .stat{background:none!important}
+  .stat .n,.stat .l{color:var(--ink)!important}
+  .pnl{display:block!important;break-inside:avoid;margin-bottom:24px}
+  .scr{overflow:visible} table.d{min-width:0!important}
+  .cost-hero{background:none!important;color:var(--ink)!important;border:1px solid var(--line)}
+  .cost-hero .l,.cost-hero .s{color:var(--ink2)!important}
+  .ci{cursor:default}
+  body{padding-bottom:0}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <p class="eyebrow"><span class="pulse"></span>🇹🇭 파타야 → 방콕</p>
+    <h1 class="title">태국 겨울 골프 원정</h1>
+    <div class="dates">
+      <span class="rng">2026.12.16(수) → 2027.1.4(월) · 20일</span>
+      <span class="dday" id="dday">계산중…</span>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-top">
+        <span class="prog-lbl">예약 준비 진행률</span>
+        <span class="prog-pct" id="ppct">0%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="pfill"></div></div>
+    </div>
+    <button class="next-card" id="nextCard" type="button" style="display:none">
+      <span class="nc-tag" id="ncTag">다음 일정</span>
+      <span class="nc-body"><span class="nc-e" id="ncE"></span><span class="nc-t" id="ncT"></span></span>
+      <span class="nc-arrow">이동 →</span>
+    </button>
+    <div class="stats">
+      <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">10명 함께</div></div>
+      <div class="stat"><div class="n"><span id="stN2" data-to="8">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
+      <div class="stat"><div class="n"><span id="stN3" data-to="6">0</span><small>/6</small></div><div class="l">🏨 숙소 확정</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap" role="tablist" aria-label="섹션">
+    <button class="tb on" data-t="golf" role="tab" aria-selected="true" id="tb-golf"><span class="ico">⛳</span>골프</button>
+    <button class="tb" data-t="people" role="tab" aria-selected="false" id="tb-people"><span class="ico">👨‍👩‍👧‍👦</span>참가자</button>
+    <button class="tb" data-t="itin" role="tab" aria-selected="false" id="tb-itin"><span class="ico">🗓️</span>일정</button>
+    <button class="tb" data-t="stay" role="tab" aria-selected="false" id="tb-stay"><span class="ico">🏨</span>숙소</button>
+    <button class="tb" data-t="cost" role="tab" aria-selected="false" id="tb-cost"><span class="ico">💰</span>정산</button>
+    <button class="tb" data-t="todo" role="tab" aria-selected="false" id="tb-todo"><span class="ico">✅</span>할일<span class="badge-n" id="tdN">0</span></button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ⛳ GOLF -->
+<section class="pnl on" id="golf" role="tabpanel" aria-labelledby="tb-golf">
+  <div class="sec-row">
+    <h2 class="sec"><span class="e">⛳</span>골프 8라운드</h2>
+    <button class="copy-btn" id="copyGolf">📋 텍스트로 복사</button>
+  </div>
+  <p class="sub">파타야 6회 · 방콕 2회 · 전액 윤우열 선지불 후 참여자별 1/N 정산 · 카드를 탭하면 바우처 상세정보가 열립니다</p>
+
+  <div class="golf-sum">
+    <div class="gs"><div class="n">8</div><div class="l">총 라운드</div></div>
+    <div class="gs"><div class="n" id="gConf">8</div><div class="l">예약 확정</div></div>
+    <div class="gs"><div class="n" id="gSum">–</div><div class="l">확정 총액</div></div>
+  </div>
+
+  <div class="lg-loc">🌴 파타야 · 6라운드</div>
+  <div id="golfPat"></div>
+
+  <div class="lg-loc" style="margin-top:22px">🏙️ 방콕 · 2라운드</div>
+  <div id="golfBkk"></div>
+
+  <h3 class="stbl"><span class="i">◈</span>누가 몇 번 치나</h3>
+  <p class="mx-hint">→ 좌우로 밀어서 전체 보기</p>
+  <div class="mx-wrap"><table class="mx" id="mxTable"></table></div>
+</section>
+
+<!-- 👨‍👩‍👧‍👦 PEOPLE -->
+<section class="pnl" id="people" role="tabpanel" aria-labelledby="tb-people">
+  <h2 class="sec"><span class="e">👨‍👩‍👧‍👦</span>참가자</h2>
+  <p class="sub">3개 그룹, 총 10명 · <span style="color:var(--gold)">●</span> = 골프 참여 (색상은 골프 탭과 동일)</p>
+  <div class="fams" id="famsWrap"></div>
+</section>
+
+<!-- 🗓 ITINERARY -->
+<section class="pnl" id="itin" role="tabpanel" aria-labelledby="tb-itin">
+  <div class="sec-row">
+    <h2 class="sec"><span class="e">🗓️</span>일정</h2>
+    <button class="copy-btn" id="copyItin">📋 텍스트로 복사</button>
+  </div>
+  <p class="sub">날짜 색상 = 상태 · <span style="color:var(--ok);font-weight:700">확정</span> / <span style="color:var(--wait);font-weight:700">요청중</span> / <span style="color:var(--coral);font-weight:700">미정</span> · ⛳ 있는 날은 탭하면 바우처 정보가 열립니다</p>
+  <div class="mdiv">🌴 December · 파타야</div><div id="iA"></div>
+  <div class="mdiv">🏙️ December · 방콕</div><div id="iB"></div>
+  <div class="mdiv">🎍 January 2027</div><div id="iC"></div>
+</section>
+
+<!-- 🏨 STAY -->
+<section class="pnl" id="stay" role="tabpanel" aria-labelledby="tb-stay">
+  <h2 class="sec"><span class="e">🏨</span>숙소</h2>
+  <p class="sub">전 6건 확정 · 카드를 탭하면 바우처 상세정보가 열립니다</p>
+
+  <div class="lg-grp">
+    <div class="lg-loc">파타야 · 빌라 통부라</div>
+    <div class="lg">
+      <div class="lg-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="lg-t"><div class="lg-n">① 윤우열 + 가족1 · 2BR</div>
+          <div class="lg-p">2,052,000원 <span class="chip ok">확정</span></div></div>
+        <div class="lg-sum">12/16–26 (10박) · 조식 불포함</div>
+        <div class="g-toggle"><span class="chev">▾</span> 상세보기</div>
+      </div>
+      <div class="lg-detail">
+        <div class="gd-row"><span class="gd-k">바우처</span><span class="gd-v">V20260805001</span></div>
+        <div class="gd-row"><span class="gd-k">취소기한</span><span class="gd-v">11/16까지</span></div>
+        <div class="gd-row"><span class="gd-k">부담방식</span><span class="gd-v">초기 2박 윤우열 단독 + 나머지 8박 5인 1/N</span></div>
+        <div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="https://maps.google.com/?q=221/100+Moo+12+Soi+Thepprasit+17+Banglamung+Chonburi" target="_blank" rel="noopener">221/100 Moo 12 Soi Thepprasit 17, Nongprue, Banglamung, Chonburi 20150 <span class="mico">↗</span></a></div>
+      </div>
+    </div>
+    <div class="lg">
+      <div class="lg-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="lg-t"><div class="lg-n">② 김태기 · Studio</div>
+          <div class="lg-p">598,500원 <span class="chip info">개별결제</span></div></div>
+        <div class="lg-sum">12/16–23 (7박) · 조식 불포함</div>
+        <div class="g-toggle"><span class="chev">▾</span> 상세보기</div>
+      </div>
+      <div class="lg-detail">
+        <div class="gd-row"><span class="gd-k">바우처</span><span class="gd-v">V20260805002</span></div>
+        <div class="gd-row"><span class="gd-k">취소기한</span><span class="gd-v">11/16까지</span></div>
+        <div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="https://maps.google.com/?q=221/100+Moo+12+Soi+Thepprasit+17+Banglamung+Chonburi" target="_blank" rel="noopener">221/100 Moo 12 Soi Thepprasit 17, Nongprue, Banglamung, Chonburi 20150 <span class="mico">↗</span></a></div>
+      </div>
+    </div>
+    <div class="warn">※ 윤성욱은 별도 체류 (12/1~)</div>
+  </div>
+
+  <div class="lg-grp">
+    <div class="lg-loc">방콕 · 티니디 트렌디 카오산</div>
+    <div class="lg">
+      <div class="lg-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="lg-t"><div class="lg-n">③ 윤우열 + 가족1 · 트리플룸 2개</div>
+          <div class="lg-p">1,672,248원 <span class="chip ok">확정</span></div></div>
+        <div class="lg-sum">12/26–31 (5박)</div>
+        <div class="g-toggle"><span class="chev">▾</span> 상세보기</div>
+      </div>
+      <div class="lg-detail">
+        <div class="gd-row"><span class="gd-k">예약처</span><span class="gd-v">몽키트래블 #200662986</span></div>
+        <div class="gd-row"><span class="gd-k">취소기한</span><span class="gd-v">11/26까지</span></div>
+        <div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="https://maps.google.com/?q=42+Ram+Buttri+Alley+Bangkok" target="_blank" rel="noopener">42 Ram Buttri Alley, Bangkok <span class="mico">↗</span></a></div>
+        <div class="gd-row"><span class="gd-k">전화</span><a class="gd-v maddr" href="tel:+6622805434">+66 2 280 5434 📞</a></div>
+      </div>
+    </div>
+    <div class="lg">
+      <div class="lg-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="lg-t"><div class="lg-n">④ 윤우열 + 가족1 · 연박</div>
+          <div class="lg-p">627,451원 <span class="chip ok">확정</span></div></div>
+        <div class="lg-sum">12/31–1/2 (2박)</div>
+        <div class="g-toggle"><span class="chev">▾</span> 상세보기</div>
+      </div>
+      <div class="lg-detail">
+        <div class="gd-row"><span class="gd-k">예약처</span><span class="gd-v">SK하나투어 #HH2635748888</span></div>
+        <div class="gd-row"><span class="gd-k">취소기한</span><span class="gd-v">11/30까지</span></div>
+        <div class="gd-row"><span class="gd-k">객실배정</span><span class="gd-v">Room1 정유경·정유현·장모님 / Room2 윤우열·김윤후</span></div>
+        <div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="https://maps.google.com/?q=42+Ram+Buttri+Alley+Bangkok" target="_blank" rel="noopener">42 Ram Buttri Alley, Bangkok <span class="mico">↗</span></a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lg-grp">
+    <div class="lg-loc">방콕 · 가족2 (개별결제)</div>
+    <div class="lg">
+      <div class="lg-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="lg-t"><div class="lg-n">티니디 트렌디 카오산</div>
+          <div class="lg-p"><span class="chip ok">확정</span></div></div>
+        <div class="lg-sum">12/27–30 (3박)</div>
+        <div class="g-toggle"><span class="chev">▾</span> 상세보기</div>
+      </div>
+      <div class="lg-detail">
+        <div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#200675569</span></div>
+        <div class="gd-row"><span class="gd-k">취소기한</span><span class="gd-v">11/27까지</span></div>
+        <div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="https://maps.google.com/?q=42+Ram+Buttri+Alley+Bangkok" target="_blank" rel="noopener">42 Ram Buttri Alley, Bangkok <span class="mico">↗</span></a></div>
+      </div>
+    </div>
+    <div class="lg">
+      <div class="lg-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="lg-t"><div class="lg-n">Grande Centre Point Ratchadamri</div>
+          <div class="lg-p">1,503,266원 <span class="chip ok">확정</span></div></div>
+        <div class="lg-sum">12/30–1/2 (3박)</div>
+        <div class="g-toggle"><span class="chev">▾</span> 상세보기</div>
+      </div>
+      <div class="lg-detail">
+        <div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#HH2635759914</span></div>
+        <div class="gd-row"><span class="gd-k">취소기한</span><span class="gd-v">11/30까지</span></div>
+        <div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="https://maps.google.com/?q=153/2+Mahatlek+Luang+1+Ratchadamri+Rd+Bangkok" target="_blank" rel="noopener">153/2 Mahatlek Luang 1, Ratchadamri Rd <span class="mico">↗</span></a></div>
+      </div>
+    </div>
+    <div class="warn">⚠ 12/30 티니디 체크아웃 → 당일 GCP 체크인 (자유일정)</div>
+  </div>
+</section>
+
+<!-- 💰 COST -->
+<section class="pnl" id="cost" role="tabpanel" aria-labelledby="tb-cost">
+  <h2 class="sec"><span class="e">💰</span>정산</h2>
+  <p class="sub">개별결제 3건(이준영 픽업·숙박 2건, 김태기 숙박) 제외 · 나머지 전부 윤우열 선지불 · 막대를 탭하면 항목별 내역이 열립니다</p>
+
+  <div class="cost-hero">
+    <div class="l">윤우열이 받아야 할 금액</div>
+    <div class="a" id="oweTotal">–</div>
+    <div class="s" id="oweBreak">계산중…</div>
+  </div>
+
+  <h3 class="stbl"><span class="i">◈</span>사람별 정산액</h3>
+  <div class="bar-list" id="bars"></div>
+
+  <h3 class="stbl"><span class="i">4-1</span>숙박</h3>
+  <div class="scr"><table class="d" id="tStay"></table></div>
+
+  <h3 class="stbl"><span class="i">4-2</span>골프</h3>
+  <div class="scr"><table class="d" id="tGolf"></table></div>
+
+  <h3 class="stbl"><span class="i">4-3</span>차량</h3>
+  <div class="scr"><table class="d" id="tCar"></table></div>
+</section>
+
+<!-- ✅ TODO -->
+<section class="pnl" id="todo" role="tabpanel" aria-labelledby="tb-todo">
+  <h2 class="sec"><span class="e">✅</span>할 일</h2>
+  <p class="sub">탭하면 완료 표시됩니다 (새로고침 시 초기화) · 그룹 제목을 탭하면 접고 펼칠 수 있어요</p>
+
+  <div class="todo-hero">
+    <div class="th-ring">
+      <svg viewBox="0 0 44 44"><circle class="th-bg" cx="22" cy="22" r="18"/><circle class="th-fg" id="thRing" cx="22" cy="22" r="18"/></svg>
+      <span class="th-pct" id="thPct">0%</span>
+    </div>
+    <div class="th-info">
+      <div class="th-nums"><span id="thDone">0</span> / <span id="thTotal">0</span> 완료</div>
+      <div class="th-left" id="thLeft">계산중…</div>
+    </div>
+    <label class="th-toggle">
+      <input type="checkbox" id="hideDone">
+      <span>미완료만 보기</span>
+    </label>
+  </div>
+
+  <div id="todoWrap"></div>
+</section>
+
+</main>
+
+<footer class="ft"><div class="wrap">
+  v8.1 · 최종수정 2026-08-11<br>태국 겨울 골프 원정 · 2026.12.16–2027.1.4
+</div></footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const won=n=>n==null?'—':n.toLocaleString();
+/* ═══ DATA ═══ */
+const GOLF=[
+ {d:'12/17',w:'목',loc:'pat',c:'Chee Chan Golf Resort',p:['윤우열','김태기','윤성욱'],tee:'08:34 확정',amt:695094,per:231698,st:'ok',
+  book:'200693563',addr:'108/18 Moo 6, Na Jom Tien, Amphoe Sattahip, Chon Buri 20250',tel:'038-196-555'},
+ {d:'12/18',w:'금',loc:'pat',c:'Siam CC Rolling Hills',p:['윤우열','김태기','윤성욱'],tee:'8:30–9AM 요청',amt:695095,per:231698,st:'ok',
+  book:'200691954',addr:'50/16 Moo.9 T.Pong A, Bang Lamung, Chon Buri 20150',tel:'038-909-700'},
+ {d:'12/21',w:'월',loc:'pat',c:'Siam CC Plantation',p:['윤우열','김태기','윤성욱','정유경'],tee:'08:28 요청',amt:926794,per:231699,st:'ok',
+  book:'200692610',addr:'50/6 Moo 9, T.Pong, Banglamung, Chon Buri 20150',tel:'038-909-700'},
+ {d:'12/22',w:'화',loc:'pat',c:'Siam CC Waterside',p:['윤우열','김태기','윤성욱','정유경','정유현'],tee:'08:36 요청',amt:1158492,per:231698,st:'ok',
+  book:'200693565',addr:'50/6 Moo 9, T.Pong, Banglamung, Chon Buri 20150',tel:'038-909-700'},
+ {d:'12/23',w:'수',loc:'pat',c:'Siam CC Plantation',p:['윤우열','김태기','윤성욱','정유경','정유현'],tee:'08:36 요청 · 오전',amt:1153600,per:230720,st:'ok',
+  book:'200694123',addr:'50/6 Moo 9, T.Pong, Banglamung, Chon Buri 20150',tel:'038-909-700'},
+ {d:'12/24',w:'목',loc:'pat',c:'Phoenix Gold Golf & CC',p:['윤우열','윤성욱','정유경','정유현'],tee:'08:24 요청',amt:523448,per:130862,st:'ok',
+  book:'200706977',addr:'Sukhumvit Rd 2, Muang Pattaya, Chon Buri 20150',tel:'084-873-5363'},
+ {d:'12/29',w:'화',loc:'bkk',c:'Nikanti Golf Club',p:['윤우열','이준영','윤성욱','정유현'],tee:'08:30 확정',amt:1023096,per:255774,st:'ok',
+  book:'200698940',bid:'eec215',addr:'333 Moo 2 T.Dhammasala A.Muang, Nakhon Pathom 73000',tel:'034-965-666'},
+ {d:'12/31',w:'목',loc:'bkk',c:'Royal Bang Pa-In Golf Club',p:['윤우열','이준영','윤성욱','정유경'],tee:'08:30 확정',amt:881496,per:220374,st:'ok',
+  book:'200698946',addr:'19 Moo.14, Bang Krasan, Bangpain, Phra Nakhon Si Ayutthaya 13160',tel:'063-195-2286'},
+];
+const GOLFERS=['윤우열','윤성욱','김태기','정유경','정유현','이준영'];
+const PCOLOR={'윤우열':'#7FBFA6','윤성욱':'#B6A6D9','김태기':'#8AC0E4','정유경':'#E8C27A','정유현':'#EFA895','이준영':'#8FCFC2'};
+function pc(name){return PCOLOR[name]||'#B7C4BC';}
+function pcBg(name){return pc(name)+'2E';}  // 아주 옅은 배경톤
+function dot(name){return `<span class="pdot" style="background:${pc(name)}"></span>`;}
+
+const FAMS=[
+ {tag:'가족 1',cnt:'5명',rows:[
+   {n:'윤우열',p:'12/16–1/2',g:1},{n:'정유경',p:'12/18밤–1/2',g:1},
+   {n:'정유현',p:'12/18밤–1/2',g:1},{n:'장모님',p:'12/18밤–1/2',g:0},{n:'김윤후',p:'12/18밤–1/2',g:0},
+ ]},
+ {tag:'가족 2',cnt:'3명',rows:[
+   {n:'이준영',p:'12/27–1/2',g:1},{n:'박지해',p:'12/27–1/2',g:0},{n:'이동현',p:'12/27–1/2',g:0},
+ ]},
+ {tag:'가족 3',cnt:'2명',rows:[
+   {n:'김태기',p:'12/16–12/23',g:1},{n:'윤성욱',p:'12/1–1/4(미정)',g:1},
+ ]},
+];
+$('famsWrap').innerHTML = FAMS.map(f=>`
+  <div class="fam">
+    <div class="fam-h"><span class="fam-t">${f.tag}</span><span class="fam-c">${f.cnt}</span></div>
+    <ul>${f.rows.map(r=>`<li><span class="nm">${r.g?dot(r.n):''}${r.n}</span><span class="pd">${r.p}</span></li>`).join('')}</ul>
+  </div>`).join('');
+
+function gday(dk,l,extra){ // dk: GOLF의 d 필드('12/17' 등), l: 지역표시
+  const g = GOLF.find(x=>x.d===dk);
+  const names = g.p.map(p=>`${dot(p)}${p}`).join(' ');
+  const status = g.st==='todo' ? `+1인 미정 · ${g.note||'견적 재요청'}` : `· ${g.tee}`;
+  return {d:dk.split('/')[1], w:g.w, l, e:'⛳', s:g.st, t:g.c, n:`${names} ${status}`, x:extra,
+    book:g.book, addr:g.addr, tel:g.tel};
+}
+const ITIN_A=[
+ {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류'},
+ gday('12/17','파타야'),
+ gday('12/18','파타야','가족1 도착 OZ741 18:05–22:00 · 공항픽업 확정'),
+ {d:'19',w:'토',l:'파타야',e:'🏨',t:'가족1 통부라 도착',n:'~00:30 · 이후 자유일정'},
+ {d:'20',w:'일',l:'파타야',e:'☀️',t:'자유일정'},
+ gday('12/21','파타야','정유현·장모님·김윤후 개별일정 (쿠킹클래스 등 TBD)'),
+ gday('12/22','파타야'),
+ gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:30)'),
+ gday('12/24','파타야'),
+ {d:'25',w:'금',l:'파타야',e:'🎄',t:'크리스마스',n:'자유일정'},
+];
+const ITIN_B=[
+ {d:'26',w:'토',l:'파타야→BKK',e:'🚐',t:'방콕 이동',n:'통부라 체크아웃 → 티니디 체크인'},
+ {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',x:'이후 자유일정'},
+ {d:'28',w:'월',l:'BKK',e:'☀️',t:'자유일정',n:'시내관광'},
+ gday('12/29','BKK'),
+ {d:'30',w:'수',l:'BKK',e:'☀️',t:'자유일정',n:'가족2 티니디 체크아웃 → GCP 체크인'},
+ gday('12/31','BKK','차량 2대 배차 (순차픽업 無)'),
+];
+const ITIN_C=[
+ {d:'1',w:'금',l:'BKK',e:'🎊',t:'신정',n:'자유일정'},
+ {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:20–19:40',x:'호텔 08시 출발'},
+ {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
+];
+
+const OWE=[
+ {n:'정유경',t:1868091,b:'숙박 798,340 + 골프 1,045,353 + 차량 24,398'},
+ {n:'윤성욱',t:1764523,b:'골프 1,764,523'},
+ {n:'정유현',t:1671792,b:'숙박 798,340 + 골프 849,054 + 차량 24,398'},
+ {n:'김태기',t:1157513,b:'골프 1,157,513'},
+ {n:'장모님',t:822738,b:'숙박 798,340 + 차량 24,398'},
+ {n:'김윤후',t:822737,b:'숙박 798,339 + 차량 24,398'},
+ {n:'이준영',t:476148,b:'골프 476,148'},
+];
+
+const T_STAY=[
+ ['통부라 3BR','2,052,000','698,400','338,400','338,400','338,400','338,400'],
+ ['티니디 5박','1,672,248','334,450','334,450','334,450','334,450','334,448'],
+ ['티니디 2박','627,451','125,490','125,490','125,490','125,490','125,491'],
+];
+const T_CAR=[
+ ['① 12/16','수완나품→파타야 (Big C 경유)','116,532','ok','정산완료'],
+ ['① 12/18','가족1 4인 픽업','97,592','ok','인당 24,398'],
+ ['③ 파타야','골프장 왕복 6회','TBD','todo','미확정'],
+ ['② 12/23','통부라→공항 (김태기)','80,676','ok','정산완료'],
+ ['④ 12/26','파타야→방콕','TBD','todo','미확정'],
+ ['① 12/27','가족2 픽업','0','info','개별결제'],
+ ['③ 방콕','골프장 왕복 2회','TBD','todo','미확정'],
+ ['④ 12/30','티니디→GCP (가족2)','TBD','todo','미확정'],
+ ['② 1/2','공항 샌딩 2건','TBD','todo','미확정'],
+];
+
+const TODO=[
+ {g:'📝 예약 · 견적',items:[
+  '차량 미확정 — 파타야 골프 6회 · 방콕 골프 2회',
+  '차량 미확정 — 12/26 도시이동 · 12/30 가족2 호텔이동',
+  '차량 미확정 — 1/2 공항 샌딩 2건',
+ ]},
+ {g:'🔍 확인사항',items:[
+  '전 참가자(10명) 여행자보험 가입 확인',
+  '12/18 통부라 엑스트라베드 현지 최종 확인',
+  '12/21 정유현·장모님·김윤후 개별일정 확정 (쿠킹클래스 등)',
+  '티오프 확정 대기 — 12/18·21·22·23(9/10), 12/24(10/1)',
+  '12/30 가족2 체크아웃 동선, 12/31 2대 배차 시간 조율',
+ ]},
+ {g:'💸 정산 회수',items:OWE.map(o=>`${o.n} → 윤우열 ${o.t.toLocaleString()}원`)},
+];
+
+/* ═══ RENDER ═══ */
+
+// count-up
+(function(){
+  const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-to]').forEach(el=>{
+    const to=+el.dataset.to;
+    if(rm){el.textContent=to;return;}
+    let cur=0; const dur=700, t0=performance.now();
+    function tick(t){
+      const p=Math.min(1,(t-t0)/dur), eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(eased*to);
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+})();
+
+// D-day
+(function(){
+  const s=new Date('2026-12-16T00:00:00+07:00'), e=new Date('2027-01-04T23:59:59+07:00'), now=new Date(), D=864e5;
+  $('dday').textContent = now<s ? `D-${Math.ceil((s-now)/D)}` : now<=e ? `여행 ${Math.floor((now-s)/D)+1}일차 🎉` : '여행 완료 ✅';
+})();
+
+// 오늘/다음 일정 프리뷰 카드
+(function(){
+  const stripTag = s => (s||'').replace(/<[^>]*>/g,'');
+  const mkDate = (mon,day,year) => new Date(`${year}-${String(mon).padStart(2,'0')}-${String(day).padStart(2,'0')}T00:00:00+07:00`);
+  const all = [
+    ...ITIN_A.map(x=>({...x, mon:12, yr:2026})),
+    ...ITIN_B.map(x=>({...x, mon:12, yr:2026})),
+    ...ITIN_C.map(x=>({...x, mon:1, yr:2027})),
+  ].map(x=>({...x, date:mkDate(x.mon,+x.d,x.yr)}));
+  const now = new Date(), todayKey = now.toISOString().slice(0,10);
+  let match = all.find(x=>x.date.toISOString().slice(0,10)===todayKey);
+  let tag = match ? '📍 오늘 일정' : null;
+  if(!match){ match = all.find(x=>x.date>now); tag = match ? '다음 일정' : null; }
+  const card = $('nextCard');
+  if(match){
+    $('ncTag').textContent = tag;
+    $('ncE').textContent = match.e||'📌';
+    $('ncT').textContent = `${match.mon}/${match.d}(${match.w}) ${stripTag(match.t)}`;
+    card.style.display='flex';
+    card.addEventListener('click', ()=> go($('tb-itin')));
+  } else {
+    $('ncTag').textContent='🎉';
+    $('ncE').textContent='';
+    $('ncT').textContent='여행 완료! 다들 수고하셨습니다';
+    card.style.display='flex';
+    card.style.cursor='default';
+  }
+})();
+
+// progress (예약 확정 기준: 숙소6 + 골프8 + 차량9 = 23건)
+(function(){
+  const done = 6 + 8 + 4;   // 숙소6 골프8(전부확정) 차량4
+  const total = 6 + 8 + 9;  // 숙소6 골프8 차량9
+  const pct = Math.round(done/total*100);
+  $('ppct').textContent = pct+'%';
+  setTimeout(()=>{$('pfill').style.width=pct+'%';},260);
+})();
+
+// golf cards
+function golfCard(g){
+  const mapUrl = 'https://maps.google.com/?q='+encodeURIComponent(g.addr || (g.c+' Thailand'));
+  const telHref = g.tel ? 'tel:'+g.tel.replace(/-/g,'') : '';
+  const hasDetail = !!(g.book || g.addr || g.tel);
+  return `<div class="gcard s-${g.st}">
+    <div class="gcard-head" role="button" tabindex="0" aria-expanded="false">
+      <div class="g-top">
+        <div><div class="g-dt">${g.d} (${g.w})</div><div class="g-nm">${g.c}</div></div>
+        <div class="g-price">${g.amt?won(g.amt)+'원':'<span class="chip todo">견적대기</span>'}
+          ${g.per?`<small>인당 ${won(g.per)}</small>`:''}</div>
+      </div>
+      <div class="g-meta">
+        <div class="ppl">${g.p.map(p=>`<span class="av" style="background:${pcBg(p)}">${dot(p)}${p}</span>`).join('')}${g.note?`<span class="av" style="background:var(--coral-s);color:var(--coral)">${g.note}</span>`:''}</div>
+        <span class="tee">⏱ ${g.tee}</span>
+      </div>
+      ${hasDetail?'<div class="g-toggle"><span class="chev">▾</span> 바우처 상세보기</div>':''}
+    </div>
+    ${hasDetail?`<div class="gcard-detail">
+      ${g.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${g.book}</span></div>`:''}
+      ${g.bid?`<div class="gd-row"><span class="gd-k">Booking ID</span><span class="gd-v">${g.bid}</span></div>`:''}
+      ${g.addr?`<div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="${mapUrl}" target="_blank" rel="noopener">${g.addr} <span class="mico">↗</span></a></div>`:''}
+      ${g.tel?`<div class="gd-row"><span class="gd-k">전화</span><a class="gd-v maddr" href="${telHref}">${g.tel} 📞</a></div>`:''}
+    </div>`:''}
+  </div>`;
+}
+$('golfPat').innerHTML = GOLF.filter(g=>g.loc==='pat').map(golfCard).join('');
+$('golfBkk').innerHTML = GOLF.filter(g=>g.loc==='bkk').map(golfCard).join('');
+$('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'만';
+
+// 골프카드 탭-확장 (바우처 상세)
+['golfPat','golfBkk'].forEach(id=>{
+  $(id).addEventListener('click', e=>{
+    if(e.target.closest('a')) return; // 지도/전화 링크는 그대로 동작
+    const head = e.target.closest('.gcard-head'); if(!head) return;
+    const card = head.closest('.gcard'), opened = card.classList.toggle('open');
+    head.setAttribute('aria-expanded', opened);
+  });
+  $(id).addEventListener('keydown', e=>{
+    if((e.key===' '||e.key==='Enter') && e.target.classList.contains('gcard-head')){
+      e.preventDefault(); e.target.click();
+    }
+  });
+});
+
+// 숙소카드 탭-확장 (바우처 상세)
+$('stay').addEventListener('click', e=>{
+  if(e.target.closest('a')) return; // 지도/전화 링크는 그대로 동작
+  const head = e.target.closest('.lg-head'); if(!head) return;
+  const card = head.closest('.lg'), opened = card.classList.toggle('open');
+  head.setAttribute('aria-expanded', opened);
+});
+$('stay').addEventListener('keydown', e=>{
+  if((e.key===' '||e.key==='Enter') && e.target.classList.contains('lg-head')){
+    e.preventDefault(); e.target.click();
+  }
+});
+
+// matrix
+(function(){
+  const rows = GOLFERS.map(p=>{
+    const cells = GOLF.map(g=>g.p.includes(p)
+      ? `<td title="${g.d} ${g.c}"><span class="mdot" style="background:${pc(p)}"></span></td>` : `<td class="no">·</td>`).join('');
+    const cnt = GOLF.filter(g=>g.p.includes(p)).length;
+    return `<tr><td>${dot(p)}${p}</td>${cells}<td style="font-family:'IBM Plex Mono',monospace;font-weight:700;background:${pcBg(p)};border-radius:8px">${cnt}</td></tr>`;
+  }).join('');
+  $('mxTable').innerHTML =
+    `<thead><tr><th>참여자</th>${GOLF.map(g=>`<th>${g.d.replace('12/','')}</th>`).join('')}<th>계</th></tr></thead>
+     <tbody>${rows}</tbody>
+     <tfoot><tr><td>인원</td>${GOLF.map(g=>`<td>${g.p.length}${g.st==='todo'?'+':''}</td>`).join('')}<td>–</td></tr></tfoot>`;
+})();
+
+// itinerary
+function days(list,el){
+  $(el).innerHTML = list.map(x=>{
+    const hasDetail = !!(x.book||x.addr||x.tel);
+    const mapUrl = x.addr ? 'https://maps.google.com/?q='+encodeURIComponent(x.addr) : '';
+    const telHref = x.tel ? 'tel:'+x.tel.replace(/-/g,'') : '';
+    return `
+   <div class="day ${x.s?'s-'+x.s:''}">
+     <div class="dbox"><div class="dn">${x.d}</div><div class="dw">${x.w}</div></div>
+     <div class="de" aria-hidden="true">${x.e||''}</div>
+     <div class="day-col">
+       <div class="${hasDetail?'day-head':''}" ${hasDetail?'role="button" tabindex="0" aria-expanded="false"':''}>
+         <div class="dloc">${x.l}</div>
+         <div class="dt">${x.t}</div>
+         ${x.n?`<div class="dnote">${x.n}</div>`:''}
+         ${x.x?`<div class="dx">${x.x}</div>`:''}
+         ${hasDetail?'<div class="g-toggle"><span class="chev">▾</span> 바우처 상세보기</div>':''}
+       </div>
+       ${hasDetail?`<div class="day-detail">
+         ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
+         ${x.addr?`<div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="${mapUrl}" target="_blank" rel="noopener">${x.addr} <span class="mico">↗</span></a></div>`:''}
+         ${x.tel?`<div class="gd-row"><span class="gd-k">전화</span><a class="gd-v maddr" href="${telHref}">${x.tel} 📞</a></div>`:''}
+       </div>`:''}
+     </div>
+   </div>`;
+  }).join('');
+}
+days(ITIN_A,'iA'); days(ITIN_B,'iB'); days(ITIN_C,'iC');
+
+// 일정탭 골프 바우처 탭-확장
+['iA','iB','iC'].forEach(id=>{
+  $(id).addEventListener('click', e=>{
+    if(e.target.closest('a')) return;
+    const head = e.target.closest('.day-head'); if(!head) return;
+    const day = head.closest('.day'), opened = day.classList.toggle('open');
+    head.setAttribute('aria-expanded', opened);
+  });
+  $(id).addEventListener('keydown', e=>{
+    if((e.key===' '||e.key==='Enter') && e.target.classList.contains('day-head')){
+      e.preventDefault(); e.target.click();
+    }
+  });
+});
+
+// cost
+const oweSum = OWE.reduce((a,o)=>a+o.t,0);
+$('oweTotal').innerHTML = won(oweSum)+'<small>원</small>';
+
+// 정산 요약 문구 — 하드코딩 대신 원본 데이터에서 직접 계산 (드리프트 방지)
+(function(){
+  const num = s => parseInt(String(s).replace(/,/g,''));
+  const stayOwed = T_STAY.reduce((sum,r)=> sum + num(r[3])+num(r[4])+num(r[5])+num(r[6]), 0);
+  const golfOwed = GOLF.reduce((sum,g)=> g.amt ? sum + (g.amt - g.per) : sum, 0);
+  const carOwed = 97592; // 12/18 가족1 픽업, 4인 1/N (12/16·23·27은 이미 정산완료 또는 개별결제)
+  const pendingGolf = GOLF.filter(g=>!g.amt).length;
+  $('oweBreak').textContent =
+    `숙박 ${won(stayOwed)} + 골프 ${won(golfOwed)} + 차량 ${won(carOwed)}`+
+    (pendingGolf ? ` · 미확정 골프 ${pendingGolf}건 제외` : '');
+})();
+const oweMax = Math.max(...OWE.map(o=>o.t));
+
+// 사람별 정산 항목 상세 (골프+숙박+차량 원본 데이터에서 동적 산출)
+function owedItems(name){
+  const items=[];
+  GOLF.forEach(g=>{
+    if(g.amt && g.p.includes(name) && name!=='윤우열'){
+      items.push({label:`⛳ ${g.d} ${g.c}`, amt:g.per});
+    }
+  });
+  const stayIdx = {'정유경':3,'정유현':4,'장모님':5,'김윤후':6};
+  const stayLabel = ['🏨 통부라 3BR (10박)','🏨 티니디 5박','🏨 티니디 2박'];
+  if(stayIdx[name]!=null){
+    T_STAY.forEach((r,i)=> items.push({label:stayLabel[i], amt:parseInt(r[stayIdx[name]].replace(/,/g,''))}));
+  }
+  if(['정유경','정유현','장모님','김윤후'].includes(name)){
+    items.push({label:'🚐 12/18 공항픽업', amt:24398});
+  }
+  return items;
+}
+
+$('bars').innerHTML = OWE.map((o,i)=>{
+  const items = owedItems(o.n);
+  return `<div class="bar-row">
+    <div class="bar-head" role="button" tabindex="0" aria-expanded="false">
+      <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}</span><span class="bar-amt">${won(o.t)}원</span></div>
+      <div class="bar-track"><div class="bar-fill" data-w="${(o.t/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc(o.n)} 0%,${pc(o.n)}CC 100%)"></div></div>
+      <div class="bar-brk">${o.b} <span class="chev">▾</span></div>
+    </div>
+    <div class="bar-detail">
+      ${items.map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label}</span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace">${won(it.amt)}원</span></div>`).join('')}
+    </div>
+  </div>`;
+}).join('');
+setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach((b,i)=>{
+  setTimeout(()=>b.style.width=b.dataset.w+'%', i*70);});},300);
+
+$('bars').addEventListener('click', e=>{
+  const head = e.target.closest('.bar-head'); if(!head) return;
+  const row = head.closest('.bar-row'), opened = row.classList.toggle('open');
+  head.setAttribute('aria-expanded', opened);
+});
+$('bars').addEventListener('keydown', e=>{
+  if((e.key===' '||e.key==='Enter') && e.target.classList.contains('bar-head')){
+    e.preventDefault(); e.target.click();
+  }
+});
+
+$('tStay').innerHTML = `<tr><th>항목</th><th>합계</th><th>윤우열</th><th>정유경</th><th>정유현</th><th>장모님</th><th>김윤후</th></tr>`+
+ T_STAY.map(r=>`<tr><td data-l="항목">${r[0]}</td><td class="n" data-l="합계">${r[1]}</td><td class="n" data-l="윤우열">${r[2]}</td><td class="n" data-l="정유경">${r[3]}</td><td class="n" data-l="정유현">${r[4]}</td><td class="n" data-l="장모님">${r[5]}</td><td class="n" data-l="김윤후">${r[6]}</td></tr>`).join('');
+
+$('tGolf').innerHTML = `<tr><th>날짜</th><th>코스</th><th>참여자</th><th>금액</th><th>인당</th></tr>`+
+ GOLF.map(g=>`<tr><td data-l="날짜">${g.d}</td><td data-l="코스">${g.c}</td><td data-l="참여자">${g.p.join('·')}${g.st==='todo'?' +1?':''}</td><td class="n" data-l="금액">${g.amt?won(g.amt):'TBD'}</td><td class="n" data-l="인당">${g.per?won(g.per):'TBD'}</td></tr>`).join('');
+
+$('tCar').innerHTML = `<tr><th>구분</th><th>내용</th><th>금액</th><th>상태</th></tr>`+
+ T_CAR.map(r=>`<tr><td data-l="구분">${r[0]}</td><td data-l="내용">${r[1]}</td><td class="n" data-l="금액">${r[2]}</td><td data-l="상태"><span class="chip ${r[3]}">${r[4]}</span></td></tr>`).join('');
+
+// todo
+$('todoWrap').innerHTML = TODO.map((g,gi)=>`
+  <div class="cgrp" data-g="${gi}">
+    <h3 role="button" tabindex="0" aria-expanded="true"><span class="h3-tx">${g.g}</span><span class="cnt"></span><span class="chev">▾</span></h3>
+    ${g.items.map(t=>`<div class="ci" role="checkbox" aria-checked="false" tabindex="0"><span class="bx"></span><span class="tx">${t}</span></div>`).join('')}
+  </div>`).join('');
+
+const RING_C = 2*Math.PI*18; // r=18
+function refresh(){
+  let left=0, doneTotal=0, allTotal=0;
+  const hideDone = $('hideDone').checked;
+  document.querySelectorAll('.cgrp').forEach(g=>{
+    const all=g.querySelectorAll('.ci'), doneEls=g.querySelectorAll('.ci.done'), dn=doneEls.length;
+    const remain=all.length-dn;
+    g.querySelector('.cnt').textContent = remain ? `${remain}개 남음` : '완료 🎉';
+    g.querySelector('.cnt').style.background = remain ? '' : 'var(--ok-s)';
+    g.querySelector('.cnt').style.color = remain ? '' : 'var(--ok)';
+    left += remain; doneTotal += dn; allTotal += all.length;
+    all.forEach(el=> el.classList.toggle('hide-done', hideDone && el.classList.contains('done')));
+  });
+  $('tdN').textContent = left;
+  $('tdN').style.display = left ? '' : 'none';
+
+  const pct = allTotal ? Math.round(doneTotal/allTotal*100) : 0;
+  $('thPct').textContent = pct+'%';
+  $('thDone').textContent = doneTotal;
+  $('thTotal').textContent = allTotal;
+  $('thLeft').textContent = left ? `${left}개 남았어요` : '전부 완료했어요 🎉';
+  $('thRing').style.strokeDashoffset = RING_C - (pct/100)*RING_C;
+}
+document.querySelectorAll('.ci').forEach(i=>{
+  const tog=()=>{const d=i.classList.toggle('done');i.setAttribute('aria-checked',d);refresh();};
+  i.addEventListener('click',tog);
+  i.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();tog();}});
+});
+document.querySelectorAll('.cgrp h3').forEach(h=>{
+  const tog = ()=>{
+    const collapsed = h.closest('.cgrp').classList.toggle('collapsed');
+    h.setAttribute('aria-expanded', !collapsed);
+  };
+  h.addEventListener('click', tog);
+  h.addEventListener('keydown', e=>{
+    if(e.key===' '||e.key==='Enter'){ e.preventDefault(); tog(); }
+  });
+});
+$('hideDone').addEventListener('change', refresh);
+refresh();
+
+// copy-to-text
+function buildGolfText(){
+  const pat=GOLF.filter(g=>g.loc==='pat'), bkk=GOLF.filter(g=>g.loc==='bkk');
+  const line=g=>`${g.d}(${g.w}) ${g.c} - ${g.p.join('·')}${g.st==='todo'?' +1(미정)':''}${g.amt?` · ${won(g.amt)}원`:' · 견적대기'}`;
+  return `🇹🇭 태국 골프 일정\n\n[파타야]\n${pat.map(line).join('\n')}\n\n[방콕]\n${bkk.map(line).join('\n')}`;
+}
+function buildItinText(){
+  const plain = s => (s||'').replace(/<[^>]*>/g,''); // 화면표시용 HTML(색점 등) 제거, 순수 텍스트만
+  const line=x=>`12/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}`;
+  const lineJan=x=>`1/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}`;
+  return `🇹🇭 태국 여행 일정 (2026.12.16–2027.1.4)\n\n${ITIN_A.map(line).join('\n')}\n${ITIN_B.map(line).join('\n')}\n${ITIN_C.map(lineJan).join('\n')}`;
+}
+function wireCopy(id, builder){
+  const btn=$(id); if(!btn) return;
+  btn.addEventListener('click', async ()=>{
+    try{ await navigator.clipboard.writeText(builder()); }
+    catch(e){
+      const ta=document.createElement('textarea'); ta.value=builder();
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    }
+    const orig=btn.textContent;
+    btn.textContent='✅ 복사됨'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent=orig; btn.classList.remove('copied');}, 1600);
+  });
+}
+wireCopy('copyGolf', buildGolfText);
+wireCopy('copyItin', buildItinText);
+
+// tabs
+const tbs=document.querySelectorAll('.tb'), pnls=document.querySelectorAll('.pnl');
+const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function go(b){
+  tbs.forEach(x=>{x.classList.remove('on');x.setAttribute('aria-selected','false');});
+  pnls.forEach(p=>p.classList.remove('on'));
+  b.classList.add('on'); b.setAttribute('aria-selected','true');
+  $(b.dataset.t).classList.add('on');
+  if(innerWidth>760) scrollTo({top:document.querySelector('nav.tabs').offsetTop-1,behavior:rm?'auto':'smooth'});
+  else scrollTo({top:0,behavior:rm?'auto':'smooth'});
+}
+tbs.forEach((b,i)=>{
+  b.addEventListener('click',()=>go(b));
+  b.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();
+      const n=tbs[(i+(e.key==='ArrowRight'?1:-1)+tbs.length)%tbs.length];n.focus();go(n);}
+  });
+});
+
+// 스와이프로 탭 전환 (모바일). 가로 스크롤 표(.scr, .mx-wrap) 위에서는 비활성화
+(function(){
+  if(innerWidth>760) return;
+  let x0=0, y0=0, swiping=false;
+  const main = document.querySelector('main');
+  main.addEventListener('touchstart', e=>{
+    if(e.target.closest('.scr, .mx-wrap')) { swiping=false; return; }
+    x0=e.touches[0].clientX; y0=e.touches[0].clientY; swiping=true;
+  }, {passive:true});
+  main.addEventListener('touchend', e=>{
+    if(!swiping) return;
+    const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>64 && Math.abs(dx)>Math.abs(dy)*1.6){
+      const cur=[...tbs].findIndex(t=>t.classList.contains('on'));
+      const next=tbs[dx<0 ? Math.min(cur+1,tbs.length-1) : Math.max(cur-1,0)];
+      if(next && next!==tbs[cur]) go(next);
+    }
+  }, {passive:true});
+})();
+</script>
+</body>
+</html>
