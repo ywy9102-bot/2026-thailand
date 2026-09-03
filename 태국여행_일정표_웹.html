@@ -15,13 +15,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#12211E; --ink2:#3D544D; --ink3:#7E9189;
+  --ink:#12211E; --ink2:#3D544D; --ink3:#5E7167;
   --paper:#F6F2E8; --card:#FFFFFF; --line:#E2D9C6;
   --jade:#1E4B41; --jade-d:#0E2822; --jade-s:#DDE9E3;
-  --gold:#B58A28; --gold-s:#F5E7C0;
-  --coral:#C05B39; --coral-s:#F7E2D8;
+  --gold:#B58A28; --gold-s:#F5E7C0; --gold-text:#856419;
+  --coral:#A94A2C; --coral-s:#F7E2D8;
   --ok:#2C6B4C; --ok-s:#DCEFE2;
-  --wait:#8F7118; --wait-s:#F7EDCC;
+  --wait:#7E640F; --wait-s:#F7EDCC;
   --sh: 0 1px 2px rgba(14,40,34,.05), 0 6px 20px -10px rgba(14,40,34,.16);
   --nav-h: 62px;
 }
@@ -157,7 +157,7 @@ h2.sec .e{font-size:21px;line-height:1}
 .gcard.s-todo{border-left-color:var(--coral);background:#FEFAF8}
 .gcard.s-wait{border-left-color:var(--wait)}
 .g-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
-.g-dt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;margin-bottom:3px}
+.g-dt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold-text);font-weight:700;margin-bottom:3px}
 .g-nm{font-weight:700;font-size:15px;line-height:1.3}
 .g-price{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--jade-d);text-align:right;white-space:nowrap}
 .g-price small{display:block;font-size:11px;color:var(--ink3);font-weight:500;margin-top:2px}
@@ -169,18 +169,19 @@ h2.sec .e{font-size:21px;line-height:1}
 .tee{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink3);margin-left:auto;white-space:nowrap}
 
 .gcard-head{cursor:pointer}
-.g-toggle{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--gold);font-weight:700;
+.g-toggle{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--gold-text);font-weight:700;
   margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);user-select:none}
 .chev{display:inline-block;transition:transform .2s ease;font-size:9px}
 .gcard.open .chev{transform:rotate(180deg)}
 .gcard-detail{display:none}
 .gcard.open .gcard-detail{display:block;animation:fadeIn .18s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.gd-row{display:flex;gap:10px;align-items:baseline;padding:7px 0;font-size:12px;border-top:1px dashed var(--line)}
+.gd-row{display:flex;gap:10px;align-items:center;padding:6px 0;font-size:12px;border-top:1px dashed var(--line)}
 .gd-row:first-child{border-top:none}
-.gd-k{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);flex:none;width:58px}
+.gd-k{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);flex:none;width:58px;align-self:center}
 .gd-v{color:var(--ink2);flex:1}
-a.gd-v{color:var(--jade);font-weight:600;text-decoration:none}
+a.gd-v{color:var(--jade);font-weight:600;text-decoration:none;
+  display:inline-block;padding-block:14px}  /* 지도·전화 링크 세로 터치영역 ≥44px */
 a.gd-v:hover{text-decoration:underline}
 
 /* ══ MATRIX ══ */
@@ -208,7 +209,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 
 /* ══ LODGING ══ */
 .lg-grp{margin-bottom:24px}
-.lg-loc{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);
+.lg-loc{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--gold-text);
   letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:8px}
 .lg-loc::after{content:"";flex:1;height:1px;background:var(--line)}
 .lg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:9px;box-shadow:var(--sh)}
@@ -225,14 +226,14 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .maddr:hover{text-decoration:underline}
 .maddr .mico{font-size:10px;opacity:.7}
 a.g-nm.maddr{color:var(--ink);text-decoration:none}
-a.g-nm.maddr .mico{font-size:11px;color:var(--gold);opacity:.9}
+a.g-nm.maddr .mico{font-size:11px;color:var(--gold-text);opacity:.9}
 a.g-nm.maddr:hover{color:var(--jade-d)}
 .lg-m code{background:var(--jade-s);padding:1px 6px;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:10.5px}
 .warn{font-size:12px;color:var(--coral);background:var(--coral-s);border-radius:9px;
   padding:9px 12px;margin-top:8px;line-height:1.6}
 
 /* ══ ITINERARY ══ */
-.mdiv{font-family:'Fraunces',serif;font-style:italic;font-size:14.5px;color:var(--gold);
+.mdiv{font-family:'Fraunces',serif;font-style:italic;font-size:14.5px;color:var(--gold-text);
   padding:20px 0 8px;border-bottom:2px solid var(--gold-s);display:flex;align-items:center;gap:8px}
 .day{display:grid;grid-template-columns:46px 26px 1fr;gap:11px;align-items:start;
   padding:12px 0;border-bottom:1px solid var(--line)}
@@ -253,7 +254,7 @@ a.g-nm.maddr:hover{color:var(--jade-d)}
 .day-detail{display:none}
 .day.open .day-detail{display:block;animation:fadeIn .18s ease}
 .day.open .g-toggle .chev{transform:rotate(180deg)}
-.dx::before{content:"↳";color:var(--gold);font-weight:700;flex:none}
+.dx::before{content:"↳";color:var(--gold-text);font-weight:700;flex:none}
 
 /* ══ COST ══ */
 .cost-hero{background:linear-gradient(135deg,var(--jade) 0%,var(--jade-d) 100%);color:#fff;
@@ -281,7 +282,7 @@ a.g-nm.maddr:hover{color:var(--jade-d)}
 .bar-detail .gd-row:first-child{border-top:none;padding-top:9px}
 
 .stbl{font-weight:700;font-size:14px;margin:24px 0 9px;display:flex;align-items:center;gap:7px}
-.stbl .i{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:11.5px}
+.stbl .i{font-family:'IBM Plex Mono',monospace;color:var(--gold-text);font-size:11.5px}
 table.d{width:100%;border-collapse:collapse;font-size:12.5px}
 table.d th{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;
   letter-spacing:.03em;color:var(--ink2);padding:8px;border-bottom:1.5px solid var(--jade)}
@@ -294,7 +295,7 @@ table.d tr:nth-child(even) td{background:rgba(30,75,65,.02)}
 /* ══ CHECKLIST ══ */
 .cgrp{margin-bottom:22px}
 .cgrp h3{font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-transform:uppercase;
-  letter-spacing:.07em;color:var(--gold);margin:0 0 9px;font-weight:700;display:flex;align-items:center;gap:8px}
+  letter-spacing:.05em;color:var(--gold-text);margin:0 0 9px;font-weight:700;display:flex;align-items:center;gap:7px}
 .cnt{font-family:'Inter',sans-serif;text-transform:none;letter-spacing:0;font-weight:600;
   font-size:10px;color:var(--ink2);background:var(--jade-s);padding:1px 8px;border-radius:99px}
 .ci{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);user-select:none;
@@ -336,7 +337,8 @@ table.d tr:nth-child(even) td{background:rgba(30,75,65,.02)}
 .th-toggle input:checked::after{transform:translateX(14px)}
 
 .cgrp h3{cursor:pointer}
-.cgrp .chev{font-size:9px;transition:transform .2s ease;margin-left:auto}
+.cgrp .chev{font-size:10px;transition:transform .2s ease;order:-1;color:var(--gold-text)}
+.cgrp .cnt{margin-left:auto}
 .cgrp.collapsed .chev{transform:rotate(-90deg)}
 .cgrp.collapsed .ci{display:none}
 .ci.hide-done{display:none !important}
@@ -373,8 +375,9 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .th-toggle input::after{width:14px;height:14px}
   .th-toggle input:checked::after{transform:translateX(12px)}
 
-  /* nav → bottom bar */
+  /* nav → bottom bar (fixed 요소 + backdrop-filter 조합의 iOS Safari 잔상 방지: blur 제거, 불투명 배경) */
   nav.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;border-bottom:none;
+    background:var(--paper);-webkit-backdrop-filter:none;backdrop-filter:none;
     border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);
     box-shadow:0 -3px 16px rgba(14,40,34,.09)}
   nav.tabs .wrap{padding:0;justify-content:space-around;overflow:visible}
@@ -421,7 +424,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   table.mx{min-width:520px}
   .mx-hint{display:block!important}
 }
-.mx-hint{display:none;font-size:11.5px;color:var(--gold);font-family:'IBM Plex Mono',monospace;margin-bottom:7px}
+.mx-hint{display:none;font-size:11.5px;color:var(--gold-text);font-family:'IBM Plex Mono',monospace;margin-bottom:7px}
 
 @media (max-width:400px){
   h1.title{font-size:25px}
@@ -521,7 +524,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 <!-- 👨‍👩‍👧‍👦 PEOPLE -->
 <section class="pnl" id="people" role="tabpanel" aria-labelledby="tb-people">
   <h2 class="sec"><span class="e">👨‍👩‍👧‍👦</span>참가자</h2>
-  <p class="sub">3개 그룹, 총 10명 · <span style="color:var(--gold)">●</span> = 골프 참여 (색상은 골프 탭과 동일)</p>
+  <p class="sub">3개 그룹, 총 10명 · <span style="color:var(--gold-text)">●</span> = 골프 참여 (색상은 골프 탭과 동일)</p>
   <div class="fams" id="famsWrap"></div>
 </section>
 
@@ -688,7 +691,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v8.1 · 최종수정 2026-08-11<br>태국 겨울 골프 원정 · 2026.12.16–2027.1.4
+  v8.2 · 최종수정 <span id="ftDate">–</span><br>태국 겨울 골프 원정 · 2026.12.16–2027.1.4
 </div></footer>
 
 <script>
@@ -835,6 +838,13 @@ const TODO=[
 (function(){
   const s=new Date('2026-12-16T00:00:00+07:00'), e=new Date('2027-01-04T23:59:59+07:00'), now=new Date(), D=864e5;
   $('dday').textContent = now<s ? `D-${Math.ceil((s-now)/D)}` : now<=e ? `여행 ${Math.floor((now-s)/D)+1}일차 🎉` : '여행 완료 ✅';
+})();
+
+// 최종수정일 — 배포 시각(document.lastModified)에서 자동 산출
+(function(){
+  const d = new Date(document.lastModified);
+  $('ftDate').textContent = isNaN(d) ? '–' :
+    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 })();
 
 // 오늘/다음 일정 프리뷰 카드
