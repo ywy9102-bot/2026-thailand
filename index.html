@@ -53,6 +53,8 @@ header.hero::before{content:"";position:absolute;inset:0;
 .hero-in{position:relative}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;
   color:#BCCDC4;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.eyebrow-upd{margin-left:auto;letter-spacing:.02em;font-size:10px;color:#8FA69C;
+  font-weight:400;white-space:nowrap;text-transform:none}
 .eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);
   box-shadow:0 0 0 0 rgba(181,138,40,.7);animation:pulse 2.4s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(181,138,40,.6)}70%{box-shadow:0 0 0 9px rgba(181,138,40,0)}100%{box-shadow:0 0 0 0 rgba(181,138,40,0)}}
@@ -457,7 +459,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 
 <header class="hero">
   <div class="wrap hero-in">
-    <p class="eyebrow"><span class="pulse"></span>🇹🇭 파타야 → 방콕</p>
+    <p class="eyebrow"><span class="pulse"></span>🇹🇭 파타야 → 방콕<span class="eyebrow-upd">upd <span id="updStamp">–</span></span></p>
     <h1 class="title">태국 겨울 골프 원정</h1>
     <div class="dates">
       <span class="rng">2026.12.16(수) → 2027.1.4(월) · 20일</span>
@@ -691,7 +693,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v8.2 · 최종수정 <span id="ftDate">–</span><br>태국 겨울 골프 원정 · 2026.12.16–2027.1.4
+  v8.2 · 태국 겨울 골프 원정 · 2026.12.16–2027.1.4
 </div></footer>
 
 <script>
@@ -840,11 +842,11 @@ const TODO=[
   $('dday').textContent = now<s ? `D-${Math.ceil((s-now)/D)}` : now<=e ? `여행 ${Math.floor((now-s)/D)+1}일차 🎉` : '여행 완료 ✅';
 })();
 
-// 최종수정일 — 배포 시각(document.lastModified)에서 자동 산출
+// 최종수정 일시 — 배포 시각(document.lastModified)에서 자동 산출, 히어로 우측 상단 표시
 (function(){
-  const d = new Date(document.lastModified);
-  $('ftDate').textContent = isNaN(d) ? '–' :
-    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const d = new Date(document.lastModified), p = n => String(n).padStart(2,'0');
+  $('updStamp').textContent = isNaN(d) ? '–' :
+    `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 })();
 
 // 오늘/다음 일정 프리뷰 카드
