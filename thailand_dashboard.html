@@ -829,6 +829,13 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 <script>
 const $=id=>document.getElementById(id);
 const won=n=>n==null?'—':n.toLocaleString();
+
+/* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
+const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+function haptic(kind){
+  if(!HAPTIC_OK) return;
+  try{ navigator.vibrate(kind==='ok' ? [11,26,15] : kind==='strong' ? 20 : 9); }catch(e){}
+}
 /* ═══ DATA ═══ */
 const GOLF=[
  {d:'12/17',w:'목',loc:'pat',c:'Chee Chan Golf Resort',p:['윤우열','김태기','윤성욱'],tee:'08:34 확정',amt:695094,per:231698,st:'ok',
@@ -1066,34 +1073,34 @@ const TODO=[
     agoEl.textContent=fmtAgo(w&&w.ts);
   }
   let fetching=false;
-  async function sync(){
+  async function sync(userInitiated){
     if(fetching) return;
     fetching=true; wx.classList.add('loading');
-    const {lat,lon}=CITIES[city];
+    const {lat,lon}=CITIES[city]; let ok=false;
     try{
       const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=Asia%2FBangkok`,{cache:'no-store'});
       const j=await r.json();
       if(j&&j.current){
         state[city]={temp:j.current.temperature_2m, code:j.current.weather_code, ts:Date.now()};
-        state.city=city;
+        state.city=city; ok=true;
         try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
       }
     }catch(e){/* 실패 시 캐시 유지 */}
-    finally{ fetching=false; wx.classList.remove('loading'); renderWx(); }
+    finally{ fetching=false; wx.classList.remove('loading'); renderWx(); if(userInitiated) haptic(ok?'ok':'strong'); }
   }
 
   function toggleCity(){
     city = (city==='파타야') ? '방콕' : '파타야';
     state.city=city;
     try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
-    renderCity(); renderWx();
+    renderCity(); renderWx(); haptic('tap');
     if(!state[city] || Date.now()-state[city].ts > 30*6e4) sync();
   }
   // 위젯 아무 곳이나 탭 → 동기화 (구글 링크는 이동만, 위치 버튼은 전환)
   wx.addEventListener('click', e=>{
-    if(e.target.closest('#wxMain')) return;              // 구글 날씨로 이동
+    if(e.target.closest('#wxMain')){ haptic('tap'); return; }  // 구글 날씨로 이동
     if(e.target.closest('#wxLoc')){ toggleCity(); return; }
-    sync();
+    haptic('tap'); sync(true);
   });
 
   renderCity(); timeEl.textContent=fmtTime(); renderWx();
@@ -1130,7 +1137,7 @@ const TODO=[
     $('ncE').textContent = match.e||'📌';
     $('ncT').textContent = `${match.mon}/${match.d}(${match.w}) ${stripTag(match.t)}`;
     card.style.display='flex';
-    card.addEventListener('click', ()=> go($('tb-itin')));
+    card.addEventListener('click', ()=>{ haptic('tap'); go($('tb-itin')); });
   } else {
     $('ncTag').textContent='🎉';
     $('ncE').textContent='';
@@ -1185,7 +1192,7 @@ $('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'�
     if(e.target.closest('a')) return; // 지도/전화 링크는 그대로 동작
     const head = e.target.closest('.gcard-head'); if(!head) return;
     const card = head.closest('.gcard'), opened = card.classList.toggle('open');
-    head.setAttribute('aria-expanded', opened);
+    head.setAttribute('aria-expanded', opened); haptic('tap');
   });
   $(id).addEventListener('keydown', e=>{
     if((e.key===' '||e.key==='Enter') && e.target.classList.contains('gcard-head')){
@@ -1199,7 +1206,7 @@ $('stay').addEventListener('click', e=>{
   if(e.target.closest('a')) return; // 지도/전화 링크는 그대로 동작
   const head = e.target.closest('.lg-head'); if(!head) return;
   const card = head.closest('.lg'), opened = card.classList.toggle('open');
-  head.setAttribute('aria-expanded', opened);
+  head.setAttribute('aria-expanded', opened); haptic('tap');
 });
 $('stay').addEventListener('keydown', e=>{
   if((e.key===' '||e.key==='Enter') && e.target.classList.contains('lg-head')){
@@ -1256,7 +1263,7 @@ days(ITIN_A,'iA'); days(ITIN_B,'iB'); days(ITIN_C,'iC');
     if(e.target.closest('a')) return;
     const head = e.target.closest('.day-head'); if(!head) return;
     const day = head.closest('.day'), opened = day.classList.toggle('open');
-    head.setAttribute('aria-expanded', opened);
+    head.setAttribute('aria-expanded', opened); haptic('tap');
   });
   $(id).addEventListener('keydown', e=>{
     if((e.key===' '||e.key==='Enter') && e.target.classList.contains('day-head')){
@@ -1320,7 +1327,7 @@ setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach((b,i)=>{
 $('bars').addEventListener('click', e=>{
   const head = e.target.closest('.bar-head'); if(!head) return;
   const row = head.closest('.bar-row'), opened = row.classList.toggle('open');
-  head.setAttribute('aria-expanded', opened);
+  head.setAttribute('aria-expanded', opened); haptic('tap');
 });
 $('bars').addEventListener('keydown', e=>{
   if((e.key===' '||e.key==='Enter') && e.target.classList.contains('bar-head')){
@@ -1382,8 +1389,8 @@ document.querySelectorAll('.ci').forEach(i=>{
   const tog=()=>{
     const d=i.classList.toggle('done');
     i.setAttribute('aria-checked',d);
-    if(d){ store.done[key]=true; i.classList.add('just-done'); setTimeout(()=>i.classList.remove('just-done'),460); }
-    else delete store.done[key];
+    if(d){ store.done[key]=true; i.classList.add('just-done'); setTimeout(()=>i.classList.remove('just-done'),460); haptic('ok'); }
+    else { delete store.done[key]; haptic('tap'); }
     saveStore(); refresh();
   };
   i.addEventListener('click',tog);
@@ -1400,7 +1407,7 @@ document.querySelectorAll('.cgrp h3').forEach(h=>{
     const collapsed = grp.classList.toggle('collapsed');
     h.setAttribute('aria-expanded', !collapsed);
     if(collapsed) store.collapsed[gi]=true; else delete store.collapsed[gi];
-    saveStore();
+    saveStore(); haptic('tap');
   };
   h.addEventListener('click', tog);
   h.addEventListener('keydown', e=>{
@@ -1409,7 +1416,7 @@ document.querySelectorAll('.cgrp h3').forEach(h=>{
 });
 
 $('hideDone').checked = store.hideDone;
-$('hideDone').addEventListener('change', ()=>{ store.hideDone = $('hideDone').checked; saveStore(); refresh(); });
+$('hideDone').addEventListener('change', ()=>{ store.hideDone = $('hideDone').checked; saveStore(); refresh(); haptic('tap'); });
 saveStore();
 refresh();
 
@@ -1434,7 +1441,7 @@ function wireCopy(id, builder){
       document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
     }
     const orig=btn.textContent;
-    btn.textContent='✅ 복사됨'; btn.classList.add('copied');
+    btn.textContent='✅ 복사됨'; btn.classList.add('copied'); haptic('ok');
     setTimeout(()=>{btn.textContent=orig; btn.classList.remove('copied');}, 1600);
   });
 }
@@ -1463,7 +1470,7 @@ function go(b,noScroll){
   }
 }
 tbs.forEach((b,i)=>{
-  b.addEventListener('click',()=>go(b));
+  b.addEventListener('click',()=>{ haptic('tap'); go(b); });
   b.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();
       const n=tbs[(i+(e.key==='ArrowRight'?1:-1)+tbs.length)%tbs.length];n.focus();go(n);}
@@ -1489,7 +1496,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     if(Math.abs(dx)>64 && Math.abs(dx)>Math.abs(dy)*1.6){
       const cur=[...tbs].findIndex(t=>t.classList.contains('on'));
       const next=tbs[dx<0 ? Math.min(cur+1,tbs.length-1) : Math.max(cur-1,0)];
-      if(next && next!==tbs[cur]) go(next);
+      if(next && next!==tbs[cur]){ haptic('tap'); go(next); }
     }
   }, {passive:true});
 })();
