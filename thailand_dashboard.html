@@ -7,8 +7,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="태국골프여행">
-<title>태국 겨울 골프 원정 · 3가족 10명</title>
+<meta name="apple-mobile-web-app-title" content="태국 겨울 여행">
+<title>태국 겨울 여행 · 3가족 10명</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛳</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,6 +89,27 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 }
 @keyframes planeWobble{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(2px) rotate(6deg)}60%{transform:translateX(-1px) rotate(-4deg)}}
 
+/* ── 태국 현지 정보 위젯 ── */
+.wx{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin:0 0 15px;
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#CFE0D8}
+.wx button,.wx a{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer;
+  appearance:none;text-decoration:none;padding:5px 7px;border-radius:8px;line-height:1;white-space:nowrap;
+  transition:background .15s}
+.wx button:hover,.wx a:hover{background:rgba(255,255,255,.09)}
+.wx-loc{font-weight:700;color:#EBF2EE;display:inline-flex;align-items:center;gap:4px}
+.wx-swap{font-size:10px;color:var(--gold-s);opacity:.75}
+.wx-main{display:inline-flex;align-items:center;gap:6px;flex:1;min-width:0}
+.wx-sep{opacity:.4}
+.wx-ico{font-size:13px}
+.wx-text{color:#CFE0D8}
+.wx-temp{font-weight:700;color:#EBF2EE;font-style:normal}
+.wx-temp:empty{display:none}
+.wx-sync{margin-left:auto;color:#9FB6AC;display:inline-flex;align-items:center;gap:4px;font-size:10.5px}
+.wx-sync .wx-spin{display:inline-block;font-size:12px}
+.wx.loading .wx-spin{animation:wxSpin .8s linear infinite}
+.wx.stale .wx-main{opacity:.55}
+@keyframes wxSpin{to{transform:rotate(360deg)}}
+
 /* progress */
 .prog-wrap{margin:0 0 16px}
 .prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
@@ -146,11 +167,13 @@ section.pnl.on{display:block;animation:fade .32s cubic-bezier(.16,1,.3,1)}
 @media (prefers-reduced-motion:no-preference){
   .hero-in>*{opacity:0;animation:heroReveal .62s cubic-bezier(.16,1,.3,1) both}
   .hero-in>*:nth-child(1){animation-delay:.04s}
-  .hero-in>*:nth-child(2){animation-delay:.12s}
-  .hero-in>*:nth-child(3){animation-delay:.20s}
-  .hero-in>*:nth-child(4){animation-delay:.29s}
-  .hero-in>*:nth-child(5){animation-delay:.38s}
-  .hero-in>*:nth-child(6){animation-delay:.47s}
+  .hero-in>*:nth-child(2){animation-delay:.11s}
+  .hero-in>*:nth-child(3){animation-delay:.18s}
+  .hero-in>*:nth-child(4){animation-delay:.25s}
+  .hero-in>*:nth-child(5){animation-delay:.33s}
+  .hero-in>*:nth-child(6){animation-delay:.41s}
+  .hero-in>*:nth-child(7){animation-delay:.49s}
+  .hero-in>*:nth-child(n+8){animation-delay:.52s}
 }
 @keyframes heroReveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
@@ -401,6 +424,11 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .cd-num.mini{font-size:16px}
   .cd-head{font-size:15.5px}
   .cd-sub{font-size:10.5px;margin-top:4px}
+  .wx{font-size:11px;gap:1px;margin-bottom:13px;row-gap:2px}
+  .wx button,.wx a{padding:5px 5px}
+  .wx-main{flex:1 1 100%;order:3;padding-left:2px}
+  .wx-loc{order:1}
+  .wx-sync{order:2}
   .prog-pct{font-size:17px}
   .next-card{padding:10px 12px;margin-bottom:12px;gap:8px}
   .nc-tag{font-size:10px;padding:2px 7px}
@@ -512,7 +540,8 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 
 @media print{
   nav.tabs{display:none}
-  .next-card{display:none!important}
+  .next-card,.wx-sync{display:none!important}
+  .wx{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
   header.hero::before{display:none}
   .eyebrow,.cd-sub{color:var(--ink2)!important}
@@ -539,7 +568,18 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 <header class="hero">
   <div class="wrap hero-in">
     <p class="eyebrow"><span class="pulse"></span>🇹🇭 파타야 → 방콕<span class="eyebrow-upd"><span id="updFull">–</span><span id="updMini">–</span></span></p>
-    <h1 class="title">태국 겨울 골프 원정</h1>
+    <h1 class="title">태국 겨울 여행</h1>
+    <div class="wx" id="wx">
+      <button class="wx-loc" id="wxLoc" type="button" aria-label="파타야·방콕 전환">📍 <span id="wxLocName">파타야</span> <span class="wx-swap">⇄</span></button>
+      <a class="wx-main" id="wxMain" href="https://www.google.com/search?q=%ED%8C%8C%ED%83%80%EC%95%BC+%EB%82%A0%EC%94%A8" target="_blank" rel="noopener">
+        <span class="wx-time" id="wxTime">--:--</span>
+        <span class="wx-sep">·</span>
+        <span class="wx-ico" id="wxIco">·</span>
+        <span class="wx-text" id="wxText">동기화 전</span>
+        <b class="wx-temp" id="wxTemp"></b>
+      </a>
+      <button class="wx-sync" id="wxSync" type="button" aria-label="현지 날씨 새로고침"><span class="wx-spin" id="wxSpin">⟳</span><span id="wxAgo">동기화</span></button>
+    </div>
     <div class="countdown" id="cd">
       <div class="cd-ring-wrap">
         <svg class="cd-ring" viewBox="0 0 108 108" aria-hidden="true">
@@ -550,7 +590,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
       </div>
       <div class="cd-text">
         <div class="cd-head" id="cdHead">계산 중…</div>
-        <div class="cd-sub">2026.12.16(수) 출발 · 20일 일정</div>
+        <div class="cd-sub">2026.12.16(수) 출발</div>
       </div>
     </div>
     <div class="prog-wrap">
@@ -782,7 +822,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v8.2 · 태국 겨울 골프 원정 · 2026.12.16–2027.1.4
+  v8.3 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <script>
@@ -965,6 +1005,94 @@ const TODO=[
   if(cls) cd.classList.add(cls);
   if(rm) setRing(ringP);
   else { setRing(0); setTimeout(()=>setRing(ringP),360); }
+})();
+
+// ── 태국 현지 정보 위젯 (시각·위치·날씨) ──
+(function(){
+  const CITIES={ '파타야':{lat:12.93,lon:100.88,q:'파타야 날씨'}, '방콕':{lat:13.75,lon:100.50,q:'방콕 날씨'} };
+  const LS='thai2026_wx_v1';
+  const wx=$('wx'), locName=$('wxLocName'), timeEl=$('wxTime'), icoEl=$('wxIco'),
+        textEl=$('wxText'), tempEl=$('wxTemp'), mainEl=$('wxMain'), syncBtn=$('wxSync'), agoEl=$('wxAgo');
+  if(!wx) return;
+
+  function autoCity(){
+    const now=new Date(), bkk=new Date('2026-12-26T00:00:00+07:00'), end=new Date('2027-01-04T23:59:59+07:00');
+    return (now>=bkk && now<=end) ? '방콕' : '파타야';
+  }
+  let state=(()=>{ try{ return JSON.parse(localStorage.getItem(LS))||{}; }catch(e){ return {}; } })();
+  let city = (state.city && CITIES[state.city]) ? state.city : autoCity();
+
+  function wmo(c){
+    if(c===0) return {i:'☀️',t:'맑음'};
+    if(c===1) return {i:'🌤️',t:'대체로 맑음'};
+    if(c===2) return {i:'⛅',t:'구름 조금'};
+    if(c===3) return {i:'☁️',t:'흐림'};
+    if(c===45||c===48) return {i:'🌫️',t:'안개'};
+    if(c>=51&&c<=57) return {i:'🌦️',t:'이슬비'};
+    if(c>=61&&c<=67) return {i:'🌧️',t:'비'};
+    if(c>=71&&c<=77) return {i:'🌨️',t:'눈'};
+    if(c>=80&&c<=82) return {i:'🌧️',t:'소나기'};
+    if(c>=95) return {i:'⛈️',t:'뇌우'};
+    return {i:'·',t:'—'};
+  }
+  function fmtTime(){
+    const p=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Bangkok',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+    const g=t=>(p.find(x=>x.type===t)||{}).value||'';
+    return `${g('weekday')} ${g('hour')}:${g('minute')}`;
+  }
+  function fmtAgo(ts){
+    if(!ts) return '동기화';
+    const m=Math.floor((Date.now()-ts)/6e4);
+    if(m<1) return '방금';
+    if(m<60) return `${m}분 전`;
+    const h=Math.floor(m/60);
+    if(h<24) return `${h}시간 전`;
+    return `${Math.floor(h/24)}일 전`;
+  }
+  function renderCity(){
+    locName.textContent=city;
+    mainEl.href='https://www.google.com/search?q='+encodeURIComponent(CITIES[city].q);
+  }
+  function renderWx(){
+    const w=state[city];
+    if(w){
+      const m=wmo(w.code);
+      icoEl.textContent=m.i; textEl.textContent=m.t; tempEl.textContent=Math.round(w.temp)+'°C';
+      wx.classList.toggle('stale', Date.now()-w.ts > 3*36e5);
+    } else {
+      icoEl.textContent='·'; textEl.textContent='날씨 —'; tempEl.textContent=''; wx.classList.remove('stale');
+    }
+    agoEl.textContent=fmtAgo(w&&w.ts);
+  }
+  let fetching=false;
+  async function sync(){
+    if(fetching) return;
+    fetching=true; wx.classList.add('loading');
+    const {lat,lon}=CITIES[city];
+    try{
+      const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=Asia%2FBangkok`,{cache:'no-store'});
+      const j=await r.json();
+      if(j&&j.current){
+        state[city]={temp:j.current.temperature_2m, code:j.current.weather_code, ts:Date.now()};
+        state.city=city;
+        try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
+      }
+    }catch(e){/* 실패 시 캐시 유지 */}
+    finally{ fetching=false; wx.classList.remove('loading'); renderWx(); }
+  }
+
+  syncBtn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); sync(); });
+  $('wxLoc').addEventListener('click', ()=>{
+    city = (city==='파타야') ? '방콕' : '파타야';
+    state.city=city;
+    try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
+    renderCity(); renderWx();
+    if(!state[city] || Date.now()-state[city].ts > 30*6e4) sync();
+  });
+
+  renderCity(); timeEl.textContent=fmtTime(); renderWx();
+  setInterval(()=>{ timeEl.textContent=fmtTime(); agoEl.textContent=fmtAgo(state[city]&&state[city].ts); }, 3e4);
+  if(!state[city] || Date.now()-(state[city].ts||0) > 30*6e4) sync();
 })();
 
 // 최종수정 일시 — 배포 시각(document.lastModified)에서 자동 산출, 히어로 우측 상단 표시
