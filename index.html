@@ -89,25 +89,26 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 }
 @keyframes planeWobble{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(2px) rotate(6deg)}60%{transform:translateX(-1px) rotate(-4deg)}}
 
-/* ── 태국 현지 정보 위젯 ── */
-.wx{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin:0 0 15px;
-  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#CFE0D8}
+/* ── 태국 현지 정보 위젯 (위젯 아무 곳이나 탭 → 동기화) ── */
+.wx{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin:0 0 15px;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#D3E2DB;border-radius:10px}
 .wx button,.wx a{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer;
-  appearance:none;text-decoration:none;padding:5px 7px;border-radius:8px;line-height:1;white-space:nowrap;
+  appearance:none;text-decoration:none;padding:9px 7px;border-radius:8px;line-height:1;white-space:nowrap;
   transition:background .15s}
 .wx button:hover,.wx a:hover{background:rgba(255,255,255,.09)}
-.wx-loc{font-weight:700;color:#EBF2EE;display:inline-flex;align-items:center;gap:4px}
-.wx-swap{font-size:10px;color:var(--gold-s);opacity:.75}
+.wx button:active,.wx a:active{background:rgba(255,255,255,.14)}
+.wx .wx-loc{font-weight:700;color:#F0F5F2;display:inline-flex;align-items:center;gap:4px}
+.wx-swap{font-size:10px;color:var(--gold-s);opacity:.8}
 .wx-main{display:inline-flex;align-items:center;gap:6px;flex:1;min-width:0}
 .wx-sep{opacity:.4}
 .wx-ico{font-size:13px}
-.wx-text{color:#CFE0D8}
-.wx-temp{font-weight:700;color:#EBF2EE;font-style:normal}
+.wx-text{color:#D3E2DB}
+.wx-temp{font-weight:700;color:#F0F5F2;font-style:normal}
 .wx-temp:empty{display:none}
-.wx-sync{margin-left:auto;color:#9FB6AC;display:inline-flex;align-items:center;gap:4px;font-size:10.5px}
+.wx .wx-sync{margin-left:auto;color:#A9BEB5;display:inline-flex;align-items:center;gap:4px;font-size:10.5px}
 .wx-sync .wx-spin{display:inline-block;font-size:12px}
 .wx.loading .wx-spin{animation:wxSpin .8s linear infinite}
-.wx.stale .wx-main{opacity:.55}
+.wx.stale .wx-main{opacity:.5}
 @keyframes wxSpin{to{transform:rotate(360deg)}}
 
 /* progress */
@@ -424,11 +425,11 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .cd-num.mini{font-size:16px}
   .cd-head{font-size:15.5px}
   .cd-sub{font-size:10.5px;margin-top:4px}
-  .wx{font-size:11px;gap:1px;margin-bottom:13px;row-gap:2px}
-  .wx button,.wx a{padding:5px 5px}
-  .wx-main{flex:1 1 100%;order:3;padding-left:2px}
+  .wx{font-size:11px;gap:1px;margin-bottom:13px;row-gap:0}
+  .wx button,.wx a{padding:8px 6px}
+  .wx-main{flex:1 1 100%;order:3;padding-left:4px}
   .wx-loc{order:1}
-  .wx-sync{order:2}
+  .wx .wx-sync{order:2}
   .prog-pct{font-size:17px}
   .next-card{padding:10px 12px;margin-bottom:12px;gap:8px}
   .nc-tag{font-size:10px;padding:2px 7px}
@@ -1012,7 +1013,7 @@ const TODO=[
   const CITIES={ '파타야':{lat:12.93,lon:100.88,q:'파타야 날씨'}, '방콕':{lat:13.75,lon:100.50,q:'방콕 날씨'} };
   const LS='thai2026_wx_v1';
   const wx=$('wx'), locName=$('wxLocName'), timeEl=$('wxTime'), icoEl=$('wxIco'),
-        textEl=$('wxText'), tempEl=$('wxTemp'), mainEl=$('wxMain'), syncBtn=$('wxSync'), agoEl=$('wxAgo');
+        textEl=$('wxText'), tempEl=$('wxTemp'), mainEl=$('wxMain'), agoEl=$('wxAgo');
   if(!wx) return;
 
   function autoCity(){
@@ -1081,13 +1082,18 @@ const TODO=[
     finally{ fetching=false; wx.classList.remove('loading'); renderWx(); }
   }
 
-  syncBtn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); sync(); });
-  $('wxLoc').addEventListener('click', ()=>{
+  function toggleCity(){
     city = (city==='파타야') ? '방콕' : '파타야';
     state.city=city;
     try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
     renderCity(); renderWx();
     if(!state[city] || Date.now()-state[city].ts > 30*6e4) sync();
+  }
+  // 위젯 아무 곳이나 탭 → 동기화 (구글 링크는 이동만, 위치 버튼은 전환)
+  wx.addEventListener('click', e=>{
+    if(e.target.closest('#wxMain')) return;              // 구글 날씨로 이동
+    if(e.target.closest('#wxLoc')){ toggleCity(); return; }
+    sync();
   });
 
   renderCity(); timeEl.textContent=fmtTime(); renderWx();
