@@ -539,8 +539,83 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   max-height:640px;visibility:visible;transition:max-height .38s cubic-bezier(.16,1,.3,1),visibility 0s;
 }
 
+/* ════════ 재미 요소 (모바일 전용) ════════ */
+.ptr,.hero-fx,.confp,.flyplane{display:none}
+@media (min-width:761px){ .toast,.ptr,.hero-fx,.confp,.flyplane{display:none!important} }
+.toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
+  max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
+  background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:#F4EEDD;
+  font-family:'Fraunces',serif;font-weight:600;font-size:14px;letter-spacing:-.01em;text-align:center;
+  box-shadow:0 10px 30px -8px rgba(14,40,34,.5);border:1px solid rgba(245,231,192,.25);border-top:none;
+  transition:transform .5s cubic-bezier(.22,1.3,.4,1)}
+.toast.show{transform:translate(-50%,0)}
+.toast .k{color:var(--gold-s);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;
+  letter-spacing:.08em;display:block;margin-bottom:2px}
+
+@media (max-width:760px){
+  /* ── 날씨 반응형 히어로 분위기 ── */
+  .hero-fx{display:block;position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:.9}
+  .hero-in{z-index:1}
+  @media (prefers-reduced-motion:no-preference){
+    header.hero[data-wx="sunny"] .hero-fx::before{content:"";position:absolute;top:-30%;right:-20%;
+      width:75%;height:110%;border-radius:50%;background:radial-gradient(circle,rgba(245,231,192,.5) 0%,transparent 62%);
+      animation:sunBreathe 7s ease-in-out infinite}
+    header.hero[data-wx="cloudy"] .hero-fx::before{content:"";position:absolute;top:8%;left:-40%;
+      width:120%;height:60%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.09) 0%,transparent 60%);
+      filter:blur(8px);animation:cloudDrift 22s ease-in-out infinite}
+    header.hero[data-wx="rain"] .hero-fx,header.hero[data-wx="storm"] .hero-fx{
+      background-image:
+        repeating-linear-gradient(101deg,transparent 0 17px,rgba(216,232,226,.11) 17px 18px),
+        repeating-linear-gradient(97deg,transparent 0 27px,rgba(216,232,226,.07) 27px 28px);
+      animation:rainSlide .6s linear infinite}
+    header.hero[data-wx="storm"] .hero-fx::after{content:"";position:absolute;inset:0;
+      background:rgba(255,255,255,.5);opacity:0;animation:lightning 9s steps(1,end) infinite}
+  }
+  @keyframes sunBreathe{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.8;transform:scale(1.08)}}
+  @keyframes cloudDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(22%)}}
+  @keyframes rainSlide{from{background-position:0 0,0 0}to{background-position:-7px 44px,-12px 64px}}
+  @keyframes lightning{0%,96%,100%{opacity:0}97%{opacity:.45}97.5%{opacity:0}98.2%{opacity:.65}98.8%{opacity:0}}
+
+  /* ── 이스터에그: 국기 · 카운트다운 링 ── */
+  .eg-flag{display:inline-block;cursor:pointer;margin-right:-3px}
+  @media (prefers-reduced-motion:no-preference){
+    .eg-flag.wiggle{animation:flagWiggle .5s ease}
+    .cd-ring-wrap{cursor:pointer}
+    .cd-ring.spin{animation:ringSpin .85s cubic-bezier(.3,1.4,.5,1)}
+    .countdown.milestone .cd-prog{animation:ringPulse 1.4s ease-in-out 2}
+  }
+  @keyframes flagWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-16deg) scale(1.15)}60%{transform:rotate(12deg) scale(1.15)}}
+  @keyframes ringSpin{to{transform:rotate(-90deg) rotate(360deg)}}
+  @keyframes ringPulse{0%,100%{filter:drop-shadow(0 0 0 rgba(245,231,192,0))}50%{filter:drop-shadow(0 0 10px rgba(245,231,192,.7))}}
+  .countdown.precise .cd-num{font-size:20px;letter-spacing:0}
+  .countdown.precise .cd-head{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.02em;font-weight:600}
+
+  /* ── 마일스톤 ✈️ 가로지르기 ── */
+  .flyplane{display:block;position:fixed;left:-40px;top:26%;z-index:190;font-size:26px;pointer-events:none;
+    filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
+  @media (prefers-reduced-motion:no-preference){ .flyplane{animation:flyby 1.9s cubic-bezier(.4,0,.6,1) forwards} }
+  @keyframes flyby{0%{transform:translate(0,0) rotate(0)}
+    40%{transform:translate(48vw,-14px) rotate(-6deg)}
+    100%{transform:translate(112vw,-40px) rotate(-3deg)}}
+
+  /* ── 컨페티 ── */
+  .confp{display:block;position:fixed;z-index:195;width:8px;height:11px;pointer-events:none;will-change:transform,opacity}
+  @media (prefers-reduced-motion:no-preference){ .confp{animation:confFall var(--d,1200ms) cubic-bezier(.2,.6,.5,1) forwards} }
+  @keyframes confFall{0%{opacity:1;transform:translate(0,0) rotate(0)}
+    100%{opacity:0;transform:translate(var(--x,0),var(--y,240px)) rotate(var(--r,540deg))}}
+
+  /* ── 당겨서 새로고침 ── */
+  .ptr{display:flex;align-items:center;justify-content:center;position:fixed;left:0;right:0;top:0;
+    height:0;z-index:60;pointer-events:none;overflow:hidden}
+  .ptr-icon{font-size:22px;transform:translateY(-30px) scale(.6);transition:transform .2s}
+  .ptr.armed .ptr-icon{transform:translateY(6px) scale(1)}
+  @media (prefers-reduced-motion:no-preference){ .ptr.spin .ptr-icon{animation:palmShake .6s ease} }
+  @keyframes palmShake{0%,100%{transform:translateY(6px) rotate(0)}25%{transform:translateY(6px) rotate(-18deg)}60%{transform:translateY(6px) rotate(14deg)}}
+}
+
 @media print{
   nav.tabs{display:none}
+  .toast,.ptr,.hero-fx,.flyplane,.confp{display:none!important}
   .next-card,.wx-sync{display:none!important}
   .wx{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
@@ -567,8 +642,9 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 <body>
 
 <header class="hero">
+  <div class="hero-fx" aria-hidden="true"></div>
   <div class="wrap hero-in">
-    <p class="eyebrow"><span class="pulse"></span>🇹🇭 겨울 가족여행<span class="eyebrow-upd"><span id="updFull">–</span><span id="updMini">–</span></span></p>
+    <p class="eyebrow"><span class="pulse"></span><span class="eg-flag" id="egFlag">🇹🇭</span> 겨울 가족여행<span class="eyebrow-upd"><span id="updFull">–</span><span id="updMini">–</span></span></p>
     <h1 class="title">태국 겨울 여행</h1>
     <div class="wx" id="wx" title="현지 정보 · 탭하면 새로고침 (날씨: Open-Meteo)">
       <button class="wx-loc" id="wxLoc" type="button" aria-label="방콕 날씨로 전환">📍 <span class="wx-c on" data-city="파타야">파타야</span><span class="wx-bar">|</span><span class="wx-c" data-city="방콕">방콕</span></button>
@@ -822,8 +898,12 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v8.3 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v8.4 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
+
+<!-- 재미 요소 오버레이 (모바일) -->
+<div class="ptr" id="ptr" aria-hidden="true"><span class="ptr-icon">🌴</span></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -1075,12 +1155,20 @@ const TODO=[
     $('wxLoc').setAttribute('aria-label', (city==='파타야'?'방콕':'파타야')+' 날씨로 전환');
     mainEl.href='https://www.google.com/search?q='+encodeURIComponent(CITIES[city].q);
   }
+  function wxGroup(c){
+    if(c==null) return '';
+    if(c<=1) return 'sunny';
+    if(c>=95) return 'storm';
+    if(c>=51) return 'rain';
+    return 'cloudy';
+  }
   function renderWx(){
     const w=state[city];
     if(w){
       const m=wmo(w.code);
       icoEl.textContent=m.i; textEl.textContent=m.t; tempEl.textContent=Math.round(w.temp)+'°C';
       wx.classList.toggle('stale', Date.now()-w.ts > 3*36e5);
+      document.querySelector('header.hero').dataset.wx = wxGroup(w.code);  // 날씨 반응형 히어로
     } else {
       icoEl.textContent='·'; textEl.textContent='날씨 —'; tempEl.textContent=''; wx.classList.remove('stale');
     }
@@ -1413,12 +1501,20 @@ function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); 
 document.querySelectorAll('.ci').forEach(i=>{
   const key = i.querySelector('.tx').textContent;
   if(store.done[key]){ i.classList.add('done'); i.setAttribute('aria-checked','true'); }
+  const grp=i.closest('.cgrp');
+  const grpDone=g=>[...g.querySelectorAll('.ci')].every(c=>c.classList.contains('done'));
+  const allDone=()=>[...document.querySelectorAll('.ci')].every(c=>c.classList.contains('done'));
   const tog=()=>{
+    const wasGrp=grpDone(grp), wasAll=allDone();
     const d=i.classList.toggle('done');
     i.setAttribute('aria-checked',d);
     if(d){ store.done[key]=true; i.classList.add('just-done'); setTimeout(()=>i.classList.remove('just-done'),460); haptic('ok'); }
     else { delete store.done[key]; haptic('tap'); }
     saveStore(); refresh();
+    if(d && window.funFx){
+      if(!wasAll && allDone()) window.funFx.all();
+      else if(!wasGrp && grpDone(grp)) window.funFx.group(grp);
+    }
   };
   i.addEventListener('click',tog);
   i.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();tog();}});
@@ -1526,6 +1622,167 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       if(next && next!==tbs[cur]){ haptic('tap'); go(next); }
     }
   }, {passive:true});
+})();
+
+/* ════════ 재미 요소 (모바일 전용) ════════ */
+(function(){
+  if(innerWidth > 760) return;
+  const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const D = 864e5;
+
+  // ── 토스트 ──
+  const toastEl = $('toast'); let toastT;
+  function toast(kicker, msg, ms=3600){
+    toastEl.innerHTML = (kicker ? `<span class="k">${kicker}</span>` : '') + msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(()=> toastEl.classList.remove('show'), ms);
+  }
+
+  // ── 컨페티 (제이드·골드 팔레트) ──
+  const CONF = ['#B58A28','#1E4B41','#F5E7C0','#2C6B4C','#EFA895','#DDE9E3'];
+  function confetti(cx, cy, n, spread){
+    if(rm) return;
+    for(let k=0;k<n;k++){
+      const p = document.createElement('div'); p.className = 'confp';
+      const ang = Math.random()*6.28, dist = 30 + Math.random()*spread;
+      p.style.left = cx+'px'; p.style.top = cy+'px';
+      p.style.background = CONF[k % CONF.length];
+      p.style.borderRadius = Math.random()<.4 ? '50%' : '1px';
+      p.style.setProperty('--x', (Math.cos(ang)*dist).toFixed(0)+'px');
+      p.style.setProperty('--y', (Math.abs(Math.sin(ang))*dist*.4 + 130 + Math.random()*170).toFixed(0)+'px');
+      p.style.setProperty('--r', (Math.random()*900-450).toFixed(0)+'deg');
+      p.style.setProperty('--d', (1100 + Math.random()*700)+'ms');
+      document.body.appendChild(p);
+      setTimeout(()=> p.remove(), 2000);
+    }
+  }
+  function flyPlane(){
+    if(rm) return;
+    const el = document.createElement('div'); el.className = 'flyplane'; el.textContent = '✈️';
+    document.body.appendChild(el); setTimeout(()=> el.remove(), 2100);
+  }
+
+  // ── A. D-day 마일스톤 축하 (1회) ──
+  (function(){
+    const dep = tripDate('depart'), now = new Date();
+    if(now >= dep) return;
+    const days = Math.ceil((dep - now)/D);
+    const MS = [
+      {d:100,k:'D-100',m:'딱 100일 남았어요 ✈️'}, {d:50,k:'D-50',m:'절반 왔어요 🌴'},
+      {d:30,k:'D-30',m:'한 달 남았어요 🎉'}, {d:14,k:'D-14',m:'2주 남았어요'},
+      {d:7,k:'D-7',m:'일주일 남았어요 ✈️'}, {d:3,k:'D-3',m:'짐 다 쌌나요? 🧳'},
+      {d:1,k:'D-1',m:'내일 출발이에요! 🎉'},
+    ];
+    let seen; try{ seen = JSON.parse(localStorage.getItem('thai2026_ms')) || []; }catch(e){ seen = []; }
+    const hit = MS.find(x => days <= x.d && !seen.includes(x.d));
+    if(!hit) return;
+    const mark = [...new Set([...seen, ...MS.filter(x => x.d >= hit.d).map(x=>x.d)])];
+    try{ localStorage.setItem('thai2026_ms', JSON.stringify(mark)); }catch(e){}
+    setTimeout(()=>{
+      toast(hit.k, hit.m, 4400); flyPlane(); haptic('ok');
+      const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
+      const r = $('cd').getBoundingClientRect();
+      confetti(r.left + r.width/2, r.top + 28, 26, 90);
+    }, 900);
+  })();
+
+  // ── C. 할 일 완료 축하 (todo tog에서 호출) ──
+  window.funFx = {
+    group(grpEl){
+      const r = grpEl.getBoundingClientRect();
+      confetti(r.left + r.width/2, r.top + 18, 14, 55); haptic('ok');
+    },
+    all(){
+      confetti(innerWidth/2, innerHeight*0.26, 44, 130);
+      toast('🎉', '할 일 전부 완료! 이제 떠나기만 하면 돼요', 4600);
+      const ring = $('thRing');
+      if(ring && !rm){
+        ring.style.transition = 'transform .9s cubic-bezier(.3,1.3,.5,1)';
+        ring.style.transform = 'rotate(360deg)';
+        setTimeout(()=>{ ring.style.transition=''; ring.style.transform=''; }, 1000);
+      }
+      try{ navigator.vibrate && navigator.userActivation?.isActive && navigator.vibrate([12,30,12,30,20]); }catch(e){}
+    }
+  };
+
+  // ── D. 이스터에그 ──
+  // D1. 국기 5연타
+  const flag = $('egFlag'); let taps = 0, tapT;
+  flag && flag.addEventListener('click', ()=>{
+    taps++;
+    if(!rm){ flag.classList.remove('wiggle'); void flag.offsetWidth; flag.classList.add('wiggle'); }
+    clearTimeout(tapT); tapT = setTimeout(()=> taps = 0, 1200);
+    if(taps >= 5){
+      taps = 0;
+      confetti(flag.getBoundingClientRect().left + 8, 42, 30, 110);
+      toast('🇹🇭', '즐거운 여행 되세요!', 3400); haptic('ok');
+    }
+  });
+  // D2. 카운트다운 링 탭 → 회전
+  const ringWrap = document.querySelector('.cd-ring-wrap'), ringSvg = document.querySelector('.cd-ring');
+  ringWrap && ringWrap.addEventListener('click', e=>{
+    if(e.target.closest('.cd-num') || rm) return;
+    ringSvg.classList.remove('spin'); void ringSvg.offsetWidth; ringSvg.classList.add('spin');
+    haptic('tap');
+  });
+  // D3. 카운트다운 숫자 롱프레스 → 정밀 카운트다운
+  const cdEl = $('cd'), numEl = $('cdNum'), headEl = $('cdHead'), depP = tripDate('depart');
+  let holdT, ticking, savedNum, savedHead;
+  function startPrecise(){
+    if(new Date() >= depP || ticking) return;
+    savedNum = numEl.textContent; savedHead = headEl.innerHTML;
+    cdEl.classList.add('precise'); numEl.classList.remove('mini');
+    const upd = ()=>{
+      let s = Math.max(0, Math.floor((depP - new Date())/1000));
+      const dd = Math.floor(s/86400); s %= 86400;
+      const p2 = n => String(n).padStart(2,'0');
+      numEl.textContent = dd;
+      headEl.textContent = `일 ${p2(Math.floor(s/3600))}:${p2(Math.floor(s%3600/60))}:${p2(s%60)} 남음`;
+    };
+    upd(); ticking = setInterval(upd, 1000); haptic('tap');
+  }
+  function endPrecise(){
+    clearTimeout(holdT);
+    if(!ticking) return;
+    clearInterval(ticking); ticking = null;
+    cdEl.classList.remove('precise');
+    numEl.textContent = savedNum; headEl.innerHTML = savedHead;
+  }
+  if(numEl){
+    numEl.addEventListener('pointerdown', ()=>{ holdT = setTimeout(startPrecise, 450); });
+    ['pointerup','pointerleave','pointercancel'].forEach(ev => numEl.addEventListener(ev, endPrecise));
+  }
+
+  // ── E. 당겨서 새로고침 → 날씨 동기화 ──
+  (function(){
+    const ptr = $('ptr'), icon = ptr.querySelector('.ptr-icon'), TH = 70;
+    let y0 = 0, pulling = false;
+    addEventListener('touchstart', e=>{
+      pulling = (scrollY <= 0 && e.touches.length === 1);
+      if(pulling) y0 = e.touches[0].clientY;
+    }, {passive:true});
+    addEventListener('touchmove', e=>{
+      if(!pulling) return;
+      const dist = e.touches[0].clientY - y0;
+      if(dist <= 0){ ptr.style.height = '0px'; ptr.classList.remove('armed'); return; }
+      const pull = Math.min(dist * 0.42, 88);
+      ptr.style.height = pull + 'px';
+      ptr.classList.toggle('armed', pull >= TH * 0.62);
+      if(!rm) icon.style.transform = `translateY(6px) scale(1) rotate(${(pull*3)|0}deg)`;
+    }, {passive:true});
+    addEventListener('touchend', ()=>{
+      if(!pulling) return;
+      pulling = false;
+      const armed = ptr.classList.contains('armed');
+      ptr.style.height = '0px'; ptr.classList.remove('armed'); icon.style.transform = '';
+      if(armed){
+        if(!rm){ ptr.classList.add('spin'); setTimeout(()=> ptr.classList.remove('spin'), 650); }
+        haptic('ok');
+        const sync = $('wxSync'); sync && sync.click();
+        toast('🌴', '현지 정보 새로고침', 1700);
+      }
+    }, {passive:true});
+  })();
 })();
 </script>
 </body>
