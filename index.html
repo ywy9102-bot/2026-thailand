@@ -9,7 +9,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="태국 겨울 여행">
 <title>태국 겨울 여행 · 3가족 10명</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛳</text></svg>">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -50,7 +53,34 @@ header.hero{
 header.hero::before{content:"";position:absolute;inset:0;
   background:radial-gradient(circle at 88% 15%,rgba(181,138,40,.22) 0,transparent 42%),
              radial-gradient(circle at 8% 85%,rgba(255,255,255,.05) 0,transparent 45%);}
-.hero-in{position:relative}
+.hero-in{position:relative;z-index:1}
+
+/* ── 날짜 특수 연출 (크리스마스 / 신정) ── */
+.hero-occ{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+header.hero:not([data-occasion]) .hero-occ{display:none}
+.hero-occ i{position:absolute;display:block}
+/* 크리스마스: 위쪽 반짝이는 전구 줄 */
+header.hero[data-occasion="christmas"] .hero-occ i{
+  top:calc(env(safe-area-inset-top) + 6px);width:5px;height:5px;border-radius:50%;opacity:.35}
+header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+1){background:var(--gold-s)}
+header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+2){background:#EFA895}
+header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+3){background:#8FD0B4}
+header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+4){background:var(--gold)}
+header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+5){background:#F5E7C0}
+/* 신정: 은은한 폭죽 버스트 */
+header.hero[data-occasion="newyear"] .hero-occ i{
+  width:5px;height:5px;border-radius:50%;background:var(--gold-s);opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  header.hero[data-occasion="christmas"] .hero-occ i{animation:occTwinkle 3.4s ease-in-out infinite}
+  header.hero[data-occasion="newyear"] .hero-occ i{animation:occBurst 6s ease-out infinite}
+}
+@keyframes occTwinkle{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.9;transform:scale(1.15);box-shadow:0 0 7px currentColor}}
+@keyframes occBurst{
+  0%,72%,100%{opacity:0;box-shadow:0 0 0 0 rgba(245,231,192,0)}
+  75%{opacity:1;box-shadow:0 0 0 0 rgba(245,231,192,.9)}
+  92%{opacity:0;box-shadow:0 0 0 26px rgba(245,231,192,0)}
+}
+.eyebrow .occ-emoji{font-size:13px;margin-left:-2px}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;
   color:#BCCDC4;margin:0 0 12px;display:flex;align-items:center;gap:8px}
 .eyebrow-upd{margin-left:auto;letter-spacing:.02em;font-size:10px;color:#8FA69C;
@@ -332,8 +362,15 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .mdiv{font-family:'Fraunces',serif;font-style:italic;font-size:14.5px;color:var(--gold-text);
   padding:20px 0 8px;border-bottom:2px solid var(--gold-s);display:flex;align-items:center;gap:8px}
 .day{display:grid;grid-template-columns:46px 26px 1fr;gap:11px;align-items:start;
-  padding:12px 0;border-bottom:1px solid var(--line)}
+  padding:12px 0;border-bottom:1px solid var(--line);position:relative}
 .day:last-child{border-bottom:none}
+.day.today{background:linear-gradient(90deg,var(--jade-s) 0%,transparent 88%);
+  border-radius:10px;margin:0 -10px;padding-left:10px;padding-right:10px}
+.day.today::before{content:"";position:absolute;left:-2px;top:8px;bottom:8px;width:3px;
+  border-radius:2px;background:var(--gold)}
+.day.today .dn{color:var(--jade)}
+.day-today-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;
+  letter-spacing:.06em;color:#fff;background:var(--gold);padding:1px 5px;border-radius:99px;margin-top:4px}
 .dbox{text-align:center}
 .dn{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--jade-d);line-height:1}
 .dw{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);margin-top:3px}
@@ -736,8 +773,9 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 
 <header class="hero">
   <div class="hero-fx" aria-hidden="true"></div>
+  <div class="hero-occ" id="heroOcc" aria-hidden="true"></div>
   <div class="wrap hero-in">
-    <p class="eyebrow"><span class="pulse"></span><span class="eg-flag" id="egFlag">🇹🇭</span> 겨울 가족여행<span class="eyebrow-upd"><span id="updFull">–</span><span id="updMini">–</span></span></p>
+    <p class="eyebrow"><span class="pulse"></span><span class="eg-flag" id="egFlag">🇹🇭</span><span class="occ-emoji" id="occEmoji" hidden></span> 겨울 가족여행<span class="eyebrow-upd"><span id="updFull">–</span><span id="updMini">–</span></span></p>
     <h1 class="title">태국 겨울 여행</h1>
     <div class="wx" id="wx" title="현지 정보 · 탭하면 새로고침 (날씨: Open-Meteo)">
       <button class="wx-loc" id="wxLoc" type="button" aria-label="방콕 날씨로 전환">📍 <span class="wx-c on" data-city="파타야">파타야</span><span class="wx-bar">|</span><span class="wx-c" data-city="방콕">방콕</span></button>
@@ -1005,7 +1043,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.3 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.4 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1298,6 +1336,28 @@ const TODO=[
   else setTimeout(()=>setRing(ringP), 200);
 })();
 
+// ── 날짜 특수 연출 (12/24–25 크리스마스 · 12/31–1/1 신정) ──
+(function(){
+  const hero = document.querySelector('header.hero'), occEl = $('heroOcc'), emo = $('occEmoji');
+  if(!hero || !occEl) return;
+  const now = new Date(), m = now.getMonth()+1, d = now.getDate();
+  let occ=null, emoji='', n=0;
+  if(m===12 && (d===24 || d===25)){ occ='christmas'; emoji='🎄'; n=13; }
+  else if((m===12 && d===31) || (m===1 && d===1)){ occ='newyear'; emoji='🎆'; n=6; }
+  if(!occ) return;
+  hero.dataset.occasion = occ;
+  if(emo){ emo.textContent = emoji; emo.hidden = false; }
+  let html='';
+  for(let i=0;i<n;i++){
+    if(occ==='christmas'){
+      html += `<i style="left:${((i+0.5)/n*100).toFixed(1)}%;animation-delay:${(i*0.27).toFixed(2)}s"></i>`;
+    } else {
+      html += `<i style="left:${(10+Math.random()*78).toFixed(1)}%;top:${(12+Math.random()*44).toFixed(1)}%;animation-delay:${(i*0.95).toFixed(2)}s"></i>`;
+    }
+  }
+  occEl.innerHTML = html;
+})();
+
 // ── 태국 현지 정보 위젯 (시각·위치·날씨) ──
 (function(){
   const CITIES={ '파타야':{lat:12.93,lon:100.88,q:'파타야 날씨'}, '방콕':{lat:13.75,lon:100.50,q:'방콕 날씨'} };
@@ -1516,7 +1576,12 @@ const TODO=[
     $('ncE').textContent = match.e||'📌';
     $('ncT').textContent = `${match.mon}/${match.d}(${match.w}) ${stripTag(match.t)}`;
     card.style.display='flex';
-    card.addEventListener('click', ()=>{ haptic('tap'); go($('tb-itin')); });
+    const isTodayMatch = tag && tag.indexOf('오늘') > -1;
+    card.addEventListener('click', ()=>{
+      haptic('tap'); go($('tb-itin'));
+      if(isTodayMatch) setTimeout(()=>{ const td=document.querySelector('#itin .day.today');
+        if(td) td.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); }, 420);
+    });
   } else {
     $('ncTag').textContent='🎉';
     $('ncE').textContent='';
@@ -1608,17 +1673,20 @@ $('stay').addEventListener('keydown', e=>{
 })();
 
 // itinerary
-function days(list,el){
+function days(list,el,mon,yr){
+  const now = new Date();
+  const isToday = x => mon===now.getMonth()+1 && +x.d===now.getDate() && yr===now.getFullYear();
   $(el).innerHTML = list.map(x=>{
     const hasDetail = !!(x.book||x.addr||x.tel);
     const hasRec = Array.isArray(x.recd) && x.recd.length;
     const expandable = hasDetail || hasRec;
+    const today = isToday(x);
     const toggleTxt = hasRec && hasDetail ? '추천 · 바우처' : hasRec ? '추천 자세히' : '바우처 상세보기';
     const mapUrl = x.addr ? 'https://maps.google.com/?q='+encodeURIComponent(x.addr) : '';
     const telHref = x.tel ? 'tel:'+x.tel.replace(/-/g,'') : '';
     return `
-   <div class="day ${x.s?'s-'+x.s:''}">
-     <div class="dbox"><div class="dn">${x.d}</div><div class="dw">${x.w}</div></div>
+   <div class="day ${x.s?'s-'+x.s:''} ${today?'today':''}">
+     <div class="dbox"><div class="dn">${x.d}</div><div class="dw">${x.w}</div>${today?'<span class="day-today-tag">오늘</span>':''}</div>
      <div class="de" aria-hidden="true">${x.e||''}</div>
      <div class="day-col">
        <div class="${expandable?'day-head':''}" ${expandable?'role="button" tabindex="0" aria-expanded="false"':''}>
@@ -1641,7 +1709,7 @@ function days(list,el){
    </div>`;
   }).join('');
 }
-days(ITIN_A,'iA'); days(ITIN_B,'iB'); days(ITIN_C,'iC');
+days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
 
 // 일정탭 골프 바우처 탭-확장
 ['iA','iB','iC'].forEach(id=>{
@@ -1961,6 +2029,22 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
       const r = $('cd').getBoundingClientRect();
       confetti(r.left + r.width/2, r.top + 28, 26, 90);
+    }, 900);
+  })();
+
+  // ── B. 도착일 축하 (12/16, 1회) ──
+  (function(){
+    const dep = tripDate('depart'), now = new Date();
+    if(now.toDateString() !== dep.toDateString()) return;
+    let seen; try{ seen = localStorage.getItem('thai2026_arrived'); }catch(e){ seen = '1'; }
+    if(seen) return;
+    try{ localStorage.setItem('thai2026_arrived','1'); }catch(e){}
+    setTimeout(()=>{
+      toast('✈️ 태국 도착', '즐거운 여행 되세요!', 4800); flyPlane(); haptic('ok');
+      const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
+      const r = $('cd').getBoundingClientRect();
+      confetti(r.left + r.width/2, r.top + 28, 34, 110);
+      setTimeout(()=> confetti(innerWidth*0.5, 130, 24, 140), 550);
     }, 900);
   })();
 
