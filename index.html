@@ -1590,7 +1590,7 @@ function owedItems(name){
     }
   });
   const stayIdx = {'정유경':3,'정유현':4,'장모님':5,'김윤후':6};
-  const stayLabel = ['🏨 통부라 3BR (10박)','🏨 티니디 5박','🏨 티니디 2박'];
+  const stayLabel = ['🏨 통부라 2BR (10박)','🏨 티니디 5박','🏨 티니디 2박'];
   if(stayIdx[name]!=null){
     T_STAY.forEach((r,i)=> items.push({label:stayLabel[i], amt:parseInt(r[stayIdx[name]].replace(/,/g,''))}));
   }
