@@ -589,8 +589,11 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   @keyframes flagWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-16deg) scale(1.15)}60%{transform:rotate(12deg) scale(1.15)}}
   @keyframes ringSpin{to{transform:rotate(-90deg) rotate(360deg)}}
   @keyframes ringPulse{0%,100%{filter:drop-shadow(0 0 0 rgba(245,231,192,0))}50%{filter:drop-shadow(0 0 10px rgba(245,231,192,.7))}}
+  .cd-text .cd-head{cursor:pointer}
+  .countdown:not(.flipped):not(.precise) .cd-head::after{content:" ⏱";font-size:9px;opacity:.5}
   .countdown.precise .cd-num{font-size:20px;letter-spacing:0}
-  .countdown.precise .cd-head{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.02em;font-weight:600}
+  .countdown.precise .cd-head{font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.02em;font-weight:600}
+  .countdown.precise .cd-head::after{content:" ✕";font-size:11px;opacity:.55}
 
   /* ── F. 보딩패스 3D 플립 ── */
   .countdown{position:relative;perspective:1000px;min-height:72px;cursor:pointer}
@@ -1817,7 +1820,9 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
   ];
   let tipI = Math.floor(Math.random()*TIPS.length);
   cdEl.addEventListener('click', e=>{
-    if(e.target.closest('.cd-num')) return;                 // 롱프레스 전용
+    if(e.target.closest('.cd-num') || e.target.closest('.cd-head')){
+      togglePrecise(); return;                              // D-day 영역 탭 → 정밀 카운트다운 토글
+    }
     if(e.target.closest('.cd-ring-wrap')){
       if(!rm){ ringSvg.classList.remove('spin'); void ringSvg.offsetWidth; ringSvg.classList.add('spin'); }
       haptic('tap'); return;
@@ -1826,11 +1831,12 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       tipI = (tipI + 1) % TIPS.length;
       toast('💡 태국 팁', TIPS[tipI], 4600); haptic('tap'); return;
     }
+    if(ticking) stopPrecise();                              // 플립 전 정밀모드 해제
     cdEl.classList.toggle('flipped');                       // 보딩패스 플립
     haptic('tap');
   });
-  // D3. 카운트다운 숫자 롱프레스 → 정밀 카운트다운
-  let holdT, ticking, savedNum, savedHead;
+  // D3. D-day 영역 탭 → 정밀 카운트다운 (일 + HH:MM:SS) 토글
+  let ticking, savedNum, savedHead;
   function startPrecise(){
     if(new Date() >= depP || ticking || cdEl.classList.contains('flipped')) return;
     savedNum = numEl.textContent; savedHead = headEl.innerHTML;
@@ -1844,17 +1850,14 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     };
     upd(); ticking = setInterval(upd, 1000); haptic('tap');
   }
-  function endPrecise(){
-    clearTimeout(holdT);
+  function stopPrecise(){
     if(!ticking) return;
     clearInterval(ticking); ticking = null;
     cdEl.classList.remove('precise');
     numEl.textContent = savedNum; headEl.innerHTML = savedHead;
+    haptic('tap');
   }
-  if(numEl){
-    numEl.addEventListener('pointerdown', ()=>{ holdT = setTimeout(startPrecise, 450); });
-    ['pointerup','pointerleave','pointercancel'].forEach(ev => numEl.addEventListener(ev, endPrecise));
-  }
+  function togglePrecise(){ ticking ? stopPrecise() : startPrecise(); }
 
   // ── I. 스크롤 등장 (탭 콘텐츠 카드가 스크롤로 새로 보일 때만, 1회) ──
   if(!rm && 'IntersectionObserver' in window){
