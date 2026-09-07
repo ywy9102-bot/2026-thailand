@@ -650,9 +650,6 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   @media (prefers-reduced-motion:no-preference){ .ripple{animation:rippleOut .7s ease-out forwards} }
   @keyframes rippleOut{0%{width:8px;height:8px;opacity:.9}100%{width:64px;height:64px;opacity:0}}
 
-  /* ── J. 온도 토글 ── */
-  #wxTemp{cursor:pointer}
-
   /* ── 마일스톤 ✈️ 가로지르기 ── */
   .flyplane{display:block;position:fixed;left:-40px;top:26%;z-index:190;font-size:26px;pointer-events:none;
     filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
@@ -1872,20 +1869,6 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
     document.querySelectorAll('.gcard,.lg,.fam,.bar-row,.day').forEach(el=> io.observe(el));
   }
-
-  // ── J. 위젯 온도 °C ↔ °F 토글 ──
-  (function(){
-    const t = $('wxTemp'); if(!t) return;
-    let f = false;
-    t.addEventListener('click', e=>{
-      e.preventDefault(); e.stopPropagation();
-      const cur = t.textContent; const m = cur.match(/-?\d+(\.\d+)?/); if(!m) return;
-      const v = parseFloat(m[0]);
-      f = !f;
-      t.textContent = f ? Math.round(v*9/5 + 32) + '°F' : Math.round((v-32)*5/9) + '°C';
-      haptic('tap');
-    });
-  })();
 
   // ── K. 눈썹 pulse 탭 → 물결 ──
   (function(){
