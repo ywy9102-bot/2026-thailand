@@ -351,6 +351,10 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .day.open .day-detail{display:block;animation:fadeIn .18s ease}
 .day.open .g-toggle .chev{transform:rotate(180deg)}
 .dx::before{content:"↳";color:var(--gold-text);font-weight:700;flex:none}
+.drec{font-size:11.5px;color:var(--ink2);background:var(--jade-s);border-radius:7px;
+  padding:6px 9px;margin-top:6px;line-height:1.6}
+.drec::before{content:"💡 가볼 곳 ";font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--jade);white-space:nowrap}
 
 /* ══ COST ══ */
 .cost-hero{background:linear-gradient(135deg,var(--jade) 0%,var(--jade-d) 100%);color:#fff;
@@ -493,7 +497,6 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
     border-bottom:none;border-top:2.5px solid transparent;position:relative;min-height:var(--nav-h)}
   .tb.tb-lg{flex:1.32 1 0;font-size:10.5px}
   .tb.tb-sm{flex:1 1 0;font-size:9.5px}
-  .tb[data-t="stay"]{letter-spacing:-.03em}
   .tb .ico{font-size:18px}
   .tb.tb-lg .ico{font-size:19.5px}
   .tb.on{border-top-color:var(--gold)}
@@ -796,7 +799,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   <div class="wrap" role="tablist" aria-label="섹션">
     <button class="tb tb-lg on" data-t="golf" role="tab" aria-selected="true" id="tb-golf"><span class="ico">⛳</span>골프</button>
     <button class="tb tb-lg" data-t="itin" role="tab" aria-selected="false" id="tb-itin"><span class="ico">🗓️</span>일정</button>
-    <button class="tb tb-sm" data-t="stay" role="tab" aria-selected="false" id="tb-stay"><span class="ico">🏨</span>숙소·참가자</button>
+    <button class="tb tb-sm" data-t="stay" role="tab" aria-selected="false" id="tb-stay"><span class="ico">🏨</span>숙소·멤버</button>
     <button class="tb tb-sm" data-t="cost" role="tab" aria-selected="false" id="tb-cost"><span class="ico">💰</span>정산</button>
     <button class="tb tb-sm" data-t="todo" role="tab" aria-selected="false" id="tb-todo"><span class="ico">✅</span>할일<span class="badge-n" id="tdN">0</span></button>
   </div>
@@ -841,9 +844,9 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   <div class="mdiv">🎍 January 2027</div><div id="iC"></div>
 </section>
 
-<!-- 🏨 STAY · 참가자 -->
+<!-- 🏨 STAY · 멤버 -->
 <section class="pnl" id="stay" role="tabpanel" aria-labelledby="tb-stay">
-  <h2 class="sec"><span class="e">🏨</span>숙소 · 참가자</h2>
+  <h2 class="sec"><span class="e">🏨</span>숙소 · 멤버</h2>
   <p class="sub">숙소 전 6건 확정 · 카드를 탭하면 바우처 상세정보가 열립니다</p>
 
   <div class="lg-grp">
@@ -941,7 +944,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
     <div class="warn">⚠ 12/30 티니디 체크아웃 → 당일 GCP 체크인 (자유일정)</div>
   </div>
 
-  <h3 class="stbl"><span class="i">◈</span>참가자 · 3그룹 10명</h3>
+  <h3 class="stbl"><span class="i">◈</span>멤버 · 3그룹 10명</h3>
   <p class="sub"><span style="color:var(--gold-text)">●</span> = 골프 참여 (색상은 골프 탭과 동일)</p>
   <div class="fams" id="famsWrap"></div>
 </section>
@@ -996,7 +999,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.1 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.2 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1077,24 +1080,24 @@ const ITIN_A=[
  {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류'},
  gday('12/17','파타야'),
  gday('12/18','파타야','가족1 도착 OZ741 18:05–22:00 · 공항픽업 확정'),
- {d:'19',w:'토',l:'파타야',e:'🏨',t:'가족1 통부라 도착',n:'~00:30 · 이후 자유일정'},
- {d:'20',w:'일',l:'파타야',e:'☀️',t:'자유일정'},
- gday('12/21','파타야','정유현·장모님·김윤후 개별일정 (쿠킹클래스 등 TBD)'),
- gday('12/22','파타야'),
- gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:40)'),
- gday('12/24','파타야'),
- {d:'25',w:'금',l:'파타야',e:'🎄',t:'크리스마스',n:'자유일정'},
+ {d:'19',w:'토',l:'파타야',e:'🏝️',t:'꼬란섬 (Koh Larn)',n:'가족1 통부라 도착 ~00:30',rec:'발리하이 일반 페리(30밧·45분) → 사매 비치, 16:30경 복귀 · 저녁 The Sky Gallery(전망) 또는 Mum Aroi(로컬), 17시 예약'},
+ {d:'20',w:'일',l:'파타야',e:'🚐',t:'데이투어 (가족1+윤우열)',rec:'카오키여우 오픈주(기린 먹이주기) + 실버레이크 포도농원(해바라기 시즌) · 대안: 농눅빌리지 + 진리의 성전'},
+ {...gday('12/21','파타야','정유현·장모님·김윤후 개별일정'),rec:'비골퍼: 타이 쿠킹 클래스(오전, 시장투어 포함) 또는 파타야 수상시장'},
+ {...gday('12/22','파타야'),rec:'비골퍼(장모님·김윤후): 파타야 수상시장 · 언더워터월드 · Art in Paradise 중 택'},
+ {...gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:40)'),rec:'비골퍼: 실버레이크 또는 Frost 아이스 · 오후 김태기 배웅'},
+ {...gday('12/24','파타야'),rec:'비골퍼(장모님·김윤후): 농눅빌리지(코끼리쇼·정원, 반나절)'},
+ {d:'25',w:'금',l:'파타야',e:'🎄',t:'크리스마스',n:'자유일정',rec:'오전 수영 → Central Festival(크리스마스 장식) → 호텔 크리스마스 디너 · 26일 이동 짐 정리'},
 ];
 const ITIN_B=[
- {d:'26',w:'토',l:'파타야→BKK',e:'🚐',t:'방콕 이동',n:'통부라 체크아웃 → 티니디 체크인'},
- {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',x:'이후 자유일정'},
- {d:'28',w:'월',l:'BKK',e:'☀️',t:'자유일정',n:'시내관광'},
- gday('12/29','BKK'),
- {d:'30',w:'수',l:'BKK',e:'☀️',t:'자유일정',n:'가족2 티니디 체크아웃 → GCP 체크인'},
- gday('12/31','BKK','차량 2대 배차 (순차픽업 無)'),
+ {d:'26',w:'토',l:'파타야→BKK',e:'🚐',t:'방콕 이동',n:'통부라 체크아웃 → 티니디 체크인',rec:'저녁 쏨분시푸드 ①(가족1만) — 반탓통/수라웡 지점, 예약 somboonseafood.com'},
+ {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',x:'이후 자유일정',rec:'가족1 낮: 짜뚜짝 주말시장(일요일 한정) 또는 짐 톰슨 하우스'},
+ {d:'28',w:'월',l:'BKK',e:'🛕',t:'방콕 시내관광 (전원)',rec:'왕궁 + 왓 프라깨우 → 왓 포(와불) → 왓 아룬(일몰) · 저녁 야오와랏(차이나타운) 또는 왓아룬 뷰 리버사이드'},
+ {...gday('12/29','BKK'),rec:'비골퍼(정유경·장모님·김윤후·박지해·이동현): 담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일) 또는 사파리월드'},
+ {d:'30',w:'수',l:'BKK',e:'🏬',t:'자유일정 (전원)',n:'가족2 티니디 체크아웃 → GCP 체크인',rec:'라차프라송: 에라완 사당 + 센트럴월드·시암파라곤 + 씨라이프/마하나콘 스카이워크 · 저녁 쏨분시푸드 ②(전원) @센트럴월드'},
+ {...gday('12/31','BKK','차량 2대 배차 (순차픽업 無)'),rec:'비골퍼 낮: 짐 톰슨 하우스·시암 · 밤 카운트다운 — 센트럴월드(GCP 도보)/아이콘시암/짜오프라야 크루즈, 예약 필수'},
 ];
 const ITIN_C=[
- {d:'1',w:'금',l:'BKK',e:'🎊',t:'신정',n:'자유일정'},
+ {d:'1',w:'금',l:'BKK',e:'🎊',t:'신정',n:'자유일정',rec:'전원 회복형: 짜오프라야 런치크루즈 / 아유타야 당일투어 / 아시아티크 — 1/2 08시 출발이라 밤 늦지 않게'},
  {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:20–19:40',x:'호텔 08시 출발'},
  {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
 ];
@@ -1531,6 +1534,7 @@ function days(list,el){
          <div class="dt">${x.t}</div>
          ${x.n?`<div class="dnote">${x.n}</div>`:''}
          ${x.x?`<div class="dx">${x.x}</div>`:''}
+         ${x.rec?`<div class="drec">${x.rec}</div>`:''}
          ${hasDetail?'<div class="g-toggle"><span class="chev">▾</span> 바우처 상세보기</div>':''}
        </div>
        ${hasDetail?`<div class="day-detail">
@@ -1723,8 +1727,8 @@ function buildGolfText(){
 }
 function buildItinText(){
   const plain = s => (s||'').replace(/<[^>]*>/g,''); // 화면표시용 HTML(색점 등) 제거, 순수 텍스트만
-  const line=x=>`12/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}`;
-  const lineJan=x=>`1/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}`;
+  const line=x=>`12/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${x.rec?'\n   💡 '+plain(x.rec):''}`;
+  const lineJan=x=>`1/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${x.rec?'\n   💡 '+plain(x.rec):''}`;
   return `🇹🇭 태국 여행 일정 (2026.12.16–2027.1.4)\n\n${ITIN_A.map(line).join('\n')}\n${ITIN_B.map(line).join('\n')}\n${ITIN_C.map(lineJan).join('\n')}`;
 }
 function wireCopy(id, builder){
