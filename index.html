@@ -351,10 +351,15 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .day.open .day-detail{display:block;animation:fadeIn .18s ease}
 .day.open .g-toggle .chev{transform:rotate(180deg)}
 .dx::before{content:"↳";color:var(--gold-text);font-weight:700;flex:none}
-.drec{font-size:11.5px;color:var(--ink2);background:var(--jade-s);border-radius:7px;
-  padding:6px 9px;margin-top:6px;line-height:1.6}
-.drec::before{content:"💡 가볼 곳 ";font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
-  letter-spacing:.06em;color:var(--jade);white-space:nowrap}
+.rec-sum{font-size:11.5px;color:var(--jade);font-weight:600;margin-top:6px;line-height:1.45}
+.rec-sum::before{content:"💡 ";font-size:11px}
+.recd{padding:2px 0}
+.recd-row{display:flex;gap:9px;padding:6px 0;font-size:11.8px;line-height:1.55}
+.recd-row + .recd-row{border-top:1px dashed var(--line)}
+.recd-k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.02em;
+  color:var(--jade);flex:none;width:44px;padding-top:2px;text-align:right}
+.recd-v{color:var(--ink2);min-width:0}
+.recd + .vsec{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
 
 /* ══ COST ══ */
 .cost-hero{background:linear-gradient(135deg,var(--jade) 0%,var(--jade-d) 100%);color:#fff;
@@ -573,6 +578,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 .gcard.open .gcard-detail,.lg.open .lg-detail,.day.open .day-detail{
   max-height:640px;visibility:visible;transition:max-height .38s cubic-bezier(.16,1,.3,1),visibility 0s;
 }
+.day.open .day-detail{max-height:1200px}
 
 /* ════════ 재미 요소 (모바일 전용) ════════ */
 .ptr,.hero-fx,.confp,.flyplane{display:none}
@@ -838,7 +844,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
     <h2 class="sec"><span class="e">🗓️</span>일정</h2>
     <button class="copy-btn" id="copyItin">📋 텍스트로 복사</button>
   </div>
-  <p class="sub">날짜 색상 = 상태 · <span style="color:var(--ok);font-weight:700">확정</span> / <span style="color:var(--wait);font-weight:700">요청중</span> / <span style="color:var(--coral);font-weight:700">미정</span> · ⛳ 있는 날은 탭하면 바우처 정보가 열립니다</p>
+  <p class="sub">날짜 색상 = 상태 · <span style="color:var(--ok);font-weight:700">확정</span> / <span style="color:var(--wait);font-weight:700">요청중</span> / <span style="color:var(--coral);font-weight:700">미정</span> · <span style="color:var(--jade);font-weight:700">💡 추천</span>·⛳ 있는 날은 탭하면 상세가 열립니다</p>
   <div class="mdiv">🌴 December · 파타야</div><div id="iA"></div>
   <div class="mdiv">🏙️ December · 방콕</div><div id="iB"></div>
   <div class="mdiv">🎍 January 2027</div><div id="iC"></div>
@@ -999,7 +1005,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.2 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.3 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1080,24 +1086,107 @@ const ITIN_A=[
  {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류'},
  gday('12/17','파타야'),
  gday('12/18','파타야','가족1 도착 OZ741 18:05–22:00 · 공항픽업 확정'),
- {d:'19',w:'토',l:'파타야',e:'🏝️',t:'꼬란섬 (Koh Larn)',n:'가족1 통부라 도착 ~00:30',rec:'발리하이 일반 페리(30밧·45분) → 사매 비치, 16:30경 복귀 · 저녁 The Sky Gallery(전망) 또는 Mum Aroi(로컬), 17시 예약'},
- {d:'20',w:'일',l:'파타야',e:'🚐',t:'데이투어 (가족1+윤우열)',rec:'카오키여우 오픈주(기린 먹이주기) + 실버레이크 포도농원(해바라기 시즌) · 대안: 농눅빌리지 + 진리의 성전'},
- {...gday('12/21','파타야','정유현·장모님·김윤후 개별일정'),rec:'비골퍼: 타이 쿠킹 클래스(오전, 시장투어 포함) 또는 파타야 수상시장'},
- {...gday('12/22','파타야'),rec:'비골퍼(장모님·김윤후): 파타야 수상시장 · 언더워터월드 · Art in Paradise 중 택'},
- {...gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:40)'),rec:'비골퍼: 실버레이크 또는 Frost 아이스 · 오후 김태기 배웅'},
- {...gday('12/24','파타야'),rec:'비골퍼(장모님·김윤후): 농눅빌리지(코끼리쇼·정원, 반나절)'},
- {d:'25',w:'금',l:'파타야',e:'🎄',t:'크리스마스',n:'자유일정',rec:'오전 수영 → Central Festival(크리스마스 장식) → 호텔 크리스마스 디너 · 26일 이동 짐 정리'},
+ {d:'19',w:'토',l:'파타야',e:'🏝️',t:'꼬란섬 (Koh Larn)',n:'가족1 통부라 도착 ~00:30',
+  rec:'꼬란 반나절 + 파타야 저녁',
+  recd:[
+   ['이동','발리하이 선착장 일반 페리 30밧·45분 → 나반 선착장(요금 배에서). 토요일·성수기라 오전 배·막배 혼잡 → 늦은 오전 출발, 16:30경 복귀'],
+   ['해변','사매(Samae) 비치 권장 — 조용·물 맑음(장모님·김윤후). 나반에서 썽태우 약 40밧. 선베드+파라솔 100~150밧'],
+   ['저녁','① The Sky Gallery — 쁘라뚬낙 절벽·전망 ② Rimpa Lapin — 나 좀티엔·일몰 ③ Mum Aroi — 나끌루아 해변·로컬 정통. 일몰 18시경 → 17시 예약'],
+  ]},
+ {d:'20',w:'일',l:'파타야',e:'🚐',t:'데이투어 (가족1+윤우열)',
+  rec:'육지 데이투어 · 전세밴',
+  recd:[
+   ['A안 (12월 추천)','카오키여우 오픈주(08시 개장, 기린 먹이주기, 카트) → 점심 → 실버레이크 포도농원(12월 해바라기 시즌·포토존)'],
+   ['B안','농눅빌리지(10·11:15 전통쇼·코끼리쇼, 정원 카트) → 점심 → 진리의 성전(15시, ~1.5h) → 일몰 저녁'],
+   ['C안 (저강도)','Frost Magical Ice + Art in Paradise + 파타야 수상시장 → Terminal 21'],
+   ['참고','윤성욱 합류 가능 · 입장·투어 사전 예약'],
+  ]},
+ {...gday('12/21','파타야','정유현·장모님·김윤후 개별일정'),
+  rec:'비골퍼 3인 — 쿠킹 클래스 등',
+  recd:[
+   ['오전','타이 쿠킹 클래스(시장투어 포함, 반나절) — 아이 동반 가능한 곳'],
+   ['대안','파타야 수상시장 + 스파, 또는 언더워터월드'],
+  ]},
+ {...gday('12/22','파타야'),
+  rec:'비골퍼(장모님·김윤후) — 실내·저강도',
+  recd:[
+   ['옵션','① 파타야 수상시장 ② 언더워터월드(아쿠아리움) ③ Art in Paradise + Frost 아이스 ④ 스위스 십 팜(아이)'],
+   ['참고','한낮 더위 → 실내/그늘 위주, 장모님 페이스 조절'],
+  ]},
+ {...gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:40)'),
+  rec:'비골퍼 오전 + 김태기 배웅',
+  recd:[
+   ['오전','실버레이크(20일 미방문 시) 또는 Frost 아이스 — 짧게'],
+   ['오후','통부라 17시 출발 → 김태기 공항 샌딩 (KE658 21:40)'],
+  ]},
+ {...gday('12/24','파타야'),
+  rec:'비골퍼(장모님·김윤후) — 농눅빌리지',
+  recd:[
+   ['코스','농눅빌리지 — 코끼리쇼·전통쇼 + 정원(카트 필수). 반나절, 입장 약 600밧'],
+   ['대안','카오키여우 오픈주(20일 미방문 시)'],
+  ]},
+ {d:'25',w:'금',l:'파타야',e:'🎄',t:'크리스마스',n:'파타야 마지막 날',
+  rec:'크리스마스 · 26일 이동 준비',
+  recd:[
+   ['낮','오전 수영 → Central Festival Pattaya(크리스마스 장식·쇼핑)'],
+   ['저녁','호텔 크리스마스 디너 뷔페(힐튼 Edge / 하드록 등) 예약'],
+   ['정리','26일 방콕 이동 짐 싸기, 좀티엔·발리하이 일몰'],
+  ]},
 ];
 const ITIN_B=[
- {d:'26',w:'토',l:'파타야→BKK',e:'🚐',t:'방콕 이동',n:'통부라 체크아웃 → 티니디 체크인',rec:'저녁 쏨분시푸드 ①(가족1만) — 반탓통/수라웡 지점, 예약 somboonseafood.com'},
- {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',x:'이후 자유일정',rec:'가족1 낮: 짜뚜짝 주말시장(일요일 한정) 또는 짐 톰슨 하우스'},
- {d:'28',w:'월',l:'BKK',e:'🛕',t:'방콕 시내관광 (전원)',rec:'왕궁 + 왓 프라깨우 → 왓 포(와불) → 왓 아룬(일몰) · 저녁 야오와랏(차이나타운) 또는 왓아룬 뷰 리버사이드'},
- {...gday('12/29','BKK'),rec:'비골퍼(정유경·장모님·김윤후·박지해·이동현): 담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일) 또는 사파리월드'},
- {d:'30',w:'수',l:'BKK',e:'🏬',t:'자유일정 (전원)',n:'가족2 티니디 체크아웃 → GCP 체크인',rec:'라차프라송: 에라완 사당 + 센트럴월드·시암파라곤 + 씨라이프/마하나콘 스카이워크 · 저녁 쏨분시푸드 ②(전원) @센트럴월드'},
- {...gday('12/31','BKK','차량 2대 배차 (순차픽업 無)'),rec:'비골퍼 낮: 짐 톰슨 하우스·시암 · 밤 카운트다운 — 센트럴월드(GCP 도보)/아이콘시암/짜오프라야 크루즈, 예약 필수'},
+ {d:'26',w:'토',l:'파타야→BKK',e:'🚐',t:'방콕 이동',n:'통부라 체크아웃 → 티니디 체크인',
+  rec:'저녁 쏨분시푸드 ① (가족1만)',
+  recd:[
+   ['식당','쏨분시푸드 — 반탓통(원조·분위기) 또는 수라웡(미쉐린). 카오산에서 그랩 15~20분'],
+   ['메뉴','푸팟퐁커리·꿍채남쁠라·뿌님팟퐁·카나무쌉'],
+   ['예약','somboonseafood.com · 피크 18~20시 → 17:30 또는 20:30'],
+  ]},
+ {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',
+  rec:'가족1 낮 · 가족2 밤 합류',
+  recd:[
+   ['가족1 낮','짜뚜짝 주말시장(일요일 한정) 또는 짐 톰슨 하우스 + 시암 쇼핑'],
+   ['장모님·김윤후','왓포 마사지 본원 + 구시가 산책'],
+   ['밤','가족2 도착 → 밴 공항픽업 → 티니디 합류'],
+  ]},
+ {d:'28',w:'월',l:'BKK',e:'🛕',t:'방콕 시내관광 (전원)',
+  rec:'방콕 3대 사원',
+  recd:[
+   ['코스','왕궁+왓 프라깨우(에메랄드 불상) → 도보 왓 포(와불) → 나룻배 왓 아룬(일몰)'],
+   ['복장','어깨·무릎 가림 필수 · 오전 일찍 시작'],
+   ['장모님','왕궁+왓포까지만, 왓아룬은 강 건너 조망 · 중간 카페 휴식'],
+   ['저녁','야오와랏(차이나타운) 길거리 음식, 또는 왓아룬 뷰 리버사이드(Supanniga / The Deck)'],
+  ]},
+ {...gday('12/29','BKK'),
+  rec:'비골퍼 5인 (정유경·장모님·김윤후·박지해·이동현)',
+  recd:[
+   ['A안','담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일). 07:30~08:00 출발, 점심 무렵 복귀 — 아이들이 좋아함'],
+   ['B안','사파리월드 & 마린파크 — 동물·돌고래·오랑우탄 쇼. 종일, 시내에서 편도 40~60분'],
+   ['차량','골프 차량과 분리 예약 필요'],
+  ]},
+ {d:'30',w:'수',l:'BKK',e:'🏬',t:'자유일정 (전원)',n:'가족2 티니디 체크아웃 → GCP 체크인',
+  rec:'가족2 GCP 이동 · 라차프라송 관광',
+  recd:[
+   ['오전','가족2 체크아웃 → GCP(랏차담리, 센트럴월드 옆) 이동'],
+   ['오후','에라완 사당 + 센트럴월드·시암파라곤 쇼핑 + 씨라이프/마담투소, 또는 마하나콘 스카이워크 일몰'],
+   ['저녁','쏨분시푸드 ② @ 센트럴월드 — 가족1+가족2(윤성욱 제외). GCP 도보 5분'],
+  ]},
+ {...gday('12/31','BKK','차량 2대 배차 (순차픽업 無)'),
+  rec:'비골퍼 낮 + NYE 카운트다운',
+  recd:[
+   ['낮','NYE라 오후 도심 혼잡 → 오전 가볍게: 짐 톰슨 하우스·시암·BACC 또는 룸피니 산책+스파, 저녁 전 복귀'],
+   ['밤 ①','센트럴월드 카운트다운 — 공연·자정 불꽃, GCP 도보/고층뷰. 극혼잡 → 매우 일찍 자리'],
+   ['밤 ②','아이콘시암 — 차오프라야강 1,400m 불꽃, 최대 스케일'],
+   ['밤 ③','짜오프라야 NYE 디너크루즈 — 인파 크러시 없음. 조기 매진, 지금 예약'],
+   ['추천','오전 골프+아이 2명+장모님 → ③ 크루즈 또는 GCP 고층 조망'],
+  ]},
 ];
 const ITIN_C=[
- {d:'1',w:'금',l:'BKK',e:'🎊',t:'신정',n:'자유일정',rec:'전원 회복형: 짜오프라야 런치크루즈 / 아유타야 당일투어 / 아시아티크 — 1/2 08시 출발이라 밤 늦지 않게'},
+ {d:'1',w:'금',l:'BKK',e:'🎊',t:'신정',n:'자유일정',
+  rec:'전원 회복형 (1/2 08시 출발)',
+  recd:[
+   ['옵션','① 짜오프라야 런치크루즈(저강도·조망) ② 아유타야 당일투어(UNESCO·나무뿌리 불상머리) ③ 아시아티크(대관람차·야시장·칼립소 쇼)'],
+   ['참고','1/2 호텔 08:00 출발 → 밤 늦지 않게'],
+  ]},
  {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:20–19:40',x:'호텔 08시 출발'},
  {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
 ];
@@ -1522,6 +1611,9 @@ $('stay').addEventListener('keydown', e=>{
 function days(list,el){
   $(el).innerHTML = list.map(x=>{
     const hasDetail = !!(x.book||x.addr||x.tel);
+    const hasRec = Array.isArray(x.recd) && x.recd.length;
+    const expandable = hasDetail || hasRec;
+    const toggleTxt = hasRec && hasDetail ? '추천 · 바우처' : hasRec ? '추천 자세히' : '바우처 상세보기';
     const mapUrl = x.addr ? 'https://maps.google.com/?q='+encodeURIComponent(x.addr) : '';
     const telHref = x.tel ? 'tel:'+x.tel.replace(/-/g,'') : '';
     return `
@@ -1529,18 +1621,21 @@ function days(list,el){
      <div class="dbox"><div class="dn">${x.d}</div><div class="dw">${x.w}</div></div>
      <div class="de" aria-hidden="true">${x.e||''}</div>
      <div class="day-col">
-       <div class="${hasDetail?'day-head':''}" ${hasDetail?'role="button" tabindex="0" aria-expanded="false"':''}>
+       <div class="${expandable?'day-head':''}" ${expandable?'role="button" tabindex="0" aria-expanded="false"':''}>
          <div class="dloc">${x.l}</div>
          <div class="dt">${x.t}</div>
          ${x.n?`<div class="dnote">${x.n}</div>`:''}
          ${x.x?`<div class="dx">${x.x}</div>`:''}
-         ${x.rec?`<div class="drec">${x.rec}</div>`:''}
-         ${hasDetail?'<div class="g-toggle"><span class="chev">▾</span> 바우처 상세보기</div>':''}
+         ${x.rec?`<div class="rec-sum">${x.rec}</div>`:''}
+         ${expandable?`<div class="g-toggle"><span class="chev">▾</span> ${toggleTxt}</div>`:''}
        </div>
-       ${hasDetail?`<div class="day-detail">
-         ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
-         ${x.addr?`<div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="${mapUrl}" target="_blank" rel="noopener">${x.addr} <span class="mico">↗</span></a></div>`:''}
-         ${x.tel?`<div class="gd-row"><span class="gd-k">전화</span><a class="gd-v maddr" href="${telHref}">${x.tel} 📞</a></div>`:''}
+       ${expandable?`<div class="day-detail">
+         ${hasRec?`<div class="recd">${x.recd.map(r=>`<div class="recd-row"><span class="recd-k">${r[0]}</span><span class="recd-v">${r[1]}</span></div>`).join('')}</div>`:''}
+         ${hasDetail?`<div class="vsec">
+           ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
+           ${x.addr?`<div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="${mapUrl}" target="_blank" rel="noopener">${x.addr} <span class="mico">↗</span></a></div>`:''}
+           ${x.tel?`<div class="gd-row"><span class="gd-k">전화</span><a class="gd-v maddr" href="${telHref}">${x.tel} 📞</a></div>`:''}
+         </div>`:''}
        </div>`:''}
      </div>
    </div>`;
@@ -1727,8 +1822,9 @@ function buildGolfText(){
 }
 function buildItinText(){
   const plain = s => (s||'').replace(/<[^>]*>/g,''); // 화면표시용 HTML(색점 등) 제거, 순수 텍스트만
-  const line=x=>`12/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${x.rec?'\n   💡 '+plain(x.rec):''}`;
-  const lineJan=x=>`1/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${x.rec?'\n   💡 '+plain(x.rec):''}`;
+  const rec=x=>x.rec?`\n   💡 추천: ${plain(x.rec)}`+(x.recd?x.recd.map(r=>`\n      · ${r[0]} — ${plain(r[1])}`).join(''):''):'';
+  const line=x=>`12/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${rec(x)}`;
+  const lineJan=x=>`1/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${rec(x)}`;
   return `🇹🇭 태국 여행 일정 (2026.12.16–2027.1.4)\n\n${ITIN_A.map(line).join('\n')}\n${ITIN_B.map(line).join('\n')}\n${ITIN_C.map(lineJan).join('\n')}`;
 }
 function wireCopy(id, builder){
