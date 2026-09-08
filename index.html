@@ -1064,7 +1064,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.11 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.12 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1567,21 +1567,27 @@ const TODO=[
     renderBasis();
   }
   const N=s=>parseFloat(String(s==null?'':s).replace(/[,\s]/g,''));
+  const tf=(u,ms=5000)=>{ const c=new AbortController(); const id=setTimeout(()=>c.abort(),ms);
+    return fetch(u,{cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(id)); };
+  const jget=async u=> (await tf(u)).json();
   function commit(usd,thb,src,prov){
-    if(!(usd>0 && thb>0)) return false;
+    if(!(usd>0 && thb>0 && usd<100000 && thb<100000)) return false;
     state={ usd, thb, src: (/^\d{4}-\d{2}-\d{2}/.test(src||'')?src:new Date().toISOString()), prov, ts:Date.now() };
     try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
     return true;
   }
-  // 네이버 증권 환율 API (네이버 환율 페이지와 동일 값)
+  // 네이버 증권 환율 API (네이버 환율 페이지와 동일한 매매기준율) — 직접 안 되면 CORS 프록시
   async function fromNaver(){
+    const base='https://api.stock.naver.com/marketindex/exchange/';
+    const prox='https://api.allorigins.win/raw?url=';
     const one = async code => {
-      const r = await fetch('https://api.stock.naver.com/marketindex/exchange/'+code, {cache:'no-store'});
-      const j = await r.json();
+      let j;
+      try{ j = await jget(base+code); }
+      catch(e){ j = await jget(prox+encodeURIComponent(base+code)); }
       const p = j.priceInfo || j;
-      const price = N(j.closePrice ?? p.closePrice ?? j.price ?? p.currentPrice);
+      const price = N(j.closePrice ?? p.closePrice ?? j.currentPrice ?? p.currentPrice);
       const unit  = N(j.currencyUnit ?? p.currencyUnit ?? 1) || 1;
-      const at    = j.localTradedAt || j.tradedAt || j.date || p.localTradedAt || '';
+      const at    = j.localTradedAt || j.tradedAt || p.localTradedAt || '';
       return { rate: price/unit, at };
     };
     const [u,t] = await Promise.all([one('FX_USDKRW'), one('FX_THBKRW')]);
@@ -1589,18 +1595,25 @@ const TODO=[
   }
   // 두나무 forex (하나은행 매매기준율)
   async function fromDunamu(){
-    const r = await fetch('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD,FRX.KRWTHB',{cache:'no-store'});
-    const arr = await r.json();
+    const arr = await jget('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD,FRX.KRWTHB');
     const g = c => Array.isArray(arr) && arr.find(x=>x.code===c);
     const u = g('FRX.KRWUSD'), t = g('FRX.KRWTHB');
     if(!(u && t)) return false;
     return commit(u.basePrice/(u.currencyUnit||1), t.basePrice/(t.currencyUnit||1),
       (u.localTradeDate||'').replace(/\./g,'-')+'T'+(u.localTradeTime||'00:00:00')+'+09:00', '매매기준율');
   }
+  // currency-api (jsdelivr CDN · 폴백 · mid-rate) — 코드 CDN이라 차단될 확률 낮음
+  async function fromCdnApi(){
+    let j;
+    try{ j = await jget('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json'); }
+    catch(e){ j = await jget('https://latest.currency-api.pages.dev/v1/currencies/usd.json'); }
+    const u = j && j.usd;
+    if(!(u && u.krw && u.thb)) return false;
+    return commit(u.krw, u.krw/u.thb, (j.date||'')+'T00:00:00Z', '참고환율');
+  }
   // exchangerate-api (폴백 · mid-rate)
   async function fromErApi(){
-    const r = await fetch('https://open.er-api.com/v6/latest/USD',{cache:'no-store'});
-    const j = await r.json();
+    const j = await jget('https://open.er-api.com/v6/latest/USD');
     if(!(j && j.result==='success' && j.rates && j.rates.KRW && j.rates.THB)) return false;
     let iso=''; try{ iso=new Date(j.time_last_update_utc).toISOString(); }catch(e){}
     return commit(j.rates.KRW, j.rates.KRW/j.rates.THB, iso, '참고환율');
@@ -1610,7 +1623,7 @@ const TODO=[
     if(fetching) return;
     fetching=true; fx.classList.add('loading'); renderBasis();
     let ok=false;
-    for(const src of [fromNaver, fromDunamu, fromErApi]){
+    for(const src of [fromNaver, fromDunamu, fromCdnApi, fromErApi]){
       try{ if(await src()){ ok=true; break; } }catch(e){}
     }
     fetching=false; fx.classList.remove('loading'); render();
