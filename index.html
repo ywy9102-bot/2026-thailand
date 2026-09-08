@@ -1172,7 +1172,7 @@ header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opaci
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.21 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.22 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1774,9 +1774,9 @@ const TODO=[
   fx.addEventListener('click', e=>{
     if(e.target.closest('#fxNav')){ haptic('tap'); return; }
     if((e.target.closest('#fxThb') || e.target.closest('#fxUsd')) && state.thb && typeof window.__toast === 'function'){
-      const kick = '฿1 ≈ '+fmt2(state.thb)+'원' + (state.usd ? '   ·   $1 ≈ '+fmt2(state.usd)+'원' : '');
-      const rows = [100,1000,5000,10000].map(a=>`฿${a.toLocaleString()} ≈ ${Math.round(a*state.thb).toLocaleString()}원`).join('   ·   ');
-      window.__toast(kick, rows, 5600);
+      const kick = '฿1 ≈ '+fmt2(state.thb)+'원' + (state.usd ? '  ·  $1 ≈ '+fmt2(state.usd)+'원' : '');
+      const b = [100,1000,5000,10000].map(a=>`฿${a.toLocaleString()} = ${Math.round(a*state.thb).toLocaleString()}`);
+      window.__toast(kick, b[0]+'  ·  '+b[1]+'<br>'+b[2]+'  ·  '+b[3]+' <span style="opacity:.6">원</span>', 5600);
       haptic('tap'); return;
     }
     haptic('tap'); sync(true);
