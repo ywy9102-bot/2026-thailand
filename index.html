@@ -1064,7 +1064,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.10 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.11 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1602,7 +1602,8 @@ const TODO=[
     const r = await fetch('https://open.er-api.com/v6/latest/USD',{cache:'no-store'});
     const j = await r.json();
     if(!(j && j.result==='success' && j.rates && j.rates.KRW && j.rates.THB)) return false;
-    return commit(j.rates.KRW, j.rates.KRW/j.rates.THB, j.time_last_update_utc, '참고환율');
+    let iso=''; try{ iso=new Date(j.time_last_update_utc).toISOString(); }catch(e){}
+    return commit(j.rates.KRW, j.rates.KRW/j.rates.THB, iso, '참고환율');
   }
   let fetching=false;
   async function sync(userInitiated){
