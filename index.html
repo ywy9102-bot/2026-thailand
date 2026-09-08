@@ -55,19 +55,19 @@ header.hero::before{content:"";position:absolute;inset:0;
              radial-gradient(circle at 8% 85%,rgba(255,255,255,.05) 0,transparent 45%);}
 
 /* ── 현재 날씨에 맞춰 히어로 배경이 변함 (renderWx → header.hero[data-wx]) ── */
-header.hero[data-wx="sunny"]{background:linear-gradient(157deg,#245A4A 0%,#0E2A22 100%)}
+header.hero[data-wx="sunny"]{background:linear-gradient(157deg,#2E6B4E 0%,#0F3026 55%,#0C2820 100%)}
 header.hero[data-wx="sunny"]::before{background:
-  radial-gradient(circle at 86% 6%,rgba(247,224,150,.34) 0,transparent 46%),
-  radial-gradient(circle at 8% 90%,rgba(255,255,255,.06) 0,transparent 45%)}
-header.hero[data-wx="cloudy"]{background:linear-gradient(157deg,#33473F 0%,#141F1C 100%)}
-header.hero[data-wx="cloudy"]::before{opacity:.5;background:
-  radial-gradient(ellipse at 60% 0%,rgba(226,232,228,.10) 0,transparent 55%)}
-header.hero[data-wx="rain"]{background:linear-gradient(157deg,#1B434C 0%,#0A2126 100%)}
+  radial-gradient(circle at 84% 2%,rgba(250,222,138,.5) 0,rgba(240,190,90,.14) 30%,transparent 52%),
+  radial-gradient(circle at 8% 92%,rgba(255,255,255,.06) 0,transparent 45%)}
+header.hero[data-wx="cloudy"]{background:linear-gradient(157deg,#3C4B45 0%,#222C29 45%,#141B19 100%)}
+header.hero[data-wx="cloudy"]::before{background:
+  radial-gradient(ellipse at 50% -20%,rgba(214,222,219,.16) 0,transparent 58%)}
+header.hero[data-wx="rain"]{background:linear-gradient(157deg,#1D4750 0%,#0E2C33 50%,#0A2126 100%)}
 header.hero[data-wx="rain"]::before{background:
-  radial-gradient(ellipse at 50% -10%,rgba(150,180,192,.16) 0,transparent 55%)}
-header.hero[data-wx="storm"]{background:linear-gradient(157deg,#1D3439 0%,#091518 100%)}
+  radial-gradient(ellipse at 50% -10%,rgba(150,180,192,.18) 0,transparent 55%)}
+header.hero[data-wx="storm"]{background:linear-gradient(157deg,#20363B 0%,#122428 50%,#091518 100%)}
 header.hero[data-wx="storm"]::before{background:
-  radial-gradient(ellipse at 50% -10%,rgba(150,175,188,.13) 0,transparent 50%)}
+  radial-gradient(ellipse at 50% -10%,rgba(150,175,188,.14) 0,transparent 50%)}
 
 .hero-in{position:relative;z-index:1}
 
@@ -644,33 +644,67 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 .ptr,.confp,.flyplane,.wx-scene{display:none}
 @media (min-width:761px){ .toast,.ptr,.confp,.flyplane,.wx-scene{display:none!important} }
 
-/* ── 날씨 반응형 히어로 분위기 레이어 (전 폭 공통) ── */
+/* ── 날씨 반응형 히어로 분위기 레이어 (전 폭 공통 · 모션 강조) ── */
 .hero-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:0}
-header.hero[data-wx] .hero-fx{opacity:.92}
+header.hero[data-wx] .hero-fx{opacity:1}
+.hero-fx>i{position:absolute;display:block;opacity:0}
 header.hero.wx-burst .hero-fx{animation:wxBurst 1.3s ease}
-@keyframes wxBurst{0%,100%{opacity:.92;filter:none}35%{opacity:1;filter:brightness(1.5) saturate(1.25)}}
-header.hero[data-wx="sunny"] .hero-fx::before{content:"";position:absolute;top:-32%;right:-18%;
-  width:70%;height:112%;border-radius:50%;
-  background:radial-gradient(circle,rgba(247,226,158,.42) 0%,transparent 62%)}
-header.hero[data-wx="cloudy"] .hero-fx::before{content:"";position:absolute;top:4%;left:-38%;
-  width:120%;height:58%;border-radius:50%;
-  background:radial-gradient(ellipse,rgba(232,238,234,.12) 0%,transparent 60%);filter:blur(9px)}
-header.hero[data-wx="rain"] .hero-fx,header.hero[data-wx="storm"] .hero-fx{
-  background-image:
-    repeating-linear-gradient(101deg,transparent 0 17px,rgba(200,220,214,.10) 17px 18px),
-    repeating-linear-gradient(97deg,transparent 0 27px,rgba(200,220,214,.06) 27px 28px)}
-header.hero[data-wx="storm"] .hero-fx::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%,rgba(224,236,255,.4) 0,transparent 60%);opacity:0}
+@keyframes wxBurst{0%,100%{filter:none}35%{filter:brightness(1.4) saturate(1.25)}}
+
+/* 해 — 광선이 회전 + 맥동 */
+.fx-sun{width:132px;height:132px;top:-48px;right:-34px;border-radius:50%;
+  background:radial-gradient(circle at 44% 44%,rgba(255,244,204,.95),rgba(248,206,108,.55) 46%,transparent 73%)}
+.fx-sun::after{content:"";position:absolute;inset:-46px;border-radius:50%;
+  background:conic-gradient(from 0deg,
+    rgba(255,231,168,.32) 0 7deg,transparent 7deg 30deg,
+    rgba(255,231,168,.32) 30deg 37deg,transparent 37deg 60deg,
+    rgba(255,231,168,.32) 60deg 67deg,transparent 67deg 90deg,
+    rgba(255,231,168,.32) 90deg 97deg,transparent 97deg 120deg,
+    rgba(255,231,168,.32) 120deg 127deg,transparent 127deg 150deg,
+    rgba(255,231,168,.32) 150deg 157deg,transparent 157deg 180deg,
+    rgba(255,231,168,.32) 180deg 187deg,transparent 187deg 210deg,
+    rgba(255,231,168,.32) 210deg 217deg,transparent 217deg 240deg,
+    rgba(255,231,168,.32) 240deg 247deg,transparent 247deg 270deg,
+    rgba(255,231,168,.32) 270deg 277deg,transparent 277deg 300deg,
+    rgba(255,231,168,.32) 300deg 307deg,transparent 307deg 330deg,
+    rgba(255,231,168,.32) 330deg 337deg,transparent 337deg 360deg);
+  -webkit-mask:radial-gradient(circle,transparent 46%,#000 47% 74%,transparent 76%);
+          mask:radial-gradient(circle,transparent 46%,#000 47% 74%,transparent 76%)}
+header.hero[data-wx="sunny"] .fx-sun{opacity:1}
+
+/* 구름 — 계속 가로로 흘러감 */
+.fx-cloud{height:46px;border-radius:100px;filter:blur(7px);background:rgba(228,234,231,.16)}
+.fx-cloud.a{width:170px;top:10%;left:6%}
+.fx-cloud.b{width:120px;top:42%;left:52%;background:rgba(228,234,231,.12)}
+.fx-cloud.c{width:210px;top:68%;left:24%;height:54px;background:rgba(228,234,231,.09)}
+header.hero[data-wx="cloudy"] .fx-cloud{opacity:1}
+header.hero[data-wx="rain"] .fx-cloud.a,header.hero[data-wx="rain"] .fx-cloud.c,
+header.hero[data-wx="storm"] .fx-cloud.a,header.hero[data-wx="storm"] .fx-cloud.c{
+  opacity:1;background:rgba(38,52,55,.5)}
+
+/* 비 — 대각선 빗줄기가 빠르게 흐름 */
+.fx-rain{inset:0;background-image:
+  repeating-linear-gradient(104deg,transparent 0 13px,rgba(198,218,224,.16) 13px 14px),
+  repeating-linear-gradient(100deg,transparent 0 21px,rgba(198,218,224,.10) 21px 22px)}
+header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opacity:1}
+
+/* 번개 — 번쩍 */
+.fx-bolt{inset:0;background:radial-gradient(ellipse at 50% -8%,rgba(232,242,255,.6) 0,transparent 55%)}
+
 @media (prefers-reduced-motion:no-preference){
-  header.hero[data-wx="sunny"] .hero-fx::before{animation:sunBreathe 7s ease-in-out infinite}
-  header.hero[data-wx="cloudy"] .hero-fx::before{animation:cloudDrift 22s ease-in-out infinite}
-  header.hero[data-wx="rain"] .hero-fx,header.hero[data-wx="storm"] .hero-fx{animation:rainSlide .62s linear infinite}
-  header.hero[data-wx="storm"] .hero-fx::after{animation:lightning 9s steps(1,end) infinite}
+  header.hero[data-wx="sunny"] .fx-sun{animation:fxSunPulse 4.5s ease-in-out infinite}
+  header.hero[data-wx="sunny"] .fx-sun::after{animation:fxSpin 22s linear infinite}
+  header.hero[data-wx="cloudy"] .fx-cloud.a,header.hero[data-wx="rain"] .fx-cloud.a,header.hero[data-wx="storm"] .fx-cloud.a{animation:fxDrift 24s linear infinite}
+  header.hero[data-wx="cloudy"] .fx-cloud.b{animation:fxDrift 33s linear infinite;animation-delay:-9s}
+  header.hero[data-wx="cloudy"] .fx-cloud.c,header.hero[data-wx="rain"] .fx-cloud.c,header.hero[data-wx="storm"] .fx-cloud.c{animation:fxDrift 41s linear infinite;animation-delay:-19s}
+  header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{animation:fxRain .5s linear infinite}
+  header.hero[data-wx="storm"] .fx-bolt{opacity:0;animation:fxBolt 5s steps(1,end) infinite}
 }
-@keyframes sunBreathe{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.82;transform:scale(1.08)}}
-@keyframes cloudDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(20%)}}
-@keyframes rainSlide{from{background-position:0 0,0 0}to{background-position:-7px 44px,-12px 64px}}
-@keyframes lightning{0%,95%,100%{opacity:0}96%{opacity:.5}96.4%{opacity:0}97.4%{opacity:.8}97.9%{opacity:0}}
+@keyframes fxSpin{to{transform:rotate(360deg)}}
+@keyframes fxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.07);filter:brightness(1.12)}}
+@keyframes fxDrift{from{transform:translateX(-280px)}to{transform:translateX(calc(100vw + 80px))}}
+@keyframes fxRain{from{background-position:0 0,0 0}to{background-position:-6px 42px,-10px 60px}}
+@keyframes fxBolt{0%,88%,100%{opacity:0}89%{opacity:.55}89.5%{opacity:0}90.6%{opacity:.9}91.2%{opacity:0}92%{opacity:.5}92.4%{opacity:0}}
 .toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
   max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
   background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:#F4EEDD;
@@ -845,7 +879,11 @@ header.hero[data-wx="storm"] .hero-fx::after{content:"";position:absolute;inset:
 <body>
 
 <header class="hero">
-  <div class="hero-fx" aria-hidden="true"></div>
+  <div class="hero-fx" aria-hidden="true">
+    <i class="fx-sun"></i>
+    <i class="fx-cloud a"></i><i class="fx-cloud b"></i><i class="fx-cloud c"></i>
+    <i class="fx-rain"></i><i class="fx-bolt"></i>
+  </div>
   <div class="hero-occ" id="heroOcc" aria-hidden="true"></div>
   <div class="wrap hero-in">
     <p class="eyebrow"><span class="pulse"></span><span class="eg-flag" id="egFlag">🇹🇭</span><span class="occ-emoji" id="occEmoji" hidden></span> 겨울 가족여행<span class="eyebrow-upd"><span id="updFull">–</span><span id="updMini">–</span></span></p>
@@ -1125,7 +1163,7 @@ header.hero[data-wx="storm"] .hero-fx::after{content:"";position:absolute;inset:
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.19 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.20 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2293,16 +2331,70 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     '그랩(Grab) 앱 미리 설치 — 택시보다 편하고 투명',
     '팁 문화 약함 — 호텔 벨보이 20B, 마사지 50–100B 정도',
     '콘센트는 220V, 한국 플러그 대부분 그대로 사용',
-    '골프장 캐디피는 현금(보통 400–500B), 팁 별도',
     '스콜(소나기) 대비 접이 우산 하나',
     '파타야 해산물은 무게 속임 주의 — 저울 확인',
     '카오산·야시장은 소매치기 조심, 가방 앞으로',
+    '방콕 이동은 BTS·MRT + 수상보트가 러시아워엔 택시보다 빠름',
+    '파타야→방콕 차로 1시간 30분~2시간, 교통 상황 편차 큼',
+    '실내는 냉방 강함 — 얇은 겉옷 하나 챙기기',
+    '왓 포·왕궁은 오전 일찍(더위·인파 전) 방문',
+    '편의점 세븐일레븐이 곳곳에 — 물·간식·심카드 충전 다 됨',
+    '길 건널 때 차 먼저 봄 — 횡단보도도 양보 잘 안 함',
+    '더위 대비 전해질 음료(100 Plus 등) 상비',
   ];
-  let tipI = Math.floor(Math.random()*TIPS.length);
+  const PHRASES = [
+    ['싸와디 캅 / 카','안녕하세요 (남 캅 · 여 카)'],
+    ['컵쿤 캅 / 카','감사합니다'],
+    ['마이 펫','안 맵게 해주세요 — 식당 필수'],
+    ['라카 타올라이?','얼마예요?'],
+    ['아로이 (막)','(아주) 맛있어요'],
+    ['첵빈 / 겝땅','계산해주세요'],
+    ['마이 아오 컵쿤','안 살게요, 괜찮아요 (정중히 사양)'],
+    ['헝남 유 티 나이?','화장실 어디예요?'],
+    ['코 토트','실례합니다 / 죄송합니다'],
+    ['뻰 라이','괜찮아요 / 천만에요'],
+    ['니 타올라이?','이거 얼마예요?'],
+    ['롯 노이 다이 마이?','조금 깎아 주실 수 있어요?'],
+    ['넝 · 썽 · 쌈','1 · 2 · 3'],
+    ['차이 / 마이 차이','네 / 아니요'],
+  ];
+  const FOODS = [
+    ['팟타이','새콤달콤 볶음 쌀국수 — 무난한 첫 도전'],
+    ['똠얌꿍','새우 넣은 매콤·시큼 수프, 태국의 상징'],
+    ['쏨땀','파파야 채 샐러드 — 맵기 조절 요청'],
+    ['카오 팟','태국식 볶음밥, 아이도 잘 먹음'],
+    ['마사만 커리','땅콩·감자 든 순한 커리, 안 매움'],
+    ['카오 소이','북부식 코코넛 커리 국수 (치앙마이 명물)'],
+    ['무 삥 + 카오니여우','돼지 꼬치구이 + 찰밥, 아침·간식'],
+    ['뿌 팟 퐁 커리','게 넣은 노란 커리 볶음 — 쏨분시푸드 대표'],
+    ['팟 까파오 무쌉 카이다오','바질 다진고기 볶음 + 계란후라이 덮밥'],
+    ['카오니여우 마무앙','망고 찰밥 — 대표 디저트'],
+    ['카오 만 까이','부드러운 닭고기 덮밥 (치킨라이스)'],
+    ['깽 키여우 완','그린 커리 — 코코넛·바질 향, 매운 편'],
+    ['얌 운센','당면 새콤 샐러드 — 해산물 넣으면 별미'],
+    ['로띠 + 연유','길거리 팬케이크 디저트'],
+  ];
+  const GOLFT = [
+    '캐디피는 현금 400~500B + 팁 300~500B 별도 준비',
+    '티오프는 보통 이른 오전(06:30~08:30) — 한낮 더위 회피',
+    '카트 의무인 코스 많음 · 페어웨이 진입 규정 확인',
+    '워터해저드 근처 공은 미련 없이 포기 (뱀·모니터도마뱀)',
+    '복장: 카라 티셔츠 필수, 청바지·민소매 불가',
+    '선크림·모자·수건·전해질 음료 · 우기엔 우산',
+    '그늘집(할프하우스) 간식·음료는 현금',
+    '라운드 후 클럽하우스 타이 마사지 저렴 — 피로 회복',
+    '골프백 항공 수하물 규정·무게 미리 확인',
+    '스파이크는 소프트만 — 대부분 메탈 금지',
+  ];
+  let tipI = Math.floor(Math.random()*TIPS.length),
+      phI  = Math.floor(Math.random()*PHRASES.length),
+      foI  = Math.floor(Math.random()*FOODS.length),
+      goI  = Math.floor(Math.random()*GOLFT.length);
 
-  // ── 보딩패스 플립: 링(99일 원형) 제외한 카운트다운 어디를 눌러도 페이지가 넘어감 ──
+  // ── 보딩패스 플립: 링(99일 원형) 제외한 카운트다운 어디를 눌러도 페이지가 넘어감
+  //     항공편 2장 + 매번 바뀌는 콘텐츠(팁·태국어·음식·골프) 4장 ──
   const backIn = $('cdBackIn'), backDots = $('cdBackDots');
-  const golfMan = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/1e4).toFixed(0);
+  const pair = (t,d)=> '<div class="cd-ln"><b>'+t+'</b></div><div class="cd-ln cd-tip">'+d+'</div>';
   const PAGES = [
     ['✈ 출발 · ICN → BKK', ()=>
      '<div class="cd-fl"><b>OZ743</b> 07:10 <span>윤우열</span> · <b>KE657</b> 09:15 <span>김태기</span></div>'+
@@ -2310,16 +2402,10 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     ['🛬 귀국 · BKK → ICN', ()=>
      '<div class="cd-fl"><b>KE658</b> 12/23 21:40 <span>김태기</span></div>'+
      '<div class="cd-fl"><b>OZ744</b> 1/2 12:20 <span>가족1·2</span> · <span>윤성욱 1/4</span></div>'],
-    ['📅 여행 개요', ()=>
-     '<div class="cd-ln">12/16 → 1/4 · 파타야 <b>10박</b> + 방콕 <b>7박</b></div>'+
-     '<div class="cd-ln">3가족 <b>10명</b> · 골프 <b>8R</b> · 예약 준비 78%</div>'],
-    ['⛳ 골프 8라운드', ()=>
-     '<div class="cd-ln">파타야 <b>6R</b> · 방콕 <b>2R</b> · 전액 윤우열 선지불</div>'+
-     '<div class="cd-ln">확정 총액 <b>'+golfMan+'만원</b> → 참여자별 1/N</div>'],
-    ['💰 정산 (윤우열 미회수)', ()=>
-     '<div class="cd-ln"><b>8,583,542원</b></div>'+
-     '<div class="cd-ln">숙박 319 + 골프 529 + 차량 10 (만) · 정산 탭 참고</div>'],
-    ['💡 태국 팁', ()=>{ tipI = (tipI + 1) % TIPS.length; return '<div class="cd-ln cd-tip">'+TIPS[tipI]+'</div>'; }],
+    ['💡 태국 여행 팁', ()=>{ tipI = (tipI + 1) % TIPS.length; return '<div class="cd-ln cd-tip">'+TIPS[tipI]+'</div>'; }],
+    ['💬 태국어 한마디', ()=>{ phI = (phI + 1) % PHRASES.length; return pair(PHRASES[phI][0], PHRASES[phI][1]); }],
+    ['🍜 이건 꼭 먹어보기', ()=>{ foI = (foI + 1) % FOODS.length; return pair(FOODS[foI][0], FOODS[foI][1]); }],
+    ['⛳ 태국 골프 팁', ()=>{ goI = (goI + 1) % GOLFT.length; return '<div class="cd-ln cd-tip">'+GOLFT[goI]+'</div>'; }],
   ];
   let backPg = 0;
   function renderBack(){
