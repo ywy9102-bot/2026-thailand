@@ -1064,7 +1064,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.8 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.9 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1552,7 +1552,7 @@ const TODO=[
   function renderBasis(){
     if(!state.ts){ basisEl.textContent = fx.classList.contains('loading') ? '환율 정보를 불러오는 중…' : ''; return; }
     const kst=fmtKST(state.src), ago=fmtAgo(state.ts);
-    const prov = state.prov ? state.prov+' 기준' : '기준';
+    const prov = state.prov || '기준';
     basisEl.textContent = (kst ? `${kst} ${prov}` : prov) + ' · ' + ago;
   }
   function render(){
@@ -1581,7 +1581,7 @@ const TODO=[
           usd: u.basePrice/(u.currencyUnit||1),
           thb: t.basePrice/(t.currencyUnit||1),
           src: (u.localTradeDate||'').replace(/\./g,'-')+'T'+(u.localTradeTime||'00:00:00')+'+09:00',
-          prov: (u.provider||'하나은행')+' 매매기준율',
+          prov: '매매기준율',
           ts: Date.now()
         };
         ok=true;
@@ -1593,7 +1593,7 @@ const TODO=[
       const r=await fetch('https://open.er-api.com/v6/latest/USD',{cache:'no-store'});
       const j=await r.json();
       if(j && j.result==='success' && j.rates && j.rates.KRW && j.rates.THB){
-        state={ usd:j.rates.KRW, thb:j.rates.KRW/j.rates.THB, src:j.time_last_update_utc, prov:'exchangerate-api', ts:Date.now() };
+        state={ usd:j.rates.KRW, thb:j.rates.KRW/j.rates.THB, src:j.time_last_update_utc, prov:'참고환율', ts:Date.now() };
         ok=true;
         try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
       }
