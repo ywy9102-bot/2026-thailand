@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="태국 겨울 여행">
+<meta name="apple-mobile-web-app-title" content="26년 태국여행">
 <title>태국 겨울 여행 · 3가족 10명</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -200,6 +200,7 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .stat .n{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:#fff;line-height:1}
 .stat .n small{font-size:12px;font-weight:500;color:#BCCDC4;margin-left:1px}
 .stat .l{font-size:11.5px;color:#A5BAB0;margin-top:5px;letter-spacing:.01em}
+header.hero.no-stats .hero-in{padding-bottom:20px}
 
 /* ══ NAV (bottom on mobile) ══ */
 nav.tabs{position:sticky;top:0;z-index:50;background:rgba(246,242,232,.94);
@@ -1054,16 +1055,16 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   <div id="todoWrap"></div>
 
   <div class="install-box" id="installBox" hidden>
-    <div class="ib-t" id="ibTitle">📱 홈 화면에 앱으로 저장</div>
-    <div class="ib-d" id="ibDesc">이 일정판을 홈 화면 아이콘으로 두면 앱처럼 바로 열려요</div>
-    <button class="ib-btn" id="ibBtn" type="button" hidden>홈 화면에 추가</button>
+    <div class="ib-t" id="ibTitle">📱 앱으로 저장</div>
+    <div class="ib-d" id="ibDesc">이 일정판을 앱으로 저장하면 홈 화면에서 바로 열려요</div>
+    <button class="ib-btn" id="ibBtn" type="button" hidden>앱으로 저장</button>
   </div>
 </section>
 
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.6 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.7 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1399,6 +1400,15 @@ const TODO=[
   occEl.innerHTML = html;
 })();
 
+// ── 히어로 요약(가족·골프·숙소)은 이 기기 최초 1회만 노출 ──
+(function(){
+  const stats = document.querySelector('.stats');
+  if(!stats) return;
+  let seen; try{ seen = localStorage.getItem('thai2026_statseen'); }catch(e){ seen = '1'; }
+  if(seen){ stats.hidden = true; document.querySelector('header.hero').classList.add('no-stats'); return; }
+  try{ localStorage.setItem('thai2026_statseen','1'); }catch(e){}
+})();
+
 // ── 태국 현지 정보 위젯 (시각·위치·날씨) ──
 (function(){
   const CITIES={ '파타야':{lat:12.93,lon:100.88,q:'파타야 날씨'}, '방콕':{lat:13.75,lon:100.50,q:'방콕 날씨'} };
@@ -1583,6 +1593,7 @@ const TODO=[
     if(e.target.closest('#fxNav')){ haptic('tap'); return; }
     haptic('tap'); sync(true);
   });
+  window.fxRefresh = ()=> sync(true);   // 당겨서 새로고침에서 호출
   render();
   setInterval(renderBasis, 6e4);
   if(!state.ts || Date.now()-state.ts > 6*36e5) sync();
@@ -2247,8 +2258,9 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       if(armed){
         if(!rm){ ptr.classList.add('spin'); setTimeout(()=> ptr.classList.remove('spin'), 650); }
         haptic('ok');
-        const sync = $('wxSync'); sync && sync.click();
-        toast('🌴', '현지 정보 새로고침', 1700);
+        const sync = $('wxSync'); sync && sync.click();      // 날씨
+        if(typeof window.fxRefresh === 'function') window.fxRefresh();  // 환율
+        toast('🌴', '날씨·환율 새로고침', 1700);
       }
     }, {passive:true});
   })();
@@ -2263,7 +2275,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
 
   // 이미 설치(스탠드얼론)로 열림
   if(matchMedia('(display-mode: standalone)').matches || navigator.standalone){
-    done('✅ 홈 화면에 설치됨', '앱 아이콘으로 잘 쓰고 계세요');
+    done('✅ 앱으로 저장됨', '앱 아이콘으로 잘 쓰고 계세요');
     return;
   }
   const ua = navigator.userAgent;
@@ -2272,9 +2284,9 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
 
   function wirePrompt(){
     if(!window.__bip) return false;
-    show(); btn.hidden=false; btn.textContent='홈 화면에 추가';
-    title.textContent='📱 홈 화면에 앱으로 저장';
-    desc.textContent='이 일정판을 홈 화면 아이콘으로 두면 앱처럼 바로 열려요';
+    show(); btn.hidden=false; btn.textContent='앱으로 저장';
+    title.textContent='📱 앱으로 저장';
+    desc.textContent='이 일정판을 앱으로 저장하면 홈 화면에서 바로 열려요';
     btn.onclick = async ()=>{
       haptic('tap');
       const bip = window.__bip; if(!bip) return;
@@ -2282,12 +2294,12 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       let outcome='dismissed';
       try{ outcome=(await bip.userChoice).outcome; }catch(e){}
       window.__bip=null;
-      if(outcome==='accepted') done('✅ 추가되었어요', '홈 화면에서 아이콘을 확인하세요');
+      if(outcome==='accepted') done('✅ 저장되었어요', '홈 화면에서 앱 아이콘을 확인하세요');
     };
     return true;
   }
   addEventListener('bip', ()=>{
-    if(!window.__bip){ done('✅ 홈 화면에 설치됨', '앱 아이콘으로 잘 쓰고 계세요'); }
+    if(!window.__bip){ done('✅ 앱으로 저장됨', '앱 아이콘으로 잘 쓰고 계세요'); }
     else wirePrompt();
   });
 
@@ -2296,17 +2308,17 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
   // beforeinstallprompt가 없는 경우 — 브라우저별 수동 안내
   if(isIOS){
     show(); btn.hidden=true;
-    title.textContent='📱 홈 화면에 앱으로 저장';
+    title.textContent='📱 앱으로 저장';
     desc.innerHTML='Safari 하단 <b>공유</b> <span class="ib-ic">⬆️</span> 버튼 → <b>홈 화면에 추가</b> 를 누르세요';
   } else {
     // Android(프롬프트 대기) 또는 기타 브라우저 — 잠시 후에도 프롬프트 없으면 메뉴 안내
     setTimeout(()=>{
       if(wirePrompt()) return;
       show(); btn.hidden=true;
-      title.textContent='📱 홈 화면에 앱으로 저장';
+      title.textContent='📱 앱으로 저장';
       desc.innerHTML = isAndroid
-        ? 'Chrome 우측 상단 <b>메뉴</b>(점 3개) → <b>앱 설치</b> 또는 <b>홈 화면에 추가</b>'
-        : '브라우저 메뉴에서 <b>홈 화면에 추가</b> / <b>앱 설치</b> 를 선택하세요';
+        ? 'Chrome 우측 상단 <b>메뉴</b>(점 3개) → <b>앱 설치</b> 를 누르세요'
+        : '브라우저 메뉴에서 <b>앱 설치</b> / <b>홈 화면에 추가</b> 를 선택하세요';
     }, 1800);
   }
 })();
