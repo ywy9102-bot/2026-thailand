@@ -649,6 +649,9 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   /* ── 날씨 반응형 히어로 분위기 ── */
   .hero-fx{display:block;position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:.9}
   .hero-in{z-index:1}
+  header.hero.wx-burst .hero-fx{animation:wxBurst 1.3s ease}
+  @keyframes wxBurst{0%,100%{opacity:.9;filter:none}35%{opacity:1;filter:brightness(1.6) saturate(1.3)}}
+  #wxIco{cursor:pointer}
   @media (prefers-reduced-motion:no-preference){
     header.hero[data-wx="sunny"] .hero-fx::before{content:"";position:absolute;top:-30%;right:-20%;
       width:75%;height:110%;border-radius:50%;background:radial-gradient(circle,rgba(245,231,192,.5) 0%,transparent 62%);
@@ -687,21 +690,28 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .countdown.precise .cd-head::after{content:" ✕";font-size:11px;opacity:.55}
 
   /* ── F. 보딩패스 3D 플립 ── */
-  .countdown{position:relative;perspective:1000px;min-height:72px;cursor:pointer}
+  .countdown{position:relative;perspective:1000px;min-height:76px;cursor:pointer}
+  .cd-back{overflow:hidden}
   .cd-back-in .cd-fl{font-size:12px;line-height:1.65}
   .cd-front,.cd-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;
     transition:transform .62s cubic-bezier(.3,.9,.25,1)}
   .cd-front{transform:rotateY(0deg)}
-  .cd-back{display:flex;align-items:center;position:absolute;inset:0;transform:rotateY(180deg)}
+  .cd-back{display:flex;flex-direction:column;justify-content:center;position:absolute;inset:0;transform:rotateY(180deg)}
   .countdown.flipped .cd-front{transform:rotateY(180deg)}
   .countdown.flipped .cd-back{transform:rotateY(360deg)}
-  .cd-back-in{width:100%;padding:2px 2px 2px 4px}
-  .cd-back-k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.14em;
-    color:var(--gold-s);opacity:.85;display:block;margin-bottom:5px}
+  .cd-back-in{width:100%;padding:0 2px 0 4px}
+  .cd-back-k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.13em;
+    color:var(--gold-s);opacity:.85;display:block;margin-bottom:4px}
   .cd-fl{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#DCE7E1;line-height:1.5;
     display:flex;align-items:baseline;gap:7px}
   .cd-fl b{color:#F4EEDD;font-weight:700;letter-spacing:.02em}
   .cd-fl span{color:#9FB6AC;font-size:10px}
+  .cd-back-in .cd-fl{font-size:11.5px;line-height:1.55}
+  .cd-ln{font-size:11px;color:#D3E2DB;line-height:1.6;font-family:'IBM Plex Mono',monospace}
+  .cd-ln b{color:#F4EEDD;font-weight:700}
+  .cd-back-dots{display:flex;gap:4px;justify-content:flex-end;padding:5px 4px 0}
+  .cd-back-dots i{width:4px;height:4px;border-radius:50%;background:rgba(245,231,192,.3)}
+  .cd-back-dots i.on{background:var(--gold-s);width:12px;border-radius:99px}
 
   /* ── G. 여행 팁: cd-sub 탭 ── */
   .cd-sub{cursor:pointer}
@@ -829,11 +839,12 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
         </div>
       </div>
       <div class="cd-back" aria-hidden="true">
-        <div class="cd-back-in">
+        <div class="cd-back-in" id="cdBackIn">
           <span class="cd-back-k">✈ 12/16 출발 · ICN → BKK</span>
           <div class="cd-fl"><b>OZ743</b> 07:10–11:15 <span>윤우열</span></div>
           <div class="cd-fl"><b>KE657</b> 09:15–13:25 <span>김태기</span></div>
         </div>
+        <div class="cd-back-dots" id="cdBackDots" aria-hidden="true"></div>
       </div>
     </div>
     <div class="prog-wrap">
@@ -1064,7 +1075,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.13 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.14 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1643,9 +1654,17 @@ const TODO=[
       }
     }
   }
-  // 네이버 링크 탭 → 이동만 · 그 외 탭 → 재조회
+  // 네이버 링크 탭 → 이동만 · 숫자 탭 → 환산표 · 그 외 탭 → 재조회
   fx.addEventListener('click', e=>{
     if(e.target.closest('#fxNav')){ haptic('tap'); return; }
+    const isThb = e.target.closest('#fxThb'), isUsd = e.target.closest('#fxUsd');
+    if((isThb || isUsd) && state.thb && state.usd && typeof window.__toast === 'function'){
+      const rate = isThb ? state.thb : state.usd, sym = isThb ? '฿' : '$';
+      const amts = isThb ? [100,500,1000,5000] : [10,50,100,500];
+      window.__toast(sym+'1 ≈ '+fmt2(rate)+'원',
+        amts.map(a=>`${sym}${a.toLocaleString()} ≈ ${Math.round(a*rate).toLocaleString()}원`).join('  ·  '), 5200);
+      haptic('tap'); return;
+    }
     haptic('tap'); sync(true);
   });
   window.fxRefresh = ()=> sync(true);   // 당겨서 새로고침에서 호출
@@ -2085,6 +2104,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     toastEl.classList.add('show');
     clearTimeout(toastT); toastT = setTimeout(()=> toastEl.classList.remove('show'), ms);
   }
+  window.__toast = toast;   // 다른 위젯(환율 등)에서도 사용
 
   // ── 컨페티 (제이드·골드 기본 · 날씨에 따라 팔레트 이동 · 바람 드리프트) ──
   const PALETTES = {
@@ -2210,20 +2230,62 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     '카오산·야시장은 소매치기 조심, 가방 앞으로',
   ];
   let tipI = Math.floor(Math.random()*TIPS.length);
+
+  // ── 보딩패스 플립: 탭할 때마다 5개 정보 페이지 순환 ──
+  const backIn = $('cdBackIn'), backDots = $('cdBackDots');
+  const golfMan = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/1e4).toFixed(0);
+  const PAGES = [
+    ['✈ 출발 · ICN → BKK',
+     '<div class="cd-fl"><b>OZ743</b> 07:10 <span>윤우열</span> · <b>KE657</b> 09:15 <span>김태기</span></div>'+
+     '<div class="cd-fl"><b>OZ741</b> 12/18 18:05 <span>가족1 4인</span></div>'],
+    ['🛬 귀국 · BKK → ICN',
+     '<div class="cd-fl"><b>KE658</b> 12/23 21:40 <span>김태기</span></div>'+
+     '<div class="cd-fl"><b>OZ744</b> 1/2 12:20 <span>가족1·2</span> · <span>윤성욱 1/4</span></div>'],
+    ['📅 여행 개요',
+     '<div class="cd-ln">12/16 → 1/4 · 파타야 <b>10박</b> + 방콕 <b>7박</b></div>'+
+     '<div class="cd-ln">3가족 <b>10명</b> · 골프 <b>8R</b> · 예약 준비 78%</div>'],
+    ['⛳ 골프 8라운드',
+     '<div class="cd-ln">파타야 <b>6R</b> · 방콕 <b>2R</b> · 전액 윤우열 선지불</div>'+
+     '<div class="cd-ln">확정 총액 <b>'+golfMan+'만원</b> → 참여자별 1/N</div>'],
+    ['💰 정산 (윤우열 미회수)',
+     '<div class="cd-ln"><b>8,583,542원</b></div>'+
+     '<div class="cd-ln">숙박 319 + 골프 529 + 차량 10 (만) · 정산 탭 참고</div>'],
+  ];
+  let backPg = 0;
+  function renderBack(){
+    backIn.innerHTML = '<span class="cd-back-k">'+PAGES[backPg][0]+'</span>'+PAGES[backPg][1];
+    backDots.innerHTML = PAGES.map((_,i)=>`<i class="${i===backPg?'on':''}"></i>`).join('');
+  }
+  renderBack();
+
+  let spinN = 0, spinT;
   cdEl.addEventListener('click', e=>{
+    if(cdEl.classList.contains('flipped')){                 // 뒤집힌 상태 → 페이지 넘김 / 마지막이면 닫기
+      backPg++;
+      if(backPg >= PAGES.length){ backPg = 0; cdEl.classList.remove('flipped'); }
+      else renderBack();
+      haptic('tap'); return;
+    }
     if(e.target.closest('.cd-num') || e.target.closest('.cd-head')){
       togglePrecise(); return;                              // D-day 영역 탭 → 정밀 카운트다운 토글
     }
     if(e.target.closest('.cd-ring-wrap')){
       if(!rm){ ringSvg.classList.remove('spin'); void ringSvg.offsetWidth; ringSvg.classList.add('spin'); }
-      haptic('tap'); return;
+      haptic('tap');
+      spinN++; clearTimeout(spinT); spinT = setTimeout(()=> spinN = 0, 2600);
+      if(spinN >= 4){ spinN = 0;
+        toast('😵‍💫', '어지러워요… 그만 돌릴게요', 2400);
+        const r = ringSvg.getBoundingClientRect(); confetti(r.left+r.width/2, r.top+r.height/2, 12, 55);
+      }
+      return;
     }
     if(e.target.closest('.cd-sub')){
       tipI = (tipI + 1) % TIPS.length;
       toast('💡 태국 팁', TIPS[tipI], 4600); haptic('tap'); return;
     }
     if(ticking) stopPrecise();                              // 플립 전 정밀모드 해제
-    cdEl.classList.toggle('flipped');                       // 보딩패스 플립
+    backPg = 0; renderBack();
+    cdEl.classList.add('flipped');                          // 보딩패스 플립 (페이지 0부터)
     haptic('tap');
   });
   // D3. D-day 영역 탭 → 정밀 카운트다운 (일 + HH:MM:SS) 토글
@@ -2273,6 +2335,80 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
         const r = document.createElement('span'); r.className = 'ripple';
         r.style.left = '50%'; r.style.top = '50%';
         pulse.appendChild(r); setTimeout(()=> r.remove(), 750);
+      }
+      haptic('tap');
+    });
+  })();
+
+  // ── M. 이모지 낙하 (제목 롱프레스 · 도착일 등에서 재사용) ──
+  function emojiRain(chars, n){
+    if(rm) return;
+    for(let i=0;i<n;i++){
+      const p = document.createElement('div'); p.className = 'confp';
+      p.textContent = chars[(Math.random()*chars.length)|0];
+      p.style.cssText = `left:${(Math.random()*88+6)}%;top:-32px;background:none;font-size:${(15+Math.random()*13)|0}px`;
+      p.style.setProperty('--x', ((Math.random()*44-22)|0)+'px');
+      p.style.setProperty('--y', ((innerHeight*0.55 + Math.random()*innerHeight*0.35)|0)+'px');
+      p.style.setProperty('--r', ((Math.random()*220-110)|0)+'deg');
+      p.style.setProperty('--d', (1500+Math.random()*1000)+'ms');
+      document.body.appendChild(p); setTimeout(()=> p.remove(), 2700);
+    }
+  }
+
+  // ── N. 제목 롱프레스 → 야자수 비 ──
+  (function(){
+    const t = document.querySelector('h1.title'); if(!t) return;
+    let hold;
+    t.style.userSelect = 'none';
+    t.addEventListener('pointerdown', ()=>{ hold = setTimeout(()=>{
+      emojiRain(['🌴','🏝️','🥥','☀️'], 15);
+      toast('🌴', '곧 만나요, 태국', 2800); haptic('ok');
+    }, 550); });
+    ['pointerup','pointerleave','pointercancel'].forEach(ev=> t.addEventListener(ev, ()=> clearTimeout(hold)));
+  })();
+
+  // ── O. 진행바 탭 → 잠깐 100% ──
+  (function(){
+    const bar = document.querySelector('.prog-bar'), fill = $('pfill'), pct = $('ppct');
+    if(!bar || !fill) return;
+    let busy = false;
+    bar.addEventListener('click', ()=>{
+      if(busy) return; busy = true;
+      const w = fill.style.width, p = pct.textContent;
+      if(!rm) fill.style.transition = 'width .5s ease';
+      fill.style.width = '100%'; pct.textContent = '100%'; haptic('ok');
+      toast('😌', '예약 다 끝났으면 좋겠다…', 2400);
+      setTimeout(()=>{ fill.style.width = w; pct.textContent = p;
+        setTimeout(()=>{ fill.style.transition = ''; busy = false; }, 550); }, 950);
+    });
+  })();
+
+  // ── P. 다섯 탭 빠르게 다 둘러보면 → 탐험가 ──
+  (function(){
+    const seen = new Set(); let t;
+    tbs.forEach(b=> b.addEventListener('click', ()=>{
+      seen.add(b.dataset.t);
+      clearTimeout(t); t = setTimeout(()=> seen.clear(), 4500);
+      if(seen.size >= tbs.length){
+        seen.clear();
+        confetti(innerWidth/2, innerHeight - 76, 16, 85);
+        toast('👀', '구석구석 살펴보고 있네요', 2600); haptic('ok');
+      }
+    }));
+  })();
+
+  // ── Q. 날씨 아이콘 탭 → 아이콘·배경 반짝 ──
+  (function(){
+    const ic = $('wxIco'); if(!ic) return;
+    ic.style.display = 'inline-block';
+    ic.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(!rm){
+        ic.style.transition = 'transform .55s cubic-bezier(.3,1.6,.5,1)';
+        ic.style.transform = 'scale(1.6) rotate(360deg)';
+        setTimeout(()=>{ ic.style.transform = ''; }, 560);
+        const hero = document.querySelector('header.hero');
+        hero.classList.add('wx-burst'); setTimeout(()=> hero.classList.remove('wx-burst'), 1300);
       }
       haptic('tap');
     });
@@ -2373,8 +2509,8 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       show(); btn.hidden=true;
       title.textContent='📱 앱으로 저장';
       desc.innerHTML = isAndroid
-        ? 'Chrome 우측 상단 <b>메뉴</b>(점 3개) → <b>앱 설치</b> 를 누르세요'
-        : '브라우저 메뉴에서 <b>앱 설치</b> / <b>홈 화면에 추가</b> 를 선택하세요';
+        ? 'Chrome 우측 상단 <b>메뉴</b>(점 3개) → <b>설치 및 바로가기 만들기</b> (또는 앱 설치 · 홈 화면에 추가)'
+        : '브라우저 메뉴에서 <b>설치</b> / <b>홈 화면에 추가</b> 항목을 선택하세요';
     }, 1800);
   }
 })();
