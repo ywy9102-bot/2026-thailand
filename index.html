@@ -625,8 +625,8 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 .day.open .day-detail{max-height:800px}
 
 /* ════════ 재미 요소 (모바일 전용) ════════ */
-.ptr,.hero-fx,.confp,.flyplane{display:none}
-@media (min-width:761px){ .toast,.ptr,.hero-fx,.confp,.flyplane{display:none!important} }
+.ptr,.hero-fx,.confp,.flyplane,.wx-scene{display:none}
+@media (min-width:761px){ .toast,.ptr,.hero-fx,.confp,.flyplane,.wx-scene{display:none!important} }
 .toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
   max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
   background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:#F4EEDD;
@@ -759,6 +759,41 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .ptr.armed .ptr-icon{transform:translateY(6px) scale(1)}
   @media (prefers-reduced-motion:no-preference){ .ptr.spin .ptr-icon{animation:palmShake .6s ease} }
   @keyframes palmShake{0%,100%{transform:translateY(6px) rotate(0)}25%{transform:translateY(6px) rotate(-18deg)}60%{transform:translateY(6px) rotate(14deg)}}
+
+  /* ── 당겨서 새로고침: 현재 날씨 연출 (리프레시 완료되면 사라짐) ── */
+  .wx-scene{display:block;position:fixed;left:0;right:0;top:0;z-index:58;pointer-events:none;
+    padding:calc(12px + env(safe-area-inset-top)) 16px 10px;
+    background:#0C231D;box-shadow:0 14px 22px -8px rgba(12,35,29,.9), 0 1px 0 rgba(245,231,192,.14);
+    transform:translateY(-102%);transition:transform .42s cubic-bezier(.2,.9,.3,1)}
+  .wx-scene.on{transform:translateY(0)}
+  .wxs-sky{position:relative;height:42px;border-radius:11px;overflow:hidden;
+    background:linear-gradient(180deg,#154C3F,#0D2C25)}
+  .wxs-sun,.wxs-cloud,.wxs-rain{position:absolute;opacity:0}
+  .wxs-sun{width:24px;height:24px;left:18px;top:9px;border-radius:50%;
+    background:radial-gradient(circle at 42% 40%,#FBEDBB,#E4B24C);box-shadow:0 0 14px rgba(248,232,176,.8)}
+  .wxs-cloud{height:12px;border-radius:9px;background:rgba(233,242,238,.92);top:11px}
+  .wxs-cloud.c1{width:40px;left:22%}
+  .wxs-cloud.c2{width:28px;left:56%;top:21px;background:rgba(233,242,238,.6)}
+  .wxs-rain{width:2px;height:8px;border-radius:2px;background:rgba(183,213,232,.95);top:-9px}
+  .wxs-rain.r1{left:30%}.wxs-rain.r2{left:50%}.wxs-rain.r3{left:70%}
+  .wxs-txt{margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#E7F0EC;letter-spacing:.01em}
+  .wxs-txt b{color:#F4EEDD;font-weight:700}
+  .wxs-txt span{color:var(--gold-s);margin-left:5px}
+  .wg-sunny .wxs-sun{opacity:1}
+  .wg-cloudy .wxs-cloud,.wg-rain .wxs-cloud,.wg-storm .wxs-cloud{opacity:1}
+  .wg-rain .wxs-rain,.wg-storm .wxs-rain{opacity:1}
+  @media (prefers-reduced-motion:no-preference){
+    .wg-sunny .wxs-sun{animation:wxsSpin 3.6s linear infinite}
+    .wg-cloudy .wxs-cloud,.wg-rain .wxs-cloud,.wg-storm .wxs-cloud{animation:wxsDrift 3.4s ease-in-out infinite}
+    .wxs-cloud.c2{animation-duration:4.8s;animation-direction:reverse}
+    .wg-rain .wxs-rain,.wg-storm .wxs-rain{animation:wxsRain .68s linear infinite}
+    .wxs-rain.r2{animation-delay:.2s}.wxs-rain.r3{animation-delay:.42s}
+    .wg-storm .wxs-sky{animation:wxsFlash 1.5s ease infinite}
+  }
+  @keyframes wxsSpin{to{transform:rotate(360deg)}}
+  @keyframes wxsDrift{0%,100%{transform:translateX(-10px)}50%{transform:translateX(12px)}}
+  @keyframes wxsRain{0%{transform:translateY(-9px);opacity:0}22%{opacity:1}100%{transform:translateY(44px);opacity:0}}
+  @keyframes wxsFlash{0%,90%,100%{filter:brightness(1)}93%{filter:brightness(1.85)}}
 }
 
 @media print{
@@ -1070,7 +1105,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.17 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.18 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1153,9 +1188,29 @@ function gday(dk,l,extra){ // dk: GOLF의 d 필드('12/17' 등), l: 지역표시
     book:g.book, addr:g.addr, tel:g.tel};
 }
 const ITIN_A=[
- {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류'},
- gday('12/17','파타야'),
- gday('12/18','파타야','가족1 도착 OZ741 18:05–22:00 · 공항픽업 확정'),
+ {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류',
+  rec:'도착 · 통부라(나 좀티엔) 근처 저녁',
+  recd:[
+   ['참고','수완나품 → 파타야 ~16시 도착·체크인 → 첫날은 숙소 근처에서 가볍게. 통부라는 나 좀티엔(좀티엔 남쪽) 위치'],
+   ['Plan A','림파 라팡(Rimpa Lapin) — 나 좀티엔 절벽·일몰 뷰 타이 레스토랑, 통부라 차 5~10분. 일몰(18시경) 예약 권장. <a href="https://maps.google.com/?q=Rimpa+Lapin+Restaurant+Pattaya" target="_blank" rel="noopener">지도 ↗</a>'],
+   ['Plan B','좀티엔 비치로드 해산물 — 낭누안(Nang Nual) 등, 로컬 분위기·가성비. 차 10~15분'],
+   ['Plan C','간단히 — 좀티엔 Rompho 야시장(먹거리) 또는 Makro/Lotus 나 좀티엔에서 장보기'],
+  ]},
+ {...gday('12/17','파타야'),
+  rec:'성인 3인 라운드 → 저녁만',
+  recd:[
+   ['참고','이 날은 윤우열·김태기·윤성욱 모두 라운드 → 별도 낮 일정 없음'],
+   ['Plan A','반 암퍼(Baan Amphur) 해변 해산물 — 사따힙 방향, 통부라 남쪽 10~15분. 현지인 픽·가성비'],
+   ['Plan B','방사래(Bang Saray) 어촌 — 선착장 따라 해산물 식당 밀집·노을. <a href="https://maps.google.com/?q=Bang+Saray+Seafood" target="_blank" rel="noopener">지도 ↗</a>'],
+   ['Plan C','라운드 피로 시 — 좀티엔 시내(한식·스테이크·이자카야 등 무난한 선택지 다수)'],
+  ]},
+ {...gday('12/18','파타야','가족1 도착 OZ741 18:05–22:00 · 공항픽업 확정'),
+  rec:'골프 후 · 가족1 심야 합류',
+  recd:[
+   ['낮','성인 3인 라운드(Siam CC Rolling Hills, 방람룽 방면)'],
+   ['저녁','골퍼끼리 이른 저녁 — The Glass House(나 좀티엔·해변 테라스) 또는 림파 라팡(16일 미방문 시). <a href="https://maps.google.com/?q=The+Glass+House+Beach+Restaurant+Pattaya" target="_blank" rel="noopener">지도 ↗</a>'],
+   ['심야','가족1 4인 22:00 수완나품 도착 → 공항픽업(확정) → 통부라 ~00:30. 물·야식 미리 준비'],
+  ]},
  {d:'19',w:'토',l:'파타야',e:'🏝️',t:'꼬란섬 (Koh Larn)',n:'가족1 통부라 도착 ~00:30',
   rec:'꼬란 반나절 + 파타야 저녁',
   recd:[
@@ -1490,7 +1545,13 @@ const TODO=[
       subEl.textContent='Open-Meteo';
     }
     agoEl.textContent=fmtAgo(w&&w.ts);
+    try{ document.dispatchEvent(new CustomEvent('wx:updated')); }catch(e){}
   }
+  // 당겨서 새로고침 연출용 현재 날씨 스냅샷
+  window.wxSnapshot = ()=>{
+    const w=state[city], m = w ? wmo(w.code) : null;
+    return { city, temp: w ? Math.round(w.temp)+'°C' : '', text: m ? m.t : '', icon: m ? m.i : '', group: w ? wxGroup(w.code) : '' };
+  };
   let fetching=false;
   async function sync(userInitiated){
     if(fetching) return;
@@ -2436,11 +2497,43 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       if(armed){
         if(!rm){ ptr.classList.add('spin'); setTimeout(()=> ptr.classList.remove('spin'), 650); }
         haptic('ok');
+        showWxScene();                                                 // 현재 날씨 연출
         if(typeof window.wxRefresh === 'function') window.wxRefresh();  // 날씨
         if(typeof window.fxRefresh === 'function') window.fxRefresh();  // 환율
-        toast('🌴', '날씨·환율 새로고침', 1700);
       }
     }, {passive:true});
+
+    // 당겨서 새로고침 시 현재 도시·날씨를 애니메이션으로 잠깐 보여주고, 갱신되면 사라짐
+    let sceneCleanup = null;
+    function showWxScene(){
+      const snap = (typeof window.wxSnapshot === 'function') ? window.wxSnapshot() : null;
+      if(sceneCleanup){ sceneCleanup(); sceneCleanup = null; }
+      const prev = $('wxScene'); if(prev) prev.remove();
+      if(!snap || !snap.group) return;
+      const el = document.createElement('div');
+      el.id = 'wxScene'; el.className = 'wx-scene wg-' + snap.group;
+      el.setAttribute('aria-hidden','true');
+      el.innerHTML =
+        '<div class="wxs-sky"><i class="wxs-sun"></i>'+
+        '<i class="wxs-cloud c1"></i><i class="wxs-cloud c2"></i>'+
+        '<i class="wxs-rain r1"></i><i class="wxs-rain r2"></i><i class="wxs-rain r3"></i></div>'+
+        '<div class="wxs-txt"><b>'+snap.city+'</b> 지금 '+(snap.text||'날씨 확인 중')+
+        '<span>'+snap.icon+' '+snap.temp+'</span></div>';
+      document.body.appendChild(el);
+      requestAnimationFrame(()=> el.classList.add('on'));
+      let minDone = false, killed = false;
+      const gone = ()=>{
+        if(killed) return; killed = true;
+        document.removeEventListener('wx:updated', onUpd);
+        clearTimeout(fb); sceneCleanup = null;
+        el.classList.remove('on'); setTimeout(()=> el.remove(), 440);
+      };
+      const onUpd = ()=> minDone ? gone() : setTimeout(gone, 650);
+      setTimeout(()=>{ minDone = true; }, 1200);
+      document.addEventListener('wx:updated', onUpd);
+      const fb = setTimeout(gone, 3400);   // 폴백 (갱신 실패 대비)
+      sceneCleanup = gone;
+    }
   })();
 })();
 
