@@ -121,57 +121,49 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 }
 @keyframes planeWobble{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(2px) rotate(6deg)}60%{transform:translateX(-1px) rotate(-4deg)}}
 
-/* ── 태국 현지 정보 위젯 (위젯 아무 곳이나 탭 → 동기화) ── */
-.wx{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin:0 0 11px;cursor:pointer;
-  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#D3E2DB;border-radius:10px}
-.wx button,.wx a{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer;
-  appearance:none;text-decoration:none;padding:12px 8px;border-radius:8px;line-height:1;white-space:nowrap;
-  transition:background .15s}
-.wx button:hover,.wx a:hover{background:rgba(255,255,255,.09)}
-.wx button:active,.wx a:active{background:rgba(255,255,255,.14)}
-.wx .wx-loc{display:inline-flex;align-items:center;gap:2px}
-.wx .wx-c{opacity:.4;transition:opacity .15s,color .15s;padding:4px 4px;border-radius:6px}
-.wx .wx-c:active{background:rgba(255,255,255,.16)}
-.wx .wx-c.on{opacity:1;color:#F0F5F2;font-weight:700}
-.wx-bar{opacity:.3;margin:0 5px}
-.wx-main{display:inline-flex;align-items:center;gap:6px;flex:1;min-width:0}
+/* ── 히어로 위젯: 날씨 · 환율 공통 UX ──
+   [왼쪽 키] [가운데 내용 = 탭하면 지금 시점으로 동기화] [N분 전] [↗ 상세페이지] */
+@keyframes wxSpin{to{transform:rotate(360deg)}}
+.hw{display:flex;align-items:flex-start;gap:6px;width:100%;margin:0 0 6px;cursor:pointer;
+  padding:8px 6px;border-radius:9px;transition:background .15s;
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#D3E2DB}
+.hw:active{background:rgba(255,255,255,.10)}
+.hw-k{flex:none;align-self:flex-start;background:none;border:none;appearance:none;font:inherit;
+  color:var(--gold-s);opacity:.78;cursor:pointer;padding:5px 3px;border-radius:6px;white-space:nowrap;
+  font-size:9px;font-weight:700;letter-spacing:.13em;line-height:1.9}
+.hw-main{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 6px;line-height:1.8}
+.hw-sub{flex-basis:100%;font-size:9px;color:#8AA298;letter-spacing:.02em;margin-top:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hw-ago{flex:none;align-self:flex-start;color:#9FB6AC;font-size:10px;line-height:2;
+  display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.hw-spin{display:none;font-size:11px}
+.hw.loading .hw-spin{display:inline-block;animation:wxSpin .8s linear infinite}
+.hw.loading .hw-ago-t{opacity:.45}
+.hw-more{flex:none;align-self:flex-start;color:#9FB6AC;text-decoration:none;
+  padding:5px 7px;margin:-3px -3px 0 0;border-radius:6px;font-size:13px;line-height:1.5}
+.hw-more:active{background:rgba(255,255,255,.16);color:#F0F5F2}
+.hw.stale .fx-rate,.hw.stale .wx-text,.hw.stale .wx-temp{opacity:.5}
+.hw.err .hw-ago,.hw.err .hw-sub{color:#EFA895}
+
+/* 날씨 위젯 고유 */
+.wx-loc{flex:none;align-self:flex-start;background:none;border:none;appearance:none;font:inherit;color:inherit;
+  cursor:pointer;padding:4px 3px;border-radius:6px;display:inline-flex;align-items:center;gap:2px;
+  white-space:nowrap;line-height:1.9}
+.wx-loc:active{background:rgba(255,255,255,.16)}
+.wx-c{opacity:.4;transition:opacity .15s,color .15s;padding:3px 3px;border-radius:6px}
+.wx-c:active{background:rgba(255,255,255,.16)}
+.wx-c.on{opacity:1;color:#F0F5F2;font-weight:700}
+.wx-bar{opacity:.3;margin:0 4px}
 .wx-sep{opacity:.4}
 .wx-ico{font-size:13px}
 .wx-text{color:#D3E2DB}
 .wx-temp{font-weight:700;color:#F0F5F2;font-style:normal}
 .wx-temp:empty{display:none}
-.wx-src{font-size:9px;opacity:.38;margin-left:1px}
-.wx .wx-sync{margin-left:auto;color:#A9BEB5;display:inline-flex;align-items:center;gap:4px;font-size:10.5px}
-.wx-sync .wx-spin{display:inline-block;font-size:12px}
-.wx.loading .wx-spin{animation:wxSpin .8s linear infinite}
-.wx.stale .wx-main{opacity:.5}
-.wx.err .wx-sync{color:#EFA895}
-@keyframes wxSpin{to{transform:rotate(360deg)}}
 
-/* 환율 위젯 — 날씨 위젯과 한 쌍 */
-.wx{margin-bottom:5px}
-.fx{display:flex;align-items:center;gap:6px;flex-wrap:wrap;width:100%;margin:0 0 12px;cursor:pointer;
-  padding:10px 8px;border-radius:8px;transition:background .15s;
-  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#D3E2DB}
-.fx:hover{background:rgba(255,255,255,.07)}
-.fx:active{background:rgba(255,255,255,.12)}
-.fx-k{font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--gold-s);opacity:.72;flex:none}
-.fx-main{display:inline-flex;align-items:center;gap:6px;flex:1;min-width:0;white-space:nowrap}
+/* 환율 위젯 고유 */
 .fx-rate b{color:#F0F5F2;font-weight:700;font-style:normal}
 .fx-cur{opacity:.5}
 .fx-dot{opacity:.3}
-.fx-sync{margin-left:auto;color:#A9BEB5;flex:none;background:none;border:none;appearance:none;cursor:pointer;
-  padding:4px 6px;border-radius:6px;line-height:1}
-.fx-sync:active{background:rgba(255,255,255,.16)}
-.fx-spin{display:inline-block;font-size:13px}
-.fx.loading .fx-spin{animation:wxSpin .8s linear infinite}
-.fx-basis{flex-basis:100%;font-size:9.5px;color:#A9BEB5;opacity:.8;padding-top:3px;letter-spacing:.01em;
-  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px}
-.fx-nav{color:#A9BEB5;text-decoration:none;white-space:nowrap;flex:none;padding:6px 5px;margin:-6px -5px -6px 0;border-radius:5px}
-.fx-nav:active{background:rgba(255,255,255,.16);color:#F0F5F2}
-.fx.stale{opacity:.62}
-.fx.err .fx-basis{color:#EFA895;opacity:1}
-.fx.err .fx-nav{color:#EFA895}
 
 /* progress — 한 줄 슬림 (라벨 · 막대 · %) */
 .prog-wrap{display:flex;align-items:center;gap:10px;margin:0 0 13px}
@@ -518,12 +510,12 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .cd-num.mini{font-size:16px}
   .cd-head{font-size:15.5px}
   .cd-sub{font-size:10.5px;margin-top:4px}
-  .wx{font-size:11px;gap:1px;margin-bottom:9px;row-gap:0}
-  .wx button,.wx a{padding:11px 7px}
-  .wx-main{flex:1 1 100%;order:3;padding-left:4px;padding-top:2px}
-  .wx-loc{order:1}
-  .wx .wx-sync{order:2}
-  .wx-src{font-size:8.5px}
+  .hw{flex-wrap:wrap;gap:2px 6px;margin-bottom:7px;font-size:11px;padding:8px 5px}
+  .hw-k,.wx-loc{order:1}
+  .hw-ago{order:2;margin-left:auto}
+  .hw-more{order:3}
+  .hw-main{order:4;flex:1 1 100%;padding-left:2px}
+  .hw-sub{font-size:8.5px}
   .next-card{padding:9px 12px;margin-bottom:10px;gap:8px}
   .nc-tag{font-size:10px;padding:2px 7px}
   .nc-e{font-size:14px}
@@ -683,11 +675,12 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   @keyframes flagWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-16deg) scale(1.15)}60%{transform:rotate(12deg) scale(1.15)}}
   @keyframes ringSpin{to{transform:rotate(-90deg) rotate(360deg)}}
   @keyframes ringPulse{0%,100%{filter:drop-shadow(0 0 0 rgba(245,231,192,0))}50%{filter:drop-shadow(0 0 10px rgba(245,231,192,.7))}}
-  .cd-text .cd-head{cursor:pointer}
-  .countdown:not(.flipped):not(.precise) .cd-head::after{content:" ⏱";font-size:9px;opacity:.5}
+  .cd-ring-wrap{cursor:pointer}
+  .countdown:not(.flipped):not(.precise) .cd-ring-wrap::after{content:"⏱";position:absolute;
+    right:0;bottom:-2px;font-size:10px;opacity:.5}
+  .countdown.precise .cd-ring-wrap::after{content:"✕";position:absolute;right:0;bottom:-2px;font-size:10px;opacity:.6}
   .countdown.precise .cd-num{font-size:20px;letter-spacing:0}
   .countdown.precise .cd-head{font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.02em;font-weight:600}
-  .countdown.precise .cd-head::after{content:" ✕";font-size:11px;opacity:.55}
 
   /* ── F. 보딩패스 3D 플립 ── */
   .countdown{position:relative;perspective:1000px;min-height:76px;cursor:pointer}
@@ -709,13 +702,13 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .cd-back-in .cd-fl{font-size:11.5px;line-height:1.55}
   .cd-ln{font-size:11px;color:#D3E2DB;line-height:1.6;font-family:'IBM Plex Mono',monospace}
   .cd-ln b{color:#F4EEDD;font-weight:700}
+  .cd-tip{color:var(--gold-s);font-size:11.5px;line-height:1.55}
+  .cd-tip::before{content:"“";opacity:.55}
+  .cd-tip::after{content:"”";opacity:.55}
   .cd-back-dots{display:flex;gap:4px;justify-content:flex-end;padding:5px 4px 0}
   .cd-back-dots i{width:4px;height:4px;border-radius:50%;background:rgba(245,231,192,.3)}
   .cd-back-dots i.on{background:var(--gold-s);width:12px;border-radius:99px}
 
-  /* ── G. 여행 팁: cd-sub 탭 ── */
-  .cd-sub{cursor:pointer}
-  .cd-sub::after{content:" 💡";opacity:.5;font-size:9px}
 
   /* ── H. 탭 아이콘 시그니처 모션 ── */
   @media (prefers-reduced-motion:no-preference){
@@ -771,8 +764,8 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 @media print{
   nav.tabs{display:none}
   .toast,.ptr,.hero-fx,.flyplane,.confp{display:none!important}
-  .next-card,.wx-sync{display:none!important}
-  .wx{color:var(--ink2)!important}
+  .next-card,.hw-ago,.hw-more{display:none!important}
+  .hw{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
   header.hero::before{display:none}
   .eyebrow,.cd-sub{color:var(--ink2)!important}
@@ -802,27 +795,29 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   <div class="wrap hero-in">
     <p class="eyebrow"><span class="pulse"></span><span class="eg-flag" id="egFlag">🇹🇭</span><span class="occ-emoji" id="occEmoji" hidden></span> 겨울 가족여행<span class="eyebrow-upd"><span id="updFull">–</span><span id="updMini">–</span></span></p>
     <h1 class="title">태국 겨울 여행</h1>
-    <div class="wx" id="wx" title="현지 정보 · 탭하면 새로고침 (날씨: Open-Meteo)">
+    <div class="hw wx" id="wx" title="현지 날씨 · 탭하면 지금 시점으로 동기화">
       <button class="wx-loc" id="wxLoc" type="button" aria-label="방콕 날씨로 전환">📍 <span class="wx-c on" data-city="파타야">파타야</span><span class="wx-bar">|</span><span class="wx-c" data-city="방콕">방콕</span></button>
-      <a class="wx-main" id="wxMain" href="https://www.google.com/search?q=%ED%8C%8C%ED%83%80%EC%95%BC+%EB%82%A0%EC%94%A8" target="_blank" rel="noopener">
+      <span class="hw-main" id="wxMain">
         <span class="wx-time" id="wxTime">--:--</span>
         <span class="wx-sep">·</span>
         <span class="wx-ico" id="wxIco">·</span>
         <span class="wx-text" id="wxText">동기화 전</span>
         <b class="wx-temp" id="wxTemp"></b>
-        <span class="wx-src">Open-Meteo</span>
-      </a>
-      <button class="wx-sync" id="wxSync" type="button" aria-label="현지 날씨 새로고침"><span class="wx-spin" id="wxSpin">⟳</span><span id="wxAgo">동기화</span></button>
+        <span class="hw-sub" id="wxSub">Open-Meteo</span>
+      </span>
+      <span class="hw-ago"><span class="hw-spin">⟳</span><span class="hw-ago-t" id="wxAgo">동기화</span></span>
+      <a class="hw-more" id="wxMore" href="https://m.search.naver.com/search.naver?query=%ED%8C%8C%ED%83%80%EC%95%BC%20%EB%82%A0%EC%94%A8" target="_blank" rel="noopener" aria-label="파타야 날씨 상세 (네이버)">↗</a>
     </div>
-    <div class="fx" id="fx" title="환율 · 탭하면 새로고침">
-      <span class="fx-k">환율</span>
-      <span class="fx-main">
+    <div class="hw fx" id="fx" title="환율 · 탭하면 지금 시점으로 동기화">
+      <span class="hw-k">환율</span>
+      <span class="hw-main" id="fxMain">
         <span class="fx-rate"><span class="fx-cur">฿1</span> <b id="fxThb">–</b>원</span>
         <span class="fx-dot">·</span>
         <span class="fx-rate"><span class="fx-cur">$1</span> <b id="fxUsd">–</b>원</span>
+        <span class="hw-sub" id="fxBasis">환율 정보를 불러오는 중…</span>
       </span>
-      <button class="fx-sync" id="fxSync" type="button" aria-label="환율 새로고침"><span class="fx-spin" id="fxSpin">⟳</span></button>
-      <span class="fx-basis"><span id="fxBasis">환율 정보를 불러오는 중…</span><a class="fx-nav" id="fxNav" href="https://finance.naver.com/marketindex/" target="_blank" rel="noopener">네이버 환율&nbsp;↗</a></span>
+      <span class="hw-ago"><span class="hw-spin">⟳</span><span class="hw-ago-t" id="fxAgo">조회</span></span>
+      <a class="hw-more" id="fxNav" href="https://m.stock.naver.com/marketindex/exchange/FX_USDKRW" target="_blank" rel="noopener" aria-label="네이버 환율 상세">↗</a>
     </div>
     <div class="countdown" id="cd">
       <div class="cd-front">
@@ -1075,7 +1070,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.15 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.16 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1425,7 +1420,7 @@ const TODO=[
   const CITIES={ '파타야':{lat:12.93,lon:100.88,q:'파타야 날씨'}, '방콕':{lat:13.75,lon:100.50,q:'방콕 날씨'} };
   const LS='thai2026_wx_v1';
   const wx=$('wx'), timeEl=$('wxTime'), icoEl=$('wxIco'),
-        textEl=$('wxText'), tempEl=$('wxTemp'), mainEl=$('wxMain'), agoEl=$('wxAgo');
+        textEl=$('wxText'), tempEl=$('wxTemp'), subEl=$('wxSub'), moreEl=$('wxMore'), agoEl=$('wxAgo');
   if(!wx) return;
 
   function autoCity(){
@@ -1462,10 +1457,18 @@ const TODO=[
     if(h<24) return `${h}시간 전`;
     return `${Math.floor(h/24)}일 전`;
   }
+  function fmtBasis(ts){        // 환율 위젯과 동일한 "MM/DD HH:MM" 형식
+    if(!ts) return '';
+    const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',
+      hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(ts));
+    const g=t=>(p.find(x=>x.type===t)||{}).value||'';
+    return `${g('month')}/${g('day')} ${g('hour')}:${g('minute')}`;
+  }
   function renderCity(){
     wx.querySelectorAll('#wxLoc .wx-c').forEach(el=>el.classList.toggle('on', el.dataset.city===city));
     $('wxLoc').setAttribute('aria-label', (city==='파타야'?'방콕':'파타야')+' 날씨로 전환');
-    mainEl.href='https://www.google.com/search?q='+encodeURIComponent(CITIES[city].q);
+    moreEl.href='https://m.search.naver.com/search.naver?query='+encodeURIComponent(CITIES[city].q);
+    moreEl.setAttribute('aria-label', CITIES[city].q+' 상세 (네이버)');
   }
   function wxGroup(c){
     if(c==null) return '';
@@ -1480,9 +1483,11 @@ const TODO=[
       const m=wmo(w.code);
       icoEl.textContent=m.i; textEl.textContent=m.t; tempEl.textContent=Math.round(w.temp)+'°C';
       wx.classList.toggle('stale', Date.now()-w.ts > 3*36e5);
+      subEl.textContent = (fmtBasis(w.ts)+' Open-Meteo').trim();
       document.querySelector('header.hero').dataset.wx = wxGroup(w.code);  // 날씨 반응형 히어로
     } else {
       icoEl.textContent='·'; textEl.textContent='날씨 —'; tempEl.textContent=''; wx.classList.remove('stale');
+      subEl.textContent='Open-Meteo';
     }
     agoEl.textContent=fmtAgo(w&&w.ts);
   }
@@ -1519,9 +1524,9 @@ const TODO=[
     renderCity(); renderWx(); haptic('tap');
     if(!state[city] || Date.now()-state[city].ts > 30*6e4) sync();
   }
-  // 위젯 아무 곳이나 탭 → 동기화 (구글 링크는 이동만, 위치 이름은 그 도시 선택)
+  // 내용을 탭 → 지금 시점으로 동기화 · ↗ 는 상세페이지 이동만 · 도시명은 그 도시 선택
   wx.addEventListener('click', e=>{
-    if(e.target.closest('#wxMain')){ haptic('tap'); return; }  // 구글 날씨로 이동
+    if(e.target.closest('#wxMore')){ haptic('tap'); return; }
     if(e.target.closest('#wxLoc')){
       const c=e.target.closest('.wx-c');
       setCity(c ? c.dataset.city : (city==='파타야'?'방콕':'파타야'));
@@ -1529,6 +1534,7 @@ const TODO=[
     }
     haptic('tap'); sync(true);
   });
+  window.wxRefresh = ()=> sync(true);   // 당겨서 새로고침에서 호출
 
   renderCity(); timeEl.textContent=fmtTime(); renderWx();
   setInterval(()=>{ timeEl.textContent=fmtTime(); agoEl.textContent=fmtAgo(state[city]&&state[city].ts); }, 3e4);
@@ -1538,18 +1544,18 @@ const TODO=[
 // ── 환율 위젯 (THB·USD → KRW) ──
 (function(){
   const LS='thai2026_fx_v2';
-  const fx=$('fx'), thbEl=$('fxThb'), usdEl=$('fxUsd'), basisEl=$('fxBasis');
+  const fx=$('fx'), thbEl=$('fxThb'), usdEl=$('fxUsd'), basisEl=$('fxBasis'), agoEl=$('fxAgo');
   if(!fx) return;
   try{ localStorage.removeItem('thai2026_fx_v1'); }catch(e){}
   let state=(()=>{ try{ return JSON.parse(localStorage.getItem(LS))||{}; }catch(e){ return {}; } })();
-  function fmtAgo(ts){
-    if(!ts) return '';
+  function fmtAgo(ts){        // 날씨 위젯과 동일 표기
+    if(!ts) return '조회';
     const m=Math.floor((Date.now()-ts)/6e4);
-    if(m<1) return '방금 조회';
-    if(m<60) return `${m}분 전 조회`;
+    if(m<1) return '방금';
+    if(m<60) return `${m}분 전`;
     const h=Math.floor(m/60);
-    if(h<24) return `${h}시간 전 조회`;
-    return `${Math.floor(h/24)}일 전 조회`;
+    if(h<24) return `${h}시간 전`;
+    return `${Math.floor(h/24)}일 전`;
   }
   function fmtKST(iso){
     const d=new Date(iso);
@@ -1562,10 +1568,10 @@ const TODO=[
   const nf2 = new Intl.NumberFormat('ko-KR',{minimumFractionDigits:2, maximumFractionDigits:2});
   const fmt2 = n => nf2.format(n);
   function renderBasis(){
-    if(!state.ts){ basisEl.textContent = fx.classList.contains('loading') ? '환율 정보를 불러오는 중…' : ''; return; }
-    const kst=fmtKST(state.src), ago=fmtAgo(state.ts);
-    const prov = state.prov || '기준';
-    basisEl.textContent = (kst ? `${kst} ${prov}` : prov) + ' · ' + ago;
+    agoEl.textContent = state.ts ? fmtAgo(state.ts) : '조회';
+    if(!state.ts){ basisEl.textContent = fx.classList.contains('loading') ? '환율 불러오는 중…' : '환율 미조회'; return; }
+    const kst=fmtKST(state.src), prov = state.prov || '기준';
+    basisEl.textContent = (kst ? `${kst} ${prov}` : prov);
   }
   function render(){
     if(state.thb && state.usd){
@@ -1631,12 +1637,12 @@ const TODO=[
     if(userInitiated){
       haptic(ok ? 'ok' : 'strong');
       if(!ok){
-        fx.classList.add('err'); basisEl.textContent='환율 조회 실패 — 잠시 후 다시 시도해 주세요';
+        fx.classList.add('err'); basisEl.textContent='조회 실패 — 잠시 후 다시'; agoEl.textContent='실패';
         setTimeout(()=>{ fx.classList.remove('err'); render(); }, 2400);
       }
     }
   }
-  // 네이버 링크 탭 → 이동만 · 숫자 탭 → 환산표 · 그 외 탭 → 재조회
+  // 내용 탭 → 지금 시점으로 동기화 · ↗ 는 상세페이지 이동만 · 숫자 탭 → 환산표
   fx.addEventListener('click', e=>{
     if(e.target.closest('#fxNav')){ haptic('tap'); return; }
     const isThb = e.target.closest('#fxThb'), isUsd = e.target.closest('#fxUsd');
@@ -2213,45 +2219,40 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
   ];
   let tipI = Math.floor(Math.random()*TIPS.length);
 
-  // ── 보딩패스 플립: 탭할 때마다 5개 정보 페이지 순환 ──
+  // ── 보딩패스 플립: 링(99일 원형) 제외한 카운트다운 어디를 눌러도 페이지가 넘어감 ──
   const backIn = $('cdBackIn'), backDots = $('cdBackDots');
   const golfMan = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/1e4).toFixed(0);
   const PAGES = [
-    ['✈ 출발 · ICN → BKK',
+    ['✈ 출발 · ICN → BKK', ()=>
      '<div class="cd-fl"><b>OZ743</b> 07:10 <span>윤우열</span> · <b>KE657</b> 09:15 <span>김태기</span></div>'+
      '<div class="cd-fl"><b>OZ741</b> 12/18 18:05 <span>가족1 4인</span></div>'],
-    ['🛬 귀국 · BKK → ICN',
+    ['🛬 귀국 · BKK → ICN', ()=>
      '<div class="cd-fl"><b>KE658</b> 12/23 21:40 <span>김태기</span></div>'+
      '<div class="cd-fl"><b>OZ744</b> 1/2 12:20 <span>가족1·2</span> · <span>윤성욱 1/4</span></div>'],
-    ['📅 여행 개요',
+    ['📅 여행 개요', ()=>
      '<div class="cd-ln">12/16 → 1/4 · 파타야 <b>10박</b> + 방콕 <b>7박</b></div>'+
      '<div class="cd-ln">3가족 <b>10명</b> · 골프 <b>8R</b> · 예약 준비 78%</div>'],
-    ['⛳ 골프 8라운드',
+    ['⛳ 골프 8라운드', ()=>
      '<div class="cd-ln">파타야 <b>6R</b> · 방콕 <b>2R</b> · 전액 윤우열 선지불</div>'+
      '<div class="cd-ln">확정 총액 <b>'+golfMan+'만원</b> → 참여자별 1/N</div>'],
-    ['💰 정산 (윤우열 미회수)',
+    ['💰 정산 (윤우열 미회수)', ()=>
      '<div class="cd-ln"><b>8,583,542원</b></div>'+
      '<div class="cd-ln">숙박 319 + 골프 529 + 차량 10 (만) · 정산 탭 참고</div>'],
+    ['💡 태국 팁', ()=>{ tipI = (tipI + 1) % TIPS.length; return '<div class="cd-ln cd-tip">'+TIPS[tipI]+'</div>'; }],
   ];
   let backPg = 0;
   function renderBack(){
-    backIn.innerHTML = '<span class="cd-back-k">'+PAGES[backPg][0]+'</span>'+PAGES[backPg][1];
+    backIn.innerHTML = '<span class="cd-back-k">'+PAGES[backPg][0]+'</span>'+PAGES[backPg][1]();
     backDots.innerHTML = PAGES.map((_,i)=>`<i class="${i===backPg?'on':''}"></i>`).join('');
   }
   renderBack();
 
   let spinN = 0, spinT;
   cdEl.addEventListener('click', e=>{
-    if(cdEl.classList.contains('flipped')){                 // 뒤집힌 상태 → 페이지 넘김 / 마지막이면 닫기
-      backPg++;
-      if(backPg >= PAGES.length){ backPg = 0; cdEl.classList.remove('flipped'); }
-      else renderBack();
-      haptic('tap'); return;
-    }
-    if(e.target.closest('.cd-num') || e.target.closest('.cd-head')){
-      togglePrecise(); return;                              // D-day 영역 탭 → 정밀 카운트다운 토글
-    }
+    // 99일 원형(링) → 정밀 카운트다운 토글 + 회전
     if(e.target.closest('.cd-ring-wrap')){
+      if(cdEl.classList.contains('flipped')){ cdEl.classList.remove('flipped'); backPg = 0; }
+      togglePrecise();
       if(!rm){ ringSvg.classList.remove('spin'); void ringSvg.offsetWidth; ringSvg.classList.add('spin'); }
       haptic('tap');
       spinN++; clearTimeout(spinT); spinT = setTimeout(()=> spinN = 0, 2600);
@@ -2261,13 +2262,16 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       }
       return;
     }
-    if(e.target.closest('.cd-sub')){
-      tipI = (tipI + 1) % TIPS.length;
-      toast('💡 태국 팁', TIPS[tipI], 4600); haptic('tap'); return;
+    // 그 외 어디든 → 플립 / 다음 페이지 (정밀모드면 먼저 해제)
+    if(cdEl.classList.contains('precise')) stopPrecise();
+    if(cdEl.classList.contains('flipped')){
+      backPg++;
+      if(backPg >= PAGES.length){ backPg = 0; cdEl.classList.remove('flipped'); }
+      else renderBack();
+    } else {
+      backPg = 0; renderBack();
+      cdEl.classList.add('flipped');
     }
-    if(ticking) stopPrecise();                              // 플립 전 정밀모드 해제
-    backPg = 0; renderBack();
-    cdEl.classList.add('flipped');                          // 보딩패스 플립 (페이지 0부터)
     haptic('tap');
   });
   // D3. D-day 영역 탭 → 정밀 카운트다운 (일 + HH:MM:SS) 토글
@@ -2432,7 +2436,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       if(armed){
         if(!rm){ ptr.classList.add('spin'); setTimeout(()=> ptr.classList.remove('spin'), 650); }
         haptic('ok');
-        const sync = $('wxSync'); sync && sync.click();      // 날씨
+        if(typeof window.wxRefresh === 'function') window.wxRefresh();  // 날씨
         if(typeof window.fxRefresh === 'function') window.fxRefresh();  // 환율
         toast('🌴', '날씨·환율 새로고침', 1700);
       }
