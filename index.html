@@ -59,9 +59,10 @@ header.hero[data-wx="sunny"]{background:linear-gradient(157deg,#2E6B4E 0%,#0F302
 header.hero[data-wx="sunny"]::before{background:
   radial-gradient(circle at 84% 2%,rgba(250,222,138,.5) 0,rgba(240,190,90,.14) 30%,transparent 52%),
   radial-gradient(circle at 8% 92%,rgba(255,255,255,.06) 0,transparent 45%)}
-header.hero[data-wx="cloudy"]{background:linear-gradient(157deg,#3C4B45 0%,#222C29 45%,#141B19 100%)}
+header.hero[data-wx="cloudy"]{background:linear-gradient(157deg,#47514C 0%,#2C332F 42%,#171C1A 100%)}
 header.hero[data-wx="cloudy"]::before{background:
-  radial-gradient(ellipse at 50% -20%,rgba(214,222,219,.16) 0,transparent 58%)}
+  radial-gradient(ellipse at 50% -25%,rgba(220,226,223,.22) 0,transparent 60%),
+  radial-gradient(ellipse at 20% 8%,rgba(220,226,223,.10) 0,transparent 40%)}
 header.hero[data-wx="rain"]{background:linear-gradient(157deg,#1D4750 0%,#0E2C33 50%,#0A2126 100%)}
 header.hero[data-wx="rain"]::before{background:
   radial-gradient(ellipse at 50% -10%,rgba(150,180,192,.18) 0,transparent 55%)}
@@ -99,8 +100,9 @@ header.hero[data-occasion="newyear"] .hero-occ i{
 .eyebrow .occ-emoji{font-size:13px;margin-left:-2px}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;
   color:#BCCDC4;margin:0 0 12px;display:flex;align-items:center;gap:8px}
-.eyebrow-upd{margin-left:auto;letter-spacing:.02em;font-size:10px;color:#8FA69C;
-  font-weight:400;white-space:nowrap;text-transform:none}
+.eyebrow-upd{margin-left:auto;letter-spacing:.02em;font-size:10px;color:#A7BAB1;
+  font-weight:400;white-space:nowrap;text-transform:none;
+  text-shadow:0 1px 4px rgba(6,18,14,.85),0 0 3px rgba(6,18,14,.7);position:relative;z-index:1}
 .eyebrow-upd #updMini{display:none}
 .eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);
   box-shadow:0 0 0 0 rgba(181,138,40,.7);animation:pulse 2.4s infinite}
@@ -652,59 +654,66 @@ header.hero.wx-burst .hero-fx{animation:wxBurst 1.3s ease}
 @keyframes wxBurst{0%,100%{filter:none}35%{filter:brightness(1.4) saturate(1.25)}}
 
 /* 해 — 광선이 회전 + 맥동 */
-.fx-sun{width:132px;height:132px;top:-48px;right:-34px;border-radius:50%;
+.fx-sun{width:120px;height:120px;top:-60px;right:-52px;border-radius:50%;
   background:radial-gradient(circle at 44% 44%,rgba(255,244,204,.95),rgba(248,206,108,.55) 46%,transparent 73%)}
-.fx-sun::after{content:"";position:absolute;inset:-46px;border-radius:50%;
+.fx-sun::after{content:"";position:absolute;inset:-42px;border-radius:50%;
   background:conic-gradient(from 0deg,
-    rgba(255,231,168,.32) 0 7deg,transparent 7deg 30deg,
-    rgba(255,231,168,.32) 30deg 37deg,transparent 37deg 60deg,
-    rgba(255,231,168,.32) 60deg 67deg,transparent 67deg 90deg,
-    rgba(255,231,168,.32) 90deg 97deg,transparent 97deg 120deg,
-    rgba(255,231,168,.32) 120deg 127deg,transparent 127deg 150deg,
-    rgba(255,231,168,.32) 150deg 157deg,transparent 157deg 180deg,
-    rgba(255,231,168,.32) 180deg 187deg,transparent 187deg 210deg,
-    rgba(255,231,168,.32) 210deg 217deg,transparent 217deg 240deg,
-    rgba(255,231,168,.32) 240deg 247deg,transparent 247deg 270deg,
-    rgba(255,231,168,.32) 270deg 277deg,transparent 277deg 300deg,
-    rgba(255,231,168,.32) 300deg 307deg,transparent 307deg 330deg,
-    rgba(255,231,168,.32) 330deg 337deg,transparent 337deg 360deg);
+    rgba(255,229,160,.42) 0 7deg,transparent 7deg 30deg,
+    rgba(255,229,160,.42) 30deg 37deg,transparent 37deg 60deg,
+    rgba(255,229,160,.42) 60deg 67deg,transparent 67deg 90deg,
+    rgba(255,229,160,.42) 90deg 97deg,transparent 97deg 120deg,
+    rgba(255,229,160,.42) 120deg 127deg,transparent 127deg 150deg,
+    rgba(255,229,160,.42) 150deg 157deg,transparent 157deg 180deg,
+    rgba(255,229,160,.42) 180deg 187deg,transparent 187deg 210deg,
+    rgba(255,229,160,.42) 210deg 217deg,transparent 217deg 240deg,
+    rgba(255,229,160,.42) 240deg 247deg,transparent 247deg 270deg,
+    rgba(255,229,160,.42) 270deg 277deg,transparent 277deg 300deg,
+    rgba(255,229,160,.42) 300deg 307deg,transparent 307deg 330deg,
+    rgba(255,229,160,.42) 330deg 337deg,transparent 337deg 360deg);
   -webkit-mask:radial-gradient(circle,transparent 46%,#000 47% 74%,transparent 76%);
           mask:radial-gradient(circle,transparent 46%,#000 47% 74%,transparent 76%)}
 header.hero[data-wx="sunny"] .fx-sun{opacity:1}
 
-/* 구름 — 계속 가로로 흘러감 */
-.fx-cloud{height:46px;border-radius:100px;filter:blur(7px);background:rgba(228,234,231,.16)}
-.fx-cloud.a{width:170px;top:10%;left:6%}
-.fx-cloud.b{width:120px;top:42%;left:52%;background:rgba(228,234,231,.12)}
-.fx-cloud.c{width:210px;top:68%;left:24%;height:54px;background:rgba(228,234,231,.09)}
+/* 구름 — 뭉게구름이 계속 가로로 흘러감 (box-shadow로 덩어리감) */
+.fx-cloud{height:40px;border-radius:100px;filter:blur(3px);will-change:transform;
+  background:rgba(236,241,239,.34);
+  box-shadow:44px 10px 0 -4px rgba(236,241,239,.32), -40px 12px 0 -2px rgba(236,241,239,.30),
+             10px -14px 0 -2px rgba(236,241,239,.28), 78px 14px 0 -8px rgba(236,241,239,.24)}
+.fx-cloud.a{width:150px;top:8%;left:-320px}
+.fx-cloud.b{width:96px;top:34%;left:-300px;height:32px}
+.fx-cloud.c{width:196px;top:58%;left:-360px}
+.fx-cloud.d{width:120px;top:78%;left:-330px;height:36px}
 header.hero[data-wx="cloudy"] .fx-cloud{opacity:1}
-header.hero[data-wx="rain"] .fx-cloud.a,header.hero[data-wx="rain"] .fx-cloud.c,
-header.hero[data-wx="storm"] .fx-cloud.a,header.hero[data-wx="storm"] .fx-cloud.c{
-  opacity:1;background:rgba(38,52,55,.5)}
+header.hero[data-wx="rain"] .fx-cloud,header.hero[data-wx="storm"] .fx-cloud{
+  opacity:1;background:rgba(30,42,45,.62);
+  box-shadow:44px 10px 0 -4px rgba(30,42,45,.6), -40px 12px 0 -2px rgba(30,42,45,.55),
+             10px -14px 0 -2px rgba(30,42,45,.5), 78px 14px 0 -8px rgba(30,42,45,.42)}
 
-/* 비 — 대각선 빗줄기가 빠르게 흐름 */
+/* 비 — 굵은 대각선 빗줄기가 빠르게 흐름 */
 .fx-rain{inset:0;background-image:
-  repeating-linear-gradient(104deg,transparent 0 13px,rgba(198,218,224,.16) 13px 14px),
-  repeating-linear-gradient(100deg,transparent 0 21px,rgba(198,218,224,.10) 21px 22px)}
+  repeating-linear-gradient(105deg,transparent 0 11px,rgba(206,224,230,.26) 11px 13px),
+  repeating-linear-gradient(101deg,transparent 0 19px,rgba(206,224,230,.16) 19px 21px),
+  repeating-linear-gradient(108deg,transparent 0 31px,rgba(206,224,230,.10) 31px 32px)}
 header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opacity:1}
 
 /* 번개 — 번쩍 */
-.fx-bolt{inset:0;background:radial-gradient(ellipse at 50% -8%,rgba(232,242,255,.6) 0,transparent 55%)}
+.fx-bolt{inset:0;background:radial-gradient(ellipse at 50% -8%,rgba(236,244,255,.7) 0,transparent 58%)}
 
 @media (prefers-reduced-motion:no-preference){
-  header.hero[data-wx="sunny"] .fx-sun{animation:fxSunPulse 4.5s ease-in-out infinite}
-  header.hero[data-wx="sunny"] .fx-sun::after{animation:fxSpin 22s linear infinite}
-  header.hero[data-wx="cloudy"] .fx-cloud.a,header.hero[data-wx="rain"] .fx-cloud.a,header.hero[data-wx="storm"] .fx-cloud.a{animation:fxDrift 24s linear infinite}
-  header.hero[data-wx="cloudy"] .fx-cloud.b{animation:fxDrift 33s linear infinite;animation-delay:-9s}
-  header.hero[data-wx="cloudy"] .fx-cloud.c,header.hero[data-wx="rain"] .fx-cloud.c,header.hero[data-wx="storm"] .fx-cloud.c{animation:fxDrift 41s linear infinite;animation-delay:-19s}
-  header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{animation:fxRain .5s linear infinite}
-  header.hero[data-wx="storm"] .fx-bolt{opacity:0;animation:fxBolt 5s steps(1,end) infinite}
+  header.hero[data-wx="sunny"] .fx-sun{animation:fxSunPulse 4s ease-in-out infinite}
+  header.hero[data-wx="sunny"] .fx-sun::after{animation:fxSpin 18s linear infinite}
+  header.hero[data-wx="cloudy"] .fx-cloud.a,header.hero[data-wx="rain"] .fx-cloud.a,header.hero[data-wx="storm"] .fx-cloud.a{animation:fxDrift 19s linear infinite}
+  header.hero[data-wx="cloudy"] .fx-cloud.b,header.hero[data-wx="rain"] .fx-cloud.b,header.hero[data-wx="storm"] .fx-cloud.b{animation:fxDrift 27s linear infinite;animation-delay:-7s}
+  header.hero[data-wx="cloudy"] .fx-cloud.c,header.hero[data-wx="rain"] .fx-cloud.c,header.hero[data-wx="storm"] .fx-cloud.c{animation:fxDrift 33s linear infinite;animation-delay:-15s}
+  header.hero[data-wx="cloudy"] .fx-cloud.d,header.hero[data-wx="rain"] .fx-cloud.d,header.hero[data-wx="storm"] .fx-cloud.d{animation:fxDrift 23s linear infinite;animation-delay:-11s}
+  header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{animation:fxRain .42s linear infinite}
+  header.hero[data-wx="storm"] .fx-bolt{opacity:0;animation:fxBolt 4.5s steps(1,end) infinite}
 }
 @keyframes fxSpin{to{transform:rotate(360deg)}}
-@keyframes fxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.07);filter:brightness(1.12)}}
-@keyframes fxDrift{from{transform:translateX(-280px)}to{transform:translateX(calc(100vw + 80px))}}
-@keyframes fxRain{from{background-position:0 0,0 0}to{background-position:-6px 42px,-10px 60px}}
-@keyframes fxBolt{0%,88%,100%{opacity:0}89%{opacity:.55}89.5%{opacity:0}90.6%{opacity:.9}91.2%{opacity:0}92%{opacity:.5}92.4%{opacity:0}}
+@keyframes fxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.08);filter:brightness(1.15)}}
+@keyframes fxDrift{to{transform:translateX(calc(100vw + 420px))}}
+@keyframes fxRain{from{background-position:0 0,0 0,0 0}to{background-position:-9px 52px,-14px 74px,-6px 40px}}
+@keyframes fxBolt{0%,86%,100%{opacity:0}87%{opacity:.6}87.5%{opacity:0}89%{opacity:1}89.6%{opacity:0}90.4%{opacity:.55}90.8%{opacity:0}}
 .toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
   max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
   background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:#F4EEDD;
@@ -881,7 +890,7 @@ header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opaci
 <header class="hero">
   <div class="hero-fx" aria-hidden="true">
     <i class="fx-sun"></i>
-    <i class="fx-cloud a"></i><i class="fx-cloud b"></i><i class="fx-cloud c"></i>
+    <i class="fx-cloud a"></i><i class="fx-cloud b"></i><i class="fx-cloud c"></i><i class="fx-cloud d"></i>
     <i class="fx-rain"></i><i class="fx-bolt"></i>
   </div>
   <div class="hero-occ" id="heroOcc" aria-hidden="true"></div>
@@ -1163,7 +1172,7 @@ header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opaci
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.20 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.21 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1761,15 +1770,13 @@ const TODO=[
       }
     }
   }
-  // 내용 탭 → 지금 시점으로 동기화 · ↗ 는 상세페이지 이동만 · 숫자 탭 → 환산표
+  // 내용 탭 → 지금 시점으로 동기화 · ↗ 는 상세페이지 이동만 · 숫자(฿/$) 탭 → THB 환산표
   fx.addEventListener('click', e=>{
     if(e.target.closest('#fxNav')){ haptic('tap'); return; }
-    const isThb = e.target.closest('#fxThb'), isUsd = e.target.closest('#fxUsd');
-    if((isThb || isUsd) && state.thb && state.usd && typeof window.__toast === 'function'){
-      const rate = isThb ? state.thb : state.usd, sym = isThb ? '฿' : '$';
-      const amts = isThb ? [100,500,1000,5000] : [10,50,100,500];
-      window.__toast(sym+'1 ≈ '+fmt2(rate)+'원',
-        amts.map(a=>`${sym}${a.toLocaleString()} ≈ ${Math.round(a*rate).toLocaleString()}원`).join('  ·  '), 5200);
+    if((e.target.closest('#fxThb') || e.target.closest('#fxUsd')) && state.thb && typeof window.__toast === 'function'){
+      const kick = '฿1 ≈ '+fmt2(state.thb)+'원' + (state.usd ? '   ·   $1 ≈ '+fmt2(state.usd)+'원' : '');
+      const rows = [100,1000,5000,10000].map(a=>`฿${a.toLocaleString()} ≈ ${Math.round(a*state.thb).toLocaleString()}원`).join('   ·   ');
+      window.__toast(kick, rows, 5600);
       haptic('tap'); return;
     }
     haptic('tap'); sync(true);
