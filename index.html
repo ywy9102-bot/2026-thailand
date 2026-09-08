@@ -689,15 +689,20 @@ header.hero[data-wx="rain"] .fx-cloud,header.hero[data-wx="storm"] .fx-cloud{
   box-shadow:44px 10px 0 -4px rgba(30,42,45,.6), -40px 12px 0 -2px rgba(30,42,45,.55),
              10px -14px 0 -2px rgba(30,42,45,.5), 78px 14px 0 -8px rgba(30,42,45,.42)}
 
-/* 비 — 굵은 대각선 빗줄기가 빠르게 흐름 */
-.fx-rain{inset:0;background-image:
-  repeating-linear-gradient(105deg,transparent 0 11px,rgba(206,224,230,.26) 11px 13px),
-  repeating-linear-gradient(101deg,transparent 0 19px,rgba(206,224,230,.16) 19px 21px),
-  repeating-linear-gradient(108deg,transparent 0 31px,rgba(206,224,230,.10) 31px 32px)}
+/* 비 — 창문에 흘러내리는 물줄기 + 맺힌 빗방울 (성기게) */
+.fx-rain{inset:0;
+  background-image:
+    repeating-linear-gradient(93deg,transparent 0 46px,rgba(202,222,229,.12) 46px 48px),
+    radial-gradient(circle at 24% 30%,rgba(216,232,238,.5) 0 2px,transparent 3px),
+    radial-gradient(circle at 70% 66%,rgba(216,232,238,.4) 0 3px,transparent 4.5px),
+    radial-gradient(circle at 46% 88%,rgba(216,232,238,.34) 0 2px,transparent 3px);
+  background-size:auto,108px 150px,168px 210px,132px 176px;
+  background-repeat:repeat}
 header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opacity:1}
+header.hero[data-wx="storm"] .fx-rain{opacity:.82}
 
-/* 번개 — 번쩍 */
-.fx-bolt{inset:0;background:radial-gradient(ellipse at 50% -8%,rgba(236,244,255,.7) 0,transparent 58%)}
+/* 번개 — 번쩍 (약 3초에 한 번) */
+.fx-bolt{inset:0;background:radial-gradient(ellipse at 50% -8%,rgba(236,244,255,.68) 0,transparent 58%)}
 
 @media (prefers-reduced-motion:no-preference){
   header.hero[data-wx="sunny"] .fx-sun{animation:fxSunPulse 4s ease-in-out infinite}
@@ -706,14 +711,14 @@ header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opaci
   header.hero[data-wx="cloudy"] .fx-cloud.b,header.hero[data-wx="rain"] .fx-cloud.b,header.hero[data-wx="storm"] .fx-cloud.b{animation:fxDrift 27s linear infinite;animation-delay:-7s}
   header.hero[data-wx="cloudy"] .fx-cloud.c,header.hero[data-wx="rain"] .fx-cloud.c,header.hero[data-wx="storm"] .fx-cloud.c{animation:fxDrift 33s linear infinite;animation-delay:-15s}
   header.hero[data-wx="cloudy"] .fx-cloud.d,header.hero[data-wx="rain"] .fx-cloud.d,header.hero[data-wx="storm"] .fx-cloud.d{animation:fxDrift 23s linear infinite;animation-delay:-11s}
-  header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{animation:fxRain .42s linear infinite}
-  header.hero[data-wx="storm"] .fx-bolt{opacity:0;animation:fxBolt 4.5s steps(1,end) infinite}
+  header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{animation:fxRain 1.9s linear infinite}
+  header.hero[data-wx="storm"] .fx-bolt{opacity:0;animation:fxBolt 3s steps(1,end) infinite}
 }
 @keyframes fxSpin{to{transform:rotate(360deg)}}
 @keyframes fxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.08);filter:brightness(1.15)}}
 @keyframes fxDrift{to{transform:translateX(calc(100vw + 420px))}}
-@keyframes fxRain{from{background-position:0 0,0 0,0 0}to{background-position:-9px 52px,-14px 74px,-6px 40px}}
-@keyframes fxBolt{0%,86%,100%{opacity:0}87%{opacity:.6}87.5%{opacity:0}89%{opacity:1}89.6%{opacity:0}90.4%{opacity:.55}90.8%{opacity:0}}
+@keyframes fxRain{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 288px,0 150px,0 210px,0 176px}}
+@keyframes fxBolt{0%,80%,100%{opacity:0}82%{opacity:.5}82.6%{opacity:0}84%{opacity:.95}84.7%{opacity:0}86%{opacity:.4}86.4%{opacity:0}}
 .toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
   max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
   background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:#F4EEDD;
@@ -1172,7 +1177,7 @@ header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opaci
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.23 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.24 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
