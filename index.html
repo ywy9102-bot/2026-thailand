@@ -53,6 +53,22 @@ header.hero{
 header.hero::before{content:"";position:absolute;inset:0;
   background:radial-gradient(circle at 88% 15%,rgba(181,138,40,.22) 0,transparent 42%),
              radial-gradient(circle at 8% 85%,rgba(255,255,255,.05) 0,transparent 45%);}
+
+/* ── 현재 날씨에 맞춰 히어로 배경이 변함 (renderWx → header.hero[data-wx]) ── */
+header.hero[data-wx="sunny"]{background:linear-gradient(157deg,#245A4A 0%,#0E2A22 100%)}
+header.hero[data-wx="sunny"]::before{background:
+  radial-gradient(circle at 86% 6%,rgba(247,224,150,.34) 0,transparent 46%),
+  radial-gradient(circle at 8% 90%,rgba(255,255,255,.06) 0,transparent 45%)}
+header.hero[data-wx="cloudy"]{background:linear-gradient(157deg,#33473F 0%,#141F1C 100%)}
+header.hero[data-wx="cloudy"]::before{opacity:.5;background:
+  radial-gradient(ellipse at 60% 0%,rgba(226,232,228,.10) 0,transparent 55%)}
+header.hero[data-wx="rain"]{background:linear-gradient(157deg,#1B434C 0%,#0A2126 100%)}
+header.hero[data-wx="rain"]::before{background:
+  radial-gradient(ellipse at 50% -10%,rgba(150,180,192,.16) 0,transparent 55%)}
+header.hero[data-wx="storm"]{background:linear-gradient(157deg,#1D3439 0%,#091518 100%)}
+header.hero[data-wx="storm"]::before{background:
+  radial-gradient(ellipse at 50% -10%,rgba(150,175,188,.13) 0,transparent 50%)}
+
 .hero-in{position:relative;z-index:1}
 
 /* ── 날짜 특수 연출 (크리스마스 / 신정) ── */
@@ -625,8 +641,36 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 .day.open .day-detail{max-height:800px}
 
 /* ════════ 재미 요소 (모바일 전용) ════════ */
-.ptr,.hero-fx,.confp,.flyplane,.wx-scene{display:none}
-@media (min-width:761px){ .toast,.ptr,.hero-fx,.confp,.flyplane,.wx-scene{display:none!important} }
+.ptr,.confp,.flyplane,.wx-scene{display:none}
+@media (min-width:761px){ .toast,.ptr,.confp,.flyplane,.wx-scene{display:none!important} }
+
+/* ── 날씨 반응형 히어로 분위기 레이어 (전 폭 공통) ── */
+.hero-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:0}
+header.hero[data-wx] .hero-fx{opacity:.92}
+header.hero.wx-burst .hero-fx{animation:wxBurst 1.3s ease}
+@keyframes wxBurst{0%,100%{opacity:.92;filter:none}35%{opacity:1;filter:brightness(1.5) saturate(1.25)}}
+header.hero[data-wx="sunny"] .hero-fx::before{content:"";position:absolute;top:-32%;right:-18%;
+  width:70%;height:112%;border-radius:50%;
+  background:radial-gradient(circle,rgba(247,226,158,.42) 0%,transparent 62%)}
+header.hero[data-wx="cloudy"] .hero-fx::before{content:"";position:absolute;top:4%;left:-38%;
+  width:120%;height:58%;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(232,238,234,.12) 0%,transparent 60%);filter:blur(9px)}
+header.hero[data-wx="rain"] .hero-fx,header.hero[data-wx="storm"] .hero-fx{
+  background-image:
+    repeating-linear-gradient(101deg,transparent 0 17px,rgba(200,220,214,.10) 17px 18px),
+    repeating-linear-gradient(97deg,transparent 0 27px,rgba(200,220,214,.06) 27px 28px)}
+header.hero[data-wx="storm"] .hero-fx::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(224,236,255,.4) 0,transparent 60%);opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  header.hero[data-wx="sunny"] .hero-fx::before{animation:sunBreathe 7s ease-in-out infinite}
+  header.hero[data-wx="cloudy"] .hero-fx::before{animation:cloudDrift 22s ease-in-out infinite}
+  header.hero[data-wx="rain"] .hero-fx,header.hero[data-wx="storm"] .hero-fx{animation:rainSlide .62s linear infinite}
+  header.hero[data-wx="storm"] .hero-fx::after{animation:lightning 9s steps(1,end) infinite}
+}
+@keyframes sunBreathe{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.82;transform:scale(1.08)}}
+@keyframes cloudDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(20%)}}
+@keyframes rainSlide{from{background-position:0 0,0 0}to{background-position:-7px 44px,-12px 64px}}
+@keyframes lightning{0%,95%,100%{opacity:0}96%{opacity:.5}96.4%{opacity:0}97.4%{opacity:.8}97.9%{opacity:0}}
 .toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
   max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
   background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:#F4EEDD;
@@ -638,31 +682,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   letter-spacing:.08em;display:block;margin-bottom:2px}
 
 @media (max-width:760px){
-  /* ── 날씨 반응형 히어로 분위기 ── */
-  .hero-fx{display:block;position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:.9}
-  .hero-in{z-index:1}
-  header.hero.wx-burst .hero-fx{animation:wxBurst 1.3s ease}
-  @keyframes wxBurst{0%,100%{opacity:.9;filter:none}35%{opacity:1;filter:brightness(1.6) saturate(1.3)}}
   #wxIco{cursor:pointer}
-  @media (prefers-reduced-motion:no-preference){
-    header.hero[data-wx="sunny"] .hero-fx::before{content:"";position:absolute;top:-30%;right:-20%;
-      width:75%;height:110%;border-radius:50%;background:radial-gradient(circle,rgba(245,231,192,.5) 0%,transparent 62%);
-      animation:sunBreathe 7s ease-in-out infinite}
-    header.hero[data-wx="cloudy"] .hero-fx::before{content:"";position:absolute;top:8%;left:-40%;
-      width:120%;height:60%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.09) 0%,transparent 60%);
-      filter:blur(8px);animation:cloudDrift 22s ease-in-out infinite}
-    header.hero[data-wx="rain"] .hero-fx,header.hero[data-wx="storm"] .hero-fx{
-      background-image:
-        repeating-linear-gradient(101deg,transparent 0 17px,rgba(216,232,226,.11) 17px 18px),
-        repeating-linear-gradient(97deg,transparent 0 27px,rgba(216,232,226,.07) 27px 28px);
-      animation:rainSlide .6s linear infinite}
-    header.hero[data-wx="storm"] .hero-fx::after{content:"";position:absolute;inset:0;
-      background:rgba(255,255,255,.5);opacity:0;animation:lightning 9s steps(1,end) infinite}
-  }
-  @keyframes sunBreathe{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.8;transform:scale(1.08)}}
-  @keyframes cloudDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(22%)}}
-  @keyframes rainSlide{from{background-position:0 0,0 0}to{background-position:-7px 44px,-12px 64px}}
-  @keyframes lightning{0%,96%,100%{opacity:0}97%{opacity:.45}97.5%{opacity:0}98.2%{opacity:.65}98.8%{opacity:0}}
 
   /* ── 이스터에그: 국기 · 카운트다운 링 ── */
   .eg-flag{display:inline-block;cursor:pointer;margin-right:-3px}
@@ -1105,7 +1125,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.18 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.19 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
