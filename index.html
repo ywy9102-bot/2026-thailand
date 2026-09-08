@@ -395,8 +395,10 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .recd-row{display:flex;gap:9px;padding:6px 0;font-size:11.8px;line-height:1.55}
 .recd-row + .recd-row{border-top:1px dashed var(--line)}
 .recd-k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.02em;
-  color:var(--jade);flex:none;width:44px;padding-top:2px;text-align:right}
+  color:var(--jade);flex:none;width:50px;padding-top:2px;text-align:right}
+.recd-k.p{color:var(--gold-text)}
 .recd-v{color:var(--ink2);min-width:0}
+.recd-v a{color:var(--jade);text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 .recd + .vsec{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
 
 /* ══ COST ══ */
@@ -1044,7 +1046,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.4 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.5 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1128,48 +1130,56 @@ const ITIN_A=[
  {d:'19',w:'토',l:'파타야',e:'🏝️',t:'꼬란섬 (Koh Larn)',n:'가족1 통부라 도착 ~00:30',
   rec:'꼬란 반나절 + 파타야 저녁',
   recd:[
-   ['이동','발리하이 선착장 일반 페리 30밧·45분 → 나반 선착장(요금 배에서). 토요일·성수기라 오전 배·막배 혼잡 → 늦은 오전 출발, 16:30경 복귀'],
-   ['해변','사매(Samae) 비치 권장 — 조용·물 맑음(장모님·김윤후). 나반에서 썽태우 약 40밧. 선베드+파라솔 100~150밧'],
-   ['저녁','① The Sky Gallery — 쁘라뚬낙 절벽·전망 ② Rimpa Lapin — 나 좀티엔·일몰 ③ Mum Aroi — 나끌루아 해변·로컬 정통. 일몰 18시경 → 17시 예약'],
+   ['가는 법','발리하이 선착장 일반 페리 30밧·45분 → 나반 선착장(요금 배에서). 스피드보트는 20분(왕복 대절 별도). 토·성수기엔 오전 배·막배 혼잡 → 늦은 오전 출발, 16:30경 복귀'],
+   ['Plan A','사매(Samae) 비치 — 조용·물 맑음, 장모님·김윤후에 적합. 나반에서 썽태우 약 40밧, 선베드+파라솔 100~150밧'],
+   ['Plan B','따웬(Tawaen) 비치 — 편의시설·수상액티비티 풍부(제트스키·패러세일링·바나나보트·씨워킹). 활기차고 붐빔'],
+   ['저녁','Plan A The Sky Gallery(쁘라뚬낙 절벽·전망) · Plan B Rimpa Lapin(나 좀티엔·일몰 명소) · Plan C Mum Aroi(나끌루아 해변·현지 정통). 일몰 18시경 → 17시 예약'],
+   ['참고','태국관광청 파타야 안내 <a href="https://visitthailand.or.kr:46895/thai/?r=home&m=info&cat=74" target="_blank" rel="noopener">TAT 촌부리 ↗</a>'],
   ]},
  {d:'20',w:'일',l:'파타야',e:'🚐',t:'데이투어 (가족1+윤우열)',
   rec:'육지 데이투어 · 전세밴',
   recd:[
-   ['A안 (12월 추천)','카오키여우 오픈주(08시 개장, 기린 먹이주기, 카트) → 점심 → 실버레이크 포도농원(12월 해바라기 시즌·포토존)'],
-   ['B안','농눅빌리지(10·11:15 전통쇼·코끼리쇼, 정원 카트) → 점심 → 진리의 성전(15시, ~1.5h) → 일몰 저녁'],
-   ['C안 (저강도)','Frost Magical Ice + Art in Paradise + 파타야 수상시장 → Terminal 21'],
-   ['참고','윤성욱 합류 가능 · 입장·투어 사전 예약'],
+   ['Plan A','동물+자연(12월 추천) — 카오키여우 오픈주(08시 개장, 기린 먹이주기, 카트, 8,000+ 동물) → 점심 → 실버레이크 포도농원(12월 해바라기 시즌·포토존). <a href="https://khaokheow.zoothailand.org" target="_blank" rel="noopener">카오키여우 공식 ↗</a>'],
+   ['Plan B','정원+문화 — 농눅빌리지(10·11:15 전통쇼·코끼리쇼, 정원 카트) → 점심 → 진리의 성전(15시, 목조 건축·못 없이 조립) → 일몰 저녁. <a href="https://www.nongnoochpattaya.com" target="_blank" rel="noopener">농눅 ↗</a> · <a href="https://www.sanctuaryoftruth.com" target="_blank" rel="noopener">진리의 성전 ↗</a>'],
+   ['Plan C','저강도·실내 — Frost Magical Ice of Siam + Art in Paradise(3D 트릭아트) + 파타야 수상시장 → Terminal 21. 더위·피로 대비'],
+   ['참고','전세밴 몽키트래블 문의 · 입장·투어 사전 예약 · 윤성욱 합류 가능'],
   ]},
  {...gday('12/21','파타야','정유현·장모님·김윤후 개별일정'),
   rec:'비골퍼 3인 — 쿠킹 클래스 등',
   recd:[
-   ['오전','타이 쿠킹 클래스(시장투어 포함, 반나절) — 아이 동반 가능한 곳'],
-   ['대안','파타야 수상시장 + 스파, 또는 언더워터월드'],
+   ['Plan A','타이 쿠킹 클래스(시장투어 포함 반나절) — 아이 동반 가능한 곳으로'],
+   ['Plan B','파타야 수상시장(배·간식·공예) + 스파(Let’s Relax·Health Land 등)'],
+   ['Plan C','언더워터월드 파타야(아쿠아리움, 실내) + Terminal 21'],
   ]},
  {...gday('12/22','파타야'),
   rec:'비골퍼(장모님·김윤후) — 실내·저강도',
   recd:[
-   ['옵션','① 파타야 수상시장 ② 언더워터월드(아쿠아리움) ③ Art in Paradise + Frost 아이스 ④ 스위스 십 팜(아이)'],
-   ['참고','한낮 더위 → 실내/그늘 위주, 장모님 페이스 조절'],
+   ['Plan A','Art in Paradise(3D 트릭아트) + Frost Magical Ice of Siam — 실내·짧음'],
+   ['Plan B','카오 프라 야이(Big Buddha, 부다힐) + 카오 프라 땀낙 전망대, 또는 파타야 파크 타워 전망대 — TAT 추천'],
+   ['Plan C','스위스 십 팜 / 파타야 십 팜(양·알파카, 아이) 또는 언더워터월드'],
+   ['참고','한낮 더위 → 실내·그늘 위주'],
   ]},
  {...gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:40)'),
   rec:'비골퍼 오전 + 김태기 배웅',
   recd:[
-   ['오전','실버레이크(20일 미방문 시) 또는 Frost 아이스 — 짧게'],
+   ['Plan A','실버레이크 포도농원(20일 미방문 시)'],
+   ['Plan B','Frost Magical Ice + Art in Paradise — 짧게'],
    ['오후','통부라 17시 출발 → 김태기 공항 샌딩 (KE658 21:40)'],
   ]},
  {...gday('12/24','파타야'),
   rec:'비골퍼(장모님·김윤후) — 농눅빌리지',
   recd:[
-   ['코스','농눅빌리지 — 코끼리쇼·전통쇼 + 정원(카트 필수). 반나절, 입장 약 600밧'],
-   ['대안','카오키여우 오픈주(20일 미방문 시)'],
+   ['Plan A','농눅빌리지 — 코끼리쇼·전통쇼 + 정원(카트 필수). 반나절, 입장 약 600밧. <a href="https://www.nongnoochpattaya.com" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan B','카오키여우 오픈주(20일 미방문 시). <a href="https://khaokheow.zoothailand.org" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan C','백만년 바위공원 & 악어농장(TAT 소개) — 짧고 아이 흥미'],
   ]},
  {d:'25',w:'금',l:'파타야',e:'🎄',t:'크리스마스',n:'파타야 마지막 날',
   rec:'크리스마스 · 26일 이동 준비',
   recd:[
-   ['낮','오전 수영 → Central Festival Pattaya(크리스마스 장식·쇼핑)'],
-   ['저녁','호텔 크리스마스 디너 뷔페(힐튼 Edge / 하드록 등) 예약'],
-   ['정리','26일 방콕 이동 짐 싸기, 좀티엔·발리하이 일몰'],
+   ['Plan A','오전 수영 → Central Festival Pattaya Beach(크리스마스 장식·쇼핑·오션뷰)'],
+   ['Plan B','좀티엔 비치 반나절 + 카오 프라 땀낙 전망대 일몰'],
+   ['저녁','호텔 크리스마스 디너 뷔페(힐튼 Edge / 하드록 / 두짓타니 Cascade 등) — 예약'],
+   ['정리','26일 방콕 이동 짐 싸기'],
   ]},
 ];
 const ITIN_B=[
@@ -1178,52 +1188,60 @@ const ITIN_B=[
   recd:[
    ['식당','쏨분시푸드 — 반탓통(원조·분위기) 또는 수라웡(미쉐린). 카오산에서 그랩 15~20분'],
    ['메뉴','푸팟퐁커리·꿍채남쁠라·뿌님팟퐁·카나무쌉'],
-   ['예약','somboonseafood.com · 피크 18~20시 → 17:30 또는 20:30'],
+   ['예약','<a href="https://www.somboonseafood.com" target="_blank" rel="noopener">somboonseafood.com ↗</a> · 피크 18~20시 → 17:30 또는 20:30'],
   ]},
- {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',
-  rec:'가족1 낮 · 가족2 밤 합류',
+ {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족1 낮 · 가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',
+  rec:'가족1 낮 · 가족2 밤 도착',
   recd:[
-   ['가족1 낮','짜뚜짝 주말시장(일요일 한정) 또는 짐 톰슨 하우스 + 시암 쇼핑'],
-   ['장모님·김윤후','왓포 마사지 본원 + 구시가 산책'],
+   ['Plan A','짜뚜짝 주말시장(일요일 한정, 1.5만+ 점포, 09~18시) — 관심 있는 분들만'],
+   ['Plan B','짐 톰슨 하우스(전통 티크 가옥·실크, 09~18시) + 시암 파라곤·MBK 쇼핑. <a href="https://www.jimthompsonhouse.org" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan C','장모님·김윤후 — 왓 포 마사지 본원 + 구시가(타논 카오산) 산책. <a href="https://www.watpho.com" target="_blank" rel="noopener">왓 포 ↗</a>'],
    ['밤','가족2 도착 → 밴 공항픽업 → 티니디 합류'],
   ]},
- {d:'28',w:'월',l:'BKK',e:'🛕',t:'방콕 시내관광 (전원)',
-  rec:'방콕 3대 사원',
+ {d:'28',w:'월',l:'BKK',e:'🛕',t:'방콕 대표 사원 (전원)',
+  rec:'방콕 3대 사원 · 짜오프라야',
   recd:[
-   ['코스','왕궁+왓 프라깨우(에메랄드 불상) → 도보 왓 포(와불) → 나룻배 왓 아룬(일몰)'],
-   ['복장','어깨·무릎 가림 필수 · 오전 일찍 시작'],
-   ['장모님','왕궁+왓포까지만, 왓아룬은 강 건너 조망 · 중간 카페 휴식'],
-   ['저녁','야오와랏(차이나타운) 길거리 음식, 또는 왓아룬 뷰 리버사이드(Supanniga / The Deck)'],
+   ['코스','왕궁 + 왓 프라깨우(에메랄드 불상, 08:30~15:30) → 도보 5분 왓 포(길이 46m 와불) → 타 띠안서 나룻배(4밧) → 왓 아룬(새벽사원, 프라 쁘랑 탑) → 일몰'],
+   ['복장·팁','어깨·무릎 가림 필수(왕궁 엄격) · 오전 일찍 · 왕궁 입장 500밧(짐 톰슨 등 포함 패스)'],
+   ['장모님','왕궁+왓 포까지만, 왓 아룬은 강 건너 조망 · 중간중간 카페 휴식'],
+   ['공식','<a href="https://www.royalgrandpalace.th" target="_blank" rel="noopener">왕궁 ↗</a> · <a href="https://www.watpho.com" target="_blank" rel="noopener">왓 포 ↗</a>'],
+   ['저녁 Plan A','야오와랏(차이나타운) 길거리 음식 — 미쉐린 노점 다수, 18시 이후'],
+   ['저녁 Plan B','왓 아룬 뷰 리버사이드 — Supanniga Eating Room(타 띠안) 또는 The Deck by Arun Residence'],
   ]},
  {...gday('12/29','BKK'),
   rec:'비골퍼 5인 (정유경·장모님·김윤후·박지해·이동현)',
   recd:[
-   ['A안','담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일). 07:30~08:00 출발, 점심 무렵 복귀 — 아이들이 좋아함'],
-   ['B안','사파리월드 & 마린파크 — 동물·돌고래·오랑우탄 쇼. 종일, 시내에서 편도 40~60분'],
-   ['차량','골프 차량과 분리 예약 필요'],
+   ['Plan A','수상시장 — 담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일). 07:30~08:00 출발, 점심 무렵 복귀. 아이들이 좋아함 · TAT 소개 유형'],
+   ['Plan B','동물 — 사파리월드 & 마린파크. 드라이브 사파리 + 돌고래·오랑우탄·물개 쇼. 종일, 시내서 편도 40~60분. <a href="https://www.safariworld.com" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan C','강+실내 — 아이콘시암(쑥시암 실내 수상시장·18시 분수쇼) + 짜오프라야 셔틀보트. 냉방·전 연령. <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['차량','골프 차량과 분리 예약'],
   ]},
  {d:'30',w:'수',l:'BKK',e:'🏬',t:'자유일정 (전원)',n:'가족2 티니디 체크아웃 → GCP 체크인',
-  rec:'가족2 GCP 이동 · 라차프라송 관광',
+  rec:'가족2 GCP 이동 · 라차프라송',
   recd:[
-   ['오전','가족2 체크아웃 → GCP(랏차담리, 센트럴월드 옆) 이동'],
-   ['오후','에라완 사당 + 센트럴월드·시암파라곤 쇼핑 + 씨라이프/마담투소, 또는 마하나콘 스카이워크 일몰'],
-   ['저녁','쏨분시푸드 ② @ 센트럴월드 — 가족1+가족2(윤성욱 제외). GCP 도보 5분'],
+   ['오전','가족2 체크아웃 → GCP(랏차담리, 센트럴월드 옆) 이동·정착'],
+   ['Plan A','쇼핑+아이 — 에라완 사당 + 센트럴월드·시암파라곤 + 씨라이프 방콕(시암파라곤 지하 아쿠아리움)'],
+   ['Plan B','전망 — 킹파워 마하나콘 스카이워크(310m, 유리 바닥, 일몰). <a href="https://kingpowermahanakhon.co.th" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan C','문화 — 짐 톰슨 하우스(27일 미방문 시) + BACC(방콕예술문화센터, 무료·냉방)'],
+   ['저녁','쏨분시푸드 ② @ 센트럴월드 — 가족1+가족2(윤성욱 제외), GCP 도보 5분'],
   ]},
  {...gday('12/31','BKK','차량 2대 배차 (순차픽업 無)'),
   rec:'비골퍼 낮 + NYE 카운트다운',
   recd:[
-   ['낮','NYE라 오후 도심 혼잡 → 오전 가볍게: 짐 톰슨 하우스·시암·BACC 또는 룸피니 산책+스파, 저녁 전 복귀'],
-   ['밤 ①','센트럴월드 카운트다운 — 공연·자정 불꽃, GCP 도보/고층뷰. 극혼잡 → 매우 일찍 자리'],
-   ['밤 ②','아이콘시암 — 차오프라야강 1,400m 불꽃, 최대 스케일'],
-   ['밤 ③','짜오프라야 NYE 디너크루즈 — 인파 크러시 없음. 조기 매진, 지금 예약'],
-   ['추천','오전 골프+아이 2명+장모님 → ③ 크루즈 또는 GCP 고층 조망'],
+   ['낮','NYE라 오후 도심 혼잡 → 오전 가볍게: 짐 톰슨 하우스·시암·BACC 또는 룸피니 공원 산책+스파, 저녁 전 복귀'],
+   ['Plan A','센트럴월드 카운트다운 — 공연·자정 불꽃, GCP 도보/고층뷰. 극혼잡 → 매우 일찍 자리'],
+   ['Plan B','아이콘시암 — 차오프라야강 1,400m 불꽃, 방콕 최대 스케일. <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan C','짜오프라야 NYE 디너크루즈 — 배 위 불꽃, 인파 크러시 없음. 조기 매진 → 지금 예약'],
+   ['추천','오전 골프 + 아이 2명 + 장모님 → Plan C 크루즈 또는 GCP 고층 조망'],
   ]},
 ];
 const ITIN_C=[
- {d:'1',w:'금',l:'BKK',e:'🎊',t:'신정',n:'자유일정',
+ {d:'1',w:'금',l:'BKK',e:'🎊',t:'신정 · 회복형 (전원)',n:'자유일정',
   rec:'전원 회복형 (1/2 08시 출발)',
   recd:[
-   ['옵션','① 짜오프라야 런치크루즈(저강도·조망) ② 아유타야 당일투어(UNESCO·나무뿌리 불상머리) ③ 아시아티크(대관람차·야시장·칼립소 쇼)'],
+   ['Plan A','짜오프라야 런치크루즈 — 다 같이 앉아서 강변 명소 조망, 저강도'],
+   ['Plan B','아유타야 당일 투어 — 옛 수도 유적(왓 마하탓 나무뿌리 불상머리, 왓 차이왓타나람). 방콕서 편도 1.5h'],
+   ['Plan C','고대도시(Ancient Siam / 므앙보란) — 태국 전역 유적 축소판 대공원, 자전거·카트 + 에라완 박물관. <a href="https://www.ancientsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
    ['참고','1/2 호텔 08:00 출발 → 밤 늦지 않게'],
   ]},
  {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:20–19:40',x:'호텔 08시 출발'},
@@ -1699,7 +1717,7 @@ function days(list,el,mon,yr){
          ${expandable?`<div class="g-toggle"><span class="chev">▾</span> ${toggleTxt}</div>`:''}
        </div>
        ${expandable?`<div class="day-detail">
-         ${hasRec?`<div class="recd">${x.recd.map(r=>`<div class="recd-row"><span class="recd-k">${r[0]}</span><span class="recd-v">${r[1]}</span></div>`).join('')}</div>`:''}
+         ${hasRec?`<div class="recd">${x.recd.map(r=>`<div class="recd-row"><span class="recd-k${/^Plan /.test(r[0])?' p':''}">${r[0]}</span><span class="recd-v">${r[1]}</span></div>`).join('')}</div>`:''}
          ${hasDetail?`<div class="vsec">
            ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
            ${x.addr?`<div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="${mapUrl}" target="_blank" rel="noopener">${x.addr} <span class="mico">↗</span></a></div>`:''}
@@ -1890,7 +1908,9 @@ function buildGolfText(){
   return `🇹🇭 태국 골프 일정\n\n[파타야]\n${pat.map(line).join('\n')}\n\n[방콕]\n${bkk.map(line).join('\n')}`;
 }
 function buildItinText(){
-  const plain = s => (s||'').replace(/<[^>]*>/g,''); // 화면표시용 HTML(색점 등) 제거, 순수 텍스트만
+  const plain = s => (s||'')
+    .replace(/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/g,'$2 ($1)')  // 링크는 텍스트(URL)로
+    .replace(/<[^>]*>/g,'').replace(/\s↗/g,''); // 나머지 태그·↗ 제거
   const rec=x=>x.rec?`\n   💡 추천: ${plain(x.rec)}`+(x.recd?x.recd.map(r=>`\n      · ${r[0]} — ${plain(r[1])}`).join(''):''):'';
   const line=x=>`12/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${rec(x)}`;
   const lineJan=x=>`1/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${rec(x)}`;
