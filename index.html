@@ -490,6 +490,17 @@ table.d tr:nth-child(even) td{background:rgba(30,75,65,.02)}
 .cgrp.collapsed .ci{display:none}
 .ci.hide-done{display:none !important}
 
+/* 홈 화면에 추가 안내 (할 일 탭 하단) */
+[hidden]{display:none!important}
+.install-box{margin-top:26px;background:var(--jade-s);border-radius:14px;padding:16px 16px 18px;text-align:center}
+.ib-t{font-family:'Fraunces',serif;font-weight:600;font-size:15.5px;color:var(--jade-d)}
+.ib-d{font-size:12.5px;color:var(--ink2);margin:5px auto 12px;line-height:1.65;max-width:300px}
+.ib-d b{color:var(--jade);font-weight:700}
+.ib-d .ib-ic{display:inline-block;padding:0 3px;font-style:normal}
+.ib-btn{appearance:none;border:none;background:var(--jade);color:#F4EEDD;font-weight:700;font-size:13px;
+  font-family:'Inter',sans-serif;padding:11px 24px;border-radius:99px;cursor:pointer;min-height:44px;letter-spacing:-.01em}
+.ib-btn:active{background:var(--jade-d)}
+
 footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   font-size:11px;color:var(--ink3);font-family:'IBM Plex Mono',monospace;line-height:1.8}
 
@@ -1041,12 +1052,18 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   </div>
 
   <div id="todoWrap"></div>
+
+  <div class="install-box" id="installBox" hidden>
+    <div class="ib-t" id="ibTitle">📱 홈 화면에 앱으로 저장</div>
+    <div class="ib-d" id="ibDesc">이 일정판을 홈 화면 아이콘으로 두면 앱처럼 바로 열려요</div>
+    <button class="ib-btn" id="ibBtn" type="button" hidden>홈 화면에 추가</button>
+  </div>
 </section>
 
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.5 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.6 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1054,6 +1071,11 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+// PWA 설치 프롬프트 조기 캡처 (이벤트가 스크립트보다 먼저 뜰 수 있음)
+window.__bip = null;
+addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); window.__bip = e; dispatchEvent(new Event('bip')); });
+addEventListener('appinstalled', ()=>{ window.__bip = null; dispatchEvent(new Event('bip')); });
+
 const $=id=>document.getElementById(id);
 const won=n=>n==null?'—':n.toLocaleString();
 
@@ -1700,7 +1722,7 @@ function days(list,el,mon,yr){
     const hasRec = Array.isArray(x.recd) && x.recd.length;
     const expandable = hasDetail || hasRec;
     const today = isToday(x);
-    const toggleTxt = hasRec && hasDetail ? '추천 · 바우처' : hasRec ? '추천 자세히' : '바우처 상세보기';
+    const toggleTxt = hasRec && hasDetail ? '추천 코스 · 바우처' : hasRec ? '추천 코스 자세히' : '바우처 상세보기';
     const mapUrl = x.addr ? 'https://maps.google.com/?q='+encodeURIComponent(x.addr) : '';
     const telHref = x.tel ? 'tel:'+x.tel.replace(/-/g,'') : '';
     return `
@@ -2230,6 +2252,63 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       }
     }, {passive:true});
   })();
+})();
+
+// ── 홈 화면에 앱으로 저장 (할 일 탭 하단) ──
+(function(){
+  const box=$('installBox'), btn=$('ibBtn'), title=$('ibTitle'), desc=$('ibDesc');
+  if(!box) return;
+  const show = ()=>{ box.hidden=false; };
+  const done = (t,d)=>{ show(); title.textContent=t; desc.textContent=d; btn.hidden=true; };
+
+  // 이미 설치(스탠드얼론)로 열림
+  if(matchMedia('(display-mode: standalone)').matches || navigator.standalone){
+    done('✅ 홈 화면에 설치됨', '앱 아이콘으로 잘 쓰고 계세요');
+    return;
+  }
+  const ua = navigator.userAgent;
+  const isIOS = /iP(hone|ad|od)/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  const isAndroid = /Android/.test(ua);
+
+  function wirePrompt(){
+    if(!window.__bip) return false;
+    show(); btn.hidden=false; btn.textContent='홈 화면에 추가';
+    title.textContent='📱 홈 화면에 앱으로 저장';
+    desc.textContent='이 일정판을 홈 화면 아이콘으로 두면 앱처럼 바로 열려요';
+    btn.onclick = async ()=>{
+      haptic('tap');
+      const bip = window.__bip; if(!bip) return;
+      bip.prompt();
+      let outcome='dismissed';
+      try{ outcome=(await bip.userChoice).outcome; }catch(e){}
+      window.__bip=null;
+      if(outcome==='accepted') done('✅ 추가되었어요', '홈 화면에서 아이콘을 확인하세요');
+    };
+    return true;
+  }
+  addEventListener('bip', ()=>{
+    if(!window.__bip){ done('✅ 홈 화면에 설치됨', '앱 아이콘으로 잘 쓰고 계세요'); }
+    else wirePrompt();
+  });
+
+  if(wirePrompt()) return;
+
+  // beforeinstallprompt가 없는 경우 — 브라우저별 수동 안내
+  if(isIOS){
+    show(); btn.hidden=true;
+    title.textContent='📱 홈 화면에 앱으로 저장';
+    desc.innerHTML='Safari 하단 <b>공유</b> <span class="ib-ic">⬆️</span> 버튼 → <b>홈 화면에 추가</b> 를 누르세요';
+  } else {
+    // Android(프롬프트 대기) 또는 기타 브라우저 — 잠시 후에도 프롬프트 없으면 메뉴 안내
+    setTimeout(()=>{
+      if(wirePrompt()) return;
+      show(); btn.hidden=true;
+      title.textContent='📱 홈 화면에 앱으로 저장';
+      desc.innerHTML = isAndroid
+        ? 'Chrome 우측 상단 <b>⋮</b> → <b>앱 설치</b> 또는 <b>홈 화면에 추가</b>'
+        : '브라우저 메뉴에서 <b>홈 화면에 추가</b> / <b>앱 설치</b> 를 선택하세요';
+    }, 1800);
+  }
 })();
 </script>
 </body>
