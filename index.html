@@ -1070,7 +1070,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.16 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.17 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2256,7 +2256,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       if(!rm){ ringSvg.classList.remove('spin'); void ringSvg.offsetWidth; ringSvg.classList.add('spin'); }
       haptic('tap');
       spinN++; clearTimeout(spinT); spinT = setTimeout(()=> spinN = 0, 2600);
-      if(spinN >= 4){ spinN = 0;
+      if(spinN >= 3){ spinN = 0;
         toast('😵‍💫', '어지러워요… 그만 돌릴게요', 2400);
         const r = ringSvg.getBoundingClientRect(); confetti(r.left+r.width/2, r.top+r.height/2, 12, 55);
       }
