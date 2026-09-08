@@ -689,17 +689,19 @@ header.hero[data-wx="rain"] .fx-cloud,header.hero[data-wx="storm"] .fx-cloud{
   box-shadow:44px 10px 0 -4px rgba(30,42,45,.6), -40px 12px 0 -2px rgba(30,42,45,.55),
              10px -14px 0 -2px rgba(30,42,45,.5), 78px 14px 0 -8px rgba(30,42,45,.42)}
 
-/* 비 — 창문에 흘러내리는 물줄기 + 맺힌 빗방울 (성기게) */
-.fx-rain{inset:0;
-  background-image:
-    repeating-linear-gradient(93deg,transparent 0 46px,rgba(202,222,229,.12) 46px 48px),
-    radial-gradient(circle at 24% 30%,rgba(216,232,238,.5) 0 2px,transparent 3px),
-    radial-gradient(circle at 70% 66%,rgba(216,232,238,.4) 0 3px,transparent 4.5px),
-    radial-gradient(circle at 46% 88%,rgba(216,232,238,.34) 0 2px,transparent 3px);
-  background-size:auto,108px 150px,168px 210px,132px 176px;
-  background-repeat:repeat}
+/* 비 — 개별 빗방울 낙하 (JS가 .fx-rain 안에 <b> 여러 개 생성) */
+.fx-rain{inset:0;overflow:hidden}
+.fx-rain b{position:absolute;top:0;width:1.6px;border-radius:2px;
+  background:linear-gradient(to bottom,rgba(214,230,238,0),rgba(214,230,238,.7));
+  animation:fxFall linear infinite;animation-play-state:paused}
 header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{opacity:1}
 header.hero[data-wx="storm"] .fx-rain{opacity:.82}
+header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{animation-play-state:running}
+@keyframes fxFall{
+  0%{transform:translate3d(0,-90px,0) rotate(11deg);opacity:0}
+  10%{opacity:var(--o,.5)}
+  90%{opacity:var(--o,.5)}
+  100%{transform:translate3d(-46px,105vh,0) rotate(11deg);opacity:0}}
 
 /* 번개 — 번쩍 (약 3초에 한 번) */
 .fx-bolt{inset:0;background:radial-gradient(ellipse at 50% -8%,rgba(236,244,255,.68) 0,transparent 58%)}
@@ -711,13 +713,11 @@ header.hero[data-wx="storm"] .fx-rain{opacity:.82}
   header.hero[data-wx="cloudy"] .fx-cloud.b,header.hero[data-wx="rain"] .fx-cloud.b,header.hero[data-wx="storm"] .fx-cloud.b{animation:fxDrift 27s linear infinite;animation-delay:-7s}
   header.hero[data-wx="cloudy"] .fx-cloud.c,header.hero[data-wx="rain"] .fx-cloud.c,header.hero[data-wx="storm"] .fx-cloud.c{animation:fxDrift 33s linear infinite;animation-delay:-15s}
   header.hero[data-wx="cloudy"] .fx-cloud.d,header.hero[data-wx="rain"] .fx-cloud.d,header.hero[data-wx="storm"] .fx-cloud.d{animation:fxDrift 23s linear infinite;animation-delay:-11s}
-  header.hero[data-wx="rain"] .fx-rain,header.hero[data-wx="storm"] .fx-rain{animation:fxRain 1.9s linear infinite}
   header.hero[data-wx="storm"] .fx-bolt{opacity:0;animation:fxBolt 3s steps(1,end) infinite}
 }
 @keyframes fxSpin{to{transform:rotate(360deg)}}
 @keyframes fxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.08);filter:brightness(1.15)}}
 @keyframes fxDrift{to{transform:translateX(calc(100vw + 420px))}}
-@keyframes fxRain{from{background-position:0 0,0 0,0 0,0 0}to{background-position:0 288px,0 150px,0 210px,0 176px}}
 @keyframes fxBolt{0%,80%,100%{opacity:0}82%{opacity:.5}82.6%{opacity:0}84%{opacity:.95}84.7%{opacity:0}86%{opacity:.4}86.4%{opacity:0}}
 .toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
   max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
@@ -1177,7 +1177,7 @@ header.hero[data-wx="storm"] .fx-rain{opacity:.82}
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.24 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.25 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1541,6 +1541,23 @@ const TODO=[
   let seen; try{ seen = localStorage.getItem('thai2026_statseen'); }catch(e){ seen = '1'; }
   if(seen){ stats.hidden = true; document.querySelector('header.hero').classList.add('no-stats'); return; }
   try{ localStorage.setItem('thai2026_statseen','1'); }catch(e){}
+})();
+
+// ── 히어로 비 연출: 개별 빗방울 <b> 생성 (비/뇌우일 때만 낙하) ──
+(function(){
+  const r = document.querySelector('.fx-rain');
+  if(!r) return;
+  const N = matchMedia('(max-width:760px)').matches ? 64 : 90;
+  let h = '';
+  for(let i=0;i<N;i++){
+    const dur   = (0.55 + Math.random()*0.55).toFixed(2);   // 0.55~1.10s
+    const delay = (-Math.random()*1.6).toFixed(2);
+    const left  = (Math.random()*112 - 6).toFixed(1);       // -6%~106%
+    const len   = (30 + Math.random()*46)|0;                // 30~76px
+    const op    = (0.28 + Math.random()*0.42).toFixed(2);
+    h += `<b style="left:${left}%;height:${len}px;--o:${op};animation-duration:${dur}s;animation-delay:${delay}s"></b>`;
+  }
+  r.innerHTML = h;
 })();
 
 // ── 태국 현지 정보 위젯 (시각·위치·날씨) ──
