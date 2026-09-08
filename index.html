@@ -1075,7 +1075,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.14 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.15 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1577,7 +1577,6 @@ const TODO=[
     }
     renderBasis();
   }
-  const N=s=>parseFloat(String(s==null?'':s).replace(/[,\s]/g,''));
   const tf=(u,ms=5000)=>{ const c=new AbortController(); const id=setTimeout(()=>c.abort(),ms);
     return fetch(u,{cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(id)); };
   const jget=async u=> (await tf(u)).json();
@@ -1587,24 +1586,7 @@ const TODO=[
     try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
     return true;
   }
-  // 네이버 증권 환율 API (네이버 환율 페이지와 동일한 매매기준율) — 직접 안 되면 CORS 프록시
-  async function fromNaver(){
-    const base='https://api.stock.naver.com/marketindex/exchange/';
-    const prox='https://api.allorigins.win/raw?url=';
-    const one = async code => {
-      let j;
-      try{ j = await jget(base+code); }
-      catch(e){ j = await jget(prox+encodeURIComponent(base+code)); }
-      const p = j.priceInfo || j;
-      const price = N(j.closePrice ?? p.closePrice ?? j.currentPrice ?? p.currentPrice);
-      const unit  = N(j.currencyUnit ?? p.currencyUnit ?? 1) || 1;
-      const at    = j.localTradedAt || j.tradedAt || p.localTradedAt || '';
-      return { rate: price/unit, at };
-    };
-    const [u,t] = await Promise.all([one('FX_USDKRW'), one('FX_THBKRW')]);
-    return commit(u.rate, t.rate, u.at, '네이버 매매기준율');
-  }
-  // 두나무 forex (하나은행 매매기준율)
+  // 두나무 forex (하나은행 매매기준율 = 네이버 환율과 동일 값 · 회사망 등에서 차단될 수 있음)
   async function fromDunamu(){
     const arr = await jget('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD,FRX.KRWTHB');
     const g = c => Array.isArray(arr) && arr.find(x=>x.code===c);
@@ -1642,7 +1624,7 @@ const TODO=[
     if(fetching) return;
     fetching=true; fx.classList.add('loading'); renderBasis();
     let ok=false;
-    for(const src of [fromNaver, fromDunamu, fromManana, fromCdnApi, fromErApi]){
+    for(const src of [fromDunamu, fromManana, fromCdnApi, fromErApi]){
       try{ if(await src()){ ok=true; break; } }catch(e){}
     }
     fetching=false; fx.classList.remove('loading'); render();
