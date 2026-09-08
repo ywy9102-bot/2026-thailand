@@ -1064,7 +1064,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.12 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.13 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1602,6 +1602,14 @@ const TODO=[
     return commit(u.basePrice/(u.currencyUnit||1), t.basePrice/(t.currencyUnit||1),
       (u.localTradeDate||'').replace(/\./g,'-')+'T'+(u.localTradeTime||'00:00:00')+'+09:00', '매매기준율');
   }
+  // manana.kr (야후 파이낸스 실시간 · KRW 통화쌍 · CORS 허용) — 국내 API 차단 시 가장 근접
+  async function fromManana(){
+    const arr = await jget('https://api.manana.kr/exchange/rate/KRW/USD,THB.json');
+    const g = n => Array.isArray(arr) && arr.find(x=>x.name===n);
+    const u = g('USDKRW=X'), t = g('THBKRW=X');
+    if(!(u && t && u.rate>0 && t.rate>0)) return false;
+    return commit(u.rate, t.rate, (u.date||'').replace(' ','T')+'+09:00', '실시간 환율');
+  }
   // currency-api (jsdelivr CDN · 폴백 · mid-rate) — 코드 CDN이라 차단될 확률 낮음
   async function fromCdnApi(){
     let j;
@@ -1623,7 +1631,7 @@ const TODO=[
     if(fetching) return;
     fetching=true; fx.classList.add('loading'); renderBasis();
     let ok=false;
-    for(const src of [fromNaver, fromDunamu, fromCdnApi, fromErApi]){
+    for(const src of [fromNaver, fromDunamu, fromManana, fromCdnApi, fromErApi]){
       try{ if(await src()){ ok=true; break; } }catch(e){}
     }
     fetching=false; fx.classList.remove('loading'); render();
