@@ -340,7 +340,20 @@ h2.sec .e{font-size:21px;line-height:1}
 .gg-steps p em{font-style:normal;font-weight:700;color:var(--jade)}
 .gg-tip{margin:12px 0 0;padding:10px 12px;background:var(--gold-s);border-radius:9px;
   font-size:11.5px;color:var(--gold-text);line-height:1.58}
-.gg-src{margin:9px 0 0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);letter-spacing:.01em}
+.gg-src{margin:8px 0 0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);letter-spacing:.01em}
+
+/* ── 몽키트래블 인포그래픽 링크 모음 ── */
+.mt-links{margin:0 0 22px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;box-shadow:var(--sh)}
+.gg-inner .mt-links{margin:12px 0 0;padding:11px 0 0;border:none;border-top:1px dashed var(--line);
+  border-radius:0;background:none;box-shadow:none}
+.mt-h{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.09em;
+  color:var(--ink3);margin-bottom:7px}
+.mt-row{display:flex;flex-wrap:wrap;gap:5px 14px}
+.mt-row a{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-weight:600;
+  color:var(--gold-text);text-decoration:none;white-space:nowrap;padding:2px 0}
+.mt-row a::after{content:"↗";font-size:9px;opacity:.55}
+.mt-row a:active{opacity:.6}
 
 .chip{display:inline-flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;
   font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
@@ -967,7 +980,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 @media print{
   nav.tabs{display:none}
   .toast,.ptr,.hero-fx,.flyplane,.confp{display:none!important}
-  .next-card,.hw-ago,.hw-more,.tidbit,.gguide{display:none!important}
+  .next-card,.hw-ago,.hw-more,.tidbit,.gguide,.mt-links{display:none!important}
   .hw{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
   header.hero::before{display:none}
@@ -1118,7 +1131,14 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
         <li><b>스타팅 지점 · 티오프</b><p>배정표를 들고 스타팅 지점으로 가면 캐디가 골프백을 들고 기다립니다. 캐디 안내를 따라 첫 홀로 이동해 제 시간에 티오프. <em>2인 이하면 다른 팀과 조인</em>될 수 있습니다.</p></li>
       </ol>
       <p class="gg-tip">💡 현장에서 챙길 현금 — 캐디 팁은 라운드가 끝난 뒤 캐디에게 직접(보통 400~600밧). 그린피·캐디피는 대개 예약 시 선지불이라, 현장에서는 카트피와 팁만 준비하면 됩니다.</p>
-      <p class="gg-src">현지 라운드 경험 정리 · 참고: 몽키트래블 여행 지식백과</p>
+      <div class="mt-links">
+        <div class="mt-h">📚 몽키트래블 여행 지식백과 — 골프</div>
+        <div class="mt-row">
+          <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=38" target="_blank" rel="noopener">골프장 복장 규정</a>
+          <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=63" target="_blank" rel="noopener">라운드 중 비가 오면</a>
+        </div>
+        <p class="gg-src">현지 라운드 경험 정리</p>
+      </div>
     </div></div>
   </div>
 
@@ -1150,6 +1170,20 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
       <button class="tb-ox" data-v="O" type="button">O</button>
       <button class="tb-ox" data-v="X" type="button">X</button>
       <button class="tb-next" type="button" hidden>다음 문제 →</button>
+    </div>
+  </div>
+
+  <div class="mt-links">
+    <div class="mt-h">📚 몽키트래블 여행 지식백과 — 문화·음식·태국어</div>
+    <div class="mt-row">
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=21" target="_blank" rel="noopener">태국식당 주문 팁</a>
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=55" target="_blank" rel="noopener">식당 태국어 표현</a>
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=36" target="_blank" rel="noopener">쉬운 태국 음식 ①</a>
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=47" target="_blank" rel="noopener">쉬운 태국 음식 ②</a>
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=57" target="_blank" rel="noopener">마사지 태국어</a>
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=26" target="_blank" rel="noopener">태국 왕궁 투어</a>
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=58" target="_blank" rel="noopener">태국의 술</a>
+      <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=6" target="_blank" rel="noopener">태국여행 짐 싸기</a>
     </div>
   </div>
 
@@ -1319,7 +1353,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.31 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.32 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
