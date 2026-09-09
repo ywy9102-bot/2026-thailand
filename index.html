@@ -270,40 +270,44 @@ h2.sec .e{font-size:21px;line-height:1}
 .copy-btn.copied{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
 .sub{color:var(--ink2);font-size:13px;margin:0 0 22px;line-height:1.6}
 
-/* ── 태국 O X 퀴즈 카드 (골프 / 문화) ── */
-.tidbit{width:100%;border:1px solid var(--line);border-radius:14px;
-  background:linear-gradient(135deg,#F1F6F0 0%,#FBFAF3 60%);padding:14px 15px 13px;margin:0 0 22px;
-  position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
-.tidbit::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
-  background:linear-gradient(var(--jade),var(--jade-d))}
-.tidbit::after{content:"";position:absolute;right:-24px;top:-24px;width:76px;height:76px;border-radius:50%;
-  background:radial-gradient(circle,rgba(181,138,40,.10),transparent 70%)}
-.tidbit.correct::before{background:linear-gradient(var(--ok),#1E4B41)}
-.tidbit.wrong::before{background:linear-gradient(var(--coral),#7a3420)}
-.tb-row{display:flex;align-items:flex-start;gap:10px;position:relative}
-.tb-badge{font-size:19px;line-height:1.15;flex:none}
-.tb-txt{flex:1;min-width:0}
-.tb-kicker{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;
-  letter-spacing:.13em;color:var(--jade);opacity:.7;margin-bottom:5px}
-.tb-kicker .fire{opacity:1;letter-spacing:0}
-.tb-q{display:block;font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--jade-d);
-  line-height:1.36;letter-spacing:-.01em}
-.tb-result{font-size:12.5px;color:var(--ink2);line-height:1.62;margin-top:9px}
+/* ── 태국 OX 퀴즈 패널 (골프 / 문화) — 다크 제이드로 흰 일정 카드와 확실히 구분 ── */
+.tidbit{width:100%;border-radius:16px;padding:15px 16px 14px;margin:4px 0 24px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#215449 0%,#123128 55%,#0C241E 100%);
+  border:1px solid rgba(245,231,192,.15);
+  box-shadow:0 12px 28px -14px rgba(12,35,29,.65), inset 0 1px 0 rgba(245,231,192,.07);
+  color:#EAF1EE;-webkit-tap-highlight-color:transparent}
+.tidbit::after{content:"O X";position:absolute;right:2px;bottom:-30px;font-family:'Fraunces',serif;font-weight:700;
+  font-size:96px;letter-spacing:-.02em;color:rgba(245,231,192,.055);pointer-events:none;line-height:1}
+.tidbit.correct{background:linear-gradient(160deg,#256045 0%,#123626 55%,#0C241E 100%)}
+.tidbit.wrong{background:linear-gradient(160deg,#5C3830 0%,#33201C 55%,#1B1411 100%)}
+
+.tb-tag{display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;
+  font-size:9px;font-weight:700;letter-spacing:.13em;color:var(--gold-s);
+  background:rgba(245,231,192,.12);border:1px solid rgba(245,231,192,.22);
+  padding:3px 9px;border-radius:99px;margin-bottom:10px;position:relative}
+.tb-kicker{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
+  letter-spacing:.1em;color:rgba(234,241,238,.5);margin-bottom:7px;position:relative}
+.tb-kicker .fire{color:var(--gold-s);letter-spacing:0}
+.tb-q{display:block;font-family:'Fraunces',serif;font-size:15.5px;font-weight:600;color:#F5F1E6;
+  line-height:1.4;letter-spacing:-.01em;position:relative}
+.tb-result{font-size:12.5px;color:rgba(234,241,238,.82);line-height:1.62;margin-top:10px;position:relative}
 .tb-result:empty{display:none}
-.tb-result b{font-weight:700}
-.tidbit.correct .tb-result b{color:var(--ok)}
-.tidbit.wrong .tb-result b{color:var(--coral)}
-.tb-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.tb-ox{flex:1;min-width:0;padding:9px 0;border-radius:10px;border:1.5px solid var(--line);background:#fff;
-  font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--jade-d);cursor:pointer;
-  transition:transform .12s ease,background .15s ease}
+.tb-result b{font-weight:700;color:#F5F1E6}
+.tidbit.correct .tb-result b{color:#93DBB2}
+.tidbit.wrong .tb-result b{color:#F2AB94}
+.tb-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px;position:relative}
+.tb-ox{flex:1;min-width:0;padding:11px 0;border-radius:12px;
+  border:1.5px solid rgba(245,231,192,.28);background:rgba(245,231,192,.06);
+  font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#F5F1E6;cursor:pointer;
+  transition:transform .12s ease,background .15s ease,border-color .15s ease}
+.tb-ox:hover{background:rgba(245,231,192,.12)}
 .tb-ox:active{transform:scale(.95)}
-.tidbit.answered .tb-ox{pointer-events:none;opacity:.4}
-.tidbit .tb-ox.pick-ok{opacity:1;border-color:var(--ok);background:var(--ok-s);color:var(--ok)}
-.tidbit .tb-ox.pick-no{opacity:1;border-color:var(--coral);background:#F6E3DC;color:var(--coral)}
-.tb-next{flex:1 1 100%;padding:11px 0;border-radius:10px;border:1px solid var(--jade-d);
-  background:linear-gradient(var(--jade),var(--jade-d));color:#F4EEDD;font-weight:700;font-size:12.5px;
-  letter-spacing:.02em;cursor:pointer}
+.tidbit.answered .tb-ox{pointer-events:none;opacity:.35}
+.tidbit .tb-ox.pick-ok{opacity:1;border-color:#5FBE8A;background:rgba(95,190,138,.22);color:#BCEFD3}
+.tidbit .tb-ox.pick-no{opacity:1;border-color:#DA8E76;background:rgba(218,142,118,.2);color:#F4C6B7}
+.tb-next{flex:1 1 100%;padding:12px 0;border-radius:12px;border:none;cursor:pointer;
+  background:linear-gradient(var(--gold),#9A731F);color:#231903;font-weight:700;font-size:12.5px;
+  letter-spacing:.02em;box-shadow:0 5px 14px -5px rgba(181,138,40,.55)}
 .tb-next:active{transform:scale(.99)}
 @media (prefers-reduced-motion:no-preference){
   .tidbit.swap .tb-q{animation:tbSwap .3s ease both}
@@ -936,7 +940,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 @media print{
   nav.tabs{display:none}
   .toast,.ptr,.hero-fx,.flyplane,.confp{display:none!important}
-  .next-card,.hw-ago,.hw-more{display:none!important}
+  .next-card,.hw-ago,.hw-more,.tidbit{display:none!important}
   .hw{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
   header.hero::before{display:none}
@@ -1063,14 +1067,10 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
   </div>
 
   <div class="tidbit" id="golfTidbit">
-    <div class="tb-row">
-      <span class="tb-badge">⛳</span>
-      <div class="tb-txt">
-        <span class="tb-kicker">태국 골프 O X 퀴즈</span>
-        <b class="tb-q">불러오는 중…</b>
-        <div class="tb-result" aria-live="polite"></div>
-      </div>
-    </div>
+    <span class="tb-tag">⛳ 태국 골프 · OX 퀴즈</span>
+    <span class="tb-kicker"></span>
+    <b class="tb-q">불러오는 중…</b>
+    <div class="tb-result" aria-live="polite"></div>
     <div class="tb-actions">
       <button class="tb-ox" data-v="O" type="button">O</button>
       <button class="tb-ox" data-v="X" type="button">X</button>
@@ -1098,14 +1098,10 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
   <p class="sub">날짜 색상 = 상태 · <span style="color:var(--ok);font-weight:700">확정</span> / <span style="color:var(--wait);font-weight:700">요청중</span> / <span style="color:var(--coral);font-weight:700">미정</span> · <span style="color:var(--jade);font-weight:700">💡 추천</span>·⛳ 있는 날은 탭하면 상세가 열립니다</p>
 
   <div class="tidbit" id="cultureTidbit">
-    <div class="tb-row">
-      <span class="tb-badge">🇹🇭</span>
-      <div class="tb-txt">
-        <span class="tb-kicker">태국 문화 O X 퀴즈</span>
-        <b class="tb-q">불러오는 중…</b>
-        <div class="tb-result" aria-live="polite"></div>
-      </div>
-    </div>
+    <span class="tb-tag">🇹🇭 태국 문화 · OX 퀴즈</span>
+    <span class="tb-kicker"></span>
+    <b class="tb-q">불러오는 중…</b>
+    <div class="tb-result" aria-live="polite"></div>
     <div class="tb-actions">
       <button class="tb-ox" data-v="O" type="button">O</button>
       <button class="tb-ox" data-v="X" type="button">X</button>
@@ -1279,7 +1275,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.28 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.29 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2137,9 +2133,9 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
     let bag = shuffle(pool), i = 0, tries = 0, streak = 0, done = false;
 
     function kicker(){
-      K.innerHTML = label + ' O X 퀴즈'
-        + (streak >= 2 ? '  ·  <span class="fire">🔥 ' + streak + '연속 정답</span>'
-                       : '  ·  ' + String(i+1).padStart(2,'0') + ' / ' + pool.length);
+      K.innerHTML = streak >= 2
+        ? '<span class="fire">🔥 ' + streak + '연속 정답</span>'
+        : String(i+1).padStart(2,'0') + ' / ' + pool.length + ' 문항';
     }
     function loadQ(){
       if(i >= bag.length){
