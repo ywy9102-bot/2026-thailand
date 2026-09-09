@@ -315,6 +315,33 @@ h2.sec .e{font-size:21px;line-height:1}
 }
 @keyframes tbSwap{0%{opacity:0;transform:translateY(7px)}100%{opacity:1;transform:none}}
 
+/* ── 골프 티오프 가이드 (접이식) ── */
+.gguide{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:12px;margin:0 0 22px;box-shadow:var(--sh);overflow:hidden}
+.gguide-head{width:100%;display:flex;align-items:center;gap:9px;padding:13px 14px;background:none;border:none;
+  cursor:pointer;text-align:left;font:inherit}
+.gg-ico{font-size:15px;flex:none}
+.gg-ttl{flex:1;font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--jade-d);line-height:1.32}
+.gg-chev{flex:none;font-size:11px;color:var(--gold-text);transition:transform .25s ease}
+.gguide.open .gg-chev{transform:rotate(180deg)}
+.gguide-body{max-height:0;overflow:hidden;transition:max-height .38s ease}
+.gguide.open .gguide-body{max-height:1000px}
+.gg-inner{padding:0 15px 15px}
+.gg-steps{list-style:none;counter-reset:gg;margin:0;padding:4px 0 0}
+.gg-steps>li{position:relative;padding:0 0 15px 32px;counter-increment:gg}
+.gg-steps>li:last-child{padding-bottom:2px}
+.gg-steps>li::before{content:counter(gg);position:absolute;left:0;top:1px;width:21px;height:21px;
+  border-radius:50%;background:var(--jade);color:#F4EEDD;font-family:'IBM Plex Mono',monospace;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.gg-steps>li::after{content:"";position:absolute;left:10px;top:25px;bottom:5px;width:1.5px;background:var(--line)}
+.gg-steps>li:last-child::after{display:none}
+.gg-steps>li>b{display:block;font-size:13px;font-weight:700;color:var(--jade-d);margin:2px 0 4px}
+.gg-steps p{margin:0;font-size:12.5px;color:var(--ink2);line-height:1.64}
+.gg-steps p em{font-style:normal;font-weight:700;color:var(--jade)}
+.gg-tip{margin:12px 0 0;padding:10px 12px;background:var(--gold-s);border-radius:9px;
+  font-size:11.5px;color:var(--gold-text);line-height:1.58}
+.gg-src{margin:9px 0 0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);letter-spacing:.01em}
+
 .chip{display:inline-flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;
   font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
 .chip.ok{background:var(--ok-s);color:var(--ok)}
@@ -940,7 +967,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 @media print{
   nav.tabs{display:none}
   .toast,.ptr,.hero-fx,.flyplane,.confp{display:none!important}
-  .next-card,.hw-ago,.hw-more,.tidbit{display:none!important}
+  .next-card,.hw-ago,.hw-more,.tidbit,.gguide{display:none!important}
   .hw{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
   header.hero::before{display:none}
@@ -1076,6 +1103,23 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
       <button class="tb-ox" data-v="X" type="button">X</button>
       <button class="tb-next" type="button" hidden>다음 문제 →</button>
     </div>
+  </div>
+
+  <div class="gguide" id="gGuide">
+    <button class="gguide-head" type="button" aria-expanded="false">
+      <span class="gg-ico">🚩</span>
+      <span class="gg-ttl">태국 골프장, 도착부터 티오프까지</span>
+      <span class="gg-chev">▾</span>
+    </button>
+    <div class="gguide-body"><div class="gg-inner">
+      <ol class="gg-steps">
+        <li><b>클럽하우스 앞 · 캐디 배정</b><p>기사가 클럽하우스 앞에 차를 세우면 캐디들이 알아서 옵니다. 담당 캐디가 트렁크에서 골프백을 꺼내 <em>티오프 시각·차량번호</em>를 메모해 붙이고, 스타팅 지점으로 옮겨 대기해요. 이때 <em>카트 사용 여부</em>도 확인합니다. 캐디는 순번대로 자동 배정되지만, 미리 예약하거나 직접 보고 지정할 수도 있습니다.</p></li>
+        <li><b>클럽하우스 안 · 티켓 수령</b><p>카운터에 바우처를 제시하고 티오프 시각이 적힌 티켓을 받습니다. 종이 출력 없이 <em>휴대폰 사진</em>이나, 티오프 시각·예약 회사명을 정확히 말하는 것으로도 됩니다. 카트를 쓰면 여기서 카트피를 내요 (예약 때 이미 냈다면 추가 없음).</p></li>
+        <li><b>스타팅 지점 · 티오프</b><p>배정표를 들고 스타팅 지점으로 가면 캐디가 골프백을 들고 기다립니다. 캐디 안내를 따라 첫 홀로 이동해 제 시간에 티오프. <em>2인 이하면 다른 팀과 조인</em>될 수 있습니다.</p></li>
+      </ol>
+      <p class="gg-tip">💡 현장에서 챙길 현금 — 캐디 팁은 라운드가 끝난 뒤 캐디에게 직접(보통 400~600밧). 그린피·캐디피는 대개 예약 시 선지불이라, 현장에서는 카트피와 팁만 준비하면 됩니다.</p>
+      <p class="gg-src">현지 라운드 경험 정리 · 참고: 몽키트래블 여행 지식백과</p>
+    </div></div>
   </div>
 
   <div class="lg-loc">🌴 파타야 · 6라운드</div>
@@ -1275,7 +1319,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.30 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.31 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2006,6 +2050,17 @@ $('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'�
     }
   });
 });
+
+// 티오프 가이드 접이식
+(function(){
+  const g = $('gGuide'); if(!g) return;
+  const head = g.querySelector('.gguide-head');
+  head.addEventListener('click', ()=>{
+    const open = g.classList.toggle('open');
+    head.setAttribute('aria-expanded', open);
+    if(typeof haptic === 'function') haptic('tap');
+  });
+})();
 
 // 숙소카드 탭-확장 (바우처 상세)
 $('stay').addEventListener('click', e=>{
