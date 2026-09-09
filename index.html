@@ -534,6 +534,10 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 
 .stbl{font-weight:700;font-size:14px;margin:24px 0 9px;display:flex;align-items:center;gap:7px}
 .stbl .i{font-family:'IBM Plex Mono',monospace;color:var(--gold-text);font-size:11.5px}
+.learn-h{font-family:'Fraunces',serif;font-weight:600;font-size:14.5px;color:var(--jade-d);
+  margin:34px 0 12px;padding-top:18px;border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
+.learn-h .i{font-size:15px}
 table.d{width:100%;border-collapse:collapse;font-size:12.5px}
 table.d th{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;
   letter-spacing:.03em;color:var(--ink2);padding:8px;border-bottom:1.5px solid var(--jade)}
@@ -1116,6 +1120,18 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
     <div class="gs"><div class="n" id="gSum">–</div><div class="l">확정 총액</div></div>
   </div>
 
+  <div class="lg-loc">🌴 파타야 · 6라운드</div>
+  <div id="golfPat"></div>
+
+  <div class="lg-loc" style="margin-top:22px">🏙️ 방콕 · 2라운드</div>
+  <div id="golfBkk"></div>
+
+  <h3 class="stbl"><span class="i">◈</span>누가 몇 번 치나</h3>
+  <p class="mx-hint">→ 좌우로 밀어서 전체 보기</p>
+  <div class="mx-wrap"><table class="mx" id="mxTable"></table></div>
+
+  <h3 class="learn-h"><span class="i">🇹🇭</span>태국 골프 알아보기</h3>
+
   <div class="tidbit" id="golfTidbit">
     <span class="tb-tag">⛳ 태국 골프 · OX 퀴즈</span>
     <span class="tb-kicker"></span>
@@ -1166,16 +1182,6 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
       </div>
     </div></div>
   </div>
-
-  <div class="lg-loc">🌴 파타야 · 6라운드</div>
-  <div id="golfPat"></div>
-
-  <div class="lg-loc" style="margin-top:22px">🏙️ 방콕 · 2라운드</div>
-  <div id="golfBkk"></div>
-
-  <h3 class="stbl"><span class="i">◈</span>누가 몇 번 치나</h3>
-  <p class="mx-hint">→ 좌우로 밀어서 전체 보기</p>
-  <div class="mx-wrap"><table class="mx" id="mxTable"></table></div>
 </section>
 
 <!-- 🗓 ITINERARY -->
@@ -1437,7 +1443,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.33 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.34 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2362,6 +2368,18 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
   }
   mount('golfTidbit', GOLF_Q, '태국 골프');
   mount('cultureTidbit', CULT_Q, '태국 문화');
+
+  // 일정탭: 퀴즈 + 지식백과를 일정(날짜) 아래로 이동 — 일정이 먼저 보이도록
+  (function(){
+    const itin = document.getElementById('itin');
+    const quiz = document.getElementById('cultureTidbit');
+    const know = itin && itin.querySelector('.mt-topics');
+    if(!itin || !quiz || !know) return;
+    const h = document.createElement('h3');
+    h.className = 'learn-h';
+    h.innerHTML = '<span class="i">🇹🇭</span>태국 문화 알아보기';
+    itin.appendChild(h); itin.appendChild(quiz); itin.appendChild(know);
+  })();
 })();
 
 // 일정탭 골프 바우처 탭-확장
