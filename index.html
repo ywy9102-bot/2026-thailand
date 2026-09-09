@@ -270,6 +270,34 @@ h2.sec .e{font-size:21px;line-height:1}
 .copy-btn.copied{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
 .sub{color:var(--ink2);font-size:13px;margin:0 0 22px;line-height:1.6}
 
+/* ── 태국 상식 카드 (골프 / 문화) — 탭하면 다음 이야기 ── */
+.tidbit{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;
+  background:linear-gradient(135deg,#F1F6F0 0%,#FBFAF3 60%);padding:13px 15px 12px;margin:0 0 22px;
+  position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;font:inherit;color:inherit}
+.tidbit::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(var(--jade),var(--jade-d))}
+.tidbit::after{content:"";position:absolute;right:-24px;top:-24px;width:76px;height:76px;border-radius:50%;
+  background:radial-gradient(circle,rgba(181,138,40,.10),transparent 70%)}
+.tidbit:active{transform:scale(.993)}
+.tb-row{display:flex;align-items:flex-start;gap:10px;position:relative}
+.tb-badge{font-size:19px;line-height:1.15;flex:none}
+.tb-txt{flex:1;min-width:0}
+.tb-kicker{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;
+  letter-spacing:.13em;color:var(--jade);opacity:.65;margin-bottom:4px}
+.tb-head{display:block;font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--jade-d);
+  line-height:1.32;letter-spacing:-.01em}
+.tb-body{display:block;font-size:12.5px;color:var(--ink2);line-height:1.62;margin-top:5px}
+.tb-more{display:flex;align-items:center;justify-content:flex-end;gap:5px;margin-top:9px;
+  font-size:10.5px;font-weight:700;color:var(--jade);letter-spacing:.01em}
+.tb-more .dice{display:inline-block;font-size:12px}
+@media (prefers-reduced-motion:no-preference){
+  .tidbit.swap .tb-head,.tidbit.swap .tb-body,.tidbit.swap .tb-kicker{animation:tbSwap .34s ease both}
+  .tidbit.swap .tb-body{animation-delay:.04s}
+  .tidbit.swap .dice{animation:tbRoll .5s cubic-bezier(.3,1.4,.5,1)}
+}
+@keyframes tbSwap{0%{opacity:0;transform:translateY(7px)}100%{opacity:1;transform:none}}
+@keyframes tbRoll{0%{transform:rotate(-40deg) scale(.8)}100%{transform:rotate(320deg) scale(1)}}
+
 .chip{display:inline-flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;
   font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
 .chip.ok{background:var(--ok-s);color:var(--ok)}
@@ -1021,6 +1049,18 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
     <div class="gs"><div class="n" id="gSum">–</div><div class="l">확정 총액</div></div>
   </div>
 
+  <button class="tidbit" id="golfTidbit" type="button" aria-label="태국 골프 상식 · 탭하면 다른 이야기">
+    <span class="tb-row">
+      <span class="tb-badge">⛳</span>
+      <span class="tb-txt">
+        <span class="tb-kicker">태국 골프</span>
+        <b class="tb-head">불러오는 중…</b>
+        <span class="tb-body"></span>
+      </span>
+    </span>
+    <span class="tb-more"><span class="dice">🎲</span> 다른 이야기</span>
+  </button>
+
   <div class="lg-loc">🌴 파타야 · 6라운드</div>
   <div id="golfPat"></div>
 
@@ -1039,6 +1079,19 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
     <button class="copy-btn" id="copyItin">📋 텍스트로 복사</button>
   </div>
   <p class="sub">날짜 색상 = 상태 · <span style="color:var(--ok);font-weight:700">확정</span> / <span style="color:var(--wait);font-weight:700">요청중</span> / <span style="color:var(--coral);font-weight:700">미정</span> · <span style="color:var(--jade);font-weight:700">💡 추천</span>·⛳ 있는 날은 탭하면 상세가 열립니다</p>
+
+  <button class="tidbit" id="cultureTidbit" type="button" aria-label="태국 문화 상식 · 탭하면 다른 이야기">
+    <span class="tb-row">
+      <span class="tb-badge">🇹🇭</span>
+      <span class="tb-txt">
+        <span class="tb-kicker">태국 문화</span>
+        <b class="tb-head">불러오는 중…</b>
+        <span class="tb-body"></span>
+      </span>
+    </span>
+    <span class="tb-more"><span class="dice">🎲</span> 다른 이야기</span>
+  </button>
+
   <div class="mdiv">🌴 December · 파타야</div><div id="iA"></div>
   <div class="mdiv">🏙️ December · 방콕</div><div id="iB"></div>
   <div class="mdiv">🎍 January 2027</div><div id="iC"></div>
@@ -1205,7 +1258,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.26 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.27 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2002,6 +2055,87 @@ function days(list,el,mon,yr){
   }).join('');
 }
 days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
+
+// ── 태국 상식 카드: 골프 / 문화 (탭하면 풀에서 다음 항목, 한 바퀴 돌기 전엔 중복 없음) ──
+(function(){
+  const GOLF_FACTS = [
+    ['캐디피가 한국의 1/10쯤','팀당 15만 원 안팎인 한국과 달리 태국은 1인당 300~500밧(약 1.2~2만 원) + 팁 별도. 라운드 총비용도 한국의 1/3~1/2 수준.'],
+    ['플레이어마다 전담 캐디','한국은 보통 4인팀에 캐디 1명이지만, 태국은 1인 1캐디. 클럽·라인·거리는 물론 파라솔·얼음물까지 챙겨줍니다.'],
+    ['그린피·카트비·캐디피를 따로 낸다','한국은 대개 묶여 나오지만 태국은 항목별. 카트비 600~800밧, 캐디피는 현금, 그린피는 외국인(비지터) 요금이 현지인보다 비쌉니다.'],
+    ['반바지 입고 라운드 가능','카라 티셔츠는 필수지만 반바지를 허용하는 코스가 많습니다. 청바지·민소매·러닝 차림은 불가.'],
+    ['워터해저드에 진짜 악어가 산다','물뱀·모니터도마뱀도 흔합니다. 해저드에 빠진 공은 미련 없이 포기하는 게 정답.'],
+    ['5시간 라운드도 흔하다','뒷팀 압박이 덜하고, 하프 때 그늘집(할프하우스)에서 쉬어 갑니다. 서두르지 않고 즐기는 분위기.'],
+    ['12~2월이 골프 성수기','건기라 비가 거의 없고 아침저녁이 선선합니다. 우기(5~10월)에도 치지만 스콜이 지나가길 기다려야 해요.'],
+    ['페어웨이에 카트를 몰고 들어간다','카트도로만 다녀야 하는 한국과 달리, 태국 리조트 코스는 페어웨이 진입 허용이 많아 이동이 편합니다.'],
+    ['캐디 팁은 라운드 후 직접 현금으로','보통 300~500밧, 잘 봐줬으면 그 이상. 그늘집 음료·간식도 대부분 현금이라 소액권을 챙기세요.'],
+    ['명문 코스는 파타야에 몰려 있다','촌부리 지역에 시암 CC·피닉스 골드·차이찬 등이 밀집. 방콕은 니칸티처럼 도심 접근성 좋은 코스가 있습니다.'],
+    ['평지 리조트형 코스가 많다','산악 코스 위주인 한국과 달리 대부분 평탄합니다. 대신 홀 간 이동이 길어 카트가 사실상 필수.'],
+    ['골프백은 항공 위탁수하물','국적기는 보통 스포츠장비를 15~20kg까지 별도 또는 무료로 실어줍니다. 항공사·요금제마다 다르니 미리 확인.'],
+    ['예약은 여행사가 편하다','몽키트래블 등에서 티타임·차량·픽업을 묶어 예약하면 편리합니다. 골프장 직접 예약도 가능.'],
+    ['캐디와 영어로 소통한다','간단한 영어는 통합니다. 클럽은 "세븐 아이언", 거리는 숫자로. 그린 경사와 라이도 읽어줍니다.'],
+    ['코스 관리 편차가 크다','명문 코스는 최상급이지만 저가 코스는 그린 상태가 들쭉날쭉합니다. 후기를 보고 고르세요.'],
+    ['아침 일찍 티오프','한낮 더위를 피해 06:30~08:30 출발이 일반적. 선크림·모자·전해질 음료는 필수템입니다.'],
+    ['카트에 GPS·거리계가 흔하다','중급 이상 코스는 카트 화면에 남은 거리와 홀 맵이 뜹니다. 캐디의 거리 콜과 함께 참고하세요.'],
+    ['소나기는 잠깐, 낙뢰는 진짜 위험','스콜은 20~30분이면 지나가지만 천둥이 치면 즉시 대피. 코스에서 사이렌이 울리면 플레이 중단입니다.'],
+  ];
+  const CULTURE_FACTS = [
+    ['왕실 이야기는 진짜 조심','왕실 모독은 실제 형사처벌 대상(불경죄). 농담·비하는 물론, 지폐·동전에 국왕 초상이 있어 밟거나 함부로 다루지 않습니다.'],
+    ['영화 시작 전 다 같이 일어선다','극장에서 본편 전 국왕 찬가가 나오면 관객 전원 기립. 관광객도 따라 일어서는 게 예의입니다.'],
+    ['아침 8시·저녁 6시 국가가 울린다','공공장소·역 등에서 국가가 흘러나오면 그 자리에 멈춰 서는 사람이 많습니다. 당황하지 말고 잠시 함께 멈춰 주세요.'],
+    ['머리를 만지면 큰 실례','머리는 영혼이 깃든 신성한 부위로 여깁니다. 아무리 귀여워도 아이 머리를 쓰다듬지 마세요.'],
+    ['발이 향하는 방향을 조심','발은 가장 낮고 부정한 부위. 사람·불상 쪽으로 발을 뻗거나, 발로 문을 닫거나 물건을 가리키지 않습니다.'],
+    ['사원은 복장 규정이 엄격','어깨와 무릎을 가려야 입장, 신발은 벗습니다. 왕궁은 특히 까다로워 얇은 긴바지·스카프를 챙기면 좋아요.'],
+    ['여성은 승려와 접촉 금지','물건도 직접 건네지 않고 바닥이나 천 위에 놓으면 승려가 집습니다. 남성은 괜찮습니다.'],
+    ['불상 앞 셀카 포즈 주의','함께 찍는 건 괜찮지만 등지거나 올라타거나 장난스러운 포즈는 큰 결례. 태국은 "불상은 장식품이 아니다" 캠페인도 합니다.'],
+    ['인사는 합장하는 "와이"','손을 높이 들수록 존경의 표시입니다. 외국인이 먼저 안 해도 되지만, 받으면 가볍게 답례하세요.'],
+    ['화내면 지는 겁니다','언성을 높이면 "체면을 잃은" 사람이 됩니다. "마이 뻰 라이(괜찮아요)" 정신으로 웃으며 침착하게.'],
+    ['태국인의 미소가 늘 "좋다"는 아니다','당황·거절·미안함도 미소로 표현합니다. 중요한 건 웃으며 넘기지 말고 한 번 더 확인하세요.'],
+    ['얼음은 구멍 뚫린 게 안전','원통형(구멍 있는) 얼음은 공장에서 만든 것이라 안전합니다. 불투명한 각얼음은 피하고, 물은 무조건 브랜드 생수.'],
+    ['매운맛은 기본이 세다','쏨땀·태국 카레는 한국인 기준으로 꽤 맵습니다. "마이 펫(안 맵게)" 또는 "펫 닛노이(조금 맵게)"라고 말하세요.'],
+    ['밥은 스푼, 포크는 보조','포크로 음식을 스푼에 밀어 담아 먹습니다. 포크를 입에 직접 넣지 않아요. 젓가락은 국수류에만 씁니다.'],
+    ['태국 음식은 네 가지 맛의 균형','한 접시 안에서 단맛·신맛·짠맛·매운맛을 조화시킵니다. 반찬을 밥에 조금씩 덜어 먹는 게 정석.'],
+    ['커피·차는 아주 달게 나온다','연유와 설탕이 듬뿍 들어갑니다. 덜 달게 원하면 "완 닛노이"라고 요청하세요.'],
+    ['물건은 오른손으로 주고받기','왼손은 부정하게 여깁니다. 두 손으로 건네면 더 정중합니다.'],
+    ['실내에선 신발을 벗는다','가정집·마사지숍·일부 상점은 신발을 벗고 들어갑니다. 문 앞에 놓인 신발이 힌트예요.'],
+    ['흥정은 시장·뚝뚝에서만','웃으며 부드럽게, 부르는 값의 반쯤에서 시작합니다. 백화점·편의점·마트는 정찰제라 흥정하지 않습니다.'],
+    ['세븐일레븐이 만능','심카드 충전, 공과금 납부, 택배, 간편식까지 됩니다. 봉투는 환경정책으로 유료이니 장바구니를 챙기세요.'],
+    ['문장 끝에 "캅/카"를 붙이면 부드럽다','남성은 "캅", 여성은 "카". "컵쿤 캅/카(감사합니다)"처럼 붙이면 훨씬 공손하게 들립니다.'],
+    ['승려에게는 길을 양보','대중교통에 승려 전용석이 있고, 승려 앞을 가로지르거나 손으로 만지지 않습니다.'],
+    ['코끼리 타기는 논란거리','코끼리는 국가 상징입니다. 요즘은 타기보다 먹이주기·목욕 같은 윤리적 생추어리 방문을 권합니다.'],
+    ['요일마다 상징색이 있다','일요일 빨강, 월요일 노랑, 화요일 분홍… 태국 사람들은 특별한 날 그 요일의 색 옷을 입기도 합니다.'],
+    ['뚝뚝은 흥정, 그랩은 정찰','미터 없는 택시·뚝뚝은 타기 전 요금 합의. 그랩(Grab) 앱은 요금이 미리 떠서 편하고 투명합니다.'],
+    ['길 건널 때는 차가 우선','횡단보도가 있어도 차가 잘 서지 않습니다. 현지인 뒤에 붙어 함께 건너는 게 안전해요.'],
+    ['주소보다 "쏘이" 번호와 핀','쏘이(soi)는 큰길에서 갈라지는 골목 번호. 그랩 지도에 핀을 찍어 보여주는 게 가장 확실합니다.'],
+    ['팁은 소액이지만 관광지선 일반적','식당 잔돈, 호텔 벨보이 20~40밧, 마사지 50~100밧 정도. 강요는 없습니다.'],
+    ['연말엔 태국식 카운트다운','태국 설(송끄란)은 4월 물축제라 못 보지만, 12~1월엔 방콕·파타야 곳곳에서 불꽃놀이와 카운트다운을 즐길 수 있습니다.'],
+    ['불전 화환은 공양용','연꽃·자스민 화환은 사당·불전에 바치는 것입니다. 사서 목에 걸고 장난치지 않는 게 좋아요.'],
+  ];
+  function shuffle(src){
+    const a = src.slice();
+    for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; const t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+  function mount(id, pool, label){
+    const el = document.getElementById(id); if(!el) return;
+    const K = el.querySelector('.tb-kicker'), H = el.querySelector('.tb-head'), B = el.querySelector('.tb-body');
+    let bag = shuffle(pool), i = 0;
+    function render(){
+      if(i >= bag.length){
+        const last = bag[bag.length-1];
+        do { bag = shuffle(pool); } while(pool.length > 1 && bag[0] === last);
+        i = 0;
+      }
+      K.textContent = label + '  ·  ' + String(i+1).padStart(2,'0') + ' / ' + pool.length;
+      H.textContent = bag[i][0];
+      B.textContent = bag[i][1];
+      el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap');
+    }
+    render();
+    el.addEventListener('click', ()=>{ i++; render(); if(typeof haptic === 'function') haptic('tap'); });
+  }
+  mount('golfTidbit', GOLF_FACTS, '태국 골프');
+  mount('cultureTidbit', CULTURE_FACTS, '태국 문화');
+})();
 
 // 일정탭 골프 바우처 탭-확장
 ['iA','iB','iC'].forEach(id=>{
