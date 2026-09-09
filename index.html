@@ -125,6 +125,15 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
   font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--gold-s);
   letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
 .cd-num.mini{font-size:18px;letter-spacing:.02em}
+/* 여정 진행 비행기 — 링 위를 계획일→출발일 진행률만큼 이동 */
+.cd-plane{position:absolute;left:50%;top:50%;font-size:12px;line-height:1;color:#FFF3D4;
+  opacity:0;transition:opacity .5s ease .3s;pointer-events:none;z-index:2;
+  text-shadow:0 0 5px rgba(245,231,192,.55);filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.countdown:not(.flipped):not(.precise):not(.trip-over) .cd-plane{opacity:1}
+@media (prefers-reduced-motion:no-preference){
+  .cd-plane{animation:cdPlaneBob 3.2s ease-in-out infinite}
+}
+@keyframes cdPlaneBob{0%,100%{margin-top:0}50%{margin-top:-1.6px}}
 .cd-text{min-width:0}
 .cd-head{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#F2EEE0;
   line-height:1.25;letter-spacing:-.01em}
@@ -853,6 +862,23 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 @keyframes fxSunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.08);filter:brightness(1.15)}}
 @keyframes fxDrift{to{transform:translateX(calc(100vw + 420px))}}
 @keyframes fxBolt{0%,80%,100%{opacity:0}82%{opacity:.5}82.6%{opacity:0}84%{opacity:.95}84.7%{opacity:0}86%{opacity:.4}86.4%{opacity:0}}
+
+/* ── 콩로이(풍등) — 태국 현지 저녁시간대에 히어로에서 천천히 떠오름 ── */
+.hero-lanterns{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-lanterns{opacity:0}
+.hero-lantern{position:absolute;bottom:-20px;width:8px;height:11px;border-radius:50% 50% 45% 45%;
+  background:radial-gradient(circle at 50% 32%,#FFEDB6,#F2AE54 68%,#CE7A1E);
+  box-shadow:0 0 9px 2px rgba(248,196,108,.45);opacity:0}
+.hero-lantern::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:3px;
+  background:rgba(255,220,150,.5);transform:translateX(-50%)}
+@media (prefers-reduced-motion:no-preference){
+  .hero-lantern{animation:lanternRise var(--lr,16s) ease-in var(--ld,0s) infinite}
+}
+@keyframes lanternRise{
+  0%{opacity:0;transform:translate(0,0) scale(.92)}
+  14%{opacity:.9}
+  72%{opacity:.62}
+  100%{opacity:0;transform:translate(var(--lx,16px),-340px) scale(1.04)}}
 .toast{position:fixed;left:50%;top:0;transform:translate(-50%,-120%);z-index:200;
   max-width:88vw;padding:11px 18px;border-radius:0 0 16px 16px;pointer-events:none;
   background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:#F4EEDD;
@@ -943,15 +969,27 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
   /* ── 마일스톤 ✈️ 가로지르기 ── */
   .flyplane{display:block;position:fixed;left:-40px;top:26%;z-index:190;font-size:26px;pointer-events:none;
     filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
+  .flyplane.contrail::before{content:"";position:absolute;right:100%;top:50%;width:60px;height:3px;
+    transform:translateY(-1px);border-radius:3px;
+    background:linear-gradient(to left,rgba(255,255,255,.5),rgba(255,255,255,0))}
   @media (prefers-reduced-motion:no-preference){ .flyplane{animation:flyby 1.9s cubic-bezier(.4,0,.6,1) forwards} }
   @keyframes flyby{0%{transform:translate(0,0) rotate(0)}
     40%{transform:translate(48vw,-14px) rotate(-6deg)}
     100%{transform:translate(112vw,-40px) rotate(-3deg)}}
 
-  /* ── 컨페티 ── */
+  /* ── 컨페티 · 꽃잎 ── */
   .confp{display:block;position:fixed;z-index:195;width:8px;height:11px;pointer-events:none;will-change:transform,opacity}
-  @media (prefers-reduced-motion:no-preference){ .confp{animation:confFall var(--d,1200ms) cubic-bezier(.2,.6,.5,1) forwards} }
+  .confp.petal{width:11px;height:8px;border-radius:100% 0 100% 0;
+    box-shadow:0 1px 2px rgba(120,80,40,.18)}
+  @media (prefers-reduced-motion:no-preference){
+    .confp{animation:confFall var(--d,1200ms) cubic-bezier(.2,.6,.5,1) forwards}
+    .confp.petal{animation:petalFall var(--d,2000ms) cubic-bezier(.35,.4,.5,1) forwards}
+  }
   @keyframes confFall{0%{opacity:1;transform:translate(0,0) rotate(0)}
+    100%{opacity:0;transform:translate(var(--x,0),var(--y,240px)) rotate(var(--r,540deg))}}
+  @keyframes petalFall{0%{opacity:1;transform:translate(0,0) rotate(0)}
+    25%{transform:translate(calc(var(--x,0)*.3),calc(var(--y,240px)*.2)) rotate(calc(var(--r,360deg)*.35))}
+    60%{transform:translate(calc(var(--x,0)*.7),calc(var(--y,240px)*.6)) rotate(calc(var(--r,360deg)*.7))}
     100%{opacity:0;transform:translate(var(--x,0),var(--y,240px)) rotate(var(--r,540deg))}}
 
   /* ── 당겨서 새로고침 ── */
@@ -1025,11 +1063,31 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
     pointer-events:none}
   .to-top.show{opacity:1;transform:none;pointer-events:auto}
   .to-top:active{transform:scale(.9)}
+
+  /* ── 탭 첫 진입 시 아이콘이 살짝 날아오름 (세션당 탭별 1회) ── */
+  .tab-fly{position:fixed;z-index:188;font-size:19px;pointer-events:none;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.28))}
+  @media (prefers-reduced-motion:no-preference){ .tab-fly{animation:tabFly .72s cubic-bezier(.3,.7,.4,1) forwards} }
+  @keyframes tabFly{0%{opacity:0;transform:translateY(0) scale(.55) rotate(0)}
+    22%{opacity:1}
+    100%{opacity:0;transform:translateY(-116px) scale(1.25) rotate(-12deg)}}
+
+  /* ── 뚝뚝: 정산 💰 탭 → 화면 하단을 부릉 가로지름 ── */
+  .tuktuk{position:fixed;left:-64px;bottom:calc(56px + env(safe-area-inset-bottom));z-index:189;
+    font-size:30px;pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.3))}
+  @media (prefers-reduced-motion:no-preference){ .tuktuk{animation:tukCross 1.55s cubic-bezier(.45,.05,.55,1) forwards} }
+  @keyframes tukCross{
+    0%{transform:translateX(0) translateY(0) rotate(0)}
+    12%{transform:translateX(8vw) translateY(-1px) rotate(-3deg)}
+    26%{transform:translateX(24vw) translateY(1px) rotate(2deg)}
+    50%{transform:translateX(50vw) translateY(-1px) rotate(-2deg)}
+    74%{transform:translateX(76vw) translateY(1px) rotate(2deg)}
+    100%{transform:translateX(118vw) translateY(0) rotate(0)}}
 }
 
 @media print{
   nav.tabs{display:none}
-  .toast,.ptr,.hero-fx,.flyplane,.confp{display:none!important}
+  .toast,.ptr,.hero-fx,.flyplane,.confp,.hero-lanterns,.tab-fly,.tuktuk,.cd-plane{display:none!important}
   .next-card,.hw-ago,.hw-more,.tidbit,.gguide,.mt-topics{display:none!important}
   .hw{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
@@ -1098,6 +1156,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
             <circle class="cd-prog" id="cdProg" cx="54" cy="54" r="49"/>
           </svg>
           <span class="cd-num" id="cdNum">–</span>
+          <span class="cd-plane" id="cdPlane" aria-hidden="true">✈</span>
         </div>
         <div class="cd-text">
           <div class="cd-head" id="cdHead">계산 중…</div>
@@ -1494,7 +1553,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.36 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.37 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1827,6 +1886,30 @@ const TODO=[
   // CSS 초기값(빈 링)에서 최종값으로 transition. setTimeout은 백그라운드 탭에서도 실행됨
   if(rm) setRing(ringP);
   else setTimeout(()=>setRing(ringP), 200);
+
+  // ── 여정 진행 비행기: 링 위 진행률 지점에 ✈ 배치 (12시 방향 출발, 시계방향) ──
+  (function(){
+    const plane = $('cdPlane'), wrap = plane && plane.parentElement;
+    if(!plane || !wrap) return;
+    if(now > endT){ cd.classList.add('trip-over'); return; }   // 여행 끝나면 숨김
+    const place = (p)=>{
+      const rad = Math.max(0,Math.min(1,p)) * 2*Math.PI - Math.PI/2;
+      const R = (wrap.offsetWidth || 78) * 0.42;
+      const x = (Math.cos(rad)*R).toFixed(1), y = (Math.sin(rad)*R).toFixed(1);
+      const deg = (rad*180/Math.PI + 90).toFixed(0);
+      plane.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px) rotate(${deg}deg)`;
+    };
+    place(rm ? ringP : 0);
+    if(!rm){
+      const t0 = performance.now(), dur = 1600;
+      requestAnimationFrame(function tick(t){
+        const q = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-q,3);
+        place(ringP*e);
+        if(q<1) requestAnimationFrame(tick);
+      });
+    }
+    addEventListener('resize', ()=> place(ringP), {passive:true});
+  })();
 })();
 
 // ── 날짜 특수 연출 (12/24–25 크리스마스 · 12/31–1/1 신정) ──
@@ -1851,6 +1934,36 @@ const TODO=[
   occEl.innerHTML = html;
 })();
 
+// ── 콩로이(풍등): 태국 현지(UTC+7) 저녁 18시~새벽 1시엔 히어로에 풍등이 천천히 떠오름 ──
+(function(){
+  const hero = document.querySelector('header.hero');
+  if(!hero || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const layer = document.createElement('div');
+  layer.className = 'hero-lanterns'; layer.setAttribute('aria-hidden','true');
+  hero.appendChild(layer);
+  let lit = false;
+  function tick(){
+    const h = (new Date().getUTCHours() + 7) % 24;
+    const want = (h >= 18 || h < 1);
+    if(want === lit) return;
+    lit = want;
+    if(!want){ layer.innerHTML = ''; return; }
+    let html = '';
+    for(let i=0;i<4;i++){
+      const left  = (10 + Math.random()*78).toFixed(0);
+      const dur   = (13 + Math.random()*7).toFixed(1);
+      const delay = (i*3.6 + Math.random()*2).toFixed(1);
+      const lx    = (Math.random()*30 - 8).toFixed(0);
+      const w     = (7 + Math.random()*3).toFixed(1);
+      html += `<i class="hero-lantern" style="left:${left}%;width:${w}px;height:${(w*1.35).toFixed(1)}px;`
+            + `--lr:${dur}s;--ld:-${delay}s;--lx:${lx}px"></i>`;
+    }
+    layer.innerHTML = html;
+  }
+  tick();
+  setInterval(tick, 6e5);   // 10분마다 재확인
+})();
+
 // ── 히어로 요약(가족·골프·숙소)은 이 기기 최초 1회만 노출 ──
 (function(){
   const stats = document.querySelector('.stats');
@@ -1860,21 +1973,26 @@ const TODO=[
   try{ localStorage.setItem('thai2026_statseen','1'); }catch(e){}
 })();
 
-// ── 히어로 비 연출: 개별 빗방울 <b> 생성 (비/뇌우일 때만 낙하) ──
-(function(){
-  const r = document.querySelector('.fx-rain');
-  if(!r) return;
-  const N = matchMedia('(max-width:760px)').matches ? 64 : 90;
-  let h = '';
-  for(let i=0;i<N;i++){
-    const dur   = (0.55 + Math.random()*0.55).toFixed(2);   // 0.55~1.10s
-    const delay = (-Math.random()*1.6).toFixed(2);
-    const left  = (Math.random()*112 - 6).toFixed(1);       // -6%~106%
-    const len   = (30 + Math.random()*46)|0;                // 30~76px
-    const op    = (0.28 + Math.random()*0.42).toFixed(2);
-    h += `<b style="left:${left}%;height:${len}px;--o:${op};animation-duration:${dur}s;animation-delay:${delay}s"></b>`;
-  }
-  r.innerHTML = h;
+// ── 히어로 비 연출: 개별 빗방울 <b> — 첫 비/뇌우일 때 한 번만 생성 (평소엔 DOM 비움) ──
+window.__ensureRain = (function(){
+  let built = false;
+  return function(){
+    if(built) return;
+    const r = document.querySelector('.fx-rain');
+    if(!r) return;
+    built = true;
+    const N = matchMedia('(max-width:760px)').matches ? 64 : 90;
+    let h = '';
+    for(let i=0;i<N;i++){
+      const dur   = (0.55 + Math.random()*0.55).toFixed(2);   // 0.55~1.10s
+      const delay = (-Math.random()*1.6).toFixed(2);
+      const left  = (Math.random()*112 - 6).toFixed(1);       // -6%~106%
+      const len   = (30 + Math.random()*46)|0;                // 30~76px
+      const op    = (0.28 + Math.random()*0.42).toFixed(2);
+      h += `<b style="left:${left}%;height:${len}px;--o:${op};animation-duration:${dur}s;animation-delay:${delay}s"></b>`;
+    }
+    r.innerHTML = h;
+  };
 })();
 
 // ── 태국 현지 정보 위젯 (시각·위치·날씨) ──
@@ -1946,7 +2064,9 @@ const TODO=[
       icoEl.textContent=m.i; textEl.textContent=m.t; tempEl.textContent=Math.round(w.temp)+'°C';
       wx.classList.toggle('stale', Date.now()-w.ts > 3*36e5);
       subEl.textContent = (fmtBasis(w.ts)+' Open-Meteo').trim();
-      document.querySelector('header.hero').dataset.wx = wxGroup(w.code);  // 날씨 반응형 히어로
+      const grp = wxGroup(w.code);
+      document.querySelector('header.hero').dataset.wx = grp;  // 날씨 반응형 히어로
+      if((grp==='rain'||grp==='storm') && window.__ensureRain) window.__ensureRain();
     } else {
       icoEl.textContent='·'; textEl.textContent='날씨 —'; tempEl.textContent=''; wx.classList.remove('stale');
       subEl.textContent='Open-Meteo';
@@ -2781,11 +2901,52 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       setTimeout(()=> p.remove(), 2000);
     }
   }
-  function flyPlane(){
+
+  // ── 플루메리아(태국 상징 꽃) 꽃잎 흩날림 — 축하용, confetti보다 느긋하게 ──
+  const PETAL_C = ['#FBF3DF','#F7E4B8','#F3D9C4','#FBEAD0','#F6D2C3'];
+  function petalBurst(cx, cy, n, spread){
+    if(rm) return;
+    const wind = (Math.random()*2 - 1) * 50;
+    for(let k=0;k<n;k++){
+      const p = document.createElement('div'); p.className = 'confp petal';
+      const ang = Math.random()*6.28, dist = 24 + Math.random()*(spread||100);
+      p.style.left = cx+'px'; p.style.top = cy+'px';
+      p.style.background = PETAL_C[k % PETAL_C.length];
+      p.style.setProperty('--x', (Math.cos(ang)*dist + wind*Math.random()).toFixed(0)+'px');
+      p.style.setProperty('--y', (Math.abs(Math.sin(ang))*dist*.35 + 150 + Math.random()*180).toFixed(0)+'px');
+      p.style.setProperty('--r', (Math.random()*720-360).toFixed(0)+'deg');
+      p.style.setProperty('--d', (1700 + Math.random()*900)+'ms');
+      document.body.appendChild(p);
+      setTimeout(()=> p.remove(), 2700);
+    }
+  }
+  window.__petals = petalBurst;
+
+  function flyPlane(trail){
     if(rm) return;
     const el = document.createElement('div'); el.className = 'flyplane'; el.textContent = '✈️';
+    if(trail !== false) el.classList.add('contrail');
     document.body.appendChild(el); setTimeout(()=> el.remove(), 2100);
   }
+
+  // ── 축하 연출 통합 헬퍼 (컨페티+토스트+햅틱+비행기를 한 번에) ──
+  //   celebrate({ kicker, msg, ms, at:<el|rect>, dy, cx, cy, n, spread, petals, plane, haptic })
+  function celebrate(o){
+    o = o || {};
+    let cx = o.cx, cy = o.cy;
+    if(o.at){
+      const r = o.at.getBoundingClientRect ? o.at.getBoundingClientRect() : o.at;
+      cx = (r.left||0) + (r.width||0)/2;
+      cy = (r.top||0) + (o.dy==null ? 18 : o.dy);
+    }
+    if(cx==null) cx = innerWidth/2;
+    if(cy==null) cy = innerHeight*0.26;
+    if(o.n) (o.petals ? petalBurst : confetti)(cx, cy, o.n, o.spread||100);
+    if(o.plane) flyPlane();
+    if(o.msg || o.kicker) toast(o.kicker||'', o.msg||'', o.ms||3400);
+    haptic(o.haptic || 'ok');
+  }
+  window.__celebrate = celebrate;
 
   // ── A. D-day 마일스톤 축하 (1회) ──
   (function(){
@@ -2804,10 +2965,8 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     const mark = [...new Set([...seen, ...MS.filter(x => x.d >= hit.d).map(x=>x.d)])];
     try{ localStorage.setItem('thai2026_ms', JSON.stringify(mark)); }catch(e){}
     setTimeout(()=>{
-      toast(hit.k, hit.m, 4400); flyPlane(); haptic('ok');
       const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
-      const r = $('cd').getBoundingClientRect();
-      confetti(r.left + r.width/2, r.top + 28, 26, 90);
+      celebrate({ kicker:hit.k, msg:hit.m, ms:4400, at:cd||$('cd'), dy:28, n:26, spread:90, petals:true, plane:true });
     }, 900);
   })();
 
@@ -2819,11 +2978,9 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     if(seen) return;
     try{ localStorage.setItem('thai2026_arrived','1'); }catch(e){}
     setTimeout(()=>{
-      toast('✈️ 태국 도착', '즐거운 여행 되세요!', 4800); flyPlane(); haptic('ok');
       const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
-      const r = $('cd').getBoundingClientRect();
-      confetti(r.left + r.width/2, r.top + 28, 34, 110);
-      setTimeout(()=> confetti(innerWidth*0.5, 130, 24, 140), 550);
+      celebrate({ kicker:'✈️ 태국 도착', msg:'즐거운 여행 되세요!', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
+      setTimeout(()=> petalBurst(innerWidth*0.5, 130, 22, 150), 550);
     }, 900);
   })();
 
@@ -2834,7 +2991,8 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       confetti(r.left + r.width/2, r.top + 18, 14, 55); haptic('ok');
     },
     all(){
-      confetti(innerWidth/2, innerHeight*0.26, 44, 130);
+      confetti(innerWidth/2, innerHeight*0.26, 34, 130);
+      setTimeout(()=> petalBurst(innerWidth/2, innerHeight*0.22, 22, 150), 260);
       toast('🎉', '할 일 전부 완료! 이제 떠나기만 하면 돼요', 4600);
       const ring = $('thRing');
       if(ring && !rm){
@@ -2848,29 +3006,26 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
 
   // ── D. 이스터에그 ──
   const cdEl = $('cd'), numEl = $('cdNum'), headEl = $('cdHead'), depP = tripDate('depart');
-  // D1. 국기 5연타
+  // D1. 국기 3연타 (기존 5연타에서 완화) → 국기색 색종이
   const flag = $('egFlag'); let taps = 0, tapT;
   flag && flag.addEventListener('click', ()=>{
     taps++;
     if(!rm){ flag.classList.remove('wiggle'); void flag.offsetWidth; flag.classList.add('wiggle'); }
-    clearTimeout(tapT); tapT = setTimeout(()=> taps = 0, 1200);
-    if(taps >= 5){
+    clearTimeout(tapT); tapT = setTimeout(()=> taps = 0, 1400);
+    if(taps >= 3){
       taps = 0;
-      confetti(flag.getBoundingClientRect().left + 8, 42, 30, 110);
-      toast('🇹🇭', '즐거운 여행 되세요!', 3400); haptic('ok');
+      const r = flag.getBoundingClientRect();
+      celebrate({ kicker:'🇹🇭', msg:'즐거운 여행 되세요!', ms:3400, cx:r.left + 8, cy:42, n:26, spread:110 });
     }
   });
   // D2/F/G. 카운트다운 통합 탭: 링→회전 · 부제→여행팁 · 그 외→보딩패스 플립
   const ringSvg = document.querySelector('.cd-ring');
+  // 여행 팁 — "공항에서 한 번 훑는" 실전 준비물·이동 위주 (문화·예절 상세는 일정탭 OX 퀴즈로 분리)
   const TIPS = [
     '뚝뚝·택시는 미터기 확인, 아니면 요금 먼저 흥정',
     '12월 파타야·방콕 낮 32°C 안팎 — 선크림·모자 필수',
     '공항 환전보다 시내 슈퍼리치(Super Rich) 환율이 좋아요',
     '유심은 AIS·True 공항 부스 or 미리 eSIM',
-    '사원 방문 시 어깨·무릎 가리는 옷',
-    '길거리 얼음·생수는 브랜드 페트병으로',
-    '왕실·국왕 관련 농담은 금물',
-    '그랩(Grab) 앱 미리 설치 — 택시보다 편하고 투명',
     '팁 문화 약함 — 호텔 벨보이 20B, 마사지 50–100B 정도',
     '콘센트는 220V, 한국 플러그 대부분 그대로 사용',
     '스콜(소나기) 대비 접이 우산 하나',
@@ -2880,9 +3035,9 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     '파타야→방콕 차로 1시간 30분~2시간, 교통 상황 편차 큼',
     '실내는 냉방 강함 — 얇은 겉옷 하나 챙기기',
     '왓 포·왕궁은 오전 일찍(더위·인파 전) 방문',
-    '편의점 세븐일레븐이 곳곳에 — 물·간식·심카드 충전 다 됨',
-    '길 건널 때 차 먼저 봄 — 횡단보도도 양보 잘 안 함',
     '더위 대비 전해질 음료(100 Plus 등) 상비',
+    '스완나품·돈므앙 → 시내 택시는 미터 + 톨비 + 공항수수료 50B',
+    '한낮은 실내·수영장, 관광은 오전·저녁으로 쪼개기',
   ];
   const PHRASES = [
     ['싸와디 캅 / 카','안녕하세요 (남 캅 · 여 카)'],
@@ -2916,25 +3071,13 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     ['얌 운센','당면 새콤 샐러드 — 해산물 넣으면 별미'],
     ['로띠 + 연유','길거리 팬케이크 디저트'],
   ];
-  const GOLFT = [
-    '캐디피는 현금 400~500B + 팁 300~500B 별도 준비',
-    '티오프는 보통 이른 오전(06:30~08:30) — 한낮 더위 회피',
-    '카트 의무인 코스 많음 · 페어웨이 진입 규정 확인',
-    '워터해저드 근처 공은 미련 없이 포기 (뱀·모니터도마뱀)',
-    '복장: 카라 티셔츠 필수, 청바지·민소매 불가',
-    '선크림·모자·수건·전해질 음료 · 우기엔 우산',
-    '그늘집(할프하우스) 간식·음료는 현금',
-    '라운드 후 클럽하우스 타이 마사지 저렴 — 피로 회복',
-    '골프백 항공 수하물 규정·무게 미리 확인',
-    '스파이크는 소프트만 — 대부분 메탈 금지',
-  ];
   let tipI = Math.floor(Math.random()*TIPS.length),
       phI  = Math.floor(Math.random()*PHRASES.length),
-      foI  = Math.floor(Math.random()*FOODS.length),
-      goI  = Math.floor(Math.random()*GOLFT.length);
+      foI  = Math.floor(Math.random()*FOODS.length);
 
-  // ── 보딩패스 플립: 링(99일 원형) 제외한 카운트다운 어디를 눌러도 페이지가 넘어감
-  //     항공편 2장 + 매번 바뀌는 콘텐츠(팁·태국어·음식·골프) 4장 ──
+  // ── 보딩패스 플립: 링(원형) 제외한 카운트다운 어디를 눌러도 페이지가 넘어감
+  //     항공편 2장 + 매번 바뀌는 빠른 참고(팁·태국어·음식) 3장
+  //     ※ 태국 골프 팁·문화 예절은 각 탭 하단 OX 퀴즈/지식백과로 이관 (중복 정리) ──
   const backIn = $('cdBackIn'), backDots = $('cdBackDots');
   const pair = (t,d)=> '<div class="cd-ln"><b>'+t+'</b></div><div class="cd-ln cd-tip">'+d+'</div>';
   const PAGES = [
@@ -2947,7 +3090,6 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     ['💡 태국 여행 팁', ()=>{ tipI = (tipI + 1) % TIPS.length; return '<div class="cd-ln cd-tip">'+TIPS[tipI]+'</div>'; }],
     ['💬 태국어 한마디', ()=>{ phI = (phI + 1) % PHRASES.length; return pair(PHRASES[phI][0], PHRASES[phI][1]); }],
     ['🍜 이건 꼭 먹어보기', ()=>{ foI = (foI + 1) % FOODS.length; return pair(FOODS[foI][0], FOODS[foI][1]); }],
-    ['⛳ 태국 골프 팁', ()=>{ goI = (goI + 1) % GOLFT.length; return '<div class="cd-ln cd-tip">'+GOLFT[goI]+'</div>'; }],
   ];
   let backPg = 0, swipeUntil = 0;
   function renderBack(){
@@ -3091,6 +3233,37 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
         toast('👀', '구석구석 살펴보고 있네요', 2600); haptic('ok');
       }
     }));
+  })();
+
+  // ── P2. 탭 첫 진입 시 아이콘이 살짝 날아오름 (세션당 탭별 1회) ──
+  (function(){
+    if(rm) return;
+    const EMO = { golf:'⛳', itin:'🗓️', stay:'🏨', cost:'💰', todo:'✅' };
+    const opened = new Set();
+    tbs.forEach(b=> b.addEventListener('click', ()=>{
+      const key = b.dataset.t;
+      if(opened.has(key)) return;
+      opened.add(key);
+      const r = b.getBoundingClientRect();
+      const f = document.createElement('div'); f.className = 'tab-fly';
+      f.textContent = EMO[key] || '✈️';
+      f.style.left = (r.left + r.width/2 - 9) + 'px';
+      f.style.top  = (r.top - 4) + 'px';
+      document.body.appendChild(f);
+      setTimeout(()=> f.remove(), 760);
+    }));
+  })();
+
+  // ── P3. 정산 💰 탭 → 뚝뚝이 화면 하단을 부릉 가로지름 ──
+  (function(){
+    const e = document.querySelector('#cost .sec .e'); if(!e) return;
+    e.style.cursor = 'pointer'; e.style.display = 'inline-block';
+    e.addEventListener('click', ()=>{
+      haptic('tap');
+      if(rm) return;
+      const t = document.createElement('div'); t.className = 'tuktuk'; t.textContent = '🛺';
+      document.body.appendChild(t); setTimeout(()=> t.remove(), 1650);
+    });
   })();
 
   // ── Q. 날씨 아이콘 탭 → 아이콘·배경 반짝 ──
@@ -3275,36 +3448,52 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     });
   })();
 
-  // ── W. 첫 화면에 오래 머물면 → 새 한 마리 스윽 (유휴당 1회) ──
+  // ── W. 첫 화면에 머물면 → 새가 스윽 (날씨 반응: 맑으면 V자 편대, 비·뇌우면 안 뜸) ──
   (function(){
     const hero = document.querySelector('header.hero'); if(!hero || rm) return;
+    function oneBird(topPct, delay){
+      const b = document.createElement('div'); b.className = 'hero-bird';
+      b.textContent = Math.random() < .5 ? '🐦' : '🕊️';
+      b.style.setProperty('--bd', (6.5 + Math.random()*2.5).toFixed(1) + 's');
+      b.style.top = topPct + '%';
+      if(delay) b.style.animationDelay = delay + 's';
+      hero.appendChild(b); setTimeout(()=> b.remove(), 12000);
+    }
     let idleT, fired = false;
+    function fly(){
+      const wx = hero.dataset.wx || '';
+      if(/rain|storm/.test(wx)) return;                 // 궂은 날엔 새 없음
+      if(wx === 'sunny' && Math.random() < 0.55){       // 맑으면 절반 확률로 V자 편대
+        const base = 10 + Math.random()*7;
+        oneBird(base, 0);                                 // 선두
+        oneBird(base - 3.2, 0.42); oneBird(base + 3.2, 0.42);   // 뒤 좌·우
+        oneBird(base, 0.9);                               // 맨 뒤
+      } else {
+        oneBird(9 + Math.random()*12, 0);
+      }
+    }
     function arm(){
       clearTimeout(idleT); fired = false;
       idleT = setTimeout(()=>{
         if(fired || scrollY > 44 || document.hidden) return;
-        fired = true;
-        const b = document.createElement('div'); b.className = 'hero-bird';
-        b.textContent = Math.random() < .5 ? '🐦' : '🕊️';
-        b.style.setProperty('--bd', (6.5 + Math.random()*2.5).toFixed(1) + 's');
-        b.style.top = (9 + Math.random()*12) + '%';
-        hero.appendChild(b); setTimeout(()=> b.remove(), 9500);
-      }, 26000);
+        fired = true; fly();
+      }, 15000);
     }
     ['touchstart','click','scroll','keydown'].forEach(ev=> addEventListener(ev, arm, {passive:true}));
     arm();
   })();
 
-  // ── X. 푸터 버전 5탭 → 제작 후기 ──
+  // ── X. 푸터 버전 3탭 → 제작 후기 ──
   (function(){
     const f = document.querySelector('footer.ft .wrap'); if(!f) return;
     f.style.cursor = 'pointer';
     let n = 0, t;
     f.addEventListener('click', ()=>{
-      n++; clearTimeout(t); t = setTimeout(()=> n = 0, 3000);
-      if(n >= 5){ n = 0;
-        toast('✈️ 만든 사람', '이 판을 함께 만든 시간도 여행의 일부예요 · 즐거운 여행 되세요', 4200);
-        const r = f.getBoundingClientRect(); confetti(r.left + r.width/2, r.top, 18, 80); haptic('ok');
+      n++; clearTimeout(t); t = setTimeout(()=> n = 0, 3200);
+      if(n >= 3){ n = 0;
+        const r = f.getBoundingClientRect();
+        celebrate({ kicker:'✈️ 만든 사람', msg:'이 판을 함께 만든 시간도 여행의 일부예요 · 즐거운 여행 되세요', ms:4200,
+                    cx:r.left + r.width/2, cy:r.top, n:18, spread:80, petals:true });
       }
     });
   })();
@@ -3341,7 +3530,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       const now = Date.now();
       if(Math.abs((a.x||0) - lastX) > 15 && now - lastT > 90){ hits++; lastT = now; }
       lastX = a.x || 0;
-      if(hits >= 5 && now - cool > 4000){
+      if(hits >= 4 && now - cool > 4000){
         hits = 0; cool = now;
         emojiRain(['🥥','🌴','🫨','😵‍💫'], 12);
         toast('🫨', '어질어질~ 살살 흔들어요', 2600);
