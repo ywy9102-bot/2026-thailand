@@ -1907,6 +1907,7 @@ const TODO=[
         place(ringP*e);
         if(q<1) requestAnimationFrame(tick);
       });
+      setTimeout(()=> place(ringP), 1700);   // rAF가 멈춘 백그라운드 탭 대비 최종값 보정
     }
     addEventListener('resize', ()=> place(ringP), {passive:true});
   })();
