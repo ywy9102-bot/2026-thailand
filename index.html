@@ -354,8 +354,8 @@ h2.sec .e{font-size:21px;line-height:1}
 .mt-topic summary{list-style:none;cursor:pointer;padding:9px 0;display:flex;align-items:center;gap:7px;
   font-size:12.5px;font-weight:700;color:var(--jade-d);-webkit-tap-highlight-color:transparent}
 .mt-topic summary::-webkit-details-marker{display:none}
-.mt-topic summary::before{content:"▸";font-size:10px;color:var(--gold-text);flex:none;transition:transform .2s}
-.mt-topic[open] summary::before{transform:rotate(90deg)}
+.mt-topic summary::before{content:"▾";font-size:10px;color:var(--gold-text);flex:none;transition:transform .2s}
+.mt-topic[open] summary::before{transform:rotate(180deg)}
 .mt-body{font-size:12px;color:var(--ink2);line-height:1.68;padding:0 2px 11px 15px}
 .mt-body b{font-weight:700;color:var(--jade)}
 .mt-body .ox-o{color:var(--ok);font-weight:700}
@@ -531,6 +531,38 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .bar-row.open .bar-detail{display:block;animation:fadeIn .18s ease}
 .bar-detail .gd-row{padding:6px 0;font-size:11.5px}
 .bar-detail .gd-row:first-child{border-top:none;padding-top:9px}
+.bar-copy{margin-top:10px;width:100%;padding:9px 0;border-radius:9px;border:1px solid var(--line);
+  background:var(--jade-s);color:var(--jade-d);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer}
+.bar-copy:active{transform:scale(.99)}
+.bar-copy.copied{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
+
+/* 정산 상세표 — 접이식 */
+.cost-tbl{margin:24px 0 0}
+.cost-tbl-h{width:100%;display:flex;align-items:center;gap:7px;padding:6px 0 10px;background:none;border:none;
+  cursor:pointer;font:inherit;font-weight:700;font-size:14px;color:var(--ink);text-align:left;
+  -webkit-tap-highlight-color:transparent}
+.cost-tbl-h .i{font-family:'IBM Plex Mono',monospace;color:var(--gold-text);font-size:11.5px}
+.cost-tbl-h .ct-more{font-size:10.5px;font-weight:600;color:var(--ink3)}
+.cost-tbl.open .cost-tbl-h .ct-more{display:none}
+.cost-tbl-h .chev{margin-left:auto;font-size:10px;color:var(--gold-text);transition:transform .2s ease}
+.cost-tbl.open .cost-tbl-h .chev{transform:rotate(180deg)}
+
+/* 골프 다음 라운드 포인터 */
+.next-round{display:flex;align-items:center;gap:9px;margin:0 0 18px;padding:11px 13px;border-radius:12px;
+  background:linear-gradient(120deg,var(--jade-s),#EFF5F1);border:1px solid var(--line);cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.next-round:active{transform:scale(.995)}
+.nr-tag{flex:none;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:.1em;
+  color:var(--jade);background:#fff;border:1px solid var(--line);padding:3px 7px;border-radius:99px}
+.nr-body{flex:1;min-width:0;font-size:12px;color:var(--jade-d);line-height:1.4}
+.nr-body b{font-weight:700}
+.nr-dday{flex:none;font-family:'Fraunces',serif;font-weight:700;font-size:13px;color:var(--gold-text)}
+
+/* 일정 오늘로 가기 칩 */
+.today-jump{display:inline-flex;align-items:center;gap:5px;margin:0 0 16px;padding:7px 13px;border-radius:99px;
+  background:var(--jade);color:#F4EEDD;border:none;font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 12px -5px rgba(14,40,34,.4);-webkit-tap-highlight-color:transparent}
+.today-jump:active{transform:scale(.97)}
 
 .stbl{font-weight:700;font-size:14px;margin:24px 0 9px;display:flex;align-items:center;gap:7px}
 .stbl .i{font-family:'IBM Plex Mono',monospace;color:var(--gold-text);font-size:11.5px}
@@ -1009,7 +1041,8 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
   .stat{background:none!important}
   .stat .n,.stat .l{color:var(--ink)!important}
   .pnl{display:block!important;break-inside:avoid;margin-bottom:24px}
-  .scr{overflow:visible} table.d{min-width:0!important}
+  .scr{overflow:visible!important;display:block!important} table.d{min-width:0!important}
+  .cost-tbl-h .chev,.cost-tbl-h .ct-more,.next-round,.today-jump,.bar-copy{display:none!important}
   .cost-hero{background:none!important;color:var(--ink)!important;border:1px solid var(--line)}
   .cost-hero .l,.cost-hero .s{color:var(--ink2)!important}
   .ci{cursor:default}
@@ -1114,6 +1147,12 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
   </div>
   <p class="sub">파타야 6회 · 방콕 2회 · 전액 윤우열 선지불 후 참여자별 1/N 정산 · 카드를 탭하면 바우처 상세정보가 열립니다</p>
 
+  <button class="next-round" id="nextRound" type="button" hidden>
+    <span class="nr-tag">다음 라운드</span>
+    <span class="nr-body" id="nrBody"></span>
+    <span class="nr-dday" id="nrDday"></span>
+  </button>
+
   <div class="golf-sum">
     <div class="gs"><div class="n">8</div><div class="l">총 라운드</div></div>
     <div class="gs"><div class="n" id="gConf">8</div><div class="l">예약 확정</div></div>
@@ -1191,6 +1230,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
     <button class="copy-btn" id="copyItin">📋 텍스트로 복사</button>
   </div>
   <p class="sub">날짜 색상 = 상태 · <span style="color:var(--ok);font-weight:700">확정</span> / <span style="color:var(--wait);font-weight:700">요청중</span> / <span style="color:var(--coral);font-weight:700">미정</span> · <span style="color:var(--jade);font-weight:700">💡 추천</span>·⛳ 있는 날은 탭하면 상세가 열립니다</p>
+  <button class="today-jump" id="todayJump" type="button" hidden>📍 오늘 일정으로</button>
 
   <div class="tidbit" id="cultureTidbit">
     <span class="tb-tag">🇹🇭 태국 문화 · OX 퀴즈</span>
@@ -1390,7 +1430,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 <!-- 💰 COST -->
 <section class="pnl" id="cost" role="tabpanel" aria-labelledby="tb-cost">
   <h2 class="sec"><span class="e">💰</span>정산</h2>
-  <p class="sub">개별결제 3건(이준영 픽업·숙박 2건, 김태기 숙박) 제외 · 나머지 전부 윤우열 선지불 · 막대를 탭하면 항목별 내역이 열립니다</p>
+  <p class="sub">이준영 픽업·숙박 2건, 김태기 숙박은 개별결제라 정산 제외. 막대를 탭하면 항목별 내역이 열려요.</p>
 
   <div class="cost-hero">
     <div class="l">윤우열이 받아야 할 금액</div>
@@ -1401,14 +1441,18 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
   <h3 class="stbl"><span class="i">◈</span>사람별 정산액</h3>
   <div class="bar-list" id="bars"></div>
 
-  <h3 class="stbl"><span class="i">4-1</span>숙박</h3>
-  <div class="scr"><table class="d" id="tStay"></table></div>
-
-  <h3 class="stbl"><span class="i">4-2</span>골프</h3>
-  <div class="scr"><table class="d" id="tGolf"></table></div>
-
-  <h3 class="stbl"><span class="i">4-3</span>차량</h3>
-  <div class="scr"><table class="d" id="tCar"></table></div>
+  <div class="cost-tbl" id="ctStay">
+    <button class="cost-tbl-h" type="button" aria-expanded="false"><span class="i">4-1</span>숙박<span class="ct-more">상세 표</span><span class="chev">▾</span></button>
+    <div class="scr" hidden><table class="d" id="tStay"></table></div>
+  </div>
+  <div class="cost-tbl" id="ctGolf">
+    <button class="cost-tbl-h" type="button" aria-expanded="false"><span class="i">4-2</span>골프<span class="ct-more">상세 표</span><span class="chev">▾</span></button>
+    <div class="scr" hidden><table class="d" id="tGolf"></table></div>
+  </div>
+  <div class="cost-tbl" id="ctCar">
+    <button class="cost-tbl-h" type="button" aria-expanded="false"><span class="i">4-3</span>차량<span class="ct-more">상세 표</span><span class="chev">▾</span></button>
+    <div class="scr" hidden><table class="d" id="tCar"></table></div>
+  </div>
 </section>
 
 <!-- ✅ TODO -->
@@ -1443,7 +1487,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.34 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.35 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2135,7 +2179,7 @@ function golfCard(g){
   const mapUrl = 'https://maps.google.com/?q='+encodeURIComponent(g.addr || (g.c+' Thailand'));
   const telHref = g.tel ? 'tel:'+g.tel.replace(/-/g,'') : '';
   const hasDetail = !!(g.book || g.addr || g.tel);
-  return `<div class="gcard s-${g.st}">
+  return `<div class="gcard s-${g.st}" data-d="${g.d}">
     <div class="gcard-head" role="button" tabindex="0" aria-expanded="false">
       <div class="g-top">
         <div><div class="g-dt">${g.d} (${g.w})</div><div class="g-nm">${g.c}</div></div>
@@ -2159,6 +2203,24 @@ function golfCard(g){
 $('golfPat').innerHTML = GOLF.filter(g=>g.loc==='pat').map(golfCard).join('');
 $('golfBkk').innerHTML = GOLF.filter(g=>g.loc==='bkk').map(golfCard).join('');
 $('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'만';
+
+// 골프 다음 라운드 포인터
+(function(){
+  const el = $('nextRound'); if(!el) return;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const next = GOLF.map(g=>{ const [m,d]=g.d.split('/').map(Number); return {...g, date:new Date(2026,m-1,d)}; })
+                   .find(g=> g.date >= now);
+  if(!next){ el.hidden = true; return; }
+  const dday = Math.round((next.date - now)/864e5);
+  $('nrBody').innerHTML = `<b>${next.d}(${next.w})</b> ${next.c} · ⏱ ${next.tee}`;
+  $('nrDday').textContent = dday === 0 ? '오늘' : 'D-'+dday;
+  el.hidden = false;
+  el.addEventListener('click', ()=>{
+    haptic('tap');
+    const t = document.querySelector(`.gcard[data-d="${next.d}"]`) || $('golfPat');
+    t && t.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  });
+})();
 
 // 골프카드 탭-확장 (바우처 상세)
 ['golfPat','golfBkk'].forEach(id=>{
@@ -2251,6 +2313,20 @@ function days(list,el,mon,yr){
   }).join('');
 }
 days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
+
+// 여행 기간엔 "오늘 일정으로" 칩 표시
+(function(){
+  const btn = $('todayJump'); if(!btn) return;
+  const now = new Date(), dep = tripDate('depart'), end = tripDate('end', true);
+  const td = () => document.querySelector('#itin .day.today');
+  if(now < dep || now > end || !td()){ btn.hidden = true; return; }
+  btn.hidden = false;
+  btn.addEventListener('click', ()=>{
+    haptic('tap');
+    const t = td();
+    t && t.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  });
+})();
 
 // ── 태국 O X 퀴즈 카드: 골프 / 문화 ──
 //    [문장, 정답('O'|'X'), 힌트(틀리면), 해설(맞으면/정답공개)]
@@ -2443,16 +2519,37 @@ $('bars').innerHTML = OWE.map((o,i)=>{
     </div>
     <div class="bar-detail">
       ${items.map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label}</span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace">${won(it.amt)}원</span></div>`).join('')}
+      <button class="bar-copy" type="button" data-n="${o.n}" data-t="${o.t}" data-b="${o.b.replace(/"/g,'&quot;')}">📋 정산 요청 메시지 복사</button>
     </div>
   </div>`;
 }).join('');
 setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach((b,i)=>{
   setTimeout(()=>b.style.width=b.dataset.w+'%', i*70);});},300);
 
-$('bars').addEventListener('click', e=>{
+$('bars').addEventListener('click', async e=>{
+  const cp = e.target.closest('.bar-copy');
+  if(cp){
+    e.stopPropagation();
+    const msg = `${cp.dataset.n}님, 태국 여행 정산 ${(+cp.dataset.t).toLocaleString()}원을 윤우열에게 보내주세요.\n(${cp.dataset.b})`;
+    try{ await navigator.clipboard.writeText(msg); }
+    catch(_){ const ta=document.createElement('textarea'); ta.value=msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    const o=cp.textContent; cp.textContent='✅ 복사됨'; cp.classList.add('copied'); haptic('ok');
+    setTimeout(()=>{ cp.textContent=o; cp.classList.remove('copied'); }, 1600);
+    return;
+  }
   const head = e.target.closest('.bar-head'); if(!head) return;
   const row = head.closest('.bar-row'), opened = row.classList.toggle('open');
   head.setAttribute('aria-expanded', opened); haptic('tap');
+});
+
+// 정산 상세표 접이식
+['ctStay','ctGolf','ctCar'].forEach(id=>{
+  const box = $(id); if(!box) return;
+  const h = box.querySelector('.cost-tbl-h'), scr = box.querySelector('.scr');
+  h.addEventListener('click', ()=>{
+    const open = box.classList.toggle('open');
+    scr.hidden = !open; h.setAttribute('aria-expanded', open); haptic('tap');
+  });
 });
 $('bars').addEventListener('keydown', e=>{
   if((e.key===' '||e.key==='Enter') && e.target.classList.contains('bar-head')){
