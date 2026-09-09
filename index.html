@@ -862,6 +862,34 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
   @keyframes wxsDrift{0%,100%{transform:translateX(-10px)}50%{transform:translateX(12px)}}
   @keyframes wxsRain{0%{transform:translateY(-9px);opacity:0}22%{opacity:1}100%{transform:translateY(44px);opacity:0}}
   @keyframes wxsFlash{0%,90%,100%{filter:brightness(1)}93%{filter:brightness(1.85)}}
+
+  /* ── 추가 재미 요소 (R~AA) ── */
+  .hw-more{padding:9px 10px;margin:-6px -5px -6px 0}          /* ↗ 탭 영역 키움 */
+  .putt-ball{position:fixed;width:11px;height:11px;border-radius:50%;z-index:190;pointer-events:none;
+    background:radial-gradient(circle at 34% 30%,#fff,#c7d0ca);box-shadow:0 1px 3px rgba(0,0,0,.35)}
+  @media (prefers-reduced-motion:no-preference){
+    .putt-ball{animation:puttRoll .82s cubic-bezier(.3,.7,.5,1) forwards}
+    .sec .e.putt-hit{animation:flagWag .5s ease}
+    .gs .n.repop{animation:nPop .5s cubic-bezier(.3,1.5,.5,1)}
+    .hero-bird{animation:birdCross var(--bd,7s) linear forwards}
+  }
+  @keyframes puttRoll{0%{transform:translateX(-64px) rotate(0)}
+    78%{transform:translateX(0) rotate(760deg)}
+    100%{transform:translateX(0) scale(.2);opacity:0}}
+  @keyframes flagWag{0%,100%{transform:rotate(0)}30%{transform:rotate(-16deg)}65%{transform:rotate(11deg)}}
+  @keyframes nPop{0%{transform:scale(1)}45%{transform:scale(1.28)}100%{transform:scale(1)}}
+  .hero-bird{position:absolute;z-index:0;left:-32px;top:13%;font-size:14px;opacity:.8;pointer-events:none;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+  @keyframes birdCross{to{transform:translate3d(calc(100vw + 40px),-10px,0)}}
+  .to-top{position:fixed;right:13px;bottom:calc(62px + env(safe-area-inset-bottom));z-index:56;
+    width:40px;height:40px;border-radius:50%;border:1px solid rgba(245,231,192,.32);
+    background:linear-gradient(157deg,var(--jade),var(--jade-d));color:#F4EEDD;font-size:15px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    box-shadow:0 8px 20px -6px rgba(14,40,34,.55);
+    opacity:0;transform:translateY(14px) scale(.88);transition:opacity .25s ease,transform .25s ease;
+    pointer-events:none}
+  .to-top.show{opacity:1;transform:none;pointer-events:auto}
+  .to-top:active{transform:scale(.9)}
 }
 
 @media print{
@@ -1177,7 +1205,7 @@ header.hero[data-wx="rain"] .fx-rain b,header.hero[data-wx="storm"] .fx-rain b{a
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.25 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.26 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -2437,7 +2465,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     ['🍜 이건 꼭 먹어보기', ()=>{ foI = (foI + 1) % FOODS.length; return pair(FOODS[foI][0], FOODS[foI][1]); }],
     ['⛳ 태국 골프 팁', ()=>{ goI = (goI + 1) % GOLFT.length; return '<div class="cd-ln cd-tip">'+GOLFT[goI]+'</div>'; }],
   ];
-  let backPg = 0;
+  let backPg = 0, swipeUntil = 0;
   function renderBack(){
     backIn.innerHTML = '<span class="cd-back-k">'+PAGES[backPg][0]+'</span>'+PAGES[backPg][1]();
     backDots.innerHTML = PAGES.map((_,i)=>`<i class="${i===backPg?'on':''}"></i>`).join('');
@@ -2446,6 +2474,7 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
 
   let spinN = 0, spinT;
   cdEl.addEventListener('click', e=>{
+    if(Date.now() < swipeUntil) return;                 // 방금 스와이프했으면 탭 무시
     // 99일 원형(링) → 정밀 카운트다운 토글 + 회전
     if(e.target.closest('.cd-ring-wrap')){
       if(cdEl.classList.contains('flipped')){ cdEl.classList.remove('flipped'); backPg = 0; }
@@ -2671,6 +2700,173 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       sceneCleanup = gone;
     }
   })();
+
+  // ── R. 히어로 더블탭 → 해변 이모지 터짐 ──
+  (function(){
+    const hero = document.querySelector('header.hero'); if(!hero) return;
+    let last = 0;
+    hero.style.touchAction = 'manipulation';
+    hero.addEventListener('click', e=>{
+      if(e.target.closest('button,a,.hw,.countdown,.prog-wrap,.stats,input,#wxIco,#wxTemp')) { last = 0; return; }
+      const now = Date.now();
+      if(now - last < 430){ last = 0; emojiRain(['🥥','🌴','🌺','🍹','🐚','🩴'], 8); haptic('tap'); }
+      else last = now;
+    });
+  })();
+
+  // ── S. 골프 제목 ⛳ 탭 → 퍼팅 ──
+  (function(){
+    const e = document.querySelector('#golf .sec .e'); if(!e) return;
+    e.style.cursor = 'pointer'; e.style.display = 'inline-block';
+    e.addEventListener('click', ()=>{
+      haptic('tap');
+      if(rm) return;
+      const r = e.getBoundingClientRect();
+      const ball = document.createElement('div'); ball.className = 'putt-ball';
+      ball.style.left = r.left + 'px'; ball.style.top = (r.top + r.height*0.62) + 'px';
+      document.body.appendChild(ball);
+      setTimeout(()=> ball.remove(), 900);
+      setTimeout(()=>{ e.classList.remove('putt-hit'); void e.offsetWidth; e.classList.add('putt-hit'); }, 620);
+    });
+  })();
+
+  // ── T. 골프 스탯 숫자 탭 → 다시 카운트업 ──
+  (function(){
+    document.querySelectorAll('#golf .golf-sum .gs .n').forEach(n=>{
+      n.style.cursor = 'pointer';
+      n.addEventListener('click', ()=>{
+        const raw = n.textContent, m = raw.match(/[\d,]+/);
+        haptic('tap');
+        if(!m || rm){ if(!rm){ n.classList.remove('repop'); void n.offsetWidth; n.classList.add('repop'); } return; }
+        const suffix = raw.slice(m.index + m[0].length), prefix = raw.slice(0, m.index);
+        const to = +m[0].replace(/,/g,''); const t0 = performance.now(); const dur = 620;
+        n.classList.remove('repop'); void n.offsetWidth; n.classList.add('repop');
+        (function tick(t){
+          const p = Math.min(1,(t-t0)/dur), v = Math.round((1-Math.pow(1-p,3))*to);
+          n.textContent = prefix + v.toLocaleString() + suffix;
+          if(p<1) requestAnimationFrame(tick); else n.textContent = raw;
+        })(t0);
+      });
+    });
+  })();
+
+  // ── U. 카운트다운 좌우 스와이프 → 플립 페이지 넘기기 ──
+  (function(){
+    let x0=0, y0=0, on=false;
+    cdEl.addEventListener('touchstart', ev=>{ x0=ev.touches[0].clientX; y0=ev.touches[0].clientY; on=true; }, {passive:true});
+    cdEl.addEventListener('touchend', ev=>{
+      if(!on) return; on=false;
+      const dx = ev.changedTouches[0].clientX - x0, dy = ev.changedTouches[0].clientY - y0;
+      if(Math.abs(dx) < 44 || Math.abs(dx) < Math.abs(dy)*1.5) return;
+      swipeUntil = Date.now() + 450;
+      if(cdEl.classList.contains('precise')) stopPrecise();
+      if(dx < 0){                                   // ← 다음
+        if(!cdEl.classList.contains('flipped')){ backPg = 0; renderBack(); cdEl.classList.add('flipped'); }
+        else { backPg = (backPg + 1) % PAGES.length; renderBack(); }
+      } else {                                      // → 이전 / 닫기
+        if(!cdEl.classList.contains('flipped')) return;
+        if(backPg > 0){ backPg--; renderBack(); }
+        else cdEl.classList.remove('flipped');
+      }
+      haptic('tap');
+    }, {passive:true});
+  })();
+
+  // ── V. 온도 탭 → 날씨 한마디 ──
+  (function(){
+    const tp = $('wxTemp'); if(!tp) return;
+    tp.style.cursor = 'pointer';
+    tp.addEventListener('click', e=>{
+      e.stopPropagation();
+      const t = parseInt(tp.textContent, 10);
+      const wet = /rain|storm/.test(document.querySelector('header.hero').dataset.wx || '');
+      let m;
+      if(isNaN(t)) m = '날씨 동기화하고 다시 눌러보세요';
+      else if(t >= 34) m = '완전 더워요 🥵 · 그늘·물·선크림 필수, 한낮 야외 자제';
+      else if(t >= 30) m = '딱 좋은 여행 날씨 😎 · 반팔 각';
+      else if(t >= 26) m = '살짝 선선 🌤️ · 반팔에 얇은 겉옷 하나';
+      else m = '태국치곤 쌀쌀해요 🧥 · 겉옷 챙기기';
+      toast('🌡️ 지금 ' + (isNaN(t)?'':t+'°C'), (wet ? '☂️ 우산 챙기세요 · ' : '') + m, 3600);
+      haptic('tap');
+    });
+  })();
+
+  // ── W. 첫 화면에 오래 머물면 → 새 한 마리 스윽 (유휴당 1회) ──
+  (function(){
+    const hero = document.querySelector('header.hero'); if(!hero || rm) return;
+    let idleT, fired = false;
+    function arm(){
+      clearTimeout(idleT); fired = false;
+      idleT = setTimeout(()=>{
+        if(fired || scrollY > 44 || document.hidden) return;
+        fired = true;
+        const b = document.createElement('div'); b.className = 'hero-bird';
+        b.textContent = Math.random() < .5 ? '🐦' : '🕊️';
+        b.style.setProperty('--bd', (6.5 + Math.random()*2.5).toFixed(1) + 's');
+        b.style.top = (9 + Math.random()*12) + '%';
+        hero.appendChild(b); setTimeout(()=> b.remove(), 9500);
+      }, 26000);
+    }
+    ['touchstart','click','scroll','keydown'].forEach(ev=> addEventListener(ev, arm, {passive:true}));
+    arm();
+  })();
+
+  // ── X. 푸터 버전 5탭 → 제작 후기 ──
+  (function(){
+    const f = document.querySelector('footer.ft .wrap'); if(!f) return;
+    f.style.cursor = 'pointer';
+    let n = 0, t;
+    f.addEventListener('click', ()=>{
+      n++; clearTimeout(t); t = setTimeout(()=> n = 0, 3000);
+      if(n >= 5){ n = 0;
+        toast('✈️ 만든 사람', '이 판을 함께 만든 시간도 여행의 일부예요 · 즐거운 여행 되세요', 4200);
+        const r = f.getBoundingClientRect(); confetti(r.left + r.width/2, r.top, 18, 80); haptic('ok');
+      }
+    });
+  })();
+
+  // ── Y. "다음 일정" ✈️ 탭 → 비행기 이륙 ──
+  (function(){
+    const e = $('ncE'); if(!e) return;
+    e.addEventListener('click', ev=>{ ev.stopPropagation(); flyPlane(); haptic('tap'); });
+  })();
+
+  // ── Z. 스크롤 많이 내리면 "맨 위로" 버튼 ──
+  (function(){
+    const b = document.createElement('button');
+    b.className = 'to-top'; b.type = 'button'; b.setAttribute('aria-label','맨 위로'); b.textContent = '↑';
+    document.body.appendChild(b);
+    let shown = false;
+    addEventListener('scroll', ()=>{
+      const want = scrollY > 900;
+      if(want !== shown){ shown = want; b.classList.toggle('show', want); }
+    }, {passive:true});
+    b.addEventListener('click', ()=>{
+      haptic('tap');
+      scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' });
+      if(!rm) emojiRain(['🌴'], 3);
+    });
+  })();
+
+  // ── AA. 흔들기 → 어질어질 ──
+  (function(){
+    if(rm || typeof DeviceMotionEvent === 'undefined') return;
+    let hits = 0, lastX = 0, lastT = 0, cool = 0;
+    addEventListener('devicemotion', e=>{
+      const a = e.accelerationIncludingGravity; if(!a) return;
+      const now = Date.now();
+      if(Math.abs((a.x||0) - lastX) > 15 && now - lastT > 90){ hits++; lastT = now; }
+      lastX = a.x || 0;
+      if(hits >= 5 && now - cool > 4000){
+        hits = 0; cool = now;
+        emojiRain(['🥥','🌴','🫨','😵‍💫'], 12);
+        toast('🫨', '어질어질~ 살살 흔들어요', 2600);
+        try{ navigator.vibrate && navigator.vibrate([15,40,15,40,25]); }catch(e){}
+      }
+      if(now - lastT > 700) hits = 0;
+    });
+  })();
+
 })();
 
 // ── 홈 화면에 앱으로 저장 (할 일 탭 하단) ──
