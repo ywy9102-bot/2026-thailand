@@ -42,7 +42,12 @@ button,.tb,.copy-btn,.ci,.gcard-head,.next-card,a,.lg-head,.day-head,.bar-head,.
 img,svg{max-width:100%}
 button{font-family:inherit}
 :focus-visible{outline:2.5px solid var(--gold); outline-offset:2px; border-radius:6px;}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+::selection{background:var(--gold-s); color:var(--ink);}
+header.hero ::selection{background:rgba(245,231,192,.30); color:#F4EEDD;}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
 .wrap{max-width:900px;margin:0 auto;padding:0 16px;}
 
 /* ══ HERO ══ */
@@ -100,7 +105,7 @@ header.hero[data-occasion="newyear"] .hero-occ i{
 .eyebrow .occ-emoji{font-size:13px;margin-left:-2px}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;
   color:#BCCDC4;margin:0 0 12px;display:flex;align-items:center;gap:8px}
-.eyebrow-upd{margin-left:auto;letter-spacing:.02em;font-size:10px;color:#A7BAB1;
+.eyebrow-upd{margin-left:auto;letter-spacing:.02em;font-size:10px;color:#BACDC0;
   font-weight:400;white-space:nowrap;text-transform:none;
   text-shadow:0 1px 4px rgba(6,18,14,.85),0 0 3px rgba(6,18,14,.7);position:relative;z-index:1}
 .eyebrow-upd #updMini{display:none}
@@ -159,9 +164,9 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
   color:var(--gold-s);opacity:.78;cursor:pointer;padding:5px 3px;border-radius:6px;white-space:nowrap;
   font-size:9px;font-weight:700;letter-spacing:.13em;line-height:1.9}
 .hw-main{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 6px;line-height:1.8}
-.hw-sub{flex-basis:100%;font-size:9px;color:#8AA298;letter-spacing:.02em;margin-top:1px;
+.hw-sub{flex-basis:100%;font-size:9.5px;color:#AAC4B8;letter-spacing:.02em;margin-top:1px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hw-ago{flex:none;align-self:flex-start;color:#9FB6AC;font-size:10px;line-height:2;
+.hw-ago{flex:none;align-self:flex-start;color:#B3CABF;font-size:10px;line-height:2;
   display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
 .hw-spin{display:none;font-size:11px}
 .hw.loading .hw-spin{display:inline-block;animation:wxSpin .8s linear infinite}
@@ -399,7 +404,7 @@ h2.sec .e{font-size:21px;line-height:1}
 /* ══ GOLF ══ */
 .golf-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px}
 .gs{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 10px;text-align:center}
-.gs .n{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--jade-d);line-height:1}
+.gs .n{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--jade-d);line-height:1;font-variant-numeric:tabular-nums}
 .gs .l{font-size:10px;color:var(--ink3);margin-top:5px}
 .gcard{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);
   border-radius:12px;padding:14px 15px;margin-bottom:9px;box-shadow:var(--sh)}
@@ -476,15 +481,15 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 
 /* ── 이동정보 블록 (골프장·관광지) : 구글맵 링크 + Grab/Bolt 붙여넣기용 영문주소 ── */
 .triploc{margin-top:4px;padding-top:11px;border-top:1px dashed var(--line)}
-.tl-char{font-size:11.5px;color:var(--ink2);line-height:1.65;margin:0 0 10px}
+.tl-char{font-size:11.5px;color:var(--ink2);line-height:1.65;margin:0 0 11px}
 .tl-char b{font-weight:700;color:var(--jade-d)}
 .tl-name{font-size:12.5px;font-weight:700;color:var(--jade-d);line-height:1.35}
-.tl-name .tl-en{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
-  color:var(--ink3);margin-top:1px;letter-spacing:0}
-.tl-addr{display:block;margin-top:7px;font-size:11.5px;color:var(--ink2);line-height:1.55;text-decoration:none}
-.tl-addr .mico{color:var(--gold-text);font-size:10px}
-.tl-addr:active{color:var(--jade)}
-.tl-tel{display:inline-block;margin-top:6px;font-size:11.5px;color:var(--ink2);text-decoration:none}
+.tl-addr{display:block;margin-top:4px;font-size:11.5px;color:var(--jade);line-height:1.55;
+  text-decoration:none;text-underline-offset:2px}
+.tl-addr .mico{color:var(--gold-text);font-size:10.5px;white-space:nowrap}
+.tl-addr:hover{text-decoration:underline}
+.tl-addr:active{opacity:.65}
+.tl-tel{display:inline-block;margin-top:7px;font-size:11.5px;color:var(--ink2);text-decoration:none}
 .tl-copy{display:block;margin-top:9px;width:100%;padding:9px 0;border-radius:9px;border:1px solid var(--line);
   background:var(--jade-s);color:var(--jade-d);font-size:11px;font-weight:700;cursor:pointer;
   -webkit-tap-highlight-color:transparent}
@@ -539,7 +544,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .cost-hero{background:linear-gradient(135deg,var(--jade) 0%,var(--jade-d) 100%);color:#fff;
   border-radius:14px;padding:20px;margin-bottom:20px}
 .cost-hero .l{font-size:12px;color:#BCCDC4;margin-bottom:4px}
-.cost-hero .a{font-family:'Fraunces',serif;font-size:30px;font-weight:600;line-height:1.1}
+.cost-hero .a{font-family:'Fraunces',serif;font-size:30px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
 .cost-hero .a small{font-size:14px;font-weight:400;color:#D6E2DC;margin-left:3px}
 .cost-hero .s{font-size:11.5px;color:#A5BAB0;margin-top:7px;line-height:1.6}
 
@@ -694,7 +699,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .hw-ago{order:2;margin-left:auto}
   .hw-more{order:3}
   .hw-main{order:4;flex:1 1 100%;padding-left:2px}
-  .hw-sub{font-size:8.5px}
+  .hw-sub{font-size:9px}
   .next-card{padding:9px 12px;margin-bottom:10px;gap:8px}
   .nc-tag{font-size:10px;padding:2px 7px}
   .nc-e{font-size:14px}
@@ -1620,7 +1625,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.40 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.41 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1725,8 +1730,8 @@ function triplocHTML(o){
   const p = o.pid && PLACES[o.pid];
   let h = o.char ? `<p class="tl-char">${o.char}</p>` : '';
   if(p){
-    h += `<div class="tl-name">${p.ko}<span class="tl-en">${p.en}</span></div>`
-      +  `<a class="tl-addr" href="${gmap(p)}" target="_blank" rel="noopener">📍 ${p.addr} <span class="mico">↗</span></a>`
+    h += `<div class="tl-name">📍 ${p.ko}</div>`
+      +  `<a class="tl-addr" href="${gmap(p)}" target="_blank" rel="noopener">${p.addr} <span class="mico">지도 ↗</span></a>`
       +  (p.tel ? `<a class="tl-tel" href="tel:${telClean(p.tel)}">📞 ${p.tel}</a>` : '')
       +  `<button class="tl-copy" type="button" data-copy="${qesc(grabAddr(p))}">📋 영문 주소 복사 · Grab·Bolt용</button>`;
   } else if(o.addr){
