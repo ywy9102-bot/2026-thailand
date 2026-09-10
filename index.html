@@ -1117,11 +1117,88 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     50%{transform:translateX(50vw) translateY(-1px) rotate(-2deg)}
     74%{transform:translateX(76vw) translateY(1px) rotate(2deg)}
     100%{transform:translateX(118vw) translateY(0) rotate(0)}}
+
+  /* ── 추가 재미 요소 (AB~AK) ── */
+  .cd-plane{cursor:pointer;pointer-events:auto}
+  .cd-plane.roll{filter:drop-shadow(0 0 8px var(--gold-s)) brightness(1.4)}
+  .ele{position:fixed;left:-70px;bottom:calc(50px + env(safe-area-inset-bottom));z-index:188;
+    font-size:30px;pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}
+  @media (prefers-reduced-motion:no-preference){ .ele{animation:eleWalk 6.5s linear forwards} }
+  @keyframes eleWalk{0%{transform:translateX(0)}
+    8%{transform:translateX(6vw) rotate(-2deg)}16%{transform:translateX(14vw) rotate(2deg)}
+    24%{transform:translateX(22vw) rotate(-2deg)}50%{transform:translateX(50vw) rotate(2deg)}
+    76%{transform:translateX(80vw) rotate(-2deg)}100%{transform:translateX(120vw)}}
+  .shootstar{position:absolute;top:8%;right:-10%;width:2px;height:2px;border-radius:50%;
+    background:#FFF6DA;box-shadow:0 0 6px 2px rgba(255,246,218,.9);z-index:0;pointer-events:none}
+  .shootstar::after{content:"";position:absolute;right:2px;top:0;width:70px;height:1px;
+    background:linear-gradient(to left,rgba(255,246,218,.85),transparent)}
+  @media (prefers-reduced-motion:no-preference){ .shootstar{animation:shoot 1s ease-in forwards} }
+  @keyframes shoot{0%{opacity:0;transform:translate(0,0)}12%{opacity:1}
+    100%{opacity:0;transform:translate(-88vw,42vh)}}
+  .stamp{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) rotate(-14deg) scale(.4);
+    z-index:190;pointer-events:none;font-family:'Fraunces',serif;font-weight:700;font-size:19px;
+    letter-spacing:.06em;color:var(--coral);border:2.5px solid var(--coral);border-radius:8px;
+    padding:5px 12px;opacity:0;background:rgba(246,242,232,.5)}
+  @media (prefers-reduced-motion:no-preference){ .stamp{animation:stampThunk 1.2s cubic-bezier(.3,1.4,.5,1) forwards} }
+  @keyframes stampThunk{0%{opacity:0;transform:translate(-50%,-50%) rotate(-14deg) scale(.4)}
+    18%{opacity:1;transform:translate(-50%,-50%) rotate(-14deg) scale(1.05)}
+    30%{transform:translate(-50%,-50%) rotate(-14deg) scale(1)}
+    75%{opacity:1}100%{opacity:0;transform:translate(-50%,-56%) rotate(-14deg) scale(1)}}
+  .rbadge{position:fixed;z-index:190;pointer-events:none;font-family:'IBM Plex Mono',monospace;
+    font-weight:700;font-size:10px;color:var(--hero-fg);background:var(--jade-d);
+    border-radius:99px;padding:3px 8px;box-shadow:0 4px 10px -3px rgba(14,40,34,.5);opacity:0}
+  @media (prefers-reduced-motion:no-preference){ .rbadge{animation:rbadgePop 1.5s ease forwards} }
+  @keyframes rbadgePop{0%{opacity:0;transform:translateY(4px) scale(.8)}
+    16%{opacity:1;transform:translateY(-2px) scale(1)}80%{opacity:1;transform:translateY(-2px)}
+    100%{opacity:0;transform:translateY(-8px)}}
+  .sec .e{cursor:pointer}
+  @media (prefers-reduced-motion:no-preference){
+    .sec .e.wig{animation:secWig .5s ease}
+    .countdown.almost .cd-prog{animation:ringPulse 1.7s ease-in-out infinite}
+  }
+  @keyframes secWig{0%,100%{transform:none}30%{transform:rotate(-12deg) scale(1.12)}65%{transform:rotate(9deg) scale(1.12)}}
+}
+
+/* ── 이번 업데이트 시트 ── */
+.wn-scrim{position:fixed;inset:0;z-index:210;display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(12,35,29,0);transition:background .3s ease}
+.wn-scrim.on{background:rgba(12,35,29,.55)}
+.wn-sheet{width:100%;max-width:520px;background:var(--paper);border-radius:20px 20px 0 0;
+  padding:22px 20px calc(20px + env(safe-area-inset-bottom));
+  box-shadow:0 -14px 44px -10px rgba(12,35,29,.45);
+  transform:translateY(100%);transition:transform .34s cubic-bezier(.16,1,.3,1)}
+.wn-scrim.on .wn-sheet{transform:translateY(0)}
+.wn-sheet::before{content:"";display:block;width:38px;height:4px;border-radius:99px;background:var(--line);margin:-8px auto 15px}
+.wn-head{display:flex;align-items:center;gap:9px}
+.wn-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.07em;
+  color:var(--gold-text);background:var(--gold-s);border-radius:99px;padding:3px 9px}
+.wn-title{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--jade-d);margin:0;letter-spacing:-.01em}
+.wn-sub{font-size:.719rem;color:var(--ink3);margin:7px 0 15px}
+.wn-list{list-style:none;margin:0;padding:0}
+.wn-list li{display:flex;gap:11px;align-items:flex-start;padding:12px 2px;border-top:1px solid var(--line)}
+.wn-list li:first-child{border-top:none}
+.wn-rank{flex:none;width:20px;height:20px;border-radius:50%;background:var(--jade);color:var(--hero-fg);
+  font-family:'Fraunces',serif;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.wn-ic{flex:none;font-size:17px;line-height:1.3}
+.wn-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wn-tx b{font-size:.813rem;font-weight:700;color:var(--ink);line-height:1.35}
+.wn-tx span{font-size:.719rem;color:var(--ink2);line-height:1.5}
+.wn-close{margin-top:18px;width:100%;min-height:52px;border:none;border-radius:13px;
+  background:linear-gradient(160deg,var(--jade),var(--jade-d));color:var(--hero-fg);
+  font-family:'Fraunces',serif;font-weight:600;font-size:15px;cursor:pointer;
+  box-shadow:0 8px 20px -8px rgba(14,40,34,.5);-webkit-tap-highlight-color:transparent}
+.wn-close:active{transform:scale(.99)}
+@media (prefers-reduced-motion:reduce){ .wn-sheet,.wn-scrim{transition:none} }
+@media (min-width:761px){
+  .wn-scrim{align-items:center}
+  .wn-sheet{border-radius:20px;transform:translateY(24px);transition:transform .3s ease,opacity .3s ease;opacity:0}
+  .wn-scrim.on .wn-sheet{transform:none;opacity:1}
 }
 
 @media print{
   nav.tabs{display:none}
-  .toast,.ptr,.hero-fx,.flyplane,.confp,.hero-lanterns,.tab-fly,.tuktuk,.cd-plane{display:none!important}
+  .toast,.ptr,.hero-fx,.flyplane,.confp,.hero-lanterns,.tab-fly,.tuktuk,.cd-plane,
+  .wn-scrim,.ele,.shootstar,.stamp,.rbadge{display:none!important}
   .next-card,.hw-ago,.hw-more,.tidbit,.gguide,.mt-topics{display:none!important}
   .hw{color:var(--ink2)!important}
   header.hero{background:#fff!important;color:var(--ink)!important;padding:0 0 16px}
@@ -1635,8 +1712,21 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.45 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  <span id="appVer">v9.46</span> · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
+
+<!-- 이번 업데이트 (버전당 1회) -->
+<div class="wn-scrim" id="wnScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="wnTitle">
+    <div class="wn-head">
+      <span class="wn-badge" id="wnVer">v9.46</span>
+      <h2 class="wn-title" id="wnTitle">이번 업데이트</h2>
+    </div>
+    <p class="wn-sub">지난번 열었을 때보다 이만큼 좋아졌어요 · 중요한 순</p>
+    <ol class="wn-list" id="wnList"></ol>
+    <button class="wn-close" id="wnClose" type="button">확인했어요</button>
+  </div>
+</div>
 
 <!-- 재미 요소 오버레이 (모바일) -->
 <div class="ptr" id="ptr" aria-hidden="true"><span class="ptr-icon">🌴</span></div>
@@ -1650,6 +1740,7 @@ addEventListener('appinstalled', ()=>{ window.__bip = null; dispatchEvent(new Ev
 
 const $=id=>document.getElementById(id);
 const won=n=>n==null?'—':n.toLocaleString();
+const APP_VER='v9.46';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1762,6 +1853,7 @@ document.addEventListener('click', async e=>{
     document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e2){} ta.remove(); }
   const o = b.textContent; b.textContent = '✅ 복사됨 · Grab·Bolt 목적지에 붙여넣기'; b.classList.add('copied');
   if(typeof haptic === 'function') haptic('ok');
+  if(typeof window.__confettiAt === 'function') window.__confettiAt(b);
   if(typeof window.__toast === 'function') window.__toast('📋', '영문 주소 복사 완료', 2400);
   setTimeout(()=>{ b.textContent = o; b.classList.remove('copied'); }, 1900);
 });
@@ -2838,6 +2930,7 @@ $('bars').addEventListener('click', async e=>{
     try{ await navigator.clipboard.writeText(msg); }
     catch(_){ const ta=document.createElement('textarea'); ta.value=msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
     const o=cp.textContent; cp.textContent='✅ 복사됨'; cp.classList.add('copied'); haptic('ok');
+    if(typeof window.__confettiAt === 'function') window.__confettiAt(cp);
     setTimeout(()=>{ cp.textContent=o; cp.classList.remove('copied'); }, 1600);
     return;
   }
@@ -3042,6 +3135,56 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
       if(next && next!==tbs[cur]){ haptic('tap'); go(next); }
     }
   }, {passive:true});
+})();
+
+// ── 푸터 버전 표기 동기화 ──
+try{ $('appVer').textContent = APP_VER; }catch(e){}
+
+// ── "이번 업데이트" 시트: 새 버전을 처음 열 때 1회, Top 5 ──
+(function(){
+  const scrim=$('wnScrim'); if(!scrim) return;
+  const K='thai2026_seen_ver';
+  const seenThisVer=()=>{
+    try{ if(localStorage.getItem(K)===APP_VER) return true; }catch(e){}
+    try{ if(sessionStorage.getItem(K)===APP_VER) return true; }catch(e){}
+    return window.__wnShown===APP_VER;   // 스토리지 차단 시 세션 1회로 폴백
+  };
+  if(seenThisVer()) return;                   // 이미 이 버전을 봤음
+  const WHATS_NEW=[
+    ['⛳','골프장 이동정보','카드를 열면 골프장 위치·구글맵 링크·"영문 주소 복사(Grab·Bolt용)" 버튼'],
+    ['🕐','시암CC 4R 티오프 확정','12/18 07:56 · 12/21 08:36 · 12/22 08:36 · 12/23 08:28 (12/21·23 순서 정정)'],
+    ['🇹🇭','태국 OX 퀴즈 대폭 확장','골프 21문항 · 문화 32문항 — 대마 규제·BTS 요금·Grab/Bolt 등 최신 정보'],
+    ['✈️','재미 요소 추가','카운트다운 링 위 여정 비행기, 저녁 풍등, 날씨 반응 새떼, 꽃잎 축하, 뚝뚝·코끼리…'],
+    ['👀','읽기·접근성 개선','기기 글자 크기 반영, 대비 상향, 날씨·환율 실패 시 "다시 시도" 버튼'],
+  ];
+  const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose');
+  $('wnVer').textContent=APP_VER;
+  $('wnList').innerHTML=WHATS_NEW.map(([ic,t,d],i)=>
+    `<li><span class="wn-rank">${i+1}</span><span class="wn-ic" aria-hidden="true">${ic}</span>`+
+    `<span class="wn-tx"><b>${t}</b><span>${d}</span></span></li>`).join('');
+  const prevFocus=document.activeElement;
+  let done=false;
+  function close(){
+    if(done) return; done=true;
+    scrim.classList.remove('on');
+    document.documentElement.style.overflow='';
+    window.__wnShown=APP_VER;
+    try{ localStorage.setItem('thai2026_seen_ver', APP_VER); }catch(e){}
+    try{ sessionStorage.setItem('thai2026_seen_ver', APP_VER); }catch(e){}
+    setTimeout(()=>{ scrim.hidden=true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    if(typeof haptic==='function') haptic('tap');
+  }
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e=>{ if(e.target===scrim) close(); });
+  addEventListener('keydown', e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
+  sheet.addEventListener('keydown', e=>{ if(e.key==='Tab'){ e.preventDefault(); closeBtn.focus(); } }); // 버튼 1개 → 포커스 가둠
+  setTimeout(()=>{
+    window.__wnShown=APP_VER;                 // 열렸으면 본 것으로 간주 (스토리지 폴백)
+    scrim.hidden=false; document.documentElement.style.overflow='hidden';
+    requestAnimationFrame(()=> scrim.classList.add('on'));
+    closeBtn.focus();
+  }, 650);
 })();
 
 /* ════════ 재미 요소 (모바일 전용) — 유휴 시간에 지연 초기화 (초기 파싱 부담 완화) ════════ */
@@ -3723,6 +3866,120 @@ function __initFunElements(){
       if(now - lastT > 700) hits = 0;
     });
   })();
+
+  // ── AB. 여정 비행기(✈) 탭 → 배럴롤 ──
+  (function(){
+    const p = $('cdPlane'); if(!p) return;
+    p.addEventListener('click', e=>{
+      e.stopPropagation(); haptic('tap');
+      p.classList.add('roll');
+      if(rm){ setTimeout(()=> p.classList.remove('roll'), 400); return; }
+      const base = p.style.transform;
+      p.style.transition = 'transform .82s cubic-bezier(.4,.1,.3,1)';
+      p.style.transform = base + ' rotate(360deg)';
+      setTimeout(()=>{ p.style.transition=''; p.style.transform = base; p.classList.remove('roll'); }, 840);
+    });
+  })();
+
+  // ── AC. 오래 유휴 → 코끼리 산책 (밤/궂은 날 무관, 낮은 확률) ──
+  (function(){
+    if(rm) return;
+    let t;
+    function arm(){ clearTimeout(t); t = setTimeout(()=>{
+      if(scrollY > 60 || document.hidden || Math.random() > 0.32){ arm(); return; }
+      const el = document.createElement('div'); el.className = 'ele'; el.textContent = '🐘';
+      document.body.appendChild(el); setTimeout(()=> el.remove(), 7000);
+      arm();
+    }, 45000); }
+    ['touchstart','click','scroll','keydown'].forEach(ev=> addEventListener(ev, arm, {passive:true}));
+    arm();
+  })();
+
+  // ── AD. 월 구분선 탭 → 테마 이모지 분출 ──
+  (function(){
+    const sets = [
+      ['🥥','🌴','🏖️','🐚','🩴'],   // iA 파타야
+      ['🏙️','🛺','🏯','🌃','🍜'],   // iB 방콕
+      ['🎍','✨','🎊','🧧','🥮'],   // iC January
+    ];
+    document.querySelectorAll('#itin .mdiv').forEach((d,i)=>{
+      d.style.cursor = 'pointer';
+      d.addEventListener('click', ()=>{ haptic('tap'); emojiRain(sets[i] || ['✈️','🌴'], 9); });
+    });
+  })();
+
+  // ── AE. 골퍼 이름칩 롱프레스 → 라운드 수 뱃지 ──
+  (function(){
+    if(typeof GOLF === 'undefined') return;
+    const cnt = {};
+    GOLF.forEach(g=> g.p.forEach(p=> cnt[p] = (cnt[p]||0) + 1));
+    document.querySelectorAll('#golf .gcard .ppl .av').forEach(av=>{
+      let hold;
+      av.addEventListener('pointerdown', ()=>{
+        hold = setTimeout(()=>{
+          const name = av.textContent.trim(), n = cnt[name]; if(!n) return;
+          const r = av.getBoundingClientRect();
+          const b = document.createElement('div'); b.className = 'rbadge'; b.textContent = n + ' R';
+          b.style.left = (r.left + r.width/2 - 15) + 'px';
+          b.style.top = (r.top - 24) + 'px';
+          document.body.appendChild(b); setTimeout(()=> b.remove(), 1500);
+          haptic('ok');
+        }, 480);
+      });
+      ['pointerup','pointerleave','pointercancel'].forEach(ev=> av.addEventListener(ev, ()=> clearTimeout(hold)));
+    });
+  })();
+
+  // ── AF. 숙소·일정·할일 제목 이모지 탭 → 각 테마 반응 (골프 S · 정산 P3와 세트) ──
+  (function(){
+    const acts = {
+      stay: ()=>{ const s = document.createElement('div'); s.className = 'stamp'; s.textContent = '✓ CHECK-IN';
+        document.body.appendChild(s); setTimeout(()=> s.remove(), 1300); },
+      itin: ()=> emojiRain(['📄','🗓️','✏️','📌'], 7),
+      todo: ()=> emojiRain(['✔️','✅','🎯','🙌'], 7),
+    };
+    ['stay','itin','todo'].forEach(k=>{
+      const e = document.querySelector('#'+k+' .sec .e'); if(!e) return;
+      e.style.display = 'inline-block';
+      e.addEventListener('click', ()=>{
+        haptic('tap');
+        if(rm) return;
+        e.classList.remove('wig'); void e.offsetWidth; e.classList.add('wig');
+        acts[k]();
+      });
+    });
+  })();
+
+  // ── AG. D-day 한 자리 수 → 카운트다운 링 골드 펄스 (설렘) ──
+  (function(){
+    const cd = $('cd'); if(!cd || typeof tripDate !== 'function') return;
+    const dep = tripDate('depart'), now = new Date();
+    const days = Math.ceil((dep - now) / 864e5);
+    if(now < dep && days >= 1 && days <= 9) cd.classList.add('almost');
+  })();
+
+  // ── AH. 태국 밤(현지 19~새벽5시) · 첫 화면 유휴 → 별똥별 ──
+  (function(){
+    const hero = document.querySelector('header.hero'); if(!hero || rm) return;
+    let t;
+    function arm(){ clearTimeout(t); t = setTimeout(()=>{
+      const h = (new Date().getUTCHours() + 7) % 24;
+      if(scrollY > 44 || document.hidden || !(h >= 19 || h < 5) || Math.random() > 0.5){ arm(); return; }
+      const s = document.createElement('i'); s.className = 'shootstar';
+      s.style.top = (3 + Math.random()*17) + '%';
+      hero.appendChild(s); setTimeout(()=> s.remove(), 1100);
+      arm();
+    }, 30000); }
+    ['touchstart','click','scroll'].forEach(ev=> addEventListener(ev, arm, {passive:true}));
+    arm();
+  })();
+
+  // ── AI. 주소/정산 메시지 복사 성공 → 버튼에서 미니 컨페티 (외부 핸들러가 호출) ──
+  window.__confettiAt = (el)=>{
+    if(rm || !el) return;
+    const r = el.getBoundingClientRect();
+    confetti(r.left + r.width/2, r.top + 4, 10, 52);
+  };
 
 }
 // 첫 페인트·상호작용을 막지 않도록 유휴 시간(없으면 250ms 후)에 초기화
