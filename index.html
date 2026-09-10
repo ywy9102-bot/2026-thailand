@@ -1613,7 +1613,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
       <svg viewBox="0 0 44 44"><circle class="th-bg" cx="22" cy="22" r="18"/><circle class="th-fg" id="thRing" cx="22" cy="22" r="18"/></svg>
       <span class="th-pct" id="thPct">0%</span>
     </div>
-    <div class="th-info">
+    <div class="th-info" role="status" aria-live="polite">
       <div class="th-nums"><span id="thDone">0</span> / <span id="thTotal">0</span> 완료</div>
       <div class="th-left" id="thLeft">계산중…</div>
     </div>
@@ -1635,7 +1635,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.44 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.45 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -3044,8 +3044,8 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
   }, {passive:true});
 })();
 
-/* ════════ 재미 요소 (모바일 전용) ════════ */
-(function(){
+/* ════════ 재미 요소 (모바일 전용) — 유휴 시간에 지연 초기화 (초기 파싱 부담 완화) ════════ */
+function __initFunElements(){
   if(innerWidth > 760) return;
   const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const D = 864e5;
@@ -3724,7 +3724,9 @@ addEventListener('hashchange',()=>{ const t=tabFromHash(); if(t && !t.classList.
     });
   })();
 
-})();
+}
+// 첫 페인트·상호작용을 막지 않도록 유휴 시간(없으면 250ms 후)에 초기화
+(window.requestIdleCallback || (cb => setTimeout(cb, 250)))(__initFunElements, { timeout: 1500 });
 
 // ── 홈 화면에 앱으로 저장 (할 일 탭 하단) ──
 (function(){
