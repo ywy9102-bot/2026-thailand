@@ -350,6 +350,7 @@ h2.sec .e{font-size:21px;line-height:1}
 .gg-tip{margin:12px 0 0;padding:10px 12px;background:var(--gold-s);border-radius:9px;
   font-size:11.5px;color:var(--gold-text);line-height:1.58}
 .gg-src{margin:8px 0 0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);letter-spacing:.01em}
+.gg-src2{display:block;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);opacity:.85}
 
 /* ── 몽키트래블 여행 지식백과 요약 (접이식 topic) ── */
 .mt-topics{margin:0 0 22px;background:var(--card);border:1px solid var(--line);border-radius:12px;
@@ -472,6 +473,22 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .maddr{color:var(--jade);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:3px}
 .maddr:hover{text-decoration:underline}
 .maddr .mico{font-size:10px;opacity:.7}
+
+/* ── 이동정보 블록 (골프장·관광지) : 구글맵 링크 + Grab/Bolt 붙여넣기용 영문주소 ── */
+.triploc{margin-top:4px;padding-top:11px;border-top:1px dashed var(--line)}
+.tl-char{font-size:11.5px;color:var(--ink2);line-height:1.65;margin:0 0 10px}
+.tl-name{font-size:12.5px;font-weight:700;color:var(--jade-d);line-height:1.35}
+.tl-name .tl-en{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  color:var(--ink3);margin-top:1px;letter-spacing:0}
+.tl-addr{display:block;margin-top:7px;font-size:11.5px;color:var(--ink2);line-height:1.55;text-decoration:none}
+.tl-addr .mico{color:var(--gold-text);font-size:10px}
+.tl-addr:active{color:var(--jade)}
+.tl-tel{display:inline-block;margin-top:6px;font-size:11.5px;color:var(--ink2);text-decoration:none}
+.tl-copy{display:block;margin-top:9px;width:100%;padding:9px 0;border-radius:9px;border:1px solid var(--line);
+  background:var(--jade-s);color:var(--jade-d);font-size:11px;font-weight:700;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.tl-copy.copied{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
+.tl-copy:active{transform:scale(.995)}
 .warn{font-size:12px;color:var(--coral);background:var(--coral-s);border-radius:9px;
   padding:9px 12px;margin-top:8px;line-height:1.6}
 
@@ -781,9 +798,10 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   transition:max-height .34s cubic-bezier(.16,1,.3,1),visibility 0s .34s;
 }
 .gcard.open .gcard-detail,.lg.open .lg-detail,.day.open .day-detail{
-  max-height:640px;visibility:visible;transition:max-height .38s cubic-bezier(.16,1,.3,1),visibility 0s;
+  max-height:760px;visibility:visible;transition:max-height .38s cubic-bezier(.16,1,.3,1),visibility 0s;
 }
-.day.open .day-detail{max-height:800px}
+.gcard.open .gcard-detail{max-height:900px}
+.day.open .day-detail{max-height:1100px}
 
 /* ════════ 재미 요소 (모바일 전용) ════════ */
 .ptr,.confp,.flyplane,.wx-scene{display:none}
@@ -1104,7 +1122,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   .stat .n,.stat .l{color:var(--ink)!important}
   .pnl{display:block!important;break-inside:avoid;margin-bottom:24px}
   .scr{overflow:visible!important;display:block!important} table.d{min-width:0!important}
-  .cost-tbl-h .chev,.cost-tbl-h .ct-more,.next-round,.today-jump,.bar-copy{display:none!important}
+  .cost-tbl-h .chev,.cost-tbl-h .ct-more,.next-round,.today-jump,.bar-copy,.tl-copy{display:none!important}
   .cost-hero{background:none!important;color:var(--ink)!important;border:1px solid var(--line)}
   .cost-hero .l,.cost-hero .s{color:var(--ink2)!important}
   .ci{cursor:default}
@@ -1283,7 +1301,25 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
             <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=63" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
           </div>
         </details>
-        <p class="gg-src">현지 라운드 경험 + 몽키트래블 여행 지식백과 정리</p>
+        <details class="mt-topic">
+          <summary>그린피에 뭐가 포함되나 · 트와일라잇</summary>
+          <div class="mt-body">
+            예약 시 <b>그린피 + 캐디피 + 카트비</b>를 미리 결제하는 게 보통. 현장에서 낼 건 <b>캐디 팁</b>(라운드 후 현금 400~600밧)과, 예약에 안 낀 경우의 카트비 정도.<br>
+            <b>비지터 레이트</b> — 외국인은 현지인보다 비싼 요금. 이번 코스들은 한국과 비슷하거나 더 비싼 편이라, 여행사로 픽업까지 묶어 예약하는 게 유리.<br>
+            <b>트와일라잇</b> — 대개 13~15시 이후 티오프면 정규 요금의 40~60%까지 할인. 단 12월 파타야는 18시면 해가 져 18홀 완주하려면 13시 전 시작 권장.<br>
+            <b>니칸티(12/29)는 올인클루시브</b> — 캐디 팁·현지 음료·식사 2회까지 포함이라 라운드 중 낼 현금이 거의 없음.
+          </div>
+        </details>
+        <details class="mt-topic">
+          <summary>캐디와 소통하는 법</summary>
+          <div class="mt-body">
+            태국은 <b>1인 1캐디</b>. 클럽·라이·거리는 물론 파라솔·얼음물까지 각자 챙겨줍니다.<br>
+            클럽은 숫자로 — "<b>세븐 아이언</b>", "<b>드라이버</b>". 거리는 미터 숫자로 말하면 통함.<br>
+            그린에서 "<b>라인?</b>" 하면 경사를 손·발로 읽어줌. "<b>업/다운</b>", "<b>레프트/라이트</b>".<br>
+            팁은 라운드 후 <b>개인별로</b> 직접. 잘 봐줬으면 조금 더 얹는 정도.
+          </div>
+        </details>
+        <p class="gg-src">현지 라운드 경험 + 몽키트래블 여행 지식백과 + Golfasian·GolfPass 코스 정보(2025–2026) 정리</p>
       </div>
     </div></div>
   </div>
@@ -1380,7 +1416,37 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
         <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=6" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
       </div>
     </details>
-    <p class="gg-src">몽키트래블 여행 지식백과 요약 · 자세한 내용은 각 원문</p>
+    <details class="mt-topic">
+      <summary>방콕 이동 — BTS·MRT·수상보트·Grab</summary>
+      <div class="mt-body">
+        <b>전철</b> — BTS(지상)·MRT(지하)가 주요 관광지 대부분 커버. 2025년 10월 시작된 <b>20밧 균일요금은 태국 국민 한정</b>, 외국인은 기존 거리요금(1역 약 17밧~). 래빗카드·MRT 카드 충전이 편함.<br>
+        <b>수상보트</b> — 짜오프라야 익스프레스보트(오렌지 깃발 16밧)로 왕궁·왓아룬·아이콘시암. 러시아워엔 택시보다 빠름.<br>
+        <b>Grab / Bolt</b> — Bolt가 15~35% 싸지만 취소 잦음, Grab은 비싸도 안정적. 앱에 요금이 미리 떠 흥정 불필요.<br>
+        <b>공항 택시</b> — 미터 요금 + <b>고속도로 통행료 + 공항 수수료 50밧</b> 별도. 4인 이상·짐 많으면 Grab 밴.
+        <span class="gg-src2">Richard Barrow·Bangkok Post·geosthai (2025–2026)</span>
+      </div>
+    </details>
+    <details class="mt-topic">
+      <summary>파타야 이동 · 방콕 왕복</summary>
+      <div class="mt-body">
+        <b>파타야 시내</b> — 빨간 <b>썽태우</b>(바트버스) 기본 10~20밧. 손 흔들어 타고, 내릴 때 벨 누르고 기사에게 요금. 대절도 흥정 가능.<br>
+        <b>Grab / Bolt</b> — 파타야에서도 잘 잡힘. 좀티엔↔파타야 시내 60~120밧대.<br>
+        <b>방콕 ↔ 파타야</b> — 에까마이·모칫 터미널에서 버스·미니밴 자주(1인 130~250밧, 1시간 30분~2시간). 일행 많으면 Grab 밴/사설 픽업.<br>
+        통부라(나 좀티엔) 기준 좀티엔 야시장·세컨로드는 차로 10분 안팎.
+        <span class="gg-src2">현지 이동 정보 (2025–2026)</span>
+      </div>
+    </details>
+    <details class="mt-topic">
+      <summary>12월 방콕·파타야 이벤트</summary>
+      <div class="mt-body">
+        <b>아이콘시암 카운트다운</b>(12/29~31) — 리버사이드 파크에서 대형 멀티미디어 불꽃놀이·공연. 짜오프라야 강변(아시아티크 등)도 연말 불꽃.<br>
+        <b>Wonderfruit</b> — 12월 중순 파타야 인근 The Fields(시암CC 옆)에서 열리는 음악·예술 페스티벌.<br>
+        <b>크리스마스</b> — 방콕 대형몰·호텔이 12월 내내 초대형 트리·일루미네이션, 레스토랑 크리스마스 세트.<br>
+        12~2월은 건기 성수기라 항공·호텔·골프 모두 붐빔 — 예약은 일찍.
+        <span class="gg-src2">trip.com·TAT (2025–2026)</span>
+      </div>
+    </details>
+    <p class="gg-src">몽키트래블 여행 지식백과 + 최근 1년 여행 기사·공식 정보 정리 · 자세한 내용은 각 원문</p>
   </div>
 
   <div class="mdiv">🌴 December · 파타야</div><div id="iA"></div>
@@ -1553,7 +1619,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 </main>
 
 <footer class="ft"><div class="wrap">
-  v9.37 · 태국 겨울 여행 · 2026.12.16–2027.1.4
+  v9.38 · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
 <!-- 재미 요소 오버레이 (모바일) -->
@@ -1588,27 +1654,100 @@ const tripDate = (k, endOfDay) => new Date(TRIP[k] + (endOfDay ? 'T23:59:59+07:0
 /* ═══ DATA ═══ */
 const GOLF=[
  {d:'12/17',w:'목',loc:'pat',c:'Chee Chan Golf Resort',p:['윤우열','김태기','윤성욱'],tee:'08:34 확정',amt:695094,per:231698,st:'ok',
-  book:'200693563',addr:'108/18 Moo 6, Na Jom Tien, Amphoe Sattahip, Chon Buri 20250',tel:'038-196-555'},
+  book:'200693563',pid:'chee',tel:'038-196-555',addr:'108/18 Moo 6, Na Jom Tien, Sattahip, Chon Buri 20250',
+  char:'2019년 개장, David Dale 설계. 빅부다(카오 치찬) 옆 구릉지에 스코틀랜드 하이랜드풍 — 넓은 페어웨이에 오르내림이 큼. 초고속 티프이글 그린, 카트는 정해진 도로만(그린 근처 진입 불가). 파타야 비치에서 40분. 2020 골프다이제스트 태국 1위.'},
  {d:'12/18',w:'금',loc:'pat',c:'Siam CC Rolling Hills',p:['윤우열','김태기','윤성욱'],tee:'8:30–9AM 요청',amt:695095,per:231698,st:'ok',
-  book:'200691954',addr:'50/16 Moo.9 T.Pong A, Bang Lamung, Chon Buri 20150',tel:'038-909-700'},
+  book:'200691954',pid:'siam',tel:'038-909-700',addr:'50/10 Moo 9, Pong, Bang Lamung, Chon Buri 20150',
+  char:'시암CC 4개 코스 중 가장 최근(2014)·가장 언듈레이션이 심한 코스. 이름대로 구르는 언덕 지형이라 평지 라이가 드물고 거리·경사 계산이 까다로움.'},
  {d:'12/21',w:'월',loc:'pat',c:'Siam CC Plantation',p:['윤우열','김태기','윤성욱','정유경'],tee:'08:28 요청',amt:926794,per:231699,st:'ok',
-  book:'200692610',addr:'50/6 Moo 9, T.Pong, Banglamung, Chon Buri 20150',tel:'038-909-700'},
+  book:'200692610',pid:'siam',tel:'038-909-700',addr:'50/10 Moo 9, Pong, Bang Lamung, Chon Buri 20150',
+  char:'LPGA Honda LPGA Thailand 개최 코스. 파인애플 농장 테마 27홀, 넓지만 벙커·워터가 전략적으로 놓여 티 선택이 중요. 프로 셋업이라 뒷핀이면 어려움.'},
  {d:'12/22',w:'화',loc:'pat',c:'Siam CC Waterside',p:['윤우열','김태기','윤성욱','정유경','정유현'],tee:'08:36 요청',amt:1158492,per:231698,st:'ok',
-  book:'200693565',addr:'50/6 Moo 9, T.Pong, Banglamung, Chon Buri 20150',tel:'038-909-700'},
+  book:'200693565',pid:'siam',tel:'038-909-700',addr:'50/10 Moo 9, Pong, Bang Lamung, Chon Buri 20150',
+  char:'18홀 중 상당수에 물이 걸리는 코스. 아일랜드 그린·워터캐리 홀이 많아 클럽 선택과 배짱이 필요. 바람 불면 난이도가 확 오름.'},
  {d:'12/23',w:'수',loc:'pat',c:'Siam CC Plantation',p:['윤우열','김태기','윤성욱','정유경','정유현'],tee:'08:36 요청 · 오전',amt:1153600,per:230720,st:'ok',
-  book:'200694123',addr:'50/6 Moo 9, T.Pong, Banglamung, Chon Buri 20150',tel:'038-909-700'},
+  book:'200694123',pid:'siam',tel:'038-909-700',addr:'50/10 Moo 9, Pong, Bang Lamung, Chon Buri 20150',
+  char:'12/21과 같은 Plantation 코스, 둘째 라운드. 27홀이라 앞선 날과 다른 9홀 조합이 나올 수 있음. 파인애플 농장 테마·프로 셋업.'},
  {d:'12/24',w:'목',loc:'pat',c:'Phoenix Gold Golf & CC',p:['윤우열','윤성욱','정유경','정유현'],tee:'08:24 요청',amt:523448,per:130862,st:'ok',
-  book:'200706977',addr:'Sukhumvit Rd 2, Muang Pattaya, Chon Buri 20150',tel:'084-873-5363'},
+  book:'200706977',pid:'phoenix',tel:'038-239-391',addr:'111 Moo 9, Sukhaphiban 2 Rd, Huai Yai, Bang Lamung, Chon Buri 20150',
+  char:'1993년 개장한 27홀 클래식(마운틴·오션·레이크), Dennis Griffiths 설계. 망고·유칼립투스가 늘어선 파크랜드 구릉. 오션 코스 마지막 홀 티에서 파타야 시내·태국만 전망. 최근 리뷰는 페어웨이가 다소 무르고 그린이 느린 편.'},
  {d:'12/29',w:'화',loc:'bkk',c:'Nikanti Golf Club',p:['윤우열','이준영','윤성욱','정유현'],tee:'08:30 확정',amt:1023096,per:255774,st:'ok',
-  book:'200698940',bid:'eec215',addr:'333 Moo 2 T.Dhammasala A.Muang, Nakhon Pathom 73000',tel:'034-965-666'},
+  book:'200698940',bid:'eec215',pid:'nikanti',tel:'034-965-666',addr:'333 Moo 2, Thammasala, Mueang, Nakhon Pathom 73000',
+  char:'방콕 서쪽 1시간, 옛 논 위에 조성한 링크스풍. 파3·4·5를 2개씩 묶은 6홀 3루프(아시아 최초). 그린피에 캐디·캐디팁·현지 음료·식사 2회가 포함된 올인클루시브 — 라운드 중 따로 낼 현금이 거의 없음. 클럽하우스·서비스 평이 매우 좋음.'},
  {d:'12/31',w:'목',loc:'bkk',c:'Royal Bang Pa-In Golf Club',p:['윤우열','이준영','윤성욱','정유경'],tee:'08:30 확정',amt:881496,per:220374,st:'ok',
-  book:'200698946',addr:'19 Moo.14, Bang Krasan, Bangpain, Phra Nakhon Si Ayutthaya 13160',tel:'063-195-2286'},
+  book:'200698946',pid:'bangpain',tel:'063-195-2286',addr:'19 Moo 14, Bang Krasan, Bang Pa-in, Phra Nakhon Si Ayutthaya 13160',
+  char:'Schmidt-Curley 설계, 2017년 개장. 아유타야 옛 늪지·논을 매립한 파크랜드로 방콕에서 1시간, 돈므앙 공항 30분. 챔피언 버뮤다 초대형·초고속 그린이 관건이라 퍼팅 승부, 파스팔룸 페어웨이는 거리가 잘 남. 월요일 휴장.'},
 ];
 const GOLFERS=['윤우열','윤성욱','김태기','정유경','정유현','이준영'];
 const PCOLOR={'윤우열':'#7FBFA6','윤성욱':'#B6A6D9','김태기':'#8AC0E4','정유경':'#E8C27A','정유현':'#EFA895','이준영':'#8FCFC2'};
 function pc(name){return PCOLOR[name]||'#B7C4BC';}
 function pcBg(name){return pc(name)+'2E';}  // 아주 옅은 배경톤
 function dot(name){return `<span class="pdot" style="background:${pc(name)}"></span>`;}
+
+// ── 이동정보: 주요 장소 (구글맵 링크 + Grab/Bolt 붙여넣기용 영문 주소) ──
+//   주소·이름은 이동앱·구글맵 인식을 위해 영문 로마자 유지. 출처: 각 골프장 공식 / Golfasian / GolfPass (2025–2026 확인)
+const PLACES = {
+  chee:     {ko:'치찬 골프 리조트',        en:'Chee Chan Golf Resort',            tel:'038-196-555',
+             addr:'108/18 Moo 6, Na Jom Tien, Sattahip, Chon Buri 20250',                 ll:'12.7724,100.9644'},
+  siam:     {ko:'시암 컨트리클럽 (파타야)', en:'Siam Country Club Pattaya',         tel:'038-909-700',
+             addr:'50/10 Moo 9, Pong, Bang Lamung, Chon Buri 20150',                      ll:'12.9181,100.9877'},
+  phoenix:  {ko:'피닉스 골드 GCC',          en:'Phoenix Gold Golf & Country Club',  tel:'038-239-391',
+             addr:'111 Moo 9, Sukhaphiban 2 Rd, Huai Yai, Bang Lamung, Chon Buri 20150',  ll:''},
+  nikanti:  {ko:'니칸티 골프클럽',          en:'Nikanti Golf Club',                tel:'034-965-666',
+             addr:'333 Moo 2, Thammasala, Mueang, Nakhon Pathom 73000',                   ll:''},
+  bangpain: {ko:'로열 방파인 골프클럽',     en:'Royal Bang Pa-In Golf Club',       tel:'063-195-2286',
+             addr:'19 Moo 14, Bang Krasan, Bang Pa-in, Phra Nakhon Si Ayutthaya 13160',   ll:'14.1693,100.5383'},
+  // 방콕·파타야 관광 (2025–2026)
+  iconsiam:    {ko:'아이콘시암',            en:'ICONSIAM',
+                addr:'299 Charoen Nakhon Rd, Khlong San, Bangkok 10600',                  ll:'13.7266,100.5100'},
+  joddfairs:   {ko:'JODD FAIRS 야시장',     en:'Jodd Fairs Night Market (Rama IX)',
+                addr:'Rama IX Rd, Huai Khwang, Bangkok 10310',                            ll:'13.7576,100.5657'},
+  grandpalace: {ko:'왕궁·왓 프라깨우',      en:'The Grand Palace Bangkok',
+                addr:'Na Phra Lan Rd, Phra Nakhon, Bangkok 10200',                        ll:'13.7500,100.4914'},
+  watarun:     {ko:'왓 아룬 (새벽 사원)',   en:'Wat Arun',
+                addr:'158 Thanon Wang Doem, Bangkok Yai, Bangkok 10600',                  ll:'13.7437,100.4889'},
+  asiatique:   {ko:'아시아티크',            en:'Asiatique The Riverfront',
+                addr:'2194 Charoen Krung Rd, Wat Phraya Krai, Bang Kho Laem, Bangkok 10120', ll:'13.7043,100.5041'},
+};
+// 구글맵 링크: 좌표 있으면 정확한 핀, 없으면 이름 검색 — 둘 다 크롬/구글맵 앱에서 열림
+function gmap(p){
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.ll || (p.en + ', Thailand'));
+}
+// Grab/Bolt 목적지 입력용: "영문이름, 영문주소"
+function grabAddr(p){ return p.addr ? (p.en + ', ' + p.addr) : p.en; }
+// 일정 추천 텍스트 안에서 쓰는 구글맵 링크 (PLACES id → <a>)
+const gm = (id,label) => { const p = PLACES[id]; return p ? `<a href="${gmap(p)}" target="_blank" rel="noopener">${label||p.ko} ↗</a>` : (label||id); };
+const telClean = t => (t||'').replace(/[^0-9+]/g,'');
+const qesc = s => String(s).replace(/"/g,'&quot;');
+// 골프장·관광지 공통 이동정보 블록
+function triplocHTML(o){
+  const p = o.pid && PLACES[o.pid];
+  let h = o.char ? `<p class="tl-char">${o.char}</p>` : '';
+  if(p){
+    h += `<div class="tl-name">${p.ko}<span class="tl-en">${p.en}</span></div>`
+      +  `<a class="tl-addr" href="${gmap(p)}" target="_blank" rel="noopener">📍 ${p.addr} <span class="mico">↗</span></a>`
+      +  (p.tel ? `<a class="tl-tel" href="tel:${telClean(p.tel)}">📞 ${p.tel}</a>` : '')
+      +  `<button class="tl-copy" type="button" data-copy="${qesc(grabAddr(p))}">📋 영문 주소 복사 · Grab·Bolt용</button>`;
+  } else if(o.addr){
+    h += `<a class="tl-addr" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.addr)}" target="_blank" rel="noopener">📍 ${o.addr} <span class="mico">↗</span></a>`
+      +  (o.tel ? `<a class="tl-tel" href="tel:${telClean(o.tel)}">📞 ${o.tel}</a>` : '')
+      +  `<button class="tl-copy" type="button" data-copy="${qesc(o.addr)}">📋 주소 복사 · Grab·Bolt용</button>`;
+  }
+  return h ? `<div class="triploc">${h}</div>` : '';
+}
+// .tl-copy 클립보드 (골프·일정 공통, 위임)
+document.addEventListener('click', async e=>{
+  const b = e.target.closest('.tl-copy'); if(!b) return;
+  e.stopPropagation();
+  const txt = b.dataset.copy || '';
+  try{ await navigator.clipboard.writeText(txt); }
+  catch(_){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e2){} ta.remove(); }
+  const o = b.textContent; b.textContent = '✅ 복사됨 · Grab·Bolt 목적지에 붙여넣기'; b.classList.add('copied');
+  if(typeof haptic === 'function') haptic('ok');
+  if(typeof window.__toast === 'function') window.__toast('📋', '영문 주소 복사 완료', 2400);
+  setTimeout(()=>{ b.textContent = o; b.classList.remove('copied'); }, 1900);
+});
 
 const FAMS=[
  {tag:'가족 1',cnt:'5명',rows:[
@@ -1633,7 +1772,7 @@ function gday(dk,l,extra){ // dk: GOLF의 d 필드('12/17' 등), l: 지역표시
   const names = g.p.map(p=>`${dot(p)}${p}`).join(' ');
   const status = g.st==='todo' ? `+1인 미정 · ${g.note||'견적 재요청'}` : `· ${g.tee}`;
   return {d:dk.split('/')[1], w:g.w, l, e:'⛳', s:g.st, t:g.c, n:`${names} ${status}`, x:extra,
-    book:g.book, addr:g.addr, tel:g.tel};
+    book:g.book, addr:g.addr, tel:g.tel, pid:g.pid};
 }
 const ITIN_A=[
  {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류',
@@ -1658,6 +1797,7 @@ const ITIN_A=[
   recd:[
    ['낮','성인 3인 라운드(Siam CC Rolling Hills, 방람룽 방면)'],
    ['저녁','골퍼끼리 이른 저녁 — The Glass House(나 좀티엔·해변 테라스) 또는 림파 라팡(16일 미방문 시). <a href="https://maps.google.com/?q=The+Glass+House+Beach+Restaurant+Pattaya" target="_blank" rel="noopener">지도 ↗</a>'],
+   ['참고','Wonderfruit — 매년 12월 중순 파타야 인근 The Fields(시암CC 옆)에서 열리는 음악·예술 페스티벌. 우리 라운드 기간과 겹치면 시암CC 주변 교통·숙박 수요 증가 가능 → 12/18·21~23 이동 시 참고'],
    ['심야','가족1 4인 22:00 수완나품 도착 → 공항픽업(확정) → 통부라 ~00:30. 물·야식 미리 준비'],
   ]},
  {d:'19',w:'토',l:'파타야',e:'🏝️',t:'꼬란섬 (Koh Larn)',n:'가족1 통부라 도착 ~00:30',
@@ -1734,8 +1874,8 @@ const ITIN_B=[
  {d:'28',w:'월',l:'BKK',e:'🛕',t:'방콕 대표 사원 (전원)',
   rec:'방콕 3대 사원 · 짜오프라야',
   recd:[
-   ['코스','왕궁 + 왓 프라깨우(에메랄드 불상, 08:30~15:30) → 도보 5분 왓 포(길이 46m 와불) → 타 띠안서 나룻배(4밧) → 왓 아룬(새벽사원, 프라 쁘랑 탑) → 일몰'],
-   ['복장·팁','어깨·무릎 가림 필수(왕궁 엄격) · 오전 일찍 · 왕궁 입장 500밧(짐 톰슨 등 포함 패스)'],
+   ['코스',`${gm('grandpalace','왕궁·왓 프라깨우')}(에메랄드 불상, 08:30~15:30) → 도보 5분 왓 포(길이 46m 와불) → 타 띠안서 나룻배(4밧) → ${gm('watarun','왓 아룬')}(새벽사원, 프라 쁘랑 탑) → 일몰`],
+   ['복장·팁','어깨·무릎 가림 필수(왕궁 엄격) · 오전 일찍 · 왕궁 입장 500밧(짐 톰슨 등 포함 패스) · 입구 앞 호객·"오늘 휴무" 사기 주의(정문으로 직진)'],
    ['장모님','왕궁+왓 포까지만, 왓 아룬은 강 건너 조망 · 중간중간 카페 휴식'],
    ['공식','<a href="https://www.royalgrandpalace.th" target="_blank" rel="noopener">왕궁 ↗</a> · <a href="https://www.watpho.com" target="_blank" rel="noopener">왓 포 ↗</a>'],
    ['저녁 A','야오와랏(차이나타운) 길거리 음식 — 미쉐린 노점 다수, 18시 이후'],
@@ -1746,7 +1886,8 @@ const ITIN_B=[
   recd:[
    ['Plan A','수상시장 — 담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일). 07:30~08:00 출발, 점심 무렵 복귀. 아이들이 좋아함 · TAT 소개 유형'],
    ['Plan B','동물 — 사파리월드 & 마린파크. 드라이브 사파리 + 돌고래·오랑우탄·물개 쇼. 종일, 시내서 편도 40~60분. <a href="https://maps.google.com/?q=Safari+World+Bangkok" target="_blank" rel="noopener">지도 ↗</a>'],
-   ['Plan C','강+실내 — 아이콘시암(쑥시암 실내 수상시장·18시 분수쇼) + 짜오프라야 셔틀보트. 냉방·전 연령. <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan C',`강+실내 — ${gm('iconsiam','아이콘시암')}(쑥시암 실내 수상시장·18시 분수쇼) + 짜오프라야 셔틀보트. 냉방·전 연령. <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>`],
+   ['야시장',`밤 — ${gm('joddfairs','JODD FAIRS')}(라마9, 레트로·빈티지카 테마 야시장, 16시~24시). 기차 야시장이 옮겨온 곳. 리앙 우돔쑥 랍스터·꽃게 유명`],
    ['차량','골프 차량과 분리 예약'],
   ]},
  {d:'30',w:'수',l:'BKK',e:'🏬',t:'자유일정 (전원)',n:'가족2 티니디 체크아웃 → GCP 체크인',
@@ -1754,7 +1895,7 @@ const ITIN_B=[
   recd:[
    ['오전','가족2 체크아웃 → GCP(랏차담리, 센트럴월드 옆) 이동·정착'],
    ['Plan A','쇼핑+아이 — 에라완 사당 + 센트럴월드·시암파라곤 + 씨라이프 방콕(시암파라곤 지하 아쿠아리움)'],
-   ['Plan B','전망 — 킹파워 마하나콘 스카이워크(310m, 유리 바닥, 일몰). <a href="https://kingpowermahanakhon.co.th" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan B',`전망 — <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('King Power Mahanakhon SkyWalk, Bangkok')}" target="_blank" rel="noopener">킹파워 마하나콘 스카이워크 ↗</a>(310m, 유리 바닥, 일몰). <a href="https://kingpowermahanakhon.co.th" target="_blank" rel="noopener">공식 ↗</a>`],
    ['Plan C','문화 — 짐 톰슨 하우스(27일 미방문 시) + BACC(방콕예술문화센터, 무료·냉방)'],
    ['저녁','쏨분시푸드 ② @ 센트럴월드 — 가족1+가족2(윤성욱 제외), GCP 도보 5분'],
   ]},
@@ -1763,7 +1904,7 @@ const ITIN_B=[
   recd:[
    ['낮','NYE라 오후 도심 혼잡 → 오전 가볍게: 짐 톰슨 하우스·시암·BACC 또는 룸피니 공원 산책+스파, 저녁 전 복귀'],
    ['Plan A','센트럴월드 카운트다운 — 공연·자정 불꽃, GCP 도보/고층뷰. 극혼잡 → 매우 일찍 자리'],
-   ['Plan B','아이콘시암 — 차오프라야강 1,400m 불꽃, 방콕 최대 스케일. <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['Plan B',`${gm('iconsiam','아이콘시암')} — 12/29~31 리버사이드 파크 카운트다운, 차오프라야강 대형 불꽃(방콕 최대 스케일). <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>`],
    ['Plan C','짜오프라야 NYE 디너크루즈 — 배 위 불꽃, 인파 크러시 없음. 조기 매진 → 지금 예약'],
    ['추천','오전 골프 + 아이 2명 + 장모님 → Plan C 크루즈 또는 GCP 고층 조망'],
   ]},
@@ -2304,9 +2445,8 @@ window.__ensureRain = (function(){
 
 // golf cards
 function golfCard(g){
-  const mapUrl = 'https://maps.google.com/?q='+encodeURIComponent(g.addr || (g.c+' Thailand'));
-  const telHref = g.tel ? 'tel:'+g.tel.replace(/-/g,'') : '';
-  const hasDetail = !!(g.book || g.addr || g.tel);
+  const triploc = triplocHTML({char:g.char, pid:g.pid, addr:g.addr, tel:g.tel});
+  const hasDetail = !!(g.book || triploc);
   return `<div class="gcard s-${g.st}" data-d="${g.d}">
     <div class="gcard-head" role="button" tabindex="0" aria-expanded="false">
       <div class="g-top">
@@ -2318,13 +2458,12 @@ function golfCard(g){
         <div class="ppl">${g.p.map(p=>`<span class="av" style="background:${pcBg(p)}">${dot(p)}${p}</span>`).join('')}${g.note?`<span class="av" style="background:var(--coral-s);color:var(--coral)">${g.note}</span>`:''}</div>
         <span class="tee">⏱ ${g.tee}</span>
       </div>
-      ${hasDetail?'<div class="g-toggle"><span class="chev">▾</span> 바우처 상세보기</div>':''}
+      ${hasDetail?'<div class="g-toggle"><span class="chev">▾</span> 코스 · 위치 · 바우처</div>':''}
     </div>
     ${hasDetail?`<div class="gcard-detail">
       ${g.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${g.book}</span></div>`:''}
       ${g.bid?`<div class="gd-row"><span class="gd-k">Booking ID</span><span class="gd-v">${g.bid}</span></div>`:''}
-      ${g.addr?`<div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="${mapUrl}" target="_blank" rel="noopener">${g.addr} <span class="mico">↗</span></a></div>`:''}
-      ${g.tel?`<div class="gd-row"><span class="gd-k">전화</span><a class="gd-v maddr" href="${telHref}">${g.tel} 📞</a></div>`:''}
+      ${triploc}
     </div>`:''}
   </div>`;
 }
@@ -2354,7 +2493,7 @@ $('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'�
 // 골프카드 탭-확장 (바우처 상세)
 ['golfPat','golfBkk'].forEach(id=>{
   $(id).addEventListener('click', e=>{
-    if(e.target.closest('a')) return; // 지도/전화 링크는 그대로 동작
+    if(e.target.closest('a, .tl-copy')) return; // 지도·전화 링크, 주소복사 버튼은 그대로 동작
     const head = e.target.closest('.gcard-head'); if(!head) return;
     const card = head.closest('.gcard'), opened = card.classList.toggle('open');
     head.setAttribute('aria-expanded', opened); haptic('tap');
@@ -2409,13 +2548,12 @@ function days(list,el,mon,yr){
   const now = new Date();
   const isToday = x => mon===now.getMonth()+1 && +x.d===now.getDate() && yr===now.getFullYear();
   $(el).innerHTML = list.map(x=>{
-    const hasDetail = !!(x.book||x.addr||x.tel);
+    const hasDetail = !!(x.book||x.addr||x.tel||x.pid);
     const hasRec = Array.isArray(x.recd) && x.recd.length;
     const expandable = hasDetail || hasRec;
     const today = isToday(x);
-    const toggleTxt = hasRec && hasDetail ? '추천 코스 · 바우처' : hasRec ? '추천 코스 자세히' : '바우처 상세보기';
-    const mapUrl = x.addr ? 'https://maps.google.com/?q='+encodeURIComponent(x.addr) : '';
-    const telHref = x.tel ? 'tel:'+x.tel.replace(/-/g,'') : '';
+    const toggleTxt = hasRec && hasDetail ? '추천 코스 · 위치 · 바우처' : hasRec ? '추천 코스 자세히' : '위치 · 바우처';
+    const vsec = hasDetail ? triplocHTML({pid:x.pid, addr:x.addr, tel:x.tel}) : '';
     return `
    <div class="day ${x.s?'s-'+x.s:''} ${today?'today':''}">
      <div class="dbox"><div class="dn">${x.d}</div><div class="dw">${x.w}</div>${today?'<span class="day-today-tag">오늘</span>':''}</div>
@@ -2433,8 +2571,7 @@ function days(list,el,mon,yr){
          ${hasRec?`<div class="recd">${x.recd.map(r=>`<div class="recd-row"><span class="recd-k${/^Plan /.test(r[0])?' p':''}">${r[0]}</span><span class="recd-v">${r[1]}</span></div>`).join('')}</div>`:''}
          ${hasDetail?`<div class="vsec">
            ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
-           ${x.addr?`<div class="gd-row"><span class="gd-k">주소</span><a class="gd-v maddr" href="${mapUrl}" target="_blank" rel="noopener">${x.addr} <span class="mico">↗</span></a></div>`:''}
-           ${x.tel?`<div class="gd-row"><span class="gd-k">전화</span><a class="gd-v maddr" href="${telHref}">${x.tel} 📞</a></div>`:''}
+           ${vsec}
          </div>`:''}
        </div>`:''}
      </div>
@@ -2476,6 +2613,12 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
     ['태국 골프장은 티오프가 보통 한낮(12~2시)이다.','X','태국의 한낮 더위를 생각해 보세요.','더위를 피해 <b>06:30~08:30 출발</b>이 일반적입니다. 선크림·모자·전해질 음료는 필수예요.'],
     ['태국 골프 코스는 대부분 산악 지형이다.','X','"리조트형"이라는 말을 떠올려 보세요.','대부분 <b>평탄한 리조트형</b>입니다. 대신 홀 간 이동이 길어 카트가 사실상 필수예요.'],
     ['천둥이 치면 태국 골프장은 사이렌을 울리고 플레이를 중단시킨다.','O','스콜은 잠깐이지만 낙뢰는?','<b>낙뢰는 위험</b>해서 사이렌이 울리면 즉시 대피, 플레이 중단입니다. 스콜 자체는 20~30분이면 지나가요.'],
+    ['이번에 가는 니칸티 골프클럽은 캐디 팁까지 그린피에 포함돼 라운드 중 따로 낼 현금이 거의 없다.','O','"올인클루시브"라는 말을 떠올려 보세요.','니칸티는 <b>올인클루시브</b> — 그린피에 캐디피·<b>캐디 팁</b>·현지 음료·식사 2회까지 포함됩니다. 태국 코스 중에서도 예외적이라, 다른 코스(치찬·시암CC 등)에선 캐디 팁 현금(400~600밧)을 따로 챙겨야 해요.'],
+    ['이번에 5번 가는 파타야 시암 컨트리클럽은 코스가 하나뿐이다.','X','Old·Plantation·Waterside·Rolling Hills…','시암CC 파타야는 <b>4개 챔피언십 코스</b> 단지입니다. 우리는 Plantation(12/21·23)·Waterside(12/22)·Rolling Hills(12/18) 세 코스를 도는데, 클럽하우스·주소·연락처는 모두 같아요.'],
+    ['시암CC Plantation은 LPGA 여자 프로대회가 열리는 코스다.','O','"Honda LPGA Thailand"를 들어보셨나요?','Plantation 코스는 <b>Honda LPGA Thailand</b> 개최지입니다. 파인애플 농장을 테마로 한 27홀이고, 프로 셋업이라 핀 위치·티 선택에 따라 체감 난이도가 크게 달라져요.'],
+    ['태국은 오후 늦게 시작하는 "트와일라잇" 라운드가 그린피를 크게 깎아준다.','O','해 지기 전 몇 홀을 돌 수 있느냐를 생각해 보세요.','보통 <b>13~15시 이후 티오프</b>를 트와일라잇으로 부르고, 정규 요금의 40~60%까지 싸집니다. 12월 파타야는 18시쯤 해가 지니 완주하려면 13시 전에는 시작해야 해요.'],
+    ['태국 명문 코스 그린은 대부분 한국처럼 벤트그라스다.','X','더위에 강한 잔디가 뭘까요?','태국 그린은 더위에 강한 <b>버뮤다 계열</b>(티프이글·챔피언 울트라드워프 등)입니다. 치찬은 티프이글, 방파인은 챔피언 버뮤다 — 벤트보다 결이 강하고 빠르게 세팅되는 편이라 첫 홀에서 스피드를 꼭 확인하세요.'],
+    ['성수기(12~2월) 태국 인기 코스는 예약 없이 가도 그린피만 내면 바로 라운드할 수 있다.','X','건기 성수기의 수요를 생각해 보세요.','12~2월은 <b>1년 중 가장 붐비는 시즌</b>이라 인기 코스는 사전 예약이 사실상 필수입니다. 여행사로 픽업·티타임을 묶어 예약하면 비지터 요금·이동까지 한 번에 정리돼요.'],
   ];
   const CULT_Q = [
     ['태국에서 국왕·왕실을 비하하면 실제로 형사처벌을 받을 수 있다.','O','"불경죄"라는 말을 들어보셨나요?','왕실 모독은 <b>형사처벌 대상(불경죄)</b>입니다. 지폐·동전에도 국왕 초상이 있어 밟거나 함부로 다루지 않아요.'],
@@ -2502,6 +2645,14 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
     ['태국에서 미터 없는 택시·뚝뚝은 타기 전에 요금을 정하는 게 좋다.','O','그랩(Grab)과 비교해 보세요.','뚝뚝·미터 없는 택시는 <b>타기 전 요금 합의</b>가 필수. 그랩 앱은 요금이 미리 떠서 편하고 투명해요.'],
     ['태국에서는 횡단보도가 있으면 차가 알아서 멈춰준다.','X','현지인이 어떻게 건너는지 관찰해 보세요.','횡단보도가 있어도 <b>차가 잘 서지 않습니다.</b> 현지인 뒤에 붙어 함께 건너는 게 안전해요.'],
     ['태국의 진짜 새해 축제 "송끄란"은 12월에 열린다.','X','물총 축제, 더운 계절을 떠올려 보세요.','송끄란은 <b>4월 물축제</b>입니다. 12~1월 여행이면 방콕·파타야의 연말 불꽃놀이와 카운트다운을 즐길 수 있어요.'],
+    ['2025년부터 태국에서 대마초는 의사 처방 없이 사거나 피우면 불법이다.','O','2022년과 2025년의 규정이 바뀌었어요.','<b>2025년 6월부터</b> 대마는 의료용으로만 허용 — 처방전 없이 구매·공공장소 흡연·비인가 판매는 불법이고, 벌금 최대 2.5만밧 + 징역 3개월까지 가능합니다. 한국·해외 의료용 카드는 <b>효력이 없어요</b>. 거리 매장이 남아 있어도 손대지 않는 게 안전합니다.'],
+    ['2025년 10월부터 방콕 전철이 20밧 균일요금이 됐으니, 외국인 관광객도 20밧만 내면 된다.','X','누구를 위한 정책인지 생각해 보세요.','20밧 균일요금은 <b>태국 국민(앱 등록자) 한정</b>입니다. 외국인 관광객은 기존 거리 비례 요금(1역 약 17밧부터). 래빗카드·MRT 카드를 충전해 쓰면 편해요.'],
+    ['태국에서 Bolt는 보통 Grab보다 요금이 싸지만, 기사가 배차를 취소하는 일이 더 잦다.','O','싼 만큼의 트레이드오프를 생각해 보세요.','<b>Bolt가 15~35% 저렴</b>하지만 취소가 잦아 몇 번 다시 잡아야 할 수 있습니다. Grab은 비싼 대신 배차가 안정적이라, 공항 픽업처럼 실패하면 곤란한 이동엔 Grab이 무난해요. 방콕↔파타야는 Bolt 약 1,700~2,200밧, Grab 2,000~2,500밧.'],
+    ['방콕 라차다 기차 야시장은 지금도 예전 그 자리에서 열린다.','X','팬데믹 이후 자리를 옮겼어요.','기차 야시장은 문을 닫았고, 지금은 <b>JODD FAIRS</b>라는 이름으로 라마9(Rama IX)·시내 등에서 열립니다. 레트로·빈티지카 감성으로 재단장해 방콕의 새 명소가 됐어요.'],
+    ['파타야 워킹스트리트는 저녁 6시부터 차량이 통제되고, 밤 11시 이후에 가장 붐빈다.','O','낮과 밤의 분위기가 완전히 달라요.','저녁 6시쯤 차량이 막히며 보행자 거리로 바뀌고, <b>9시부터 달아오르다 11시 이후 절정</b>입니다. 예전보다는 조용하고 물가는 올랐지만 네온 야경은 한 번 볼 만해요.'],
+    ['방콕에서 공항 택시는 미터 요금만 내면 되고 통행료는 기사가 부담한다.','X','고속도로 요금소를 지나면 누가 낼까요?','미터 요금 외에 <b>고속도로 통행료(2~3구간, 각 25~75밧)와 공항 승차 수수료 50밧</b>을 승객이 따로 냅니다. Grab·Bolt는 앱에 요금이 미리 떠서 이런 승강이가 없어요.'],
+    ['방콕에서 파타야까지는 대중교통이 없어 택시나 렌터카로만 갈 수 있다.','X','에까마이·모칫 터미널을 떠올려 보세요.','에까마이(동부)·모칫(북부) 터미널에서 <b>파타야행 버스·미니밴</b>이 자주 다니고 1인 130~250밧 수준입니다. 짐 많은 일행은 Grab/Bolt 밴이나 사설 픽업이 편해요. 소요 1시간 30분~2시간.'],
+    ['파타야 시내를 다니는 빨간 트럭(썽태우)은 손을 흔들어 세우고, 내릴 때 벨을 눌러 기사에게 요금을 낸다.','O','정해진 정류장이 없다는 점을 생각해 보세요.','<b>바트버스</b>라 불리는 썽태우는 노선 위 아무 데서나 손 흔들어 타고, 내릴 때 천장 벨을 누른 뒤 기사 창으로 요금을 냅니다. 기본 10~20밧, 대절은 타기 전 흥정. 외국인에게 더 부르면 정상 요금만 주고 내려도 돼요.'],
   ];
   const HAP = t => { if(typeof haptic === 'function') haptic(t); };
   function shuffle(src){
@@ -2590,7 +2741,7 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
 // 일정탭 골프 바우처 탭-확장
 ['iA','iB','iC'].forEach(id=>{
   $(id).addEventListener('click', e=>{
-    if(e.target.closest('a')) return;
+    if(e.target.closest('a, .tl-copy')) return;
     const head = e.target.closest('.day-head'); if(!head) return;
     const day = head.closest('.day'), opened = day.classList.toggle('open');
     head.setAttribute('aria-expanded', opened); haptic('tap');
@@ -2782,8 +2933,12 @@ refresh();
 // copy-to-text
 function buildGolfText(){
   const pat=GOLF.filter(g=>g.loc==='pat'), bkk=GOLF.filter(g=>g.loc==='bkk');
-  const line=g=>`${g.d}(${g.w}) ${g.c} - ${g.p.join('·')}${g.st==='todo'?' +1(미정)':''}${g.amt?` · ${won(g.amt)}원`:' · 견적대기'}`;
-  return `🇹🇭 태국 골프 일정\n\n[파타야]\n${pat.map(line).join('\n')}\n\n[방콕]\n${bkk.map(line).join('\n')}`;
+  const line=g=>{
+    const p = g.pid && PLACES[g.pid];
+    const base = `${g.d}(${g.w}) ${g.c} - ${g.p.join('·')}${g.st==='todo'?' +1(미정)':''}${g.amt?` · ${won(g.amt)}원`:' · 견적대기'}`;
+    return p ? `${base}\n   📍 ${grabAddr(p)}\n   🗺️ ${gmap(p)}` : base;
+  };
+  return `🇹🇭 태국 골프 일정\n\n[파타야]\n${pat.map(line).join('\n\n')}\n\n[방콕]\n${bkk.map(line).join('\n\n')}`;
 }
 function buildItinText(){
   const plain = s => (s||'')
