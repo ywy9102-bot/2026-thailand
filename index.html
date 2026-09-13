@@ -493,6 +493,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .tl-char{font-size:.719rem;color:var(--ink2);line-height:1.65;margin:0 0 11px}
 .tl-char b{font-weight:700;color:var(--jade-d)}
 .tl-name{font-size:.781rem;font-weight:700;color:var(--jade-d);line-height:1.35}
+.tl-copy+.tl-name{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
 .tl-addr{display:block;margin-top:4px;font-size:.719rem;color:var(--jade);line-height:1.55;
   text-decoration:none;text-underline-offset:2px}
 .tl-addr .mico{color:var(--gold-text);font-size:10.5px;white-space:nowrap}
@@ -1740,7 +1741,7 @@ addEventListener('appinstalled', ()=>{ window.__bip = null; dispatchEvent(new Ev
 
 const $=id=>document.getElementById(id);
 const won=n=>n==null?'—':n.toLocaleString();
-const APP_VER='v9.49';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.50';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1810,6 +1811,11 @@ const PLACES = {
              addr:'333 Moo 2, Thammasala, Mueang, Nakhon Pathom 73000',                   ll:''},
   bangpain: {ko:'로열 방파인 골프클럽',     en:'Royal Bang Pa-In Golf Club',       tel:'063-195-2286',
              addr:'19 Moo 14, Bang Krasan, Bang Pa-in, Phra Nakhon Si Ayutthaya 13160',   ll:'14.1693,100.5383'},
+  // 파타야 숙소 (골프 왕복밴 탑승 지점 — 골프장은 밴으로 이동하므로 숙소 주소가 더 실용적)
+  holidayinn: {ko:'홀리데이인 파타야 (베이타워)', en:'Holiday Inn Pattaya (Bay Tower)', tel:'038-725-555',
+             addr:'463/68 Moo 9, Pattaya Sai 1 Rd, Nongprue, Bang Lamung, Chon Buri 20150', ll:''},
+  thongbura:  {ko:'빌라 통부라',            en:'Villa Thongbura',                  tel:'',
+             addr:'221/100 Moo 12, Soi Thepprasit 17, Thepprasit Rd, Nongprue, Bang Lamung, Chon Buri 20150', ll:''},
   // 방콕·파타야 관광 (2025–2026)
   iconsiam:    {ko:'아이콘시암',            en:'ICONSIAM',
                 addr:'299 Charoen Nakhon Rd, Khlong San, Bangkok 10600',                  ll:'13.7266,100.5100'},
@@ -1834,13 +1840,16 @@ const telClean = t => (t||'').replace(/[^0-9+]/g,'');
 const qesc = s => String(s).replace(/"/g,'&quot;');
 // 골프장·관광지 공통 이동정보 블록
 function triplocHTML(o){
-  const p = o.pid && PLACES[o.pid];
+  const pids = o.pids || (o.pid ? [o.pid] : []);
+  const places = pids.map(id=>PLACES[id]).filter(Boolean);
   let h = o.char ? `<p class="tl-char">${o.char}</p>` : '';
-  if(p){
-    h += `<div class="tl-name">📍 ${p.ko}</div>`
-      +  `<a class="tl-addr" href="${gmap(p)}" target="_blank" rel="noopener">${p.addr} <span class="mico">지도 ↗</span></a>`
-      +  (p.tel ? `<a class="tl-tel" href="tel:${telClean(p.tel)}">📞 ${p.tel}</a>` : '')
-      +  `<button class="tl-copy" type="button" data-copy="${qesc(grabAddr(p))}">📋 영문 주소 복사 · Grab·Bolt용</button>`;
+  if(places.length){
+    places.forEach(p=>{
+      h += `<div class="tl-name">📍 ${p.ko}</div>`
+        +  `<a class="tl-addr" href="${gmap(p)}" target="_blank" rel="noopener">${p.addr} <span class="mico">지도 ↗</span></a>`
+        +  (p.tel ? `<a class="tl-tel" href="tel:${telClean(p.tel)}">📞 ${p.tel}</a>` : '')
+        +  `<button class="tl-copy" type="button" data-copy="${qesc(grabAddr(p))}">📋 영문 주소 복사 · Grab·Bolt용</button>`;
+    });
   } else if(o.addr){
     // 안전망: pid 없이 addr만 있는 경우(PLACES 항목 누락 등) — 현재 모든 GOLF는 pid 보유
     h += `<a class="tl-addr" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.addr)}" target="_blank" rel="noopener">${o.addr} <span class="mico">지도 ↗</span></a>`
@@ -2569,7 +2578,10 @@ window.__ensureRain = (function(){
 
 // golf cards
 function golfCard(g){
-  const triploc = triplocHTML({char:g.char, pid:g.pid, addr:g.addr, tel:g.tel});
+  // 파타야 라운드는 왕복밴으로 이동 → 골프장 주소보다 탑승 숙소(홀리데이인·통부라) 주소가 실용적
+  const triploc = g.loc==='pat'
+    ? triplocHTML({char:g.char, pids:['holidayinn','thongbura']})
+    : triplocHTML({char:g.char, pid:g.pid, addr:g.addr, tel:g.tel});
   const hasDetail = !!(g.book || triploc);
   return `<div class="gcard s-${g.st}" data-d="${g.d}">
     <div class="gcard-head" role="button" tabindex="0" aria-expanded="false">
@@ -3167,8 +3179,8 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(seenThisVer()) return;                   // 이미 이 버전을 봤음
   const WHATS_NEW=[
+    ['🏨','파타야 골프 = 숙소 주소로 변경','왕복밴으로 이동하니 골프장 대신 홀리데이인·통부라 주소가 실용적 — 카드를 열면 두 숙소 위치·구글맵 링크·"영문 주소 복사(Grab·Bolt용)" 버튼'],
     ['🚐','12/17·18 골프 왕복밴 결제완료','홀리데이인 베이타워 06:30·05:50 출발(윤성욱) → 빌라 통부라 경유(윤우열·김태기), 인당 38,484원(2회 76,968원) · 윤우열 선결제 완료'],
-    ['⛳','골프장 이동정보','카드를 열면 골프장 위치·구글맵 링크·"영문 주소 복사(Grab·Bolt용)" 버튼'],
     ['🕐','시암CC 4R 티오프 확정','12/18 07:56 · 12/21 08:36 · 12/22 08:36 · 12/23 08:28 (12/21·23 순서 정정)'],
     ['🇹🇭','태국 OX 퀴즈 대폭 확장','골프 21문항 · 문화 32문항 — 대마 규제·BTS 요금·Grab/Bolt 등 최신 정보'],
     ['✈️','재미 요소 추가','카운트다운 링 위 여정 비행기, 저녁 풍등, 날씨 반응 새떼, 꽃잎 축하, 뚝뚝·코끼리…'],
