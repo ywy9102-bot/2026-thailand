@@ -1741,7 +1741,7 @@ addEventListener('appinstalled', ()=>{ window.__bip = null; dispatchEvent(new Ev
 
 const $=id=>document.getElementById(id);
 const won=n=>n==null?'—':n.toLocaleString();
-const APP_VER='v9.51';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.52';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1896,12 +1896,16 @@ $('famsWrap').innerHTML = FAMS.map(f=>`
     <ul>${f.rows.map(r=>`<li><span class="nm">${r.g?dot(r.n):''}${r.n}</span><span class="pd">${r.p}</span></li>`).join('')}</ul>
   </div>`).join('');
 
+// 방콕 골프일 숙소: 12/29는 전원 티니디 체류중, 12/31은 티니디→GCP 체크아웃/체크인 전환일이라 둘 다 표시
+const BKK_GOLF_STAY = {'12/29':['tinidee'], '12/31':['tinidee','gcp']};
 function gday(dk,l,extra){ // dk: GOLF의 d 필드('12/17' 등), l: 지역표시
   const g = GOLF.find(x=>x.d===dk);
   const names = g.p.map(p=>`${dot(p)}${p}`).join(' ');
   const status = g.st==='todo' ? `+1인 미정 · ${g.note||'견적 재요청'}` : `· ${g.tee}`;
+  // 파타야는 골프장 대신 탑승 숙소, 방콕은 골프장+체류 숙소 (골프 탭과 동일 로직)
+  const pids = g.loc==='pat' ? ['holidayinn','thongbura'] : [g.pid, ...(BKK_GOLF_STAY[dk]||[])];
   return {d:dk.split('/')[1], w:g.w, l, e:'⛳', s:g.st, t:g.c, n:`${names} ${status}`, x:extra,
-    book:g.book, addr:g.addr, tel:g.tel, pid:g.pid, van:g.van};
+    book:g.book, addr:g.addr, tel:g.tel, pid:g.pid, pids, van:g.van};
 }
 const ITIN_A=[
  {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류',
@@ -2581,8 +2585,6 @@ window.__ensureRain = (function(){
   setTimeout(()=>{$('pfill').style.width=pct+'%';},260);
 })();
 
-// 방콕 골프일 숙소: 12/29는 전원 티니디 체류중, 12/31은 티니디→GCP 체크아웃/체크인 전환일이라 둘 다 표시
-const BKK_GOLF_STAY = {'12/29':['tinidee'], '12/31':['tinidee','gcp']};
 // golf cards
 function golfCard(g){
   // 파타야 라운드는 왕복밴으로 이동 → 골프장 주소보다 탑승 숙소(홀리데이인·통부라) 주소가 실용적
@@ -2699,7 +2701,7 @@ function days(list,el,mon,yr){
     const expandable = hasDetail || hasRec;
     const today = isToday(x);
     const toggleTxt = hasRec && hasDetail ? '추천 코스 · 위치 · 바우처' : hasRec ? '추천 코스 자세히' : '위치 · 바우처';
-    const vsec = hasDetail ? triplocHTML({pid:x.pid, addr:x.addr, tel:x.tel}) : '';
+    const vsec = hasDetail ? triplocHTML(x.pids ? {pids:x.pids} : {pid:x.pid, addr:x.addr, tel:x.tel}) : '';
     return `
    <div class="day ${x.s?'s-'+x.s:''} ${today?'today':''}">
      <div class="dbox"><div class="dn">${x.d}</div><div class="dw">${x.w}</div>${today?'<span class="day-today-tag">오늘</span>':''}</div>
@@ -3187,7 +3189,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(seenThisVer()) return;                   // 이미 이 버전을 봤음
   const WHATS_NEW=[
-    ['🏨','골프탭 위치정보 개선','파타야는 골프장 대신 홀리데이인·통부라 숙소 주소, 방콕은 골프장+체류 숙소 주소를 함께 표시 — 카드를 열면 위치·구글맵 링크·"영문 주소 복사(Grab·Bolt용)" 버튼'],
+    ['🏨','골프탭·일정탭 위치정보 개선','파타야는 골프장 대신 홀리데이인·통부라 숙소 주소, 방콕은 골프장+체류 숙소 주소를 함께 표시 — 카드를 열면 위치·구글맵 링크·"영문 주소 복사(Grab·Bolt용)" 버튼'],
     ['🚐','12/17·18 골프 왕복밴 결제완료','홀리데이인 베이타워 06:30·05:50 출발(윤성욱) → 빌라 통부라 경유(윤우열·김태기), 인당 38,484원(2회 76,968원) · 윤우열 선결제 완료'],
     ['🕐','시암CC 4R 티오프 확정','12/18 07:56 · 12/21 08:36 · 12/22 08:36 · 12/23 08:28 (12/21·23 순서 정정)'],
     ['🇹🇭','태국 OX 퀴즈 대폭 확장','골프 21문항 · 문화 32문항 — 대마 규제·BTS 요금·Grab/Bolt 등 최신 정보'],
