@@ -489,7 +489,16 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .maddr .mico{font-size:10px;opacity:.7}
 
 /* ── 이동정보 블록 (골프장·관광지) : 구글맵 링크 + Grab/Bolt 붙여넣기용 영문주소 ── */
-.triploc{margin-top:4px;padding-top:11px;border-top:1px dashed var(--line)}
+/* 왕복밴 박스 — 코스 설명·위치 정보와 섞이지 않도록 별도 카드로 분리 */
+.van-box{margin-top:4px;padding:11px 12px;background:var(--jade-s);border-radius:10px}
+.van-box-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+  font-weight:700;font-size:12.5px;color:var(--jade-d)}
+.van-box-h .mono{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11px}
+.van-per{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11.5px;color:var(--jade-d);white-space:nowrap}
+.van-route{margin:8px 0 0;font-size:.719rem;color:var(--ink2);line-height:1.65}
+.van-pay{margin-top:8px;padding-top:8px;border-top:1px dashed var(--jade);opacity:.85;
+  font-size:.719rem;color:var(--jade-d)}
+.triploc{margin-top:12px;padding-top:11px;border-top:1px dashed var(--line)}
 .tl-char{font-size:.719rem;color:var(--ink2);line-height:1.65;margin:0 0 11px}
 .tl-char b{font-weight:700;color:var(--jade-d)}
 .tl-name{font-size:.781rem;font-weight:700;color:var(--jade-d);line-height:1.35}
@@ -570,6 +579,11 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .bar-brk{font-size:11.5px;color:var(--ink3);margin-top:6px;font-family:'IBM Plex Mono',monospace;display:flex;justify-content:flex-start;gap:6px;align-items:center}
 .bar-brk .chev{font-size:10px;color:var(--gold-text);flex:none;transition:transform .2s ease}
 .bar-row.open .bar-brk .chev{transform:rotate(180deg)}
+.bar-row.settled{border-color:var(--ok)}
+.bar-row.settled .bar-amt{color:var(--ok);text-decoration:line-through;text-decoration-color:var(--ok-s)}
+.pay-toggle{border:none;min-height:28px;padding:5px 12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;
+  -webkit-tap-highlight-color:transparent}
+.pay-toggle:active{transform:scale(.96)}
 .bar-detail{display:none;padding:0 14px 12px;border-top:1px dashed var(--line)}
 .bar-row.open .bar-detail{display:block;animation:fadeIn .18s ease}
 .bar-detail .gd-row{padding:6px 0;font-size:11.5px}
@@ -1216,7 +1230,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   .stat .n,.stat .l{color:var(--ink)!important}
   .pnl{display:block!important;break-inside:avoid;margin-bottom:24px}
   .scr{overflow:visible!important;display:block!important} table.d{min-width:0!important}
-  .cost-tbl-h .chev,.cost-tbl-h .ct-more,.next-round,.today-jump,.bar-copy,.tl-copy{display:none!important}
+  .cost-tbl-h .chev,.cost-tbl-h .ct-more,.next-round,.today-jump,.bar-copy,.tl-copy,.pay-toggle{display:none!important}
   .cost-hero{background:none!important;color:var(--ink)!important;border:1px solid var(--line)}
   .cost-hero .l,.cost-hero .s{color:var(--ink2)!important}
   .ci{cursor:default}
@@ -1668,6 +1682,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     <div class="l">윤우열이 받아야 할 금액</div>
     <div class="a" id="oweTotal">–</div>
     <div class="s" id="oweBreak">계산중…</div>
+    <div class="s" id="oweSettled" style="margin-top:2px"></div>
   </div>
 
   <h3 class="stbl"><span class="i">◈</span>사람별 정산액</h3>
@@ -1747,7 +1762,14 @@ addEventListener('appinstalled', ()=>{ window.__bip = null; dispatchEvent(new Ev
 
 const $=id=>document.getElementById(id);
 const won=n=>n==null?'—':n.toLocaleString();
-const APP_VER='v9.54';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+// ── 로컬 저장 (체크·필터·접힘 상태를 이 기기에 자동 저장 — 정산탭의 "정산완료" 표시도 이 스토어를 그대로 읽음, 별도 저장소 없음) ──
+const LS_KEY = 'thai2026_todo_v1';
+const store = (()=>{ try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; } })();
+store.done = store.done || {};          // { "<항목 텍스트>": true }
+store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
+store.hideDone = !!store.hideDone;
+function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
+const APP_VER='v9.55';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1868,6 +1890,14 @@ function triplocHTML(o){
       +  `<button class="tl-copy" type="button" data-copy="${qesc(o.addr)}">📋 주소 복사 · Grab·Bolt용</button>`;
   }
   return h ? `<div class="triploc">${h}</div>` : '';
+}
+// 왕복밴 정보 — 코스·위치·바우처와 섞이지 않도록 별도 박스로 분리 (골프·일정탭 공통)
+function vanBoxHTML(van){
+  return `<div class="van-box">
+    <div class="van-box-h"><span>🚐 왕복밴 확정 <span class="mono">#${van.book}</span></span><span class="van-per">인당 ${won(van.per)}원</span></div>
+    <p class="van-route">${van.route}</p>
+    <div class="van-pay">💳 결제 ${van.pay}</div>
+  </div>`;
 }
 // .tl-copy 클립보드 (골프·일정 공통, 위임)
 document.addEventListener('click', async e=>{
@@ -2615,8 +2645,7 @@ function golfCard(g){
     ${hasDetail?`<div class="gcard-detail">
       ${g.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${g.book}</span></div>`:''}
       ${g.bid?`<div class="gd-row"><span class="gd-k">Booking ID</span><span class="gd-v">${g.bid}</span></div>`:''}
-      ${g.van?`<div class="gd-row"><span class="gd-k">왕복밴</span><span class="gd-v">확정 #${g.van.book} · 인당 ${won(g.van.per)}원</span></div>
-        <p class="tl-char">🚐 ${g.van.route}<br><span style="color:var(--ink3)">결제 ${g.van.pay}</span></p>`:''}
+      ${g.van?vanBoxHTML(g.van):''}
       ${triploc}
     </div>`:''}
   </div>`;
@@ -2725,8 +2754,7 @@ function days(list,el,mon,yr){
          ${hasRec?`<div class="recd">${x.recd.map(r=>`<div class="recd-row"><span class="recd-k${/^Plan /.test(r[0])?' p':''}">${r[0]}</span><span class="recd-v">${r[1]}</span></div>`).join('')}</div>`:''}
          ${hasDetail?`<div class="vsec">
            ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
-           ${x.van?`<div class="gd-row"><span class="gd-k">왕복밴</span><span class="gd-v">확정 #${x.van.book} · 인당 ${won(x.van.per)}원</span></div>
-             <p class="tl-char">🚐 ${x.van.route}<br><span style="color:var(--ink3)">결제 ${x.van.pay}</span></p>`:''}
+           ${x.van?vanBoxHTML(x.van):''}
            ${vsec}
          </div>`:''}
        </div>`:''}
@@ -2947,11 +2975,14 @@ function owedItems(name){
   return items;
 }
 
+// "정산 회수" 완료 체크는 별도 저장소 없이 할일탭의 체크 상태(store.done)를 그대로 읽음 — 두 탭 어디서 체크해도 서로 반영됨
+const paidKey = o => `${o.n} → 윤우열 ${won(o.t)}원`;
 $('bars').innerHTML = OWE.map((o,i)=>{
   const items = owedItems(o.n);
-  return `<div class="bar-row">
+  const paid = !!store.done[paidKey(o)];
+  return `<div class="bar-row ${paid?'settled':''}" data-paid-key="${qesc(paidKey(o))}">
     <div class="bar-head" role="button" tabindex="0" aria-expanded="false">
-      <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}</span><span class="bar-amt">${won(o.t)}원</span></div>
+      <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}<button class="chip ${paid?'ok':'wait'} pay-toggle" type="button" aria-pressed="${paid}" aria-label="${o.n} 정산완료 표시">${paid?'✅ 정산완료':'정산 대기'}</button></span><span class="bar-amt">${won(o.t)}원</span></div>
       <div class="bar-track"><div class="bar-fill" data-w="${(o.t/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc(o.n)} 0%,${pc(o.n)}CC 100%)"></div></div>
       <div class="bar-brk"><span class="chev">▾</span><span>${o.b}</span></div>
     </div>
@@ -2964,7 +2995,49 @@ $('bars').innerHTML = OWE.map((o,i)=>{
 setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach((b,i)=>{
   setTimeout(()=>b.style.width=b.dataset.w+'%', i*70);});},300);
 
+// 정산탭 뱃지·요약문구를 store.done과 동기화 (할일탭에서 체크/해제해도 여기 반영)
+function refreshSettled(){
+  let done=0;
+  document.querySelectorAll('.bar-row').forEach(row=>{
+    const paid = !!store.done[row.dataset.paidKey];
+    row.classList.toggle('settled', paid);
+    const btn = row.querySelector('.pay-toggle');
+    btn.textContent = paid ? '✅ 정산완료' : '정산 대기';
+    btn.setAttribute('aria-pressed', paid);
+    btn.classList.toggle('ok', paid);
+    btn.classList.toggle('wait', !paid);
+    if(paid) done++;
+  });
+  const total = OWE.length;
+  $('oweSettled').textContent = done===total ? '✅ 전원 정산완료' : `${done}/${total}명 정산완료`;
+}
+refreshSettled();
+
 $('bars').addEventListener('click', async e=>{
+  const pt = e.target.closest('.pay-toggle');
+  if(pt){
+    e.stopPropagation();
+    const row = pt.closest('.bar-row'), key = row.dataset.paidKey;
+    const willPay = !store.done[key];
+    if(willPay) store.done[key] = true; else delete store.done[key];
+    saveStore(); refreshSettled(); haptic(willPay?'ok':'tap');
+    // 할일탭에 같은 항목의 체크박스가 있으면 그쪽도 동기화 (두 탭 어디서 체크해도 서로 반영)
+    document.querySelectorAll('.ci').forEach(ci=>{
+      if(ci.querySelector('.tx').textContent === key){
+        ci.classList.toggle('done', willPay); ci.setAttribute('aria-checked', willPay);
+        if(typeof refresh === 'function') refresh();
+      }
+    });
+    if(willPay){
+      if(typeof window.__confettiAt === 'function') window.__confettiAt(pt);
+      const allPaid = OWE.every(o => store.done[paidKey(o)]);
+      if(allPaid && window.funFx){
+        const grp = [...document.querySelectorAll('.cgrp')].find(g=>/정산/.test(g.querySelector('.h3-tx')?.textContent||''));
+        if(grp) window.funFx.group(grp);
+      }
+    }
+    return;
+  }
   const cp = e.target.closest('.bar-copy');
   if(cp){
     e.stopPropagation();
@@ -3035,14 +3108,6 @@ function refresh(){
   $('thLeft').textContent = left ? `${left}개 남았어요` : '전부 완료했어요 🎉';
   $('thRing').style.strokeDashoffset = RING_C - (pct/100)*RING_C;
 }
-// ── 로컬 저장 (체크·필터·접힘 상태를 이 기기에 자동 저장) ──
-const LS_KEY = 'thai2026_todo_v1';
-const store = (()=>{ try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; } })();
-store.done = store.done || {};          // { "<항목 텍스트>": true }
-store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
-store.hideDone = !!store.hideDone;
-function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-
 // 저장된 체크 상태 복원 + 이벤트 연결
 document.querySelectorAll('.ci').forEach(i=>{
   const key = i.querySelector('.tx').textContent;
@@ -3057,6 +3122,7 @@ document.querySelectorAll('.ci').forEach(i=>{
     if(d){ store.done[key]=true; i.classList.add('just-done'); setTimeout(()=>i.classList.remove('just-done'),460); haptic('ok'); }
     else { delete store.done[key]; haptic('tap'); }
     saveStore(); refresh();
+    if(typeof refreshSettled === 'function') refreshSettled(); // 정산탭 뱃지 동기화 (정산 회수 그룹이 아니어도 무해)
     if(d && window.funFx){
       if(!wasAll && allDone()) window.funFx.all();
       else if(!wasGrp && grpDone(grp)) window.funFx.group(grp);
@@ -3195,11 +3261,11 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(seenThisVer()) return;                   // 이미 이 버전을 봤음
   const WHATS_NEW=[
+    ['💰','정산 완료 체크 + 축하','정산탭 이름 옆 "정산 대기" 칩을 탭하면 정산완료로 전환 — 할일탭 체크와 자동 연동, 전원 완료되면 축하 연출'],
+    ['🚐','왕복밴 정보 박스로 분리','코스 설명·위치 정보와 섞이지 않도록 왕복밴(시간·경로·결제)을 독립된 카드로 — 골프·일정탭 공통'],
     ['🏨','골프탭·일정탭 위치정보 개선','파타야는 골프장 대신 홀리데이인·통부라 숙소 주소, 방콕은 골프장+체류 숙소 주소를 함께 표시 — 카드를 열면 위치·구글맵 링크·"영문 주소 복사(Grab·Bolt용)" 버튼'],
     ['🚐','12/17·18 골프 왕복밴 결제완료','홀리데이인 베이타워 06:30·05:50 출발(윤성욱) → 빌라 통부라 경유(윤우열·김태기), 인당 38,484원(2회 76,968원) · 윤우열 선결제 완료'],
     ['🕐','시암CC 4R 티오프 확정','12/18 07:56 · 12/21 08:36 · 12/22 08:36 · 12/23 08:28 (12/21·23 순서 정정)'],
-    ['🇹🇭','태국 OX 퀴즈 대폭 확장','골프 21문항 · 문화 32문항 — 대마 규제·BTS 요금·Grab/Bolt 등 최신 정보'],
-    ['✈️','재미 요소 추가','카운트다운 링 위 여정 비행기, 저녁 풍등, 날씨 반응 새떼, 꽃잎 축하, 뚝뚝·코끼리…'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose');
   $('wnVer').textContent=APP_VER;
@@ -3359,6 +3425,11 @@ function __initFunElements(){
   // ── C. 할 일 완료 축하 (todo tog에서 호출) ──
   window.funFx = {
     group(grpEl){
+      const isSettle = /정산/.test(grpEl.querySelector('.h3-tx')?.textContent||'');
+      if(isSettle){ // 실제 돈이 오간 완료라 일반 그룹완료보다 크게 — 여기서만
+        celebrate({ kicker:'💰', msg:'전원 정산 완료! 다들 고마워요', ms:4200, at:grpEl, dy:14, n:30, spread:100, petals:true, haptic:'strong' });
+        return;
+      }
       const r = grpEl.getBoundingClientRect();
       confetti(r.left + r.width/2, r.top + 18, 14, 55); haptic('ok');
     },
