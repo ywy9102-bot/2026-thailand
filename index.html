@@ -347,8 +347,9 @@ h2.sec .e{font-size:21px;line-height:1}
 .gg-ttl{flex:1;font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--jade-d);line-height:1.32}
 .gg-chev{flex:none;font-size:11px;color:var(--gold-text);transition:transform .25s ease}
 .gguide.open .gg-chev{transform:rotate(180deg)}
-.gguide-body{max-height:0;overflow:hidden;transition:max-height .38s ease}
-.gguide.open .gguide-body{max-height:1000px}
+.gguide-body{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows .38s ease}
+.gguide-body>.gg-inner{overflow:hidden;min-height:0}
+.gguide.open .gguide-body{grid-template-rows:1fr}
 .gg-inner{padding:0 15px 15px}
 .gg-steps{list-style:none;counter-reset:gg;margin:0;padding:4px 0 0}
 .gg-steps>li{position:relative;padding:0 0 15px 32px;counter-increment:gg}
