@@ -437,8 +437,7 @@ h2.sec .e{font-size:21px;line-height:1}
   margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);user-select:none}
 .chev{display:inline-block;transition:transform .2s ease;font-size:11px}
 .gcard.open .chev{transform:rotate(180deg)}
-.gcard-detail{display:none}
-.gcard.open .gcard-detail{display:block;animation:fadeIn .18s ease}
+.gcard.open .gcard-detail{animation:fadeIn .18s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .gd-row{display:flex;gap:10px;align-items:center;padding:6px 0;font-size:12px;border-top:1px dashed var(--line)}
 .gd-row:first-child{border-top:none}
@@ -482,8 +481,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .lg-p{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;color:var(--jade-d)}
 .lg-head{cursor:pointer}
 .lg-sum{font-size:12px;color:var(--ink2)}
-.lg-detail{display:none}
-.lg.open .lg-detail{display:block;animation:fadeIn .18s ease}
+.lg.open .lg-detail{animation:fadeIn .18s ease}
 .lg.open .g-toggle .chev{transform:rotate(180deg)}
 .maddr{color:var(--jade);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:3px}
 .maddr:hover{text-decoration:underline}
@@ -544,8 +542,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .dx{font-size:.719rem;color:var(--coral);margin-top:5px;line-height:1.5;display:flex;gap:5px}
 .day-col{min-width:0}
 .day-head{cursor:pointer}
-.day-detail{display:none}
-.day.open .day-detail{display:block;animation:fadeIn .18s ease}
+.day.open .day-detail{animation:fadeIn .18s ease}
 .day.open .g-toggle .chev{transform:rotate(180deg)}
 .dx::before{content:"↳";color:var(--gold-text);font-weight:700;flex:none}
 .rec-sum{font-size:.719rem;color:var(--jade);font-weight:600;margin-top:6px;line-height:1.45}
@@ -1918,7 +1915,7 @@ document.addEventListener('click', async e=>{
   catch(_){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
     document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e2){} ta.remove(); }
   const o = b.textContent; b.textContent = '✅ 복사됨 · Grab·Bolt 목적지에 붙여넣기'; b.classList.add('copied');
-  if(typeof haptic === 'function') haptic('ok');
+  haptic('ok');
   if(typeof window.__confettiAt === 'function') window.__confettiAt(b);
   if(typeof window.__toast === 'function') window.__toast('📋', '영문 주소 복사 완료', 2400);
   setTimeout(()=>{ b.textContent = o; b.classList.remove('copied'); }, 1900);
@@ -2686,20 +2683,25 @@ $('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'�
   });
 })();
 
-// 골프카드 탭-확장 (바우처 상세)
-['golfPat','golfBkk'].forEach(id=>{
-  $(id).addEventListener('click', e=>{
-    if(e.target.closest('a, .tl-copy')) return; // 지도·전화 링크, 주소복사 버튼은 그대로 동작
-    const head = e.target.closest('.gcard-head'); if(!head) return;
-    const card = head.closest('.gcard'), opened = card.classList.toggle('open');
-    head.setAttribute('aria-expanded', opened); haptic('tap');
+// 카드 탭-확장 공통 배선 (골프/숙소/일정 바우처 상세 — 지도·전화 링크, 주소복사 버튼은 그대로 동작)
+function wireExpand(ids, headSel, openSel){
+  const headCls = headSel.slice(1);
+  ids.forEach(id=>{
+    const el = $(id); if(!el) return;
+    el.addEventListener('click', e=>{
+      if(e.target.closest('a, .tl-copy')) return;
+      const head = e.target.closest(headSel); if(!head) return;
+      const item = head.closest(openSel), opened = item.classList.toggle('open');
+      head.setAttribute('aria-expanded', opened); haptic('tap');
+    });
+    el.addEventListener('keydown', e=>{
+      if((e.key===' '||e.key==='Enter') && e.target.classList.contains(headCls)){
+        e.preventDefault(); e.target.click();
+      }
+    });
   });
-  $(id).addEventListener('keydown', e=>{
-    if((e.key===' '||e.key==='Enter') && e.target.classList.contains('gcard-head')){
-      e.preventDefault(); e.target.click();
-    }
-  });
-});
+}
+wireExpand(['golfPat','golfBkk'], '.gcard-head', '.gcard');
 
 // 티오프 가이드 접이식
 (function(){
@@ -2708,22 +2710,11 @@ $('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'�
   head.addEventListener('click', ()=>{
     const open = g.classList.toggle('open');
     head.setAttribute('aria-expanded', open);
-    if(typeof haptic === 'function') haptic('tap');
+    haptic('tap');
   });
 })();
 
-// 숙소카드 탭-확장 (바우처 상세)
-$('stay').addEventListener('click', e=>{
-  if(e.target.closest('a')) return; // 지도/전화 링크는 그대로 동작
-  const head = e.target.closest('.lg-head'); if(!head) return;
-  const card = head.closest('.lg'), opened = card.classList.toggle('open');
-  head.setAttribute('aria-expanded', opened); haptic('tap');
-});
-$('stay').addEventListener('keydown', e=>{
-  if((e.key===' '||e.key==='Enter') && e.target.classList.contains('lg-head')){
-    e.preventDefault(); e.target.click();
-  }
-});
+wireExpand(['stay'], '.lg-head', '.lg');
 
 // matrix
 (function(){
@@ -2851,7 +2842,7 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
     ['방콕에서 파타야까지는 대중교통이 없어 택시나 렌터카로만 갈 수 있다.','X','에까마이·모칫 터미널을 떠올려 보세요.','에까마이(동부)·모칫(북부) 터미널에서 <b>파타야행 버스·미니밴</b>이 자주 다니고 1인 130~250밧 수준입니다. 짐 많은 일행은 Grab/Bolt 밴이나 사설 픽업이 편해요. 소요 1시간 30분~2시간.'],
     ['파타야 시내를 다니는 빨간 트럭(썽태우)은 손을 흔들어 세우고, 내릴 때 벨을 눌러 기사에게 요금을 낸다.','O','정해진 정류장이 없다는 점을 생각해 보세요.','<b>바트버스</b>라 불리는 썽태우는 노선 위 아무 데서나 손 흔들어 타고, 내릴 때 천장 벨을 누른 뒤 기사 창으로 요금을 냅니다. 기본 10~20밧, 대절은 타기 전 흥정. 외국인에게 더 부르면 정상 요금만 주고 내려도 돼요.'],
   ];
-  const HAP = t => { if(typeof haptic === 'function') haptic(t); };
+  const HAP = haptic;
   function shuffle(src){
     const a = src.slice();
     for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; const t=a[i]; a[i]=a[j]; a[j]=t; }
@@ -2936,19 +2927,7 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
 })();
 
 // 일정탭 골프 바우처 탭-확장
-['iA','iB','iC'].forEach(id=>{
-  $(id).addEventListener('click', e=>{
-    if(e.target.closest('a, .tl-copy')) return;
-    const head = e.target.closest('.day-head'); if(!head) return;
-    const day = head.closest('.day'), opened = day.classList.toggle('open');
-    head.setAttribute('aria-expanded', opened); haptic('tap');
-  });
-  $(id).addEventListener('keydown', e=>{
-    if((e.key===' '||e.key==='Enter') && e.target.classList.contains('day-head')){
-      e.preventDefault(); e.target.click();
-    }
-  });
-});
+wireExpand(['iA','iB','iC'], '.day-head', '.day');
 
 // cost
 const oweSum = OWE.reduce((a,o)=>a+o.t,0);
@@ -3297,7 +3276,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     try{ sessionStorage.setItem('thai2026_seen_ver', APP_VER); }catch(e){}
     setTimeout(()=>{ scrim.hidden=true; }, 340);
     try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
-    if(typeof haptic==='function') haptic('tap');
+    haptic('tap');
   }
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e=>{ if(e.target===scrim) close(); });
