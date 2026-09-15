@@ -1767,7 +1767,7 @@ store.done = store.done || {};          // { "<항목 텍스트>": true }
 store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.57';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.58';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1781,6 +1781,7 @@ const TRIP = {
   planStart: '2026-08-06', // 최초 일정 구성일 = 카운트다운 링 시작점
   depart:    '2026-12-16', // 파타야 도착
   bkkFrom:   '2026-12-26', // 방콕 이동
+  mainReturn:'2027-01-02', // 가족1·가족2 귀국(OZ744) — 대다수 귀국일
   end:       '2027-01-04', // 마지막 귀국
 };
 const tripDate = (k, endOfDay) => new Date(TRIP[k] + (endOfDay ? 'T23:59:59+07:00' : 'T00:00:00+07:00'));
@@ -3253,6 +3254,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(seenThisVer()) return;                   // 이미 이 버전을 봤음
   const WHATS_NEW=[
+    ['🏠','귀국일 송별 연출 추가','1/2(가족1·가족2 귀국일)에 접속하면 도착일 축하와 짝을 이루는 송별 연출이 한 번 떠요 — "3가족 10명이 함께한 18일, 수고 많으셨어요"'],
     ['✅','12/21·22·23 골프 왕복밴 바우처 확정·결제완료','시암CC 플랜테이션·워터사이드·플랜테이션 왕복밴 예약확정서 수령(#200751875·80·84) — 인원·시간·금액 전부 기존 반영값과 일치 확인, 윤우열 선결제 완료'],
     ['🚐','12/21·22·23 골프 왕복밴 견적반영','시암CC 플랜테이션·워터사이드·플랜테이션 왕복밴 — 빌라 통부라 06:20 출발, 인당 17,909~22,386원 · 윤우열 선결제'],
     ['💰','정산 완료 체크 + 축하','정산탭 이름 옆 "정산 대기" 칩을 탭하면 정산완료로 전환 — 할일탭 체크와 자동 연동, 전원 완료되면 축하 연출'],
@@ -3412,6 +3414,19 @@ function __initFunElements(){
       const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
       celebrate({ kicker:'✈️ 태국 도착', msg:'즐거운 여행 되세요!', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
       setTimeout(()=> petalBurst(innerWidth*0.5, 130, 22, 150), 550);
+    }, 900);
+  })();
+
+  // ── B2. 귀국일 송별 (1/2, 1회) ──
+  (function(){
+    const ret = tripDate('mainReturn'), now = new Date();
+    if(now.toDateString() !== ret.toDateString()) return;
+    let seen; try{ seen = localStorage.getItem('thai2026_farewell'); }catch(e){ seen = '1'; }
+    if(seen) return;
+    try{ localStorage.setItem('thai2026_farewell','1'); }catch(e){}
+    setTimeout(()=>{
+      const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
+      celebrate({ kicker:'🏠 귀국', msg:'3가족 10명이 함께한 18일, 정말 수고 많으셨어요! 집까지 안전하게 도착하세요', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
     }, 900);
   })();
 
