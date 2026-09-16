@@ -1226,6 +1226,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   font-family:'Fraunces',serif;font-weight:600;font-size:15px;cursor:pointer;
   box-shadow:0 8px 20px -8px rgba(14,40,34,.5);-webkit-tap-highlight-color:transparent}
 .wn-close:active{transform:scale(.99)}
+.diary-grid{grid-template-columns:repeat(2,1fr);margin:16px 0 4px}
 @media (prefers-reduced-motion:reduce){ .wn-sheet,.wn-scrim{transition:none} }
 @media (min-width:761px){
   .wn-scrim{align-items:center}
@@ -1786,6 +1787,20 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 <footer class="ft"><div class="wrap">
   <span id="appVer">v9.47</span> · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
+
+<!-- 여행 다이어리 (귀국일 1회) -->
+<div class="wn-scrim" id="diaryScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="diaryTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🇹🇭 WRAPPED</span>
+      <h2 class="wn-title" id="diaryTitle">여행 다이어리</h2>
+    </div>
+    <p class="wn-sub" id="diarySub">함께한 시간을 숫자로 담아봤어요</p>
+    <div class="golf-sum diary-grid" id="diaryGrid"></div>
+    <button class="wn-close" id="diaryCopy" type="button" data-txt="">📋 다이어리 텍스트 복사</button>
+    <button class="wn-close" id="diaryClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
 
 <!-- 이번 업데이트 (버전당 1회) -->
 <div class="wn-scrim" id="wnScrim" hidden>
@@ -3559,6 +3574,69 @@ function __initFunElements(){
       const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
       celebrate({ kicker:'🏠 귀국', msg:'3가족 10명이 함께한 18일, 정말 수고 많으셨어요! 집까지 안전하게 도착하세요', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
     }, 900);
+  })();
+
+  // ── B3. 여행 다이어리 (1/2, 송별 뒤 이어서 1회) — 실제 데이터로 만든 여행 요약 ──
+  (function(){
+    const scrim = document.getElementById('diaryScrim'); if(!scrim) return;
+    const ret = tripDate('mainReturn'), now = new Date();
+    if(now.toDateString() !== ret.toDateString()) return;
+    let seen; try{ seen = localStorage.getItem('thai2026_diary'); }catch(e){ seen = '1'; }
+    if(seen) return;
+    try{ localStorage.setItem('thai2026_diary','1'); }catch(e){}
+
+    setTimeout(()=>{
+      const days = Math.round((tripDate('mainReturn') - tripDate('depart'))/D) + 1;
+      const golfDone = GOLF.filter(g=>g.st==='ok').length;
+      const carDone = T_CAR.filter(r=>r[3]==='ok').length;
+      const members = FAMS.reduce((a,f)=>a+f.rows.length,0);
+      const totalOwe = typeof oweSum!=='undefined' ? oweSum : OWE.reduce((a,o)=>a+o.t,0);
+
+      const stats = [
+        [`${days}일`,'함께한 시간'],
+        [`${golfDone}R`,'골프 라운드'],
+        [`${carDone}건`,'이동 밴 확정'],
+        [`${members}명`,'3가족 함께'],
+      ];
+      document.getElementById('diaryGrid').innerHTML = stats.map(([n,l])=>
+        `<div class="gs"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+
+      const shareTxt = `🇹🇭 태국 겨울여행 다이어리\n${TRIP.depart}~${TRIP.mainReturn} · ${days}일 · 3가족 ${members}명\n⛳ 골프 ${golfDone}라운드 · 🚐 이동밴 ${carDone}건 확정\n💰 정산 총 ${won(totalOwe)}원\n다들 수고 많았어요!`;
+      const copyBtn = document.getElementById('diaryCopy');
+      copyBtn.dataset.txt = shareTxt;
+
+      const closeBtn = document.getElementById('diaryClose');
+      const prevFocus = document.activeElement;
+      let closed = false;
+      function close(){
+        if(closed) return; closed = true;
+        scrim.classList.remove('on');
+        document.documentElement.style.overflow = '';
+        setTimeout(()=>{ scrim.hidden = true; }, 340);
+        try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+        haptic('tap');
+      }
+      closeBtn.addEventListener('click', close);
+      scrim.addEventListener('click', e=>{ if(e.target===scrim) close(); });
+      addEventListener('keydown', e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
+      copyBtn.addEventListener('click', async ()=>{
+        try{ await navigator.clipboard.writeText(copyBtn.dataset.txt); }
+        catch(_){ const ta=document.createElement('textarea'); ta.value=copyBtn.dataset.txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+        const o=copyBtn.textContent; copyBtn.textContent='✅ 복사됨'; haptic('ok');
+        setTimeout(()=>{ copyBtn.textContent=o; }, 1600);
+      });
+
+      // "이번 업데이트" 시트가 아직 떠있으면 다 닫힐 때까지 기다렸다 연다 (동시에 겹치지 않도록)
+      let tries = 0;
+      (function tryOpen(){
+        const wn = document.getElementById('wnScrim');
+        if(wn && !wn.hidden && tries++ < 24){ setTimeout(tryOpen, 500); return; }
+        scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+        void scrim.offsetHeight;
+        scrim.classList.add('on');
+        try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
+      })();
+    }, 6200);
   })();
 
   // ── C. 할 일 완료 축하 (todo tog에서 호출) ──
