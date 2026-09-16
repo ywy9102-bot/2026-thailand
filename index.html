@@ -147,6 +147,7 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
   line-height:1.25;letter-spacing:-.01em}
 .cd-head .plane{display:inline-block}
 .cd-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--hero-dim);margin-top:5px;letter-spacing:.01em}
+.cd-fl-hint{display:none}
 .countdown.soon .cd-prog{stroke:#E3C169}
 .countdown.imminent .cd-prog{stroke:#EFA895;filter:drop-shadow(0 0 7px rgba(239,168,149,.5))}
 .countdown.imminent .cd-num{color:#F6D2C3}
@@ -468,6 +469,7 @@ table.mx tr:hover td:first-child,table.mx tr:hover .mx-cnt{background:#F7F5EE}
 table.mx .no{color:#E0DACC}
 .mdot{display:inline-block;width:14px;height:14px;border-radius:50%;
   box-shadow:0 0 0 1.5px rgba(255,255,255,.7), inset 0 0 0 1px rgba(0,0,0,.05)}
+.mx-crown{font-size:11px;vertical-align:1px}
 table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:11px}
 
 /* ══ LODGING ══ */
@@ -556,6 +558,11 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .recd-v{color:var(--ink2);min-width:0}
 .recd-v a{color:var(--jade);text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 .recd + .vsec{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
+.recd-plans{background:rgba(30,75,65,.045);border-radius:10px;padding:2px 10px;margin-bottom:4px}
+.recd-plans .recd-row:first-child{padding-top:6px}
+.recd-plans .recd-row:last-child{padding-bottom:6px}
+.recd-ref-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;
+  color:var(--ink3);text-transform:uppercase;margin:8px 0 2px}
 
 /* ══ COST ══ */
 .cost-hero{background:linear-gradient(135deg,var(--jade) 0%,var(--jade-d) 100%);color:#fff;
@@ -565,8 +572,18 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .cost-hero .a small{font-size:14px;font-weight:400;color:#D6E2DC;margin-left:3px}
 .cost-hero .s{font-size:11.5px;color:#A5BAB0;margin-top:7px;line-height:1.6}
 
+.whoami{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px}
+.whoami-lbl{font-size:11.5px;font-weight:700;color:var(--ink3);flex:none}
+.whoami-chips{display:flex;gap:6px;flex-wrap:wrap}
+.whoami-chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 11px;
+  font:inherit;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.whoami-chip.on{background:var(--jade);border-color:var(--jade);color:#fff}
+.me-tag{font-size:10px;font-weight:700;color:var(--gold-text);background:var(--gold-s);
+  border-radius:99px;padding:1px 7px;letter-spacing:.01em}
+
 .bar-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
 .bar-row{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:0;overflow:hidden}
+.bar-row.is-me{border-color:var(--jade);box-shadow:0 0 0 1px var(--jade) inset}
 .bar-head{padding:12px 14px;cursor:pointer}
 .bar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
 .bar-nm{font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
@@ -580,7 +597,8 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .bar-row.settled{border-color:var(--ok)}
 .bar-row.settled .bar-amt{color:var(--ok);text-decoration:line-through;text-decoration-color:var(--ok-s)}
 .pay-toggle{border:none;min-height:28px;padding:5px 12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;
-  -webkit-tap-highlight-color:transparent}
+  -webkit-tap-highlight-color:transparent;position:relative}
+.pay-toggle::before{content:'';position:absolute;inset:-8px -3px}
 .pay-toggle:active{transform:scale(.96)}
 .bar-detail{display:none;padding:0 14px 12px;border-top:1px dashed var(--line)}
 .bar-row.open .bar-detail{display:block;animation:fadeIn .18s ease}
@@ -953,6 +971,8 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   .cd-ring-wrap{cursor:pointer}
   .countdown:not(.flipped):not(.precise) .cd-ring-wrap::after{content:"⏱";position:absolute;
     right:0;bottom:-2px;font-size:11px;opacity:.5}
+  .countdown:not(.flipped):not(.precise) .cd-fl-hint{display:inline-flex;align-items:center;gap:3px;
+    margin-top:5px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold-s);opacity:.8}
   .countdown.precise .cd-ring-wrap::after{content:"✕";position:absolute;right:0;bottom:-2px;font-size:11px;opacity:.6}
   .countdown.precise .cd-num{font-size:20px;letter-spacing:0}
   .countdown.precise .cd-head{font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.02em;font-weight:600}
@@ -1285,6 +1305,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
         <div class="cd-text">
           <div class="cd-head" id="cdHead">계산 중…</div>
           <div class="cd-sub" id="cdSub">2026.12.16 출발</div>
+          <div class="cd-fl-hint" aria-hidden="true">✈ 항공편 보기</div>
         </div>
       </div>
       <div class="cd-back" aria-hidden="true">
@@ -1308,7 +1329,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     </button>
     <div class="stats">
       <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">10명 함께</div></div>
-      <div class="stat"><div class="n"><span id="stN2" data-to="8">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
+      <div class="stat"><div class="n"><span id="stN2" data-to="7">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
       <div class="stat"><div class="n"><span id="stN3" data-to="7">0</span><small>/7</small></div><div class="l">🏨 숙소 확정</div></div>
     </div>
   </div>
@@ -1698,6 +1719,12 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     <div class="a" id="oweTotal">–</div>
     <div class="s" id="oweBreak">계산중…</div>
     <div class="s" id="oweSettled" style="margin-top:2px"></div>
+    <div class="s" id="oweMine" style="display:none;margin-top:4px"></div>
+  </div>
+
+  <div class="whoami" id="whoami">
+    <span class="whoami-lbl">이 중에 나예요</span>
+    <div class="whoami-chips" id="whoamiChips"></div>
   </div>
 
   <h3 class="stbl"><span class="i">◈</span>사람별 정산액</h3>
@@ -1782,6 +1809,7 @@ const LS_KEY = 'thai2026_todo_v1';
 const store = (()=>{ try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; } })();
 store.done = store.done || {};          // { "<항목 텍스트>": true }
 store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
+store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
 const APP_VER='v9.58';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
@@ -1835,7 +1863,7 @@ const GOLF=[
   van:{book:'200751884',amt:89544,per:17909,time:'06:20',
        route:'06:20 빌라 통부라 출발 → 시암CC 플랜테이션 도착 · 08:28 티오프 → 라운드 후 빌라 통부라 복귀',
        pay:'완료 · 윤우열 선결제'}},
- {d:'12/24',w:'목',loc:'pat',c:'Phoenix Gold Golf & CC',p:['윤우열','윤성욱','정유경','정유현'],tee:'08:24 요청',amt:523448,per:130862,st:'ok',
+ {d:'12/24',w:'목',loc:'pat',c:'Phoenix Gold Golf & CC',p:['윤우열','윤성욱','정유경','정유현'],tee:'08:24 요청',amt:523448,per:130862,st:'wait',
   book:'200706977',pid:'phoenix',
   char:'1993년 개장한 27홀 클래식(마운틴·오션·레이크), Dennis Griffiths 설계. 망고·유칼립투스가 늘어선 파크랜드 구릉. 오션 코스 마지막 홀 티에서 파타야 시내·태국만 전망. 최근 리뷰는 페어웨이가 다소 무르고 그린이 느린 편.'},
  {d:'12/29',w:'화',loc:'bkk',c:'Nikanti Golf Club',p:['윤우열','이준영','윤성욱','정유현'],tee:'08:30 확정',amt:1023096,per:255774,st:'ok',
@@ -2641,10 +2669,10 @@ window.__ensureRain = (function(){
   }
 })();
 
-// progress (예약 확정 기준: 숙소6 + 골프8 + 차량9 = 23건)
+// progress (예약 확정 기준: 숙소7 + 골프7 + 차량11 = 25건 / 전체 30건)
 (function(){
-  const done = 6 + 8 + 4;   // 숙소6 골프8(전부확정) 차량4
-  const total = 6 + 8 + 9;  // 숙소6 골프8 차량9
+  const done = 7 + 7 + 11;  // 숙소7(전부확정·개별결제 포함) 골프7(12/24 티오프만 확정대기) 차량11(10확정+가족2픽업 개별결제)
+  const total = 7 + 8 + 15; // 숙소7 골프8 차량15
   const pct = Math.round(done/total*100);
   $('ppct').textContent = pct+'%';
   setTimeout(()=>{$('pfill').style.width=pct+'%';},260);
@@ -2741,7 +2769,8 @@ wireExpand(['stay'], '.lg-head', '.lg');
     const cells = GOLF.map(g=>g.p.includes(p)
       ? `<td title="${g.d} ${g.c}"><span class="mdot" style="background:${pc(p)}"></span></td>` : `<td class="no">·</td>`).join('');
     const cnt = GOLF.filter(g=>g.p.includes(p)).length;
-    return `<tr><td>${dot(p)}${p}</td><td class="mx-cnt">${cnt}</td>${cells}</tr>`;
+    const perfect = cnt === GOLF.length;
+    return `<tr><td>${dot(p)}${p}${perfect?' <span class="mx-crown" title="전 라운드 개근">👑</span>':''}</td><td class="mx-cnt">${cnt}</td>${cells}</tr>`;
   }).join('');
   $('mxTable').innerHTML =
     `<thead><tr><th>참여자</th><th class="mx-cnt">계</th>${GOLF.map(g=>`<th>${g.d.replace('12/','')}</th>`).join('')}</tr></thead>
@@ -2750,6 +2779,16 @@ wireExpand(['stay'], '.lg-head', '.lg');
 })();
 
 // itinerary
+// 일정 상세(recd) 렌더링 — "Plan A/B/C" 같은 선택지는 참고 정보와 시각적으로 분리
+function recdHTML(recd){
+  const row = r => `<div class="recd-row"><span class="recd-k${/^Plan /.test(r[0])?' p':''}">${r[0]}</span><span class="recd-v">${r[1]}</span></div>`;
+  const plans = recd.filter(r=>/^Plan /.test(r[0]));
+  const refs = recd.filter(r=>!/^Plan /.test(r[0]));
+  return `<div class="recd">
+    ${plans.length?`<div class="recd-plans">${plans.map(row).join('')}</div>`:''}
+    ${refs.length?(plans.length?'<div class="recd-ref-lbl">참고</div>':'')+refs.map(row).join(''):''}
+  </div>`;
+}
 function days(list,el,mon,yr){
   const now = new Date();
   const isToday = x => mon===now.getMonth()+1 && +x.d===now.getDate() && yr===now.getFullYear();
@@ -2774,7 +2813,7 @@ function days(list,el,mon,yr){
          ${expandable?`<div class="g-toggle"><span class="chev">▾</span> ${toggleTxt}</div>`:''}
        </div>
        ${expandable?`<div class="day-detail"><div class="dtl-in">
-         ${hasRec?`<div class="recd">${x.recd.map(r=>`<div class="recd-row"><span class="recd-k${/^Plan /.test(r[0])?' p':''}">${r[0]}</span><span class="recd-v">${r[1]}</span></div>`).join('')}</div>`:''}
+         ${hasRec?recdHTML(x.recd):''}
          ${hasDetail?`<div class="vsec">
            ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
            ${x.van?vanBoxHTML(x.van):''}
@@ -2988,25 +3027,63 @@ function owedItems(name){
   return items;
 }
 
+// OWE(하드코딩 총액)와 owedItems() 동적 산출 합계가 어긋나면 콘솔에 경고 — 데이터 갱신 시 드리프트 방지용 안전장치
+(function(){
+  OWE.forEach(o=>{
+    const sum = owedItems(o.n).reduce((a,it)=>a+it.amt,0);
+    if(Math.abs(sum - o.t) > 5) console.warn(`[정산 드리프트] ${o.n}: OWE.t=${o.t} vs owedItems 합계=${sum} (차이 ${sum-o.t}원) — GOLF/T_STAY 갱신 후 OWE 값도 함께 확인하세요.`);
+  });
+})();
+
 // "정산 회수" 완료 체크는 별도 저장소 없이 할일탭의 체크 상태(store.done)를 그대로 읽음 — 두 탭 어디서 체크해도 서로 반영됨
 const paidKey = o => `${o.n} → 윤우열 ${won(o.t)}원`;
-$('bars').innerHTML = OWE.map((o,i)=>{
-  const items = owedItems(o.n);
-  const paid = !!store.done[paidKey(o)];
-  return `<div class="bar-row ${paid?'settled':''}" data-paid-key="${qesc(paidKey(o))}">
-    <div class="bar-head" role="button" tabindex="0" aria-expanded="false">
-      <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}<button class="chip ${paid?'ok':'wait'} pay-toggle" type="button" aria-pressed="${paid}" aria-label="${o.n} 정산완료 표시">${paid?'✅ 정산완료':'정산 대기'}</button></span><span class="bar-amt">${won(o.t)}원</span></div>
-      <div class="bar-track"><div class="bar-fill" data-w="${(o.t/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc(o.n)} 0%,${pc(o.n)}CC 100%)"></div></div>
-      <div class="bar-brk"><span class="chev">▾</span><span>${o.b}</span></div>
-    </div>
-    <div class="bar-detail">
-      ${items.map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label}</span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace">${won(it.amt)}원</span></div>`).join('')}
-      <button class="bar-copy" type="button" data-n="${o.n}" data-t="${o.t}" data-b="${o.b.replace(/"/g,'&quot;')}">📋 정산 요청 메시지 복사</button>
-    </div>
-  </div>`;
-}).join('');
-setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach((b,i)=>{
-  setTimeout(()=>b.style.width=b.dataset.w+'%', i*70);});},300);
+function renderBars(){
+  const ordered = store.myName ? [...OWE].sort((a,b)=>(a.n===store.myName?0:1)-(b.n===store.myName?0:1)) : OWE;
+  $('bars').innerHTML = ordered.map(o=>{
+    const items = owedItems(o.n);
+    const paid = !!store.done[paidKey(o)];
+    const isMe = o.n === store.myName;
+    return `<div class="bar-row ${paid?'settled':''} ${isMe?'is-me':''}" data-paid-key="${qesc(paidKey(o))}">
+      <div class="bar-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}${isMe?' <span class="me-tag">⭐ 나</span>':''}<button class="chip ${paid?'ok':'wait'} pay-toggle" type="button" aria-pressed="${paid}" aria-label="${o.n} 정산완료 표시">${paid?'✅ 정산완료':'정산 대기'}</button></span><span class="bar-amt">${won(o.t)}원</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="${(o.t/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc(o.n)} 0%,${pc(o.n)}CC 100%)"></div></div>
+        <div class="bar-brk"><span class="chev">▾</span><span>${o.b}</span></div>
+      </div>
+      <div class="bar-detail">
+        ${items.map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label}</span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace">${won(it.amt)}원</span></div>`).join('')}
+        <button class="bar-copy" type="button" data-n="${o.n}" data-t="${o.t}" data-b="${o.b.replace(/"/g,'&quot;')}">📋 정산 요청 메시지 복사</button>
+      </div>
+    </div>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach((b,i)=>{
+    setTimeout(()=>b.style.width=b.dataset.w+'%', i*70);});},300);
+}
+renderBars();
+
+// "이 중에 나예요" 선택 — 내 항목 강조 + 상단 고정 (localStorage 저장)
+function renderWhoami(){
+  $('whoamiChips').innerHTML = OWE.map(o=>
+    `<button class="whoami-chip ${o.n===store.myName?'on':''}" type="button" data-n="${o.n}">${o.n}</button>`
+  ).join('');
+}
+function updateMineLine(){
+  const el = $('oweMine');
+  const mine = store.myName && OWE.find(o=>o.n===store.myName);
+  if(!mine){ el.style.display='none'; return; }
+  const paid = !!store.done[paidKey(mine)];
+  el.style.display='block';
+  el.innerHTML = `⭐ <b>${mine.n}</b>님이 보낼 금액: <b>${won(mine.t)}원</b>${paid?' · ✅ 이미 보냈어요':''}`;
+}
+renderWhoami();
+updateMineLine();
+$('whoamiChips').addEventListener('click', e=>{
+  const btn = e.target.closest('.whoami-chip'); if(!btn) return;
+  store.myName = (store.myName === btn.dataset.n) ? null : btn.dataset.n;
+  saveStore();
+  renderWhoami(); renderBars(); updateMineLine();
+  if(typeof refreshSettled === 'function') refreshSettled();
+  haptic('tap');
+});
 
 // 정산탭 뱃지·요약문구를 store.done과 동기화 (할일탭에서 체크/해제해도 여기 반영)
 function refreshSettled(){
@@ -3023,6 +3100,7 @@ function refreshSettled(){
   });
   const total = OWE.length;
   $('oweSettled').textContent = done===total ? '✅ 전원 정산완료' : `${done}/${total}명 정산완료`;
+  if(typeof updateMineLine === 'function') updateMineLine();
 }
 refreshSettled();
 
@@ -3047,6 +3125,14 @@ $('bars').addEventListener('click', async e=>{
       if(allPaid && window.funFx){
         const grp = [...document.querySelectorAll('.cgrp')].find(g=>/정산/.test(g.querySelector('.h3-tx')?.textContent||''));
         if(grp) window.funFx.group(grp);
+      } else if(typeof window.__toast === 'function'){
+        const nm = key.split(' → ')[0];
+        const quips = [
+          '이제 발 뻗고 주무세요 😌', '깔끔하게 보냈어요, 수고하셨습니다 👏',
+          '이걸로 태국 얘기 편하게 할 수 있겠네요 🇹🇭', '정산 끝 — 다음 여행 얘기나 해볼까요? ✈️',
+          '완료! 윤우열님이 곧 확인할 거예요 ✅',
+        ];
+        window.__toast(`💸 ${nm}`, quips[Math.floor(Math.random()*quips.length)]);
       }
     }
     return;
@@ -3400,6 +3486,21 @@ function __initFunElements(){
     haptic(o.haptic || 'ok');
   }
   window.__celebrate = celebrate;
+
+  // ── 연속 방문 스트릭 (날짜 기준 비교, 3일째부터만 살짝 알림 · 여행 중엔 매일 켜볼 이유를 하나 더) ──
+  (function(){
+    try{
+      const today = new Date().toDateString();
+      const last = localStorage.getItem('thai2026_lastVisit');
+      if(last === today) return;
+      let streak = parseInt(localStorage.getItem('thai2026_streak')||'0', 10);
+      const yday = new Date(); yday.setDate(yday.getDate()-1);
+      streak = (last === yday.toDateString()) ? streak + 1 : 1;
+      localStorage.setItem('thai2026_lastVisit', today);
+      localStorage.setItem('thai2026_streak', String(streak));
+      if(streak >= 3) setTimeout(()=> toast(`🔥 ${streak}일째`, '연속으로 확인하고 계시네요, 꼼꼼하세요!'), 1400);
+    }catch(e){}
+  })();
 
   // ── A. D-day 마일스톤 축하 (1회) ──
   (function(){
