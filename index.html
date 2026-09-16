@@ -579,7 +579,9 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .whoami-lbl{font-size:11.5px;font-weight:700;color:var(--ink3);flex:none}
 .whoami-chips{display:flex;gap:6px;flex-wrap:wrap}
 .whoami-chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 11px;
-  font:inherit;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  font:inherit;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;-webkit-tap-highlight-color:transparent;
+  position:relative}
+.whoami-chip::before{content:'';position:absolute;inset:-8px -3px}
 .whoami-chip.on{background:var(--jade);border-color:var(--jade);color:#fff}
 .me-tag{font-size:10px;font-weight:700;color:var(--gold-text);background:var(--gold-s);
   border-radius:99px;padding:1px 7px;letter-spacing:.01em}
