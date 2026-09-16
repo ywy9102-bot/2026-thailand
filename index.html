@@ -1333,6 +1333,11 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
       <span class="nc-body"><span class="nc-e" id="ncE"></span><span class="nc-t" id="ncT"></span></span>
       <span class="nc-arrow">이동 →</span>
     </button>
+    <button class="next-card" id="prepCard" type="button" style="display:none">
+      <span class="nc-tag" id="pcTag">🎒 출발 준비</span>
+      <span class="nc-body"><span class="nc-e">🧳</span><span class="nc-t" id="pcT"></span></span>
+      <span class="nc-arrow">할일 →</span>
+    </button>
     <div class="stats">
       <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">10명 함께</div></div>
       <div class="stat"><div class="n"><span id="stN2" data-to="7">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
@@ -2203,13 +2208,20 @@ const T_CAR=[
 ];
 
 const TODO=[
+ {g:'🧳 출발 준비',items:[
+  'D-60 — 전 참가자(10명) 여행자보험 가입',
+  'D-30 — 골프백 항공 위탁수하물 규정 확인 (OZ·KE 항공사별 상이)',
+  'D-14 — 여권 유효기간 6개월 이상 확인',
+  'D-14 — eSIM/로밍 준비',
+  'D-7 — 환전(밧) 준비',
+  'D-3 — 짐싸기 · 상비약·보조배터리 챙기기',
+ ]},
  {g:'📝 예약 · 견적',items:[
   '차량 미확정 — 파타야 골프 1회(12/24) · 방콕 골프 2회',
   '차량 미확정 — 12/30 가족2 호텔이동(티니디→GCP)',
   '차량 미확정 — 1/2 공항 샌딩 1건 남음(가족2, GCP출발)',
  ]},
  {g:'🔍 확인사항',items:[
-  '전 참가자(10명) 여행자보험 가입 확인',
   '12/18 통부라 엑스트라베드 현지 최종 확인',
   '12/21 정유현·장모님·김윤후 개별일정 확정 (쿠킹클래스 등)',
   '티오프 확정 대기 — 12/24 Phoenix Gold (10/1 예정) · 나머지 7R 확정',
@@ -2692,6 +2704,30 @@ window.__ensureRain = (function(){
     card.style.display='flex';
     card.style.cursor='default';
   }
+})();
+
+// 출발 전 준비물 프리뷰 카드 — 출발 전까지만 노출 (여행 중엔 확인용이라 숨김), D-day에 맞는 다음 준비물 안내
+(function(){
+  const card = $('prepCard'); if(!card) return;
+  const now = new Date(), dep = tripDate('depart');
+  if(now >= dep) return;  // 출발 후에는 표시하지 않음
+  const grp = TODO.find(g=>g.g==='🧳 출발 준비'); if(!grp) return;
+  const daysLeft = Math.ceil((dep - now)/864e5);
+  const parsed = grp.items.map(s=>{ const m=s.match(/^D-(\d+)\s*—\s*(.+)$/); return m?{s, d:+m[1], txt:m[2]}:null; }).filter(Boolean);
+  const unchecked = parsed.filter(x=>!store.done[x.s]);
+  if(!unchecked.length){
+    $('pcTag').textContent='🎒 출발 준비';
+    $('pcT').textContent='다 챙겼어요! 이제 설레는 일만 남았어요';
+    card.style.display='flex'; card.style.cursor='default';
+    return;
+  }
+  const due = unchecked.filter(x=>daysLeft<=x.d).sort((a,b)=>a.d-b.d);
+  const upcoming = unchecked.filter(x=>daysLeft>x.d).sort((a,b)=>b.d-a.d);
+  const pick = due[0] || upcoming[0];
+  $('pcTag').textContent = due[0] ? `🎒 D-${pick.d} 준비` : `🎒 D-${pick.d}까지`;
+  $('pcT').textContent = pick.txt;
+  card.style.display='flex';
+  card.addEventListener('click', ()=>{ haptic('tap'); go($('tb-todo')); });
 })();
 
 // progress (예약 확정 기준: 숙소7 + 골프7 + 차량11 = 25건 / 전체 30건)
@@ -3534,8 +3570,8 @@ function __initFunElements(){
     const days = Math.ceil((dep - now)/D);
     const MS = [
       {d:100,k:'D-100',m:'딱 100일 남았어요 ✈️'}, {d:50,k:'D-50',m:'절반 왔어요 🌴'},
-      {d:30,k:'D-30',m:'한 달 남았어요 🎉'}, {d:14,k:'D-14',m:'2주 남았어요'},
-      {d:7,k:'D-7',m:'일주일 남았어요 ✈️'}, {d:3,k:'D-3',m:'짐 다 쌌나요? 🧳'},
+      {d:30,k:'D-30',m:'한 달 남았어요 🎉 — 골프백 탁송 규정 챙겨보세요'}, {d:14,k:'D-14',m:'2주 남았어요 — 여권·eSIM·환전 준비할 때예요'},
+      {d:7,k:'D-7',m:'일주일 남았어요 ✈️ — 출발 준비 카드 확인해보세요'}, {d:3,k:'D-3',m:'짐 다 쌌나요? 🧳 — 상비약·보조배터리도 챙기세요'},
       {d:1,k:'D-1',m:'내일 출발이에요! 🎉'},
     ];
     let seen; try{ seen = JSON.parse(localStorage.getItem('thai2026_ms')) || []; }catch(e){ seen = []; }
