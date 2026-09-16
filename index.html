@@ -517,6 +517,9 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .tl-copy:active{transform:scale(.995)}
 .warn{font-size:12px;color:var(--coral);background:var(--coral-s);border-radius:9px;
   padding:9px 12px;margin-top:8px;line-height:1.6}
+.transit-note{font-size:12px;color:var(--jade-d);background:var(--jade-s);border-radius:9px;
+  padding:9px 12px;margin:10px 0;line-height:1.6}
+.transit-note .mono{font-family:'IBM Plex Mono',monospace;font-size:11px}
 
 /* ══ ITINERARY ══ */
 .mdiv{font-family:'Fraunces',serif;font-style:italic;font-size:14.5px;color:var(--gold-text);
@@ -1620,6 +1623,8 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     <div class="warn">※ 윤성욱은 별도 체류 (12/1~)</div>
   </div>
 
+  <div class="transit-note">🚐 이동 밴 확정 <span class="mono">#200754271</span> · 12/26(토) 10:30 통부라 출발 → 티니디 도착 (가족1·5인) · 인당 17,875원 · 윤우열 선결제</div>
+
   <div class="lg-grp">
     <div class="lg-loc">방콕 · 티니디 트렌디 카오산</div>
     <div class="lg">
@@ -1652,6 +1657,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
         <button class="tl-copy" type="button" data-copy="Tinidee Trendy Khaosan, 42 Ram Buttri Alley, Bangkok 10200">📋 영문 주소 복사 · Grab·Bolt용</button>
       </div></div>
     </div>
+    <div class="transit-note">🚐 공항 샌딩 밴 확정 <span class="mono">#200754276</span> · 1/2(토) 08:30 호텔 출발 → 수완나품 공항 · OZ744 12:25 BKK (가족1·5인) · 인당 9,363원 · 윤우열 선결제</div>
   </div>
 
   <div class="lg-grp">
@@ -1947,7 +1953,7 @@ function triplocHTML(o){
 // 왕복밴 정보 — 코스·위치·바우처와 섞이지 않도록 별도 박스로 분리 (골프·일정탭 공통)
 function vanBoxHTML(van){
   return `<div class="van-box">
-    <div class="van-box-h"><span>🚐 왕복밴 확정 <span class="mono">#${van.book}</span></span><span class="van-per">인당 ${won(van.per)}원</span></div>
+    <div class="van-box-h"><span>🚐 ${van.label||'왕복밴 확정'} <span class="mono">#${van.book}</span></span><span class="van-per">인당 ${won(van.per)}원</span></div>
     <p class="van-route">${van.route}</p>
     <div class="van-pay">💳 결제 ${van.pay}</div>
   </div>`;
@@ -2079,6 +2085,7 @@ const ITIN_A=[
 ];
 const ITIN_B=[
  {d:'26',w:'토',l:'파타야→BKK',e:'🚐',t:'방콕 이동',n:'통부라 10:30 출발 → 티니디 체크인',
+  van:{book:'200754271',per:17875,route:'10:30 빌라 통부라 출발 → 티니디 트렌디 카오산 도착 (성인 5인: 윤우열·정유경·정유현·장모님·김윤후)',pay:'완료 · 윤우열 선결제',label:'이동 밴 확정'},
   rec:'저녁 쏨분시푸드 ① (가족1만)',
   recd:[
    ['식당','쏨분시푸드 — 반탓통(원조·분위기) 또는 수라웡(미쉐린). 카오산에서 그랩 15~20분'],
@@ -2140,7 +2147,8 @@ const ITIN_C=[
    ['Plan C','고대도시(Ancient Siam / 므앙보란) — 태국 전역 유적 축소판 대공원, 자전거·카트 + 에라완 박물관. <a href="https://www.ancientsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
    ['참고','1/2 호텔 08:00 출발 → 밤 늦지 않게'],
   ]},
- {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:25–19:50',x:'호텔 08:30 출발'},
+ {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:25–19:50',x:'호텔 08:30 출발',
+  van:{book:'200754276',per:9363,route:'08:30 티니디 트렌디 카오산 출발 → 수완나품 공항 (OZ744 12:25 BKK, 성인 5인: 윤우열·정유경·정유현·장모님·김윤후)',pay:'완료 · 윤우열 선결제',label:'이동 밴 확정'}},
  {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
 ];
 
@@ -2793,7 +2801,7 @@ function days(list,el,mon,yr){
   const now = new Date();
   const isToday = x => mon===now.getMonth()+1 && +x.d===now.getDate() && yr===now.getFullYear();
   $(el).innerHTML = list.map(x=>{
-    const hasDetail = !!(x.book||x.pid);
+    const hasDetail = !!(x.book||x.pid||x.van);
     const hasRec = Array.isArray(x.recd) && x.recd.length;
     const expandable = hasDetail || hasRec;
     const today = isToday(x);
