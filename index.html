@@ -579,7 +579,9 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .whoami-lbl{font-size:11.5px;font-weight:700;color:var(--ink3);flex:none}
 .whoami-chips{display:flex;gap:6px;flex-wrap:wrap}
 .whoami-chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 11px;
-  font:inherit;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  font:inherit;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;-webkit-tap-highlight-color:transparent;
+  position:relative}
+.whoami-chip::before{content:'';position:absolute;inset:-8px -3px}
 .whoami-chip.on{background:var(--jade);border-color:var(--jade);color:#fff}
 .me-tag{font-size:10px;font-weight:700;color:var(--gold-text);background:var(--gold-s);
   border-radius:99px;padding:1px 7px;letter-spacing:.01em}
@@ -1224,6 +1226,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   font-family:'Fraunces',serif;font-weight:600;font-size:15px;cursor:pointer;
   box-shadow:0 8px 20px -8px rgba(14,40,34,.5);-webkit-tap-highlight-color:transparent}
 .wn-close:active{transform:scale(.99)}
+.diary-grid{grid-template-columns:repeat(2,1fr);margin:16px 0 4px}
 @media (prefers-reduced-motion:reduce){ .wn-sheet,.wn-scrim{transition:none} }
 @media (min-width:761px){
   .wn-scrim{align-items:center}
@@ -1329,6 +1332,11 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
       <span class="nc-tag" id="ncTag">다음 일정</span>
       <span class="nc-body"><span class="nc-e" id="ncE"></span><span class="nc-t" id="ncT"></span></span>
       <span class="nc-arrow">이동 →</span>
+    </button>
+    <button class="next-card" id="prepCard" type="button" style="display:none">
+      <span class="nc-tag" id="pcTag">🎒 출발 준비</span>
+      <span class="nc-body"><span class="nc-e">🧳</span><span class="nc-t" id="pcT"></span></span>
+      <span class="nc-arrow">할일 →</span>
     </button>
     <div class="stats">
       <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">10명 함께</div></div>
@@ -1785,6 +1793,20 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   <span id="appVer">v9.47</span> · 태국 겨울 여행 · 2026.12.16–2027.1.4
 </div></footer>
 
+<!-- 여행 다이어리 (귀국일 1회) -->
+<div class="wn-scrim" id="diaryScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="diaryTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🇹🇭 WRAPPED</span>
+      <h2 class="wn-title" id="diaryTitle">여행 다이어리</h2>
+    </div>
+    <p class="wn-sub" id="diarySub">함께한 시간을 숫자로 담아봤어요</p>
+    <div class="golf-sum diary-grid" id="diaryGrid"></div>
+    <button class="wn-close" id="diaryCopy" type="button" data-txt="">📋 다이어리 텍스트 복사</button>
+    <button class="wn-close" id="diaryClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
 <!-- 이번 업데이트 (버전당 1회) -->
 <div class="wn-scrim" id="wnScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="wnTitle">
@@ -1818,7 +1840,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.58';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.63';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2186,13 +2208,20 @@ const T_CAR=[
 ];
 
 const TODO=[
+ {g:'🧳 출발 준비',items:[
+  'D-60 — 전 참가자(10명) 여행자보험 가입',
+  'D-30 — 골프백 항공 위탁수하물 규정 확인 (OZ·KE 항공사별 상이)',
+  'D-14 — 여권 유효기간 6개월 이상 확인',
+  'D-14 — eSIM/로밍 준비',
+  'D-7 — 환전(밧) 준비',
+  'D-3 — 짐싸기 · 상비약·보조배터리 챙기기',
+ ]},
  {g:'📝 예약 · 견적',items:[
   '차량 미확정 — 파타야 골프 1회(12/24) · 방콕 골프 2회',
   '차량 미확정 — 12/30 가족2 호텔이동(티니디→GCP)',
   '차량 미확정 — 1/2 공항 샌딩 1건 남음(가족2, GCP출발)',
  ]},
  {g:'🔍 확인사항',items:[
-  '전 참가자(10명) 여행자보험 가입 확인',
   '12/18 통부라 엑스트라베드 현지 최종 확인',
   '12/21 정유현·장모님·김윤후 개별일정 확정 (쿠킹클래스 등)',
   '티오프 확정 대기 — 12/24 Phoenix Gold (10/1 예정) · 나머지 7R 확정',
@@ -2675,6 +2704,30 @@ window.__ensureRain = (function(){
     card.style.display='flex';
     card.style.cursor='default';
   }
+})();
+
+// 출발 전 준비물 프리뷰 카드 — 출발 전까지만 노출 (여행 중엔 확인용이라 숨김), D-day에 맞는 다음 준비물 안내
+(function(){
+  const card = $('prepCard'); if(!card) return;
+  const now = new Date(), dep = tripDate('depart');
+  if(now >= dep) return;  // 출발 후에는 표시하지 않음
+  const grp = TODO.find(g=>g.g==='🧳 출발 준비'); if(!grp) return;
+  const daysLeft = Math.ceil((dep - now)/864e5);
+  const parsed = grp.items.map(s=>{ const m=s.match(/^D-(\d+)\s*—\s*(.+)$/); return m?{s, d:+m[1], txt:m[2]}:null; }).filter(Boolean);
+  const unchecked = parsed.filter(x=>!store.done[x.s]);
+  if(!unchecked.length){
+    $('pcTag').textContent='🎒 출발 준비';
+    $('pcT').textContent='다 챙겼어요! 이제 설레는 일만 남았어요';
+    card.style.display='flex'; card.style.cursor='default';
+    return;
+  }
+  const due = unchecked.filter(x=>daysLeft<=x.d).sort((a,b)=>a.d-b.d);
+  const upcoming = unchecked.filter(x=>daysLeft>x.d).sort((a,b)=>b.d-a.d);
+  const pick = due[0] || upcoming[0];
+  $('pcTag').textContent = due[0] ? `🎒 D-${pick.d} 준비` : `🎒 D-${pick.d}까지`;
+  $('pcT').textContent = pick.txt;
+  card.style.display='flex';
+  card.addEventListener('click', ()=>{ haptic('tap'); go($('tb-todo')); });
 })();
 
 // progress (예약 확정 기준: 숙소7 + 골프7 + 차량11 = 25건 / 전체 30건)
@@ -3361,20 +3414,26 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
 (function(){
   const scrim=$('wnScrim'); if(!scrim) return;
   const K='thai2026_seen_ver';
-  const seenThisVer=()=>{
-    try{ if(localStorage.getItem(K)===APP_VER) return true; }catch(e){}
-    try{ if(sessionStorage.getItem(K)===APP_VER) return true; }catch(e){}
-    return window.__wnShown===APP_VER;   // 스토리지 차단 시 세션 1회로 폴백
+  const WN_MAX_SHOWS=2;   // 놓치기 쉬우니 버전당 최대 2회까지 다시 보여줌
+  const getShownCount=()=>{
+    try{
+      const raw=localStorage.getItem(K);
+      if(raw){ const [v,c]=raw.split(':'); if(v===APP_VER) return +c||0; }
+    }catch(e){}
+    if(window.__wnShownVer===APP_VER) return window.__wnShownCount||0;  // 스토리지 차단 시 세션 폴백
+    return 0;
   };
-  if(seenThisVer()) return;                   // 이미 이 버전을 봤음
+  if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
-    ['🏠','귀국일 송별 연출 추가','1/2(가족1·가족2 귀국일)에 접속하면 도착일 축하와 짝을 이루는 송별 연출이 한 번 떠요 — "3가족 10명이 함께한 18일, 수고 많으셨어요"'],
-    ['✅','12/21·22·23 골프 왕복밴 바우처 확정·결제완료','시암CC 플랜테이션·워터사이드·플랜테이션 왕복밴 예약확정서 수령(#200751875·80·84) — 인원·시간·금액 전부 기존 반영값과 일치 확인, 윤우열 선결제 완료'],
-    ['🚐','12/21·22·23 골프 왕복밴 견적반영','시암CC 플랜테이션·워터사이드·플랜테이션 왕복밴 — 빌라 통부라 06:20 출발, 인당 17,909~22,386원 · 윤우열 선결제'],
-    ['💰','정산 완료 체크 + 축하','정산탭 이름 옆 "정산 대기" 칩을 탭하면 정산완료로 전환 — 할일탭 체크와 자동 연동, 전원 완료되면 축하 연출'],
-    ['🚐','왕복밴 정보 박스로 분리','코스 설명·위치 정보와 섞이지 않도록 왕복밴(시간·경로·결제)을 독립된 카드로 — 골프·일정탭 공통'],
-    ['🏨','골프탭·일정탭 위치정보 개선','파타야는 골프장 대신 홀리데이인·통부라 숙소 주소, 방콕은 골프장+체류 숙소 주소를 함께 표시 — 카드를 열면 위치·구글맵 링크·"영문 주소 복사(Grab·Bolt용)" 버튼'],
-    ['🚐','12/17·18 골프 왕복밴 결제완료','홀리데이인 베이타워 06:30·05:50 출발(윤성욱) → 빌라 통부라 경유(윤우열·김태기), 인당 38,484원(2회 76,968원) · 윤우열 선결제 완료'],
+    ['🎒','출발 준비 카드 + D-day 리마인더','히어로에 "출발 준비" 카드가 새로 생겨서 지금 챙길 준비물(여행자보험·eSIM·환전·짐싸기 등)을 자동으로 알려줘요. 출발 전까지만 보이고, 출발 후엔 저절로 사라져요. D-30·D-14·D-7·D-3 카운트다운 알림에도 구체적인 준비물 힌트를 넣었어요'],
+    ['📔','여행 다이어리 (귀국일 요약)','1/2 귀국일에 접속하면 송별 인사에 이어 "며칠·골프 몇 라운드·정산 얼마" 같은 실제 여행 기록을 한 장으로 요약해서 보여줘요. 공유용 텍스트 복사도 가능해요'],
+    ['⭐','정산탭 "이 중에 나예요" 추가','내 이름을 고르면 내 정산 항목이 맨 위로 고정되고 강조돼요 — 매번 목록에서 내 이름 찾을 필요 없이 한 번만 골라두면 계속 기억해요'],
+    ['🚐','왕복밴 2건 확정 (파타야→방콕·공항샌딩)','12/26 방콕 이동, 1/2 공항 가는 밴 예약이 확정됐어요(윤우열 선결제 완료) — 예약번호·경로까지 일정탭·숙소탭·정산탭 어디서든 확인할 수 있어요'],
+    ['🏨','윤성욱 방콕 숙소 추가, 주소 보강','윤성욱 개별 숙소(Oakwood Suites) 정보 추가, 이준영 숙소(GCP 랏차담리) 주소에 구역·우편번호까지 보강했어요'],
+    ['⛳','골프 상태 표시 오류 수정','12/24 라운드가 티오프 미확정인데 "확정"처럼 보이던 문제를 고쳤어요 — 이제 헤더 스탯·카드 색상이 실제 확정 상태(7/8)와 정확히 일치해요'],
+    ['🗓️','일정탭 선택지 정리','Plan A/B/C 같은 "골라야 하는" 옵션과 참고 정보를 시각적으로 구분해서 더 한눈에 보기 편하게 했어요'],
+    ['✈️','항공편 정보 상시 노출','카운트다운을 뒤집어야만 보이던 항공편 정보를, 이제 "항공편 보기" 라벨로 바로 찾을 수 있어요'],
+    ['👑','재미요소 추가','골프 매트릭스에 전 라운드 참여자 "개근왕" 배지, 정산완료 시 랜덤 축하 문구, 3일 연속 방문 스트릭 알림을 추가했어요'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose');
   $('wnVer').textContent=APP_VER;
@@ -3383,13 +3442,15 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     `<span class="wn-tx"><b>${t}</b><span>${d}</span></span></li>`).join('');
   const prevFocus=document.activeElement;
   let done=false;
+  function markShown(){
+    const next=getShownCount()+1;
+    window.__wnShownVer=APP_VER; window.__wnShownCount=next;   // 스토리지 차단 시 세션 폴백
+    try{ localStorage.setItem(K, APP_VER+':'+next); }catch(e){}
+  }
   function close(){
     if(done) return; done=true;
     scrim.classList.remove('on');
     document.documentElement.style.overflow='';
-    window.__wnShown=APP_VER;
-    try{ localStorage.setItem('thai2026_seen_ver', APP_VER); }catch(e){}
-    try{ sessionStorage.setItem('thai2026_seen_ver', APP_VER); }catch(e){}
     setTimeout(()=>{ scrim.hidden=true; }, 340);
     try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
     haptic('tap');
@@ -3399,7 +3460,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   addEventListener('keydown', e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
   sheet.addEventListener('keydown', e=>{ if(e.key==='Tab'){ e.preventDefault(); closeBtn.focus(); } }); // 버튼 1개 → 포커스 가둠
   setTimeout(()=>{
-    window.__wnShown=APP_VER;                 // 열렸으면 본 것으로 간주 (스토리지 폴백)
+    markShown();                              // 열렸으면 이번 회차로 카운트 (버전당 최대 2회)
     scrim.hidden=false; document.documentElement.style.overflow='hidden';
     void scrim.offsetHeight;                  // reflow 후 클래스 추가 (백그라운드 탭에서도 확실히)
     scrim.classList.add('on');
@@ -3517,8 +3578,8 @@ function __initFunElements(){
     const days = Math.ceil((dep - now)/D);
     const MS = [
       {d:100,k:'D-100',m:'딱 100일 남았어요 ✈️'}, {d:50,k:'D-50',m:'절반 왔어요 🌴'},
-      {d:30,k:'D-30',m:'한 달 남았어요 🎉'}, {d:14,k:'D-14',m:'2주 남았어요'},
-      {d:7,k:'D-7',m:'일주일 남았어요 ✈️'}, {d:3,k:'D-3',m:'짐 다 쌌나요? 🧳'},
+      {d:30,k:'D-30',m:'한 달 남았어요 🎉 — 골프백 탁송 규정 챙겨보세요'}, {d:14,k:'D-14',m:'2주 남았어요 — 여권·eSIM·환전 준비할 때예요'},
+      {d:7,k:'D-7',m:'일주일 남았어요 ✈️ — 출발 준비 카드 확인해보세요'}, {d:3,k:'D-3',m:'짐 다 쌌나요? 🧳 — 상비약·보조배터리도 챙기세요'},
       {d:1,k:'D-1',m:'내일 출발이에요! 🎉'},
     ];
     let seen; try{ seen = JSON.parse(localStorage.getItem('thai2026_ms')) || []; }catch(e){ seen = []; }
@@ -3557,6 +3618,69 @@ function __initFunElements(){
       const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
       celebrate({ kicker:'🏠 귀국', msg:'3가족 10명이 함께한 18일, 정말 수고 많으셨어요! 집까지 안전하게 도착하세요', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
     }, 900);
+  })();
+
+  // ── B3. 여행 다이어리 (1/2, 송별 뒤 이어서 1회) — 실제 데이터로 만든 여행 요약 ──
+  (function(){
+    const scrim = document.getElementById('diaryScrim'); if(!scrim) return;
+    const ret = tripDate('mainReturn'), now = new Date();
+    if(now.toDateString() !== ret.toDateString()) return;
+    let seen; try{ seen = localStorage.getItem('thai2026_diary'); }catch(e){ seen = '1'; }
+    if(seen) return;
+    try{ localStorage.setItem('thai2026_diary','1'); }catch(e){}
+
+    setTimeout(()=>{
+      const days = Math.round((tripDate('mainReturn') - tripDate('depart'))/D) + 1;
+      const golfDone = GOLF.filter(g=>g.st==='ok').length;
+      const carDone = T_CAR.filter(r=>r[3]==='ok').length;
+      const members = FAMS.reduce((a,f)=>a+f.rows.length,0);
+      const totalOwe = typeof oweSum!=='undefined' ? oweSum : OWE.reduce((a,o)=>a+o.t,0);
+
+      const stats = [
+        [`${days}일`,'함께한 시간'],
+        [`${golfDone}R`,'골프 라운드'],
+        [`${carDone}건`,'이동 밴 확정'],
+        [`${members}명`,'3가족 함께'],
+      ];
+      document.getElementById('diaryGrid').innerHTML = stats.map(([n,l])=>
+        `<div class="gs"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+
+      const shareTxt = `🇹🇭 태국 겨울여행 다이어리\n${TRIP.depart}~${TRIP.mainReturn} · ${days}일 · 3가족 ${members}명\n⛳ 골프 ${golfDone}라운드 · 🚐 이동밴 ${carDone}건 확정\n💰 정산 총 ${won(totalOwe)}원\n다들 수고 많았어요!`;
+      const copyBtn = document.getElementById('diaryCopy');
+      copyBtn.dataset.txt = shareTxt;
+
+      const closeBtn = document.getElementById('diaryClose');
+      const prevFocus = document.activeElement;
+      let closed = false;
+      function close(){
+        if(closed) return; closed = true;
+        scrim.classList.remove('on');
+        document.documentElement.style.overflow = '';
+        setTimeout(()=>{ scrim.hidden = true; }, 340);
+        try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+        haptic('tap');
+      }
+      closeBtn.addEventListener('click', close);
+      scrim.addEventListener('click', e=>{ if(e.target===scrim) close(); });
+      addEventListener('keydown', e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
+      copyBtn.addEventListener('click', async ()=>{
+        try{ await navigator.clipboard.writeText(copyBtn.dataset.txt); }
+        catch(_){ const ta=document.createElement('textarea'); ta.value=copyBtn.dataset.txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+        const o=copyBtn.textContent; copyBtn.textContent='✅ 복사됨'; haptic('ok');
+        setTimeout(()=>{ copyBtn.textContent=o; }, 1600);
+      });
+
+      // "이번 업데이트" 시트가 아직 떠있으면 다 닫힐 때까지 기다렸다 연다 (동시에 겹치지 않도록)
+      let tries = 0;
+      (function tryOpen(){
+        const wn = document.getElementById('wnScrim');
+        if(wn && !wn.hidden && tries++ < 24){ setTimeout(tryOpen, 500); return; }
+        scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+        void scrim.offsetHeight;
+        scrim.classList.add('on');
+        try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
+      })();
+    }, 6200);
   })();
 
   // ── C. 할 일 완료 축하 (todo tog에서 호출) ──
