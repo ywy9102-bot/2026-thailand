@@ -407,7 +407,7 @@ h2.sec .e{font-size:21px;line-height:1}
   background:var(--jade);color:#fff;padding:3px 9px;border-radius:6px;letter-spacing:.03em}
 .fam-c{font-size:11.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace}
 .fam ul{list-style:none;margin:0;padding:0}
-.fam li{padding:8px 0;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.fam li{padding:8px 0;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;border-radius:6px}
 .fam li:first-child{border-top:none}
 .nm{font-weight:600;font-size:14px;display:flex;align-items:center;gap:5px}
 .pd{font-size:11.5px;color:var(--ink3);font-family:'IBM Plex Mono',monospace;text-align:right}
@@ -830,11 +830,11 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
 /* ════ 모션 · 마이크로 인터랙션 (reduced-motion 존중) ════ */
 @media (prefers-reduced-motion:no-preference){
   /* 탭하면 살짝 눌리는 반응감 */
-  .gcard-head,.lg-head,.day-head,.bar-head,.ci,.next-card,.copy-btn,.cgrp h3{
+  .gcard-head,.lg-head,.day-head,.bar-head,.ci,.next-card,.copy-btn,.cgrp h3,.fam li{
     transition:transform .13s ease, background .15s, border-color .15s, color .15s;
   }
   .gcard-head:active,.lg-head:active,.day-head:active,.bar-head:active,
-  .ci:active,.next-card:active,.copy-btn:active,.cgrp h3:active{transform:scale(.978)}
+  .ci:active,.next-card:active,.copy-btn:active,.cgrp h3:active,.fam li:active{transform:scale(.978)}
   .tb:active .ico{transform:scale(.9)}
   /* 할 일 체크: 체크마크가 튀어나오고 행이 살짝 반응 */
   .ci.done .bx::after{animation:checkPop .34s cubic-bezier(.34,1.6,.64,1)}
@@ -961,6 +961,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 
 @media (max-width:760px){
   #wxIco{cursor:pointer}
+  .fam li{cursor:pointer;-webkit-tap-highlight-color:transparent}
 
   /* ── 이스터에그: 국기 · 카운트다운 링 ── */
   .eg-flag{display:inline-block;cursor:pointer;margin-right:-3px}
@@ -1733,6 +1734,11 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     <div class="a" id="oweTotal">–</div>
     <div class="s" id="oweBreak">계산중…</div>
     <div class="s" id="oweSettled" style="margin-top:2px"></div>
+    <div class="prog-wrap" id="oweProgWrap" style="margin-top:10px">
+      <span class="prog-lbl">정산 진행</span>
+      <div class="prog-bar"><div class="prog-fill" id="oweProgFill"></div></div>
+      <span class="prog-pct" id="oweProgPct">0%</span>
+    </div>
     <div class="s" id="oweMine" style="display:none;margin-top:4px"></div>
   </div>
 
@@ -2010,8 +2016,31 @@ const FAMS=[
 $('famsWrap').innerHTML = FAMS.map(f=>`
   <div class="fam">
     <div class="fam-h"><span class="fam-t">${f.tag}</span><span class="fam-c">${f.cnt}</span></div>
-    <ul>${f.rows.map(r=>`<li><span class="nm">${r.g?dot(r.n):''}${r.n}</span><span class="pd">${r.p}</span></li>`).join('')}</ul>
+    <ul>${f.rows.map(r=>`<li role="button" tabindex="0" data-n="${r.n}"><span class="nm">${r.g?dot(r.n):''}${r.n}</span><span class="pd">${r.p}</span></li>`).join('')}</ul>
   </div>`).join('');
+
+// 가족 이름 탭 → 골프 참여·정산 정보 미니 요약 (실데이터, OWE/GOLF는 아래에서 정의되지만 클릭 시점엔 이미 로드 완료)
+(function(){
+  const wrap = $('famsWrap');
+  function showInfo(name){
+    const golfCnt = GOLF.filter(g=>g.p.includes(name)).length;
+    const owe = OWE.find(o=>o.n===name);
+    let msg = golfCnt ? `⛳ 골프 ${golfCnt}라운드 참여` : '';
+    if(owe){
+      const paid = !!store.done[paidKey(owe)];
+      msg += (msg?' · ':'') + `💰 정산 ${won(owe.t)}원${paid?' (완료)':' (대기)'}`;
+    } else if(name==='윤우열'){
+      msg += (msg?' · ':'') + '💰 정산금 수금 담당';
+    }
+    if(!msg) msg = '함께한 소중한 팀원이에요 🙌';
+    if(typeof window.__toast === 'function') window.__toast(name, msg);
+    haptic('tap');
+  }
+  wrap.addEventListener('click', e=>{ const row = e.target.closest('li[data-n]'); if(row) showInfo(row.dataset.n); });
+  wrap.addEventListener('keydown', e=>{
+    if((e.key===' '||e.key==='Enter') && e.target.matches('li[data-n]')){ e.preventDefault(); showInfo(e.target.dataset.n); }
+  });
+})();
 
 // 방콕 골프일 숙소: 12/29는 전원 티니디 체류중, 12/31은 티니디→GCP 체크아웃/체크인 전환일이라 둘 다 표시
 const BKK_GOLF_STAY = {'12/29':['tinidee'], '12/31':['tinidee','gcp']};
@@ -3163,6 +3192,9 @@ function refreshSettled(){
   });
   const total = OWE.length;
   $('oweSettled').textContent = done===total ? '✅ 전원 정산완료' : `${done}/${total}명 정산완료`;
+  const pct = total ? Math.round(done/total*100) : 0;
+  $('oweProgPct').textContent = pct+'%';
+  setTimeout(()=>{ $('oweProgFill').style.width = pct+'%'; }, 260);
   if(typeof updateMineLine === 'function') updateMineLine();
 }
 refreshSettled();
@@ -3558,6 +3590,18 @@ function __initFunElements(){
   }
   window.__celebrate = celebrate;
 
+  // ── 1회성 이벤트 공용 헬퍼 (여러 마일스톤·축하 블록이 공유) ──
+  function seenFlag(key){
+    let seen; try{ seen = localStorage.getItem(key); }catch(e){ seen='1'; }
+    if(seen) return true;
+    try{ localStorage.setItem(key,'1'); }catch(e){}
+    return false;
+  }
+  function pulseMilestoneRing(){
+    const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
+    return cd;
+  }
+
   // ── 연속 방문 스트릭 (날짜 기준 비교, 3일째부터만 살짝 알림 · 여행 중엔 매일 켜볼 이유를 하나 더) ──
   (function(){
     try{
@@ -3591,7 +3635,7 @@ function __initFunElements(){
     const mark = [...new Set([...seen, ...MS.filter(x => x.d >= hit.d).map(x=>x.d)])];
     try{ localStorage.setItem('thai2026_ms', JSON.stringify(mark)); }catch(e){}
     setTimeout(()=>{
-      const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
+      const cd = pulseMilestoneRing();
       celebrate({ kicker:hit.k, msg:hit.m, ms:4400, at:cd||$('cd'), dy:28, n:26, spread:90, petals:true, plane:true });
     }, 900);
   })();
@@ -3600,11 +3644,9 @@ function __initFunElements(){
   (function(){
     const dep = tripDate('depart'), now = new Date();
     if(now.toDateString() !== dep.toDateString()) return;
-    let seen; try{ seen = localStorage.getItem('thai2026_arrived'); }catch(e){ seen = '1'; }
-    if(seen) return;
-    try{ localStorage.setItem('thai2026_arrived','1'); }catch(e){}
+    if(seenFlag('thai2026_arrived')) return;
     setTimeout(()=>{
-      const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
+      const cd = pulseMilestoneRing();
       celebrate({ kicker:'✈️ 태국 도착', msg:'즐거운 여행 되세요!', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
       setTimeout(()=> petalBurst(innerWidth*0.5, 130, 22, 150), 550);
     }, 900);
@@ -3614,11 +3656,9 @@ function __initFunElements(){
   (function(){
     const ret = tripDate('mainReturn'), now = new Date();
     if(now.toDateString() !== ret.toDateString()) return;
-    let seen; try{ seen = localStorage.getItem('thai2026_farewell'); }catch(e){ seen = '1'; }
-    if(seen) return;
-    try{ localStorage.setItem('thai2026_farewell','1'); }catch(e){}
+    if(seenFlag('thai2026_farewell')) return;
     setTimeout(()=>{
-      const cd = $('cd'); if(cd){ cd.classList.add('milestone'); setTimeout(()=> cd.classList.remove('milestone'), 3200); }
+      const cd = pulseMilestoneRing();
       celebrate({ kicker:'🏠 귀국', msg:'3가족 10명이 함께한 18일, 정말 수고 많으셨어요! 집까지 안전하게 도착하세요', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
     }, 900);
   })();
@@ -3628,9 +3668,7 @@ function __initFunElements(){
     const scrim = document.getElementById('diaryScrim'); if(!scrim) return;
     const ret = tripDate('mainReturn'), now = new Date();
     if(now.toDateString() !== ret.toDateString()) return;
-    let seen; try{ seen = localStorage.getItem('thai2026_diary'); }catch(e){ seen = '1'; }
-    if(seen) return;
-    try{ localStorage.setItem('thai2026_diary','1'); }catch(e){}
+    if(seenFlag('thai2026_diary')) return;
 
     setTimeout(()=>{
       const days = Math.round((tripDate('mainReturn') - tripDate('depart'))/D) + 1;
@@ -3684,6 +3722,17 @@ function __initFunElements(){
         try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
       })();
     }, 6200);
+  })();
+
+  // ── B4. 윤성욱 단독 귀국 (1/4, 1회) ──
+  (function(){
+    const solo = tripDate('end'), now = new Date();
+    if(now.toDateString() !== solo.toDateString()) return;
+    if(seenFlag('thai2026_soloReturn')) return;
+    setTimeout(()=>{
+      const cd = pulseMilestoneRing();
+      celebrate({ kicker:'👋 윤성욱 귀국', msg:'혼자 마무리까지 즐기고 오셨어요, 고생 많으셨어요! 안전하게 도착하세요', ms:4400, at:cd||$('cd'), dy:28, n:20, spread:90, petals:true, plane:true });
+    }, 900);
   })();
 
   // ── C. 할 일 완료 축하 (todo tog에서 호출) ──
@@ -3992,9 +4041,7 @@ function __initFunElements(){
 
   // ── L. 첫 방문 환영 (이 브라우저 최초 1회) ──
   (function(){
-    let seen; try{ seen = localStorage.getItem('thai2026_hello'); }catch(e){ seen = '1'; }
-    if(seen) return;
-    try{ localStorage.setItem('thai2026_hello','1'); }catch(e){}
+    if(seenFlag('thai2026_hello')) return;
     setTimeout(()=>{
       if(toastEl.classList.contains('show')) return;   // 마일스톤 토스트와 겹치면 양보
       toast('🌴', '여행 준비, 시작해볼까요?', 3800);
