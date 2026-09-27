@@ -329,7 +329,8 @@ h2.sec .e{font-size:21px;line-height:1}
 .tidbit.answered .tb-ox{pointer-events:none;opacity:.35}
 .tidbit .tb-ox.pick-ok{opacity:1;border-color:#5FBE8A;background:rgba(95,190,138,.22);color:#BCEFD3}
 .tidbit .tb-ox.pick-no{opacity:1;border-color:#DA8E76;background:rgba(218,142,118,.2);color:#F4C6B7}
-.tb-next{flex:1 1 100%;padding:12px 0;border-radius:12px;border:none;cursor:pointer;
+.tb-next{flex:1 1 100%;min-height:44px;padding:12px 0;border-radius:12px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
   background:linear-gradient(var(--gold),#A47C21);color:#231903;font-weight:700;font-size:12.5px;
   letter-spacing:.02em;box-shadow:0 5px 14px -5px rgba(181,138,40,.55)}
 .tb-next:active{transform:scale(.99)}
@@ -1822,7 +1823,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
       <h2 class="wn-title" id="wnTitle">이번 업데이트</h2>
     </div>
     <p class="wn-sub">지난번 열었을 때보다 이만큼 좋아졌어요 · 중요한 순</p>
-    <ol class="wn-list" id="wnList"></ol>
+    <ol class="wn-list" id="wnList" tabindex="0" aria-label="업데이트 목록"></ol>
     <button class="wn-close" id="wnClose" type="button">확인했어요</button>
   </div>
 </div>
@@ -3476,7 +3477,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     ['🗓️','일정탭 선택지 정리','Plan A/B/C 같은 "골라야 하는" 옵션과 참고 정보를 시각적으로 구분해서 더 한눈에 보기 편하게 했어요'],
     ['👑','재미요소 추가','골프 매트릭스에 전 라운드 참여자 "개근왕" 배지, 정산완료 시 랜덤 축하 문구, 3일 연속 방문 스트릭 알림을 추가했어요'],
   ];
-  const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose');
+  const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose'), listEl=$('wnList');
   $('wnVer').textContent=APP_VER;
   $('wnList').innerHTML=WHATS_NEW.map(([ic,t,d],i)=>
     `<li><span class="wn-rank">${i+1}</span><span class="wn-ic" aria-hidden="true">${ic}</span>`+
@@ -3499,7 +3500,14 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e=>{ if(e.target===scrim) close(); });
   addEventListener('keydown', e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
-  sheet.addEventListener('keydown', e=>{ if(e.key==='Tab'){ e.preventDefault(); closeBtn.focus(); } }); // 버튼 1개 → 포커스 가둠
+  const focusables=[listEl, closeBtn];   // 포커스 가능한 요소 2개(목록·버튼) 사이를 순환 — 키보드로도 목록 스크롤 가능
+  sheet.addEventListener('keydown', e=>{
+    if(e.key!=='Tab') return;
+    e.preventDefault();
+    const cur=focusables.indexOf(document.activeElement);
+    const next=e.shiftKey ? (cur<=0 ? focusables.length-1 : cur-1) : (cur<0 || cur===focusables.length-1 ? 0 : cur+1);
+    focusables[next].focus();
+  });
   setTimeout(()=>{
     markShown();                              // 열렸으면 이번 회차로 카운트 (버전당 최대 2회)
     scrim.hidden=false; document.documentElement.style.overflow='hidden';
