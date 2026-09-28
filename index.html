@@ -3020,6 +3020,10 @@ days(ITIN_A,'iA',12,2026); days(ITIN_B,'iB',12,2026); days(ITIN_C,'iC',1,2027);
     }
     function loadQ(){
       if(i >= bag.length){
+        if(typeof window.__toast === 'function'){
+          window.__toast('🎓 완주', `${label} 퀴즈 ${pool.length}문항을 다 풀었어요! 다시 섞어서 드릴게요`);
+          haptic('ok');
+        }
         const last = bag[bag.length-1];
         do { bag = shuffle(pool); } while(pool.length > 1 && bag[0] === last);
         i = 0;
