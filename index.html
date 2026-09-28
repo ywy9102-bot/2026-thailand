@@ -227,6 +227,12 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .nc-e{font-size:16px;flex:none}
 .nc-t{font-size:12.5px;font-weight:600;color:#F2EEE0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nc-arrow{font-size:11px;color:#BCCDC4;white-space:nowrap;flex:none;font-family:'IBM Plex Mono',monospace}
+.daily-card{flex-wrap:wrap;min-height:44px}
+.daily-card .dc-more{flex:1 1 100%;font-size:12px;line-height:1.55;color:#DCE8E2;padding-top:8px;border-top:1px dashed rgba(255,255,255,.2)}
+.daily-card .dc-more b{color:var(--gold-s);font-weight:700}
+.daily-card.open .nc-t{white-space:normal}
+.daily-card.stamped{border-color:rgba(181,138,40,.55)}
+.daily-card.stamped .nc-arrow{color:var(--gold-s)}
 
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.13);
   border-radius:14px 14px 0 0;overflow:hidden}
@@ -1341,6 +1347,12 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
       <span class="nc-body"><span class="nc-e">🧳</span><span class="nc-t" id="pcT"></span></span>
       <span class="nc-arrow">할일 →</span>
     </button>
+    <button class="next-card daily-card" id="dailyCard" type="button" aria-expanded="false" style="display:none">
+      <span class="nc-tag" id="dcTag">🌴 오늘의 태국</span>
+      <span class="nc-body"><span class="nc-e" id="dcE"></span><span class="nc-t" id="dcT"></span></span>
+      <span class="nc-arrow" id="dcArrow">열어보기 →</span>
+      <span class="dc-more" id="dcMore" hidden></span>
+    </button>
     <div class="stats">
       <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">10명 함께</div></div>
       <div class="stat"><div class="n"><span id="stN2" data-to="7">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
@@ -1848,7 +1860,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.66';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.67';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3471,6 +3483,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🌴','오늘의 태국 — 하루에 한 장씩','출발 전까지 매일 자정에 바뀌는 카드가 히어로에 떠요. 태국어 한마디·음식·여행 팁이 돌아가며 나오고, 탭하면 오늘의 미션과 함께 도장이 찍혀요. 며칠 연속으로 모았는지도 알려줘요'],
     ['📜','공지 시트 스크롤 + 세부 접근성 다듬기','업데이트 항목이 많아져도 스크롤로 끝까지 볼 수 있게 했어요. 퀴즈 "다음 문제" 버튼 터치 영역을 넓히고, 키보드만으로도 이 목록을 스크롤할 수 있게 했어요'],
     ['🎄','크리스마스·신정 축하 연출 추가','12/24-25 크리스마스, 12/31-1/1 신정에 접속하면 히어로 장식(트윙클라이트·불꽃)과 함께 축하 토스트가 떠요'],
     ['🧠','O/X퀴즈 7문항 보강','태국 골프 퀴즈 24문항, 태국 문화 퀴즈 36문항으로 늘었어요 — 좌측통행·전압·화장실 문화 등 실전 팁 위주로 추가했어요'],
@@ -3478,7 +3491,6 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     ['📔','여행 다이어리 (귀국일 요약)','1/2 귀국일에 접속하면 송별 인사에 이어 "며칠·골프 몇 라운드·정산 얼마" 같은 실제 여행 기록을 한 장으로 요약해서 보여줘요. 공유용 텍스트 복사도 가능해요'],
     ['⭐','정산탭 "이 중에 나예요" 추가','내 이름을 고르면 내 정산 항목이 맨 위로 고정되고 강조돼요 — 매번 목록에서 내 이름 찾을 필요 없이 한 번만 골라두면 계속 기억해요'],
     ['🚐','왕복밴 2건 확정 (파타야→방콕·공항샌딩)','12/26 방콕 이동, 1/2 공항 가는 밴 예약이 확정됐어요(윤우열 선결제 완료) — 예약번호·경로까지 일정탭·숙소탭·정산탭 어디서든 확인할 수 있어요'],
-    ['👑','재미요소 추가','골프 매트릭스에 전 라운드 참여자 "개근왕" 배지, 정산완료 시 랜덤 축하 문구, 3일 연속 방문 스트릭 알림을 추가했어요'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose'), listEl=$('wnList');
   $('wnVer').textContent=APP_VER;
@@ -3518,6 +3530,114 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     scrim.classList.add('on');
     try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
   }, 650);
+})();
+
+// ── 여행 콘텐츠 풀 (카운트다운 뒷면 · 오늘의 태국 카드가 공유) ──
+// 여행 팁 — "공항에서 한 번 훑는" 실전 준비물·이동 위주 (문화·예절 상세는 일정탭 OX 퀴즈로 분리)
+const TIPS = [
+  '뚝뚝·택시는 미터기 확인, 아니면 요금 먼저 흥정',
+  '12월 파타야·방콕 낮 32°C 안팎 — 선크림·모자 필수',
+  '공항 환전보다 시내 슈퍼리치(Super Rich) 환율이 좋아요',
+  '유심은 AIS·True 공항 부스 or 미리 eSIM',
+  '팁 문화 약함 — 호텔 벨보이 20B, 마사지 50–100B 정도',
+  '콘센트는 220V, 한국 플러그 대부분 그대로 사용',
+  '스콜(소나기) 대비 접이 우산 하나',
+  '파타야 해산물은 무게 속임 주의 — 저울 확인',
+  '카오산·야시장은 소매치기 조심, 가방 앞으로',
+  '방콕 이동은 BTS·MRT + 수상보트가 러시아워엔 택시보다 빠름',
+  '파타야→방콕 차로 1시간 30분~2시간, 교통 상황 편차 큼',
+  '실내는 냉방 강함 — 얇은 겉옷 하나 챙기기',
+  '왓 포·왕궁은 오전 일찍(더위·인파 전) 방문',
+  '더위 대비 전해질 음료(100 Plus 등) 상비',
+  '스완나품·돈므앙 → 시내 택시는 미터 + 톨비 + 공항수수료 50B',
+  '한낮은 실내·수영장, 관광은 오전·저녁으로 쪼개기',
+];
+const PHRASES = [
+  ['싸와디 캅 / 카','안녕하세요 (남 캅 · 여 카)'],
+  ['컵쿤 캅 / 카','감사합니다'],
+  ['마이 펫','안 맵게 해주세요 — 식당 필수'],
+  ['라카 타올라이?','얼마예요?'],
+  ['아로이 (막)','(아주) 맛있어요'],
+  ['첵빈 / 겝땅','계산해주세요'],
+  ['마이 아오 컵쿤','안 살게요, 괜찮아요 (정중히 사양)'],
+  ['헝남 유 티 나이?','화장실 어디예요?'],
+  ['코 토트','실례합니다 / 죄송합니다'],
+  ['뻰 라이','괜찮아요 / 천만에요'],
+  ['니 타올라이?','이거 얼마예요?'],
+  ['롯 노이 다이 마이?','조금 깎아 주실 수 있어요?'],
+  ['넝 · 썽 · 쌈','1 · 2 · 3'],
+  ['차이 / 마이 차이','네 / 아니요'],
+];
+const FOODS = [
+  ['팟타이','새콤달콤 볶음 쌀국수 — 무난한 첫 도전'],
+  ['똠얌꿍','새우 넣은 매콤·시큼 수프, 태국의 상징'],
+  ['쏨땀','파파야 채 샐러드 — 맵기 조절 요청'],
+  ['카오 팟','태국식 볶음밥, 아이도 잘 먹음'],
+  ['마사만 커리','땅콩·감자 든 순한 커리, 안 매움'],
+  ['카오 소이','북부식 코코넛 커리 국수 (치앙마이 명물)'],
+  ['무 삥 + 카오니여우','돼지 꼬치구이 + 찰밥, 아침·간식'],
+  ['뿌 팟 퐁 커리','게 넣은 노란 커리 볶음 — 쏨분시푸드 대표'],
+  ['팟 까파오 무쌉 카이다오','바질 다진고기 볶음 + 계란후라이 덮밥'],
+  ['카오니여우 마무앙','망고 찰밥 — 대표 디저트'],
+  ['카오 만 까이','부드러운 닭고기 덮밥 (치킨라이스)'],
+  ['깽 키여우 완','그린 커리 — 코코넛·바질 향, 매운 편'],
+  ['얌 운센','당면 새콤 샐러드 — 해산물 넣으면 별미'],
+  ['로띠 + 연유','길거리 팬케이크 디저트'],
+];
+
+// ── 오늘의 태국: 하루에 한 장, 자정에 바뀌는 카드 + 도장 모으기 (출발 전까지만 노출) ──
+(function(){
+  const card = $('dailyCard'); if(!card) return;
+  const now = new Date(), dep = tripDate('depart');
+  if(now >= dep) return;
+  const pad = n => String(n).padStart(2,'0');
+  const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const dayIdx = Math.max(0, Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(2026,7,6))/864e5));   // 로컬 자정 기준으로 바뀜 (planStart=8/6)
+  const daysLeft = Math.ceil((dep - now)/864e5);
+  const sub = Math.floor(dayIdx/3);
+  const kind = ['phrase','food','tip'][dayIdx % 3];
+  const at = (arr,i) => arr[i % arr.length];
+  let e, title, more, mission;
+  if(kind==='phrase'){ const [th,ko]=at(PHRASES,sub); e='💬'; title=th; more=ko; mission='오늘 가족 단톡에 이 말로 한 번 말 걸어보기'; }
+  else if(kind==='food'){ const [nm,ds]=at(FOODS,sub); e='🍜'; title=nm; more=ds; mission='메뉴판에서 이 이름을 찾아보는 게 오늘의 미션'; }
+  else { const t=at(TIPS,sub); e='💡'; title=t; more='출발 전에 한 번만 더 떠올려두면 현지에서 편해요'; mission='가족 단톡에 공유해서 같이 챙기기'; }
+  $('dcE').textContent = e;
+  $('dcT').textContent = title;
+  $('dcTag').textContent = `🌴 D-${daysLeft}`;
+  const more$ = $('dcMore');
+  more$.innerHTML = `${more}<br><b>오늘의 미션</b> · ${mission}`;
+
+  const LSK = 'thai2026_daily';
+  const load = () => { try{ const a = JSON.parse(localStorage.getItem(LSK)); return Array.isArray(a) ? a : []; }catch(e){ return []; } };
+  let stamps = load();
+  const today = keyOf(now);
+  const streakOf = () => {
+    let n = 0; const d = new Date(now);
+    while(stamps.includes(keyOf(d))){ n++; d.setDate(d.getDate()-1); }
+    return n;
+  };
+  const paint = () => {
+    const got = stamps.includes(today);
+    card.classList.toggle('stamped', got);
+    $('dcArrow').textContent = got ? `✓ 도장 ${stamps.length}개` : '열어보기 →';
+  };
+  paint();
+  card.style.display = 'flex';
+
+  card.addEventListener('click', ()=>{
+    const open = card.classList.toggle('open');
+    card.setAttribute('aria-expanded', open); more$.hidden = !open;
+    haptic('tap');
+    if(!open || stamps.includes(today)) return;
+    stamps.push(today);
+    try{ localStorage.setItem(LSK, JSON.stringify(stamps)); }catch(e){}
+    paint(); haptic('ok');
+    const n = stamps.length, st = streakOf();
+    const msg = st >= 2 ? `${st}일 연속 도장! 총 ${n}개 모았어요` : `오늘의 도장 완료 · 총 ${n}개`;
+    if(typeof window.__celebrate === 'function'){
+      window.__celebrate({ kicker:`🌴 D-${daysLeft}`, msg, ms:3200, at:card, dy:20, n: n%7===0 ? 26 : 10, spread:80, petals:true });
+    } else if(typeof window.__toast === 'function'){ window.__toast(`🌴 D-${daysLeft}`, msg); }
+  });
 })();
 
 /* ════════ 재미 요소 (모바일 전용) — 유휴 시간에 지연 초기화 (초기 파싱 부담 완화) ════════ */
@@ -3808,57 +3928,6 @@ function __initFunElements(){
   });
   // D2/F/G. 카운트다운 통합 탭: 링→회전 · 부제→여행팁 · 그 외→보딩패스 플립
   const ringSvg = document.querySelector('.cd-ring');
-  // 여행 팁 — "공항에서 한 번 훑는" 실전 준비물·이동 위주 (문화·예절 상세는 일정탭 OX 퀴즈로 분리)
-  const TIPS = [
-    '뚝뚝·택시는 미터기 확인, 아니면 요금 먼저 흥정',
-    '12월 파타야·방콕 낮 32°C 안팎 — 선크림·모자 필수',
-    '공항 환전보다 시내 슈퍼리치(Super Rich) 환율이 좋아요',
-    '유심은 AIS·True 공항 부스 or 미리 eSIM',
-    '팁 문화 약함 — 호텔 벨보이 20B, 마사지 50–100B 정도',
-    '콘센트는 220V, 한국 플러그 대부분 그대로 사용',
-    '스콜(소나기) 대비 접이 우산 하나',
-    '파타야 해산물은 무게 속임 주의 — 저울 확인',
-    '카오산·야시장은 소매치기 조심, 가방 앞으로',
-    '방콕 이동은 BTS·MRT + 수상보트가 러시아워엔 택시보다 빠름',
-    '파타야→방콕 차로 1시간 30분~2시간, 교통 상황 편차 큼',
-    '실내는 냉방 강함 — 얇은 겉옷 하나 챙기기',
-    '왓 포·왕궁은 오전 일찍(더위·인파 전) 방문',
-    '더위 대비 전해질 음료(100 Plus 등) 상비',
-    '스완나품·돈므앙 → 시내 택시는 미터 + 톨비 + 공항수수료 50B',
-    '한낮은 실내·수영장, 관광은 오전·저녁으로 쪼개기',
-  ];
-  const PHRASES = [
-    ['싸와디 캅 / 카','안녕하세요 (남 캅 · 여 카)'],
-    ['컵쿤 캅 / 카','감사합니다'],
-    ['마이 펫','안 맵게 해주세요 — 식당 필수'],
-    ['라카 타올라이?','얼마예요?'],
-    ['아로이 (막)','(아주) 맛있어요'],
-    ['첵빈 / 겝땅','계산해주세요'],
-    ['마이 아오 컵쿤','안 살게요, 괜찮아요 (정중히 사양)'],
-    ['헝남 유 티 나이?','화장실 어디예요?'],
-    ['코 토트','실례합니다 / 죄송합니다'],
-    ['뻰 라이','괜찮아요 / 천만에요'],
-    ['니 타올라이?','이거 얼마예요?'],
-    ['롯 노이 다이 마이?','조금 깎아 주실 수 있어요?'],
-    ['넝 · 썽 · 쌈','1 · 2 · 3'],
-    ['차이 / 마이 차이','네 / 아니요'],
-  ];
-  const FOODS = [
-    ['팟타이','새콤달콤 볶음 쌀국수 — 무난한 첫 도전'],
-    ['똠얌꿍','새우 넣은 매콤·시큼 수프, 태국의 상징'],
-    ['쏨땀','파파야 채 샐러드 — 맵기 조절 요청'],
-    ['카오 팟','태국식 볶음밥, 아이도 잘 먹음'],
-    ['마사만 커리','땅콩·감자 든 순한 커리, 안 매움'],
-    ['카오 소이','북부식 코코넛 커리 국수 (치앙마이 명물)'],
-    ['무 삥 + 카오니여우','돼지 꼬치구이 + 찰밥, 아침·간식'],
-    ['뿌 팟 퐁 커리','게 넣은 노란 커리 볶음 — 쏨분시푸드 대표'],
-    ['팟 까파오 무쌉 카이다오','바질 다진고기 볶음 + 계란후라이 덮밥'],
-    ['카오니여우 마무앙','망고 찰밥 — 대표 디저트'],
-    ['카오 만 까이','부드러운 닭고기 덮밥 (치킨라이스)'],
-    ['깽 키여우 완','그린 커리 — 코코넛·바질 향, 매운 편'],
-    ['얌 운센','당면 새콤 샐러드 — 해산물 넣으면 별미'],
-    ['로띠 + 연유','길거리 팬케이크 디저트'],
-  ];
   let tipI = Math.floor(Math.random()*TIPS.length),
       phI  = Math.floor(Math.random()*PHRASES.length),
       foI  = Math.floor(Math.random()*FOODS.length);
