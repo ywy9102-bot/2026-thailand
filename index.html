@@ -3232,16 +3232,13 @@ wireExpand(['iA','iB','iC'], '.day-head', '.day');
 const oweSum = OWE.reduce((a,o)=>a+o.t,0);
 $('oweTotal').innerHTML = won(oweSum)+'<small>원</small>';
 
-// 정산 요약 문구 — 하드코딩 대신 원본 데이터에서 직접 계산 (드리프트 방지)
+// 정산 요약 문구 — 하드코딩 대신 개인별 정산 항목(owedItems)을 분류별로 합산 (총액과 항상 일치)
 (function(){
-  const num = s => parseInt(String(s).replace(/,/g,''));
-  const stayOwed = T_STAY.reduce((sum,r)=> sum + num(r[3])+num(r[4])+num(r[5])+num(r[6]), 0);
-  const golfOwed = GOLF.reduce((sum,g)=> g.amt ? sum + (g.amt - g.per) : sum, 0);
-  const vanOwed = GOLF.reduce((sum,g)=> g.van && !g.van.pending ? sum + (g.van.amt - g.van.per) : sum, 0);   // van.pending(결제 전) 밴은 결제 후 정산에 반영
-  const carOwed = 97592 + 71500 + 37452 + vanOwed; // 12/18 가족1 픽업(4인 1/N, 전액) + 12/26 파타야→방콕(5인 1/N, 4인분) + 1/2 공항샌딩(5인 1/N, 4인분) + 골프 왕복밴(확정분, 골퍼 1/N). 12/16·23·27은 이미 정산완료 또는 개별결제
+  const cat = {stay:0, golf:0, car:0};
+  OWE.forEach(o => owedItems(o.n).forEach(it => { cat[/^🏨/.test(it.label) ? 'stay' : /^⛳/.test(it.label) ? 'golf' : 'car'] += it.amt; }));
   const pendingGolf = GOLF.filter(g=>!g.amt).length;
   $('oweBreak').textContent =
-    `숙박 ${won(stayOwed)} + 골프 ${won(golfOwed)} + 차량 ${won(carOwed)}`+
+    `숙박 ${won(cat.stay)} + 골프 ${won(cat.golf)} + 차량 ${won(cat.car)}`+
     (pendingGolf ? ` · 미확정 골프 ${pendingGolf}건 제외` : '');
 })();
 const oweMax = Math.max(...OWE.map(o=>o.t));
