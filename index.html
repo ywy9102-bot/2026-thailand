@@ -1748,7 +1748,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
         <button class="tl-copy" type="button" data-copy="Tinidee Trendy Khaosan, 42 Ram Buttri Alley, Bangkok 10200">📋 영문 주소 복사 · Grab·Bolt용</button>
       </div></div>
     </div>
-    <div class="transit-note">🚐 공항 샌딩 밴 확정 <span class="mono">#200754276</span> · 1/2(토) 08:30 호텔 출발 → 수완나품 공항 · OZ744 12:25 BKK (가족1·5인) · 인당 9,363원 · 윤우열 선결제</div>
+    <div class="transit-note">🚐 공항 샌딩 밴 확정 <span class="mono">#200754276</span> · 1/2(토) 08:30 호텔 출발 → 수완나품 공항 · OZ744 12:25 BKK (윤우열/가족1·5인 · 가족2는 별도 차량) · 인당 9,363원 · 윤우열 선결제</div>
   </div>
 
   <div class="lg-grp">
@@ -2314,8 +2314,8 @@ const ITIN_C=[
    ['Plan C','고대도시(Ancient Siam / 므앙보란) — 태국 전역 유적 축소판 대공원, 자전거·카트 + 에라완 박물관. <a href="https://www.ancientsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
    ['참고','1/2 호텔 08:00 출발 → 밤 늦지 않게'],
   ]},
- {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:25–19:50',x:'호텔 08:30 출발',
-  van:{book:'200754276',per:9363,route:'08:30 티니디 트렌디 카오산 출발 → 수완나품 공항 (OZ744 12:25 BKK, 성인 5인: 윤우열·정유경·정유현·장모님·김윤후)',pay:'완료 · 윤우열 선결제',label:'이동 밴 확정'}},
+ {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:25–19:50',x:'호텔 08:30 출발 (윤우열/가족1) · 가족2는 별도 차량',
+  van:{book:'200754276',per:9363,route:'윤우열/가족1 · 08:30 티니디 트렌디 카오산 출발 → 수완나품 공항 (OZ744 12:25 BKK, 성인 5인: 윤우열·정유경·정유현·장모님·김윤후) · 가족2는 별도 차량(미확정)',pay:'완료 · 윤우열 선결제',label:'이동 밴 확정 · 윤우열/가족1'}},
  {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
 ];
 
@@ -2348,7 +2348,7 @@ const T_CAR=[
  ['① 12/27','가족2 픽업','0','info','개별결제'],
  ['③ 방콕','골프장 왕복 2회','TBD','todo','미확정'],
  ['④ 12/30','티니디→GCP (가족2)','TBD','todo','미확정'],
- ['② 1/2','공항 샌딩 (가족1·5인, 티니디출발)','46,816','ok','인당 9,363'],
+ ['② 1/2','공항 샌딩 (윤우열/가족1·5인, 티니디출발)','46,816','ok','인당 9,363'],
  ['② 1/2','공항 샌딩 (가족2·3인, GCP출발)','TBD','todo','미확정'],
 ];
 
@@ -3239,7 +3239,7 @@ function owedItems(name){
   if(['정유경','정유현','장모님','김윤후'].includes(name)){
     items.push({label:'🚐 12/18 공항픽업', amt:24398});
     items.push({label:'🚐 12/26 파타야→방콕', amt:17875});
-    items.push({label:'🚐 1/2 공항샌딩', amt:9363});
+    items.push({label:'🚐 1/2 공항샌딩 (윤우열/가족1)', amt:9363});
   }
   return items;
 }
