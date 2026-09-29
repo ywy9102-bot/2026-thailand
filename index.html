@@ -227,6 +227,8 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .nc-e{font-size:16px;flex:none}
 .nc-t{font-size:12.5px;font-weight:600;color:#F2EEE0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nc-arrow{font-size:11px;color:#BCCDC4;white-space:nowrap;flex:none;font-family:'IBM Plex Mono',monospace}
+.round-live{min-height:44px}
+.round-live .nc-t{font-variant-numeric:tabular-nums}
 .daily-card{flex-wrap:wrap;min-height:44px}
 .daily-card .dc-more{flex:1 1 100%;font-size:12px;line-height:1.55;color:#DCE8E2;padding-top:8px;border-top:1px dashed rgba(255,255,255,.2)}
 .daily-card .dc-more b{color:var(--gold-s);font-weight:700}
@@ -1410,6 +1412,11 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <span class="nc-body"><span class="nc-e" id="ncE"></span><span class="nc-t" id="ncT"></span></span>
       <span class="nc-arrow">이동 →</span>
     </button>
+    <button class="next-card round-live" id="roundLive" type="button" aria-label="오늘 라운드 카드 보기" style="display:none">
+      <span class="nc-tag" id="rlTag">⛳ 오늘 라운드</span>
+      <span class="nc-body"><span class="nc-e" id="rlE"></span><span class="nc-t" id="rlT"></span></span>
+      <span class="nc-arrow">카드 →</span>
+    </button>
     <button class="next-card" id="prepCard" type="button" style="display:none">
       <span class="nc-tag" id="pcTag">🎒 출발 준비</span>
       <span class="nc-body"><span class="nc-e">🧳</span><span class="nc-t" id="pcT"></span></span>
@@ -1423,7 +1430,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     </button>
     <div class="stats">
       <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">10명 함께</div></div>
-      <div class="stat"><div class="n"><span id="stN2" data-to="7">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
+      <div class="stat"><div class="n"><span id="stN2" data-to="8">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
       <div class="stat"><div class="n"><span id="stN3" data-to="7">0</span><small>/7</small></div><div class="l">🏨 숙소 확정</div></div>
     </div>
   </div>
@@ -1961,7 +1968,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.69';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.70';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3626,13 +3633,13 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['✅','골프 부킹·왕복밴 예약 전부 완료','12/17~12/31 골프 8라운드의 부킹과 티오프 시각이 모두 확정됐고, 라운드마다 가는 왕복밴 8건도 예약·결제(윤우열 선결제)까지 끝났어요. 남은 차량 예약은 골프 외 2건(12/30 가족2 티니디→GCP, 1/2 가족2 공항 샌딩)뿐이에요. 이용 1~2일 전 기사가 배정되어 확정서가 다시 오면 기사님 연락처를 받아두세요'],
+    ['⛳','라운드 데이 라이브 카운트다운','골프가 있는 날 히어로에 실시간 카드가 떠요 — 밴 출발까지 → 티오프까지 → 라운드 중 경과 시간 → 라운드 끝 순서로 초 단위로 바뀌고, 탭하면 오늘 라운드 카드(밴 시각·픽업 순서·바우처)가 바로 열려요. 방콕 현지 시각 기준이에요'],
     ['🎯','태국 빙고 — 가족이 함께 채우는 5×5','뚝뚝 타기·망고 찰밥·일몰 사진·골프 버디… 여행 중 해볼 만한 24칸을 해본 대로 눌러 표시해요. 가로·세로·대각선 한 줄이 맞으면 빙고! 여권 도장첩 아래 "태국 빙고" 버튼에서 열려요. 12줄을 다 채우면 보너스 도장이 찍혀요'],
     ['🔒','정산완료 표시는 윤우열만','정산탭의 "정산완료" 표시와 할일탭 "정산 회수" 체크는 이제 수금 담당인 윤우열만 할 수 있어요. 다른 분들은 상태만 볼 수 있고, 정산 요청 메시지 복사는 그대로 쓸 수 있어요'],
     ['🛂','여권 도장첩 — 여행 도장 모으기','"오늘의 태국" 도장이 여권 페이지로 모여요. 여행이 시작되면 도착·골프 라운드·성탄·방콕 입성·신정·귀국 도장이 그날 저절로 찍혀요. 카드를 탭해서 열어보세요'],
     ['🌌','태국 하늘 라이브','히어로 배경이 방콕 현지 시각에 맞춰 새벽·낮·노을·별밤로 바뀌고, 해와 달이 하늘을 가로질러 움직여요 (12월 일출·일몰 기준 근사값)'],
-    ['📤','가족 단톡 공유 카드','여권 도장첩에서 "오늘의 카드"(출발 전) 또는 "여권 카드"(여행 중)를 이미지로 만들어 카톡 등으로 바로 공유하거나 저장할 수 있어요'],
     ['🌴','오늘의 태국 — 하루에 한 장씩','출발 전까지 매일 자정에 바뀌는 카드가 히어로에 떠요. 태국어 한마디·음식·여행 팁이 돌아가며 나오고, 탭하면 오늘의 미션과 함께 도장이 찍혀요. 며칠 연속으로 모았는지도 알려줘요'],
-    ['🎄','크리스마스·신정 축하 연출 추가','12/24-25 크리스마스, 12/31-1/1 신정에 접속하면 히어로 장식(트윙클라이트·불꽃)과 함께 축하 토스트가 떠요'],
     ['🎒','출발 준비 카드 + D-day 리마인더','히어로에 "출발 준비" 카드가 새로 생겨서 지금 챙길 준비물(여행자보험·eSIM·환전·짐싸기 등)을 자동으로 알려줘요. 출발 전까지만 보이고, 출발 후엔 저절로 사라져요. D-30·D-14·D-7·D-3 카운트다운 알림에도 구체적인 준비물 힌트를 넣었어요'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose'), listEl=$('wnList');
@@ -4016,6 +4023,51 @@ const FOODS = [
     const f = [...scrim.querySelectorAll('.bcell[data-i], #bingoReset, #bingoClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 라운드 데이 라이브: 골프가 있는 날(방콕 현지 날짜) 히어로에 밴 출발 → 티오프 → 라운드 중 → 종료를 실시간으로 ──
+(function(){
+  const card = $('roundLive'); if(!card) return;
+  const pad = n => String(n).padStart(2,'0');
+  const bkk = () => new Date(Date.now() + 7*36e5);   // 방콕 시각을 UTC 필드로
+  const mdParts = md => { const [m,d] = md.split('/').map(Number); return {y:m<6?2027:2026, m, d}; };
+  const at = (g, hhmm) => { const {y,m,d} = mdParts(g.d), [h,mi] = hhmm.split(':'); return new Date(`${y}-${pad(m)}-${pad(d)}T${pad(h)}:${mi}:00+07:00`).getTime(); };
+  const b0 = bkk(), todayKey = `${b0.getUTCFullYear()}-${pad(b0.getUTCMonth()+1)}-${pad(b0.getUTCDate())}`;
+  const g = GOLF.find(x => { const {y,m,d} = mdParts(x.d); return `${y}-${pad(m)}-${pad(d)}` === todayKey; });
+  if(!g) return;
+  const teeM = (g.tee||'').match(/(\d{1,2}):(\d{2})/); if(!teeM) return;
+  const tee = at(g, `${teeM[1]}:${teeM[2]}`), van = g.van && g.van.time ? at(g, g.van.time) : null, end = tee + 5.5*36e5;
+  const fmt = ms => { const s = Math.max(0, Math.floor(ms/1000)), h = Math.floor(s/3600), m = Math.floor(s%3600/60), sec = s%60; return h ? `${h}:${pad(m)}:${pad(sec)}` : `${pad(m)}:${pad(sec)}`; };
+  let phase = null, lastTxt = '';
+  function tick(){
+    const t = Date.now(); let ph, e, txt;
+    if(van && t < van){ ph='van'; e='🚐'; txt = `밴 출발까지 ${fmt(van - t)}${van - t < 15*6e4 ? ' · 골프백 확인!' : ''}`; }
+    else if(t < tee){ ph='tee'; e='⛳'; txt = `티오프까지 ${fmt(tee - t)}${tee - t < 30*6e4 ? ' · 스트레칭!' : ''}`; }
+    else if(t < end){ ph='play'; e='🏌️'; const el = Math.floor((t - tee)/6e4); txt = `라운드 중 · 경과 ${Math.floor(el/60)}시간 ${pad(el%60)}분`; }
+    else { ph='done'; e='🍻'; txt = '라운드 끝! 오늘도 수고했어요'; }
+    if(txt !== lastTxt){ $('rlE').textContent = e; $('rlT').textContent = txt; lastTxt = txt; }
+    if(ph !== phase){
+      if(phase && typeof window.__toast === 'function' && (ph==='tee'||ph==='play'||ph==='done')){
+        window.__toast('⛳ ' + g.c.split(' ').slice(0,2).join(' '), ph==='tee' ? '밴 출발! 안전하게 다녀오세요' : ph==='play' ? '티오프! 즐거운 라운드 되세요' : '라운드 끝! 오늘도 수고했어요');
+        haptic('ok');
+      }
+      phase = ph;
+    }
+    return ph;
+  }
+  $('rlTag').textContent = '⛳ 라운드';
+  tick(); card.style.display = 'flex';
+  let timer = null;
+  const run = () => { if(timer) return; timer = setInterval(() => { if(tick()==='done'){ clearInterval(timer); timer = null; } }, 1000); };
+  const stop = () => { clearInterval(timer); timer = null; };
+  if(phase !== 'done') run();
+  document.addEventListener('visibilitychange', () => { if(document.hidden) stop(); else { if(tick() !== 'done') run(); } });
+  card.addEventListener('click', () => {
+    haptic('tap'); go($('tb-golf'));
+    setTimeout(() => { const c = document.querySelector(`.gcard[data-d="${g.d}"]`); if(!c) return;
+      c.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth'});
+      if(!c.classList.contains('open')) c.querySelector('.gcard-head').click(); }, 420);
   });
 })();
 
