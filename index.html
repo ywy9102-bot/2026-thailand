@@ -590,6 +590,10 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
   position:relative}
 .whoami-chip::before{content:'';position:absolute;inset:-8px -3px}
 .whoami-chip.on{background:var(--jade);border-color:var(--jade);color:#fff}
+.whoami-note{flex:1 1 100%;margin:2px 0 0;font-size:12px;line-height:1.5;color:var(--ink2)}
+.pay-toggle.locked,.ci.pay-locked{cursor:not-allowed}
+.ci.deny{position:relative}
+.ci.deny::after{content:"🔒 윤우열만 가능";position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:var(--coral);background:var(--coral-s);border-radius:99px;padding:3px 10px}
 .me-tag{font-size:10px;font-weight:700;color:var(--gold-text);background:var(--gold-s);
   border-radius:99px;padding:1px 7px;letter-spacing:.01em}
 
@@ -1243,9 +1247,53 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   .wn-scrim.on .wn-sheet{transform:none;opacity:1}
 }
 
+/* ── 태국 하늘 라이브 (방콕 현지 시각에 맞춰 히어로 하늘이 변함) ── */
+.hero-sky{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.hero-sky::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+header.hero[data-sky="dawn"] .hero-sky::before{opacity:1;background:linear-gradient(180deg,rgba(255,176,128,.24) 0,rgba(255,176,128,0) 48%)}
+header.hero[data-sky="dusk"] .hero-sky::before{opacity:1;background:linear-gradient(180deg,rgba(236,112,84,.28) 0,rgba(236,112,84,0) 52%)}
+header.hero[data-sky="night"] .hero-sky::before{opacity:1;background:linear-gradient(180deg,rgba(8,16,44,.55) 0,rgba(8,16,44,0) 64%)}
+.sky-orb{position:absolute;left:50%;top:60px;font-size:26px;line-height:1;font-style:normal;opacity:0;transform:translate(-50%,-50%);
+  filter:drop-shadow(0 3px 7px rgba(0,0,0,.35))}
+header.hero[data-sky] .sky-orb{opacity:.6}
+header.hero[data-sky="dawn"] .sky-orb,header.hero[data-sky="dusk"] .sky-orb{filter:sepia(.35) saturate(1.7) drop-shadow(0 3px 7px rgba(0,0,0,.35))}
+header.hero[data-sky="day"][data-wx="sunny"] .sky-orb,header.hero[data-wx="rain"] .sky-orb,header.hero[data-wx="storm"] .sky-orb{opacity:0}
+header.hero[data-wx="cloudy"] .sky-orb{opacity:.35}
+.sky-stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#FFF6DA;opacity:0}
+header.hero[data-sky="night"] .sky-stars i{opacity:.65}
+header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars i{opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  .sky-orb{transition:left 1.2s ease,top 1.2s ease,opacity 1.2s ease}
+  header.hero[data-sky="night"] .sky-stars i{animation:skyTwinkle 3.6s ease-in-out var(--sd,0s) infinite}
+}
+@keyframes skyTwinkle{0%,100%{opacity:.25}50%{opacity:.9}}
+
+/* ── 여권 도장첩 ── */
+.pass-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 6px 0}
+.ps-h{font-size:.813rem;font-weight:700;color:var(--ink);margin:16px 0 9px;display:flex;justify-content:space-between;align-items:baseline}
+.ps-h:first-child{margin-top:2px}
+.ps-h b{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--jade)}
+.ps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.ps-grid.ps-mini{grid-template-columns:repeat(4,1fr);gap:9px}
+.pstamp{--ink-c:var(--jade);aspect-ratio:1/1;border:2px solid var(--ink-c);border-radius:14px;color:var(--ink-c);background:var(--card);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 6px;text-align:center;
+  transform:rotate(var(--rot,0deg));min-width:0}
+.pstamp.gold{--ink-c:var(--gold-text)}
+.pstamp.coral{--ink-c:var(--coral)}
+.pstamp .ps-e{font-size:24px;line-height:1;font-style:normal}
+.pstamp b{font-size:12px;font-weight:700;line-height:1.25;max-width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pstamp .ps-d{font-family:'IBM Plex Mono',monospace;font-size:12px}
+.pstamp.empty{border-style:dashed;color:var(--ink3);background:transparent;transform:none}
+.pstamp.mini{aspect-ratio:auto;padding:9px 4px;border-radius:12px}
+@media (prefers-reduced-motion:no-preference){
+  .pstamp.new{animation:pstampSlam .55s cubic-bezier(.2,1.5,.4,1) both;animation-delay:calc(var(--i,0)*110ms)}
+}
+@keyframes pstampSlam{0%{opacity:0;transform:rotate(var(--rot,0deg)) scale(1.9)}100%{opacity:1;transform:rotate(var(--rot,0deg)) scale(1)}}
+.daily-card.passport-mode .nc-t{white-space:nowrap}
+
 @media print{
   nav.tabs{display:none}
-  .toast,.ptr,.hero-fx,.flyplane,.confp,.hero-lanterns,.tab-fly,.tuktuk,.cd-plane,
+  .toast,.ptr,.hero-fx,.hero-sky,.flyplane,.confp,.hero-lanterns,.tab-fly,.tuktuk,.cd-plane,
   .wn-scrim,.ele,.shootstar,.stamp,.rbadge{display:none!important}
   .next-card,.hw-ago,.hw-more,.tidbit,.gguide,.mt-topics{display:none!important}
   .hw{color:var(--ink2)!important}
@@ -1274,6 +1322,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 <body>
 
 <header class="hero">
+  <div class="hero-sky" id="heroSky" aria-hidden="true"><i class="sky-orb" id="skyOrb"></i><span class="sky-stars" id="skyStars"></span></div>
   <div class="hero-fx" aria-hidden="true">
     <i class="fx-sun"></i>
     <i class="fx-cloud a"></i><i class="fx-cloud b"></i><i class="fx-cloud c"></i><i class="fx-cloud d"></i>
@@ -1759,6 +1808,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   <div class="whoami" id="whoami">
     <span class="whoami-lbl">이 중에 나예요</span>
     <div class="whoami-chips" id="whoamiChips"></div>
+    <p class="whoami-note" id="whoamiNote"></p>
   </div>
 
   <h3 class="stbl"><span class="i">◈</span>사람별 정산액</h3>
@@ -1827,6 +1877,20 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   </div>
 </div>
 
+<!-- 여권 도장첩 -->
+<div class="wn-scrim" id="passScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="passTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🛂 PASSPORT</span>
+      <h2 class="wn-title" id="passTitle">여권 도장첩</h2>
+    </div>
+    <p class="wn-sub" id="passSub"></p>
+    <div class="pass-body" id="passBody" tabindex="0" aria-label="도장 목록"></div>
+    <button class="wn-close" id="passShare" type="button">📤 카드로 공유하기</button>
+    <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
 <!-- 이번 업데이트 (버전당 1회) -->
 <div class="wn-scrim" id="wnScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="wnTitle">
@@ -1860,7 +1924,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.67';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.68';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3153,6 +3217,27 @@ function owedItems(name){
 
 // "정산 회수" 완료 체크는 별도 저장소 없이 할일탭의 체크 상태(store.done)를 그대로 읽음 — 두 탭 어디서 체크해도 서로 반영됨
 const paidKey = o => `${o.n} → 윤우열 ${won(o.t)}원`;
+// 정산완료 표시는 수금 담당(윤우열)만 — "이 중에 나예요"에서 윤우열을 고른 기기에서만 동작 (브라우저 저장값 기준의 가벼운 잠금)
+const isCollector = () => store.myName === '윤우열';
+const isPayKey = k => OWE.some(o=>paidKey(o)===k);
+function denyCollectorOnly(el){
+  haptic('strong');
+  if(typeof window.__toast === 'function') window.__toast('🔒 수금 담당 전용','정산완료 표시는 윤우열님만 할 수 있어요');
+  if(!el) return;
+  if(el.classList.contains('pay-toggle')){
+    const o = el.textContent; el.textContent = '🔒 윤우열만 가능';
+    setTimeout(()=>{ el.textContent = o; }, 1400);
+  } else {
+    el.classList.add('deny'); setTimeout(()=> el.classList.remove('deny'), 1400);
+  }
+}
+function syncPayLocks(){
+  const ok = isCollector();
+  document.querySelectorAll('.pay-toggle').forEach(b=>{ b.classList.toggle('locked', !ok); b.setAttribute('aria-disabled', String(!ok)); });
+  document.querySelectorAll('.ci').forEach(ci=> ci.classList.toggle('pay-locked', !ok && isPayKey(ci.querySelector('.tx').textContent)));
+  const n = $('whoamiNote');
+  if(n) n.textContent = ok ? '💼 수금 담당 모드 — 정산완료를 표시할 수 있어요' : '🔒 정산완료 표시는 윤우열(수금 담당)만 할 수 있어요';
+}
 function renderBars(){
   const ordered = store.myName ? [...OWE].sort((a,b)=>(a.n===store.myName?0:1)-(b.n===store.myName?0:1)) : OWE;
   $('bars').innerHTML = ordered.map(o=>{
@@ -3180,7 +3265,7 @@ renderBars();
 function renderWhoami(){
   $('whoamiChips').innerHTML = OWE.map(o=>
     `<button class="whoami-chip ${o.n===store.myName?'on':''}" type="button" data-n="${o.n}">${o.n}</button>`
-  ).join('');
+  ).join('') + `<button class="whoami-chip ${isCollector()?'on':''}" type="button" data-n="윤우열">윤우열 · 수금</button>`;
 }
 function updateMineLine(){
   const el = $('oweMine');
@@ -3208,7 +3293,7 @@ function refreshSettled(){
     const paid = !!store.done[row.dataset.paidKey];
     row.classList.toggle('settled', paid);
     const btn = row.querySelector('.pay-toggle');
-    btn.textContent = paid ? '✅ 정산완료' : '정산 대기';
+    btn.textContent = paid ? '✅ 정산완료' : (isCollector() ? '정산 대기' : '🔒 정산 대기');
     btn.setAttribute('aria-pressed', paid);
     btn.classList.toggle('ok', paid);
     btn.classList.toggle('wait', !paid);
@@ -3220,6 +3305,7 @@ function refreshSettled(){
   $('oweProgPct').textContent = pct+'%';
   setTimeout(()=>{ $('oweProgFill').style.width = pct+'%'; }, 260);
   if(typeof updateMineLine === 'function') updateMineLine();
+  syncPayLocks();
 }
 refreshSettled();
 
@@ -3227,6 +3313,7 @@ $('bars').addEventListener('click', async e=>{
   const pt = e.target.closest('.pay-toggle');
   if(pt){
     e.stopPropagation();
+    if(!isCollector()){ denyCollectorOnly(pt); return; }
     const row = pt.closest('.bar-row'), key = row.dataset.paidKey;
     const willPay = !store.done[key];
     if(willPay) store.done[key] = true; else delete store.done[key];
@@ -3334,6 +3421,7 @@ document.querySelectorAll('.ci').forEach(i=>{
   const grpDone=g=>[...g.querySelectorAll('.ci')].every(c=>c.classList.contains('done'));
   const allDone=()=>[...document.querySelectorAll('.ci')].every(c=>c.classList.contains('done'));
   const tog=()=>{
+    if(isPayKey(key) && !isCollector()){ denyCollectorOnly(i); return; }
     const wasGrp=grpDone(grp), wasAll=allDone();
     const d=i.classList.toggle('done');
     i.setAttribute('aria-checked',d);
@@ -3349,6 +3437,7 @@ document.querySelectorAll('.ci').forEach(i=>{
   i.addEventListener('click',tog);
   i.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();tog();}});
 });
+syncPayLocks();
 // 더 이상 존재하지 않는 항목의 저장값 정리 (일정 데이터 변경 대비)
 const validKeys = new Set([...document.querySelectorAll('.ci .tx')].map(e=>e.textContent));
 Object.keys(store.done).forEach(k=>{ if(!validKeys.has(k)) delete store.done[k]; });
@@ -3483,14 +3572,15 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🔒','정산완료 표시는 윤우열만','정산탭의 "정산완료" 표시와 할일탭 "정산 회수" 체크는 이제 수금 담당인 윤우열만 할 수 있어요. 다른 분들은 상태만 볼 수 있고, 정산 요청 메시지 복사는 그대로 쓸 수 있어요'],
+    ['🛂','여권 도장첩 — 여행 도장 모으기','"오늘의 태국" 도장이 여권 페이지로 모여요. 여행이 시작되면 도착·골프 라운드·성탄·방콕 입성·신정·귀국 도장이 그날 저절로 찍혀요. 카드를 탭해서 열어보세요'],
+    ['🌌','태국 하늘 라이브','히어로 배경이 방콕 현지 시각에 맞춰 새벽·낮·노을·별밤로 바뀌고, 해와 달이 하늘을 가로질러 움직여요 (12월 일출·일몰 기준 근사값)'],
+    ['📤','가족 단톡 공유 카드','여권 도장첩에서 "오늘의 카드"(출발 전) 또는 "여권 카드"(여행 중)를 이미지로 만들어 카톡 등으로 바로 공유하거나 저장할 수 있어요'],
     ['🌴','오늘의 태국 — 하루에 한 장씩','출발 전까지 매일 자정에 바뀌는 카드가 히어로에 떠요. 태국어 한마디·음식·여행 팁이 돌아가며 나오고, 탭하면 오늘의 미션과 함께 도장이 찍혀요. 며칠 연속으로 모았는지도 알려줘요'],
-    ['📜','공지 시트 스크롤 + 세부 접근성 다듬기','업데이트 항목이 많아져도 스크롤로 끝까지 볼 수 있게 했어요. 퀴즈 "다음 문제" 버튼 터치 영역을 넓히고, 키보드만으로도 이 목록을 스크롤할 수 있게 했어요'],
     ['🎄','크리스마스·신정 축하 연출 추가','12/24-25 크리스마스, 12/31-1/1 신정에 접속하면 히어로 장식(트윙클라이트·불꽃)과 함께 축하 토스트가 떠요'],
     ['🧠','O/X퀴즈 7문항 보강','태국 골프 퀴즈 24문항, 태국 문화 퀴즈 36문항으로 늘었어요 — 좌측통행·전압·화장실 문화 등 실전 팁 위주로 추가했어요'],
     ['🎒','출발 준비 카드 + D-day 리마인더','히어로에 "출발 준비" 카드가 새로 생겨서 지금 챙길 준비물(여행자보험·eSIM·환전·짐싸기 등)을 자동으로 알려줘요. 출발 전까지만 보이고, 출발 후엔 저절로 사라져요. D-30·D-14·D-7·D-3 카운트다운 알림에도 구체적인 준비물 힌트를 넣었어요'],
     ['📔','여행 다이어리 (귀국일 요약)','1/2 귀국일에 접속하면 송별 인사에 이어 "며칠·골프 몇 라운드·정산 얼마" 같은 실제 여행 기록을 한 장으로 요약해서 보여줘요. 공유용 텍스트 복사도 가능해요'],
-    ['⭐','정산탭 "이 중에 나예요" 추가','내 이름을 고르면 내 정산 항목이 맨 위로 고정되고 강조돼요 — 매번 목록에서 내 이름 찾을 필요 없이 한 번만 골라두면 계속 기억해요'],
-    ['🚐','왕복밴 2건 확정 (파타야→방콕·공항샌딩)','12/26 방콕 이동, 1/2 공항 가는 밴 예약이 확정됐어요(윤우열 선결제 완료) — 예약번호·경로까지 일정탭·숙소탭·정산탭 어디서든 확인할 수 있어요'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose'), listEl=$('wnList');
   $('wnVer').textContent=APP_VER;
@@ -3585,59 +3675,234 @@ const FOODS = [
   ['로띠 + 연유','길거리 팬케이크 디저트'],
 ];
 
-// ── 오늘의 태국: 하루에 한 장, 자정에 바뀌는 카드 + 도장 모으기 (출발 전까지만 노출) ──
+// ── 오늘의 태국 · 여권 도장첩 · 공유 카드 ──
+//    출발 전: 하루에 한 장 바뀌는 카드 + 도장 모으기 / 여행 중·후: 여권 요약 카드 (탭하면 도장첩)
 (function(){
   const card = $('dailyCard'); if(!card) return;
   const now = new Date(), dep = tripDate('depart');
-  if(now >= dep) return;
   const pad = n => String(n).padStart(2,'0');
   const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  const dayIdx = Math.max(0, Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(2026,7,6))/864e5));   // 로컬 자정 기준으로 바뀜 (planStart=8/6)
-  const daysLeft = Math.ceil((dep - now)/864e5);
-  const sub = Math.floor(dayIdx/3);
-  const kind = ['phrase','food','tip'][dayIdx % 3];
+  const ml = s => `${+s.slice(5,7)}/${+s.slice(8,10)}`;
+  const mdDate = md => { const [m,d] = md.split('/').map(Number); return new Date(`${m<6?2027:2026}-${pad(m)}-${pad(d)}T00:00:00+07:00`); };
+  const LSK = 'thai2026_daily', LSP = 'thai2026_passport';
+  const loadArr = k => { try{ const a = JSON.parse(localStorage.getItem(k)); return Array.isArray(a) ? a : []; }catch(e){ return []; } };
+  const saveArr = (k,a) => { try{ localStorage.setItem(k, JSON.stringify(a)); }catch(e){} };
+  let stamps = loadArr(LSK);   // 출발 전 도장(날짜)
+  let seen = loadArr(LSP);     // 이미 확인한 여행 도장 id
+  const preTrip = now < dep;
+
+  // 날짜별 오늘의 태국 (로컬 자정 기준으로 바뀜 · planStart=8/6)
+  const dayIdxOf = d => Math.max(0, Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(2026,7,6))/864e5));
   const at = (arr,i) => arr[i % arr.length];
-  let e, title, more, mission;
-  if(kind==='phrase'){ const [th,ko]=at(PHRASES,sub); e='💬'; title=th; more=ko; mission='오늘 가족 단톡에 이 말로 한 번 말 걸어보기'; }
-  else if(kind==='food'){ const [nm,ds]=at(FOODS,sub); e='🍜'; title=nm; more=ds; mission='메뉴판에서 이 이름을 찾아보는 게 오늘의 미션'; }
-  else { const t=at(TIPS,sub); e='💡'; title=t; more='출발 전에 한 번만 더 떠올려두면 현지에서 편해요'; mission='가족 단톡에 공유해서 같이 챙기기'; }
-  $('dcE').textContent = e;
-  $('dcT').textContent = title;
-  $('dcTag').textContent = `🌴 D-${daysLeft}`;
-  const more$ = $('dcMore');
-  more$.innerHTML = `${more}<br><b>오늘의 미션</b> · ${mission}`;
+  function dailyFor(d){
+    const idx = dayIdxOf(d), sub = Math.floor(idx/3), kind = ['phrase','food','tip'][idx % 3];
+    if(kind==='phrase'){ const [th,ko] = at(PHRASES,sub); return {kind, e:'💬', label:'태국어 한마디', title:th, more:ko, mission:'오늘 가족 단톡에 이 말로 한 번 말 걸어보기'}; }
+    if(kind==='food'){ const [nm,ds] = at(FOODS,sub); return {kind, e:'🍜', label:'오늘의 음식', title:nm, more:ds, mission:'메뉴판에서 이 이름을 찾아보는 게 오늘의 미션'}; }
+    return {kind, e:'💡', label:'여행 팁', title:at(TIPS,sub), more:'출발 전에 한 번만 더 떠올려두면 현지에서 편해요', mission:'가족 단톡에 공유해서 같이 챙기기'};
+  }
 
-  const LSK = 'thai2026_daily';
-  const load = () => { try{ const a = JSON.parse(localStorage.getItem(LSK)); return Array.isArray(a) ? a : []; }catch(e){ return []; } };
-  let stamps = load();
-  const today = keyOf(now);
-  const streakOf = () => {
-    let n = 0; const d = new Date(now);
-    while(stamps.includes(keyOf(d))){ n++; d.setDate(d.getDate()-1); }
-    return n;
-  };
-  const paint = () => {
-    const got = stamps.includes(today);
-    card.classList.toggle('stamped', got);
-    $('dcArrow').textContent = got ? `✓ 도장 ${stamps.length}개` : '열어보기 →';
-  };
-  paint();
-  card.style.display = 'flex';
+  // 여행 도장: 출발·골프 라운드·성탄·이동·신정·귀국 — 그날이 되면 저절로 찍힘
+  const TRIP_STAMPS = [
+    {id:'arrive', at:tripDate('depart'), e:'🛬', t:'방콕 도착', tone:'coral', dl:ml(TRIP.depart)},
+    ...GOLF.map(g => ({id:'golf-'+g.d, at:mdDate(g.d), e:'⛳', t:g.c, tone:'gold', dl:g.d})),
+    {id:'xmas', at:mdDate('12/25'), e:'🎄', t:'메리 크리스마스', tone:'jade', dl:'12/25'},
+    {id:'bkk', at:tripDate('bkkFrom'), e:'🌆', t:'방콕 입성', tone:'jade', dl:ml(TRIP.bkkFrom)},
+    {id:'ny', at:mdDate('1/1'), e:'🎆', t:'해피 뉴이어', tone:'jade', dl:'1/1'},
+    {id:'home', at:tripDate('mainReturn'), e:'🏠', t:'귀국', tone:'coral', dl:ml(TRIP.mainReturn)},
+  ].sort((a,b) => a.at - b.at);
+  const earned = () => TRIP_STAMPS.filter(x => new Date() >= x.at);
 
-  card.addEventListener('click', ()=>{
-    const open = card.classList.toggle('open');
-    card.setAttribute('aria-expanded', open); more$.hidden = !open;
+  // ── 도장첩 시트 ──
+  const scrim = $('passScrim'), body = $('passBody'), shareBtn = $('passShare'), closeBtn = $('passClose');
+  let prevFocus = null;
+  function stampHTML(x, i, isNew, ok){
+    const rot = [-6,4,-3,7,-5,3,-7,5][i % 8];
+    return ok
+      ? `<div class="pstamp ${x.tone} ${isNew?'new':''}" style="--rot:${rot}deg;--i:${i}"><i class="ps-e">${x.e}</i><b>${x.t}</b><span class="ps-d">${x.dl}</span></div>`
+      : `<div class="pstamp empty"><i class="ps-e">${x.e}</i><b>${x.t}</b><span class="ps-d">${x.dl}</span></div>`;
+  }
+  function renderPass(){
+    const got = earned(), gotIds = got.map(x => x.id);
+    const fresh = got.filter(x => !seen.includes(x.id)).map(x => x.id);
+    let k = 0;
+    let html = `<h3 class="ps-h">여행 도장 <b>${got.length}/${TRIP_STAMPS.length}</b></h3><div class="ps-grid">` +
+      TRIP_STAMPS.map(x => { const ok = gotIds.includes(x.id); return stampHTML(x, k++, ok && fresh.includes(x.id), ok); }).join('') + '</div>';
+    if(stamps.length){
+      html += `<h3 class="ps-h">출발 전 도장 <b>${stamps.length}개</b></h3><div class="ps-grid ps-mini">` +
+        [...stamps].sort().map((ds,i) => {
+          const d = new Date(ds+'T00:00:00'), dd = dailyFor(d);
+          return `<div class="pstamp mini jade" style="--rot:${[-4,3,-2,5][i%4]}deg"><i class="ps-e">${dd.e}</i><span class="ps-d">${d.getMonth()+1}/${d.getDate()}</span></div>`;
+        }).join('') + '</div>';
+    }
+    body.innerHTML = html;
+    const next = TRIP_STAMPS.find(x => new Date() < x.at);
+    $('passSub').textContent = preTrip
+      ? '여행이 시작되면 도착·골프·귀국 도장이 저절로 찍혀요'
+      : (next ? `다음 도장: ${next.e} ${next.t} (${next.dl})` : '모든 도장을 다 모았어요! 🎉');
+    shareBtn.textContent = preTrip ? '📤 오늘의 카드 공유하기' : '📤 여권 카드 공유하기';
+    if(fresh.length){ seen = [...new Set([...seen, ...gotIds])]; saveArr(LSP, seen); haptic('ok'); paintCard(); }
+  }
+  function openPass(){
+    if(!scrim) return;
+    prevFocus = document.activeElement;
+    renderPass();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
+  }
+  function closePass(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
     haptic('tap');
-    if(!open || stamps.includes(today)) return;
-    stamps.push(today);
-    try{ localStorage.setItem(LSK, JSON.stringify(stamps)); }catch(e){}
-    paint(); haptic('ok');
-    const n = stamps.length, st = streakOf();
-    const msg = st >= 2 ? `${st}일 연속 도장! 총 ${n}개 모았어요` : `오늘의 도장 완료 · 총 ${n}개`;
-    if(typeof window.__celebrate === 'function'){
-      window.__celebrate({ kicker:`🌴 D-${daysLeft}`, msg, ms:3200, at:card, dy:20, n: n%7===0 ? 26 : 10, spread:80, petals:true });
-    } else if(typeof window.__toast === 'function'){ window.__toast(`🌴 D-${daysLeft}`, msg); }
-  });
+  }
+  if(scrim){
+    closeBtn.addEventListener('click', closePass);
+    scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
+    addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
+    const focusables = [body, shareBtn, closeBtn];
+    scrim.addEventListener('keydown', e => {
+      if(e.key !== 'Tab') return;
+      e.preventDefault();
+      const cur = focusables.indexOf(document.activeElement), n = focusables.length;
+      focusables[e.shiftKey ? (cur <= 0 ? n-1 : cur-1) : (cur < 0 || cur === n-1 ? 0 : cur+1)].focus();
+    });
+    shareBtn.addEventListener('click', async () => {
+      const o = shareBtn.textContent; shareBtn.textContent = '⏳ 카드 만드는 중…';
+      const how = await shareCard();
+      shareBtn.textContent = how === 'saved' ? '✅ 이미지로 저장했어요' : how === 'shared' ? '✅ 공유했어요' : o;
+      haptic('ok'); setTimeout(() => { shareBtn.textContent = o; }, 1800);
+    });
+  }
+
+  // ── 공유 카드 (캔버스 → 이미지) ──
+  function wrapText(g, text, x, y, maxW, lh, maxLines){
+    const words = String(text).split(' '); let line = '', n = 0;
+    const flush = () => { g.fillText(line, x, y); y += lh; n++; line = ''; };
+    for(const w of words){
+      const t = line ? line + ' ' + w : w;
+      if(g.measureText(t).width > maxW && line){ flush(); if(n >= maxLines) return y; line = w; } else line = t;
+    }
+    if(line && n < maxLines) flush();
+    return y;
+  }
+  async function shareCard(){
+    const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const g = cv.getContext('2d'), cs = getComputedStyle(document.documentElement);
+    const col = (v, f) => (cs.getPropertyValue(v).trim() || f);
+    const jade = col('--jade','#1E4B41'), jadeD = col('--jade-d','#0E2822'), gold = col('--gold','#B58A28'), goldS = col('--gold-s','#F5E7C0'), fg = col('--hero-fg','#F4EEDD');
+    const sans = getComputedStyle(document.body).fontFamily || 'sans-serif';
+    const serif = "'Fraunces', 'Noto Serif KR', serif";
+    try{ await document.fonts.ready; }catch(e){}
+    const bg = g.createLinearGradient(0,0,W*.6,H); bg.addColorStop(0,jade); bg.addColorStop(1,jadeD);
+    g.fillStyle = bg; g.fillRect(0,0,W,H);
+    g.fillStyle = 'rgba(181,138,40,.16)'; g.beginPath(); g.arc(W*.92, H*.08, 340, 0, 7); g.fill();
+    g.textBaseline = 'alphabetic'; g.fillStyle = fg;
+    g.font = `600 44px ${sans}`; g.fillText('🇹🇭 태국 겨울 가족여행', 80, 120);
+    const dl = new Date(), left = Math.ceil((dep - dl)/864e5);
+    if(preTrip){
+      const d = dailyFor(dl);
+      g.fillStyle = goldS; g.font = `700 340px ${serif}`; g.fillText(`D-${left}`, 64, 500);
+      g.fillStyle = fg; g.font = `500 40px ${sans}`; g.fillText(`${TRIP.depart.replace(/-/g,'.')} 출발`, 84, 580);
+      g.fillStyle = 'rgba(245,231,192,.16)'; g.fillRect(80, 650, W-160, 3);
+      g.fillStyle = goldS; g.font = `700 38px ${sans}`; g.fillText(`${d.e} 오늘의 태국 · ${d.label}`, 80, 740);
+      g.fillStyle = fg; g.font = `700 76px ${sans}`;
+      let y = wrapText(g, d.title, 80, 850, W-160, 100, 3);
+      g.fillStyle = 'rgba(244,238,221,.86)'; g.font = `500 44px ${sans}`;
+      wrapText(g, d.more, 80, y + 20, W-160, 66, 3);
+      g.fillStyle = goldS; g.font = `600 40px ${sans}`;
+      g.fillText(`🌴 도장 ${stamps.length}개 모으는 중`, 80, H-150);
+    } else {
+      const got = earned(), latest = got[got.length-1];
+      g.fillStyle = goldS; g.font = `700 300px ${serif}`; g.fillText(`${got.length}/${TRIP_STAMPS.length}`, 64, 470);
+      g.fillStyle = fg; g.font = `500 44px ${sans}`; g.fillText('🛂 여권 도장', 84, 560);
+      g.font = `600 64px ${sans}`;
+      TRIP_STAMPS.forEach((x, i) => {
+        const cx = 146 + (i % 7) * 131, cy = 700 + Math.floor(i / 7) * 150, ok = got.includes(x);
+        g.beginPath(); g.arc(cx, cy, 56, 0, 7);
+        if(ok){ g.fillStyle = 'rgba(245,231,192,.16)'; g.fill(); g.lineWidth = 4; g.strokeStyle = goldS; g.stroke(); }
+        else { g.setLineDash([10,10]); g.lineWidth = 3; g.strokeStyle = 'rgba(244,238,221,.35)'; g.stroke(); g.setLineDash([]); }
+        g.globalAlpha = ok ? 1 : .35; g.font = '56px sans-serif'; g.textAlign = 'center'; g.fillStyle = fg; g.fillText(x.e, cx, cy + 19); g.textAlign = 'left'; g.globalAlpha = 1;
+      });
+      if(latest){ g.fillStyle = goldS; g.font = `700 52px ${sans}`; wrapText(g, `최근 도장 · ${latest.e} ${latest.t}`, 80, 1060, W-160, 70, 2); }
+      g.fillStyle = fg; g.font = `600 40px ${sans}`; g.fillText(got.length === TRIP_STAMPS.length ? '모든 도장을 다 모았어요 🎉' : '함께한 시간이 도장으로 쌓이는 중', 80, H-150);
+    }
+    g.fillStyle = 'rgba(244,238,221,.7)'; g.font = `500 34px ${sans}`;
+    g.fillText(`${TRIP.depart.replace(/-/g,'.')} – ${TRIP.end.replace(/-/g,'.')} · 3가족 10명`, 80, H-90);
+    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+    if(!blob) return 'fail';
+    const file = new File([blob], 'thailand-2026.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file], title:'태국 겨울 가족여행'}); return 'shared'; }
+      catch(e){ if(e && e.name === 'AbortError') return 'cancel'; }
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'thailand-2026.png';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    return 'saved';
+  }
+  window.__shareCard = shareCard;
+
+  // ── 히어로 카드 ──
+  function paintCard(){
+    if(preTrip){
+      const got = stamps.includes(keyOf(new Date()));
+      card.classList.toggle('stamped', got);
+      $('dcArrow').textContent = got ? `✓ 도장 ${stamps.length}개 · 여권 →` : '열어보기 →';
+    } else {
+      const got = earned(), fresh = got.filter(x => !seen.includes(x.id)).length;
+      $('dcArrow').textContent = fresh ? `새 도장 ${fresh} →` : '열기 →';
+    }
+  }
+  card.style.display = 'flex';
+  if(preTrip){
+    const d = dailyFor(now), daysLeft = Math.ceil((dep - now)/864e5), today = keyOf(now);
+    $('dcE').textContent = d.e; $('dcT').textContent = d.title; $('dcTag').textContent = `🌴 D-${daysLeft}`;
+    const more$ = $('dcMore'); more$.innerHTML = `${d.more}<br><b>오늘의 미션</b> · ${d.mission}`;
+    const streakOf = () => { let n = 0; const x = new Date(now); while(stamps.includes(keyOf(x))){ n++; x.setDate(x.getDate()-1); } return n; };
+    paintCard();
+    card.addEventListener('click', e => {
+      if(stamps.includes(today) && e.target.closest('.nc-arrow')){ haptic('tap'); openPass(); return; }
+      const open = card.classList.toggle('open');
+      card.setAttribute('aria-expanded', open); more$.hidden = !open; haptic('tap');
+      if(!open || stamps.includes(today)) return;
+      stamps.push(today); saveArr(LSK, stamps); paintCard(); haptic('ok');
+      const n = stamps.length, st = streakOf();
+      const msg = st >= 2 ? `${st}일 연속 도장! 총 ${n}개 모았어요` : `오늘의 도장 완료 · 총 ${n}개`;
+      if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:`🌴 D-${daysLeft}`, msg, ms:3200, at:card, dy:20, n: n%7===0 ? 26 : 10, spread:80, petals:true });
+      else if(typeof window.__toast === 'function') window.__toast(`🌴 D-${daysLeft}`, msg);
+    });
+  } else {
+    const got = earned(), last = got[got.length-1];
+    card.classList.add('passport-mode'); card.removeAttribute('aria-expanded');
+    $('dcTag').textContent = '🛂 여권'; $('dcE').textContent = last ? last.e : '🛂';
+    $('dcT').textContent = `도장 ${got.length}/${TRIP_STAMPS.length}${last ? ' · 최근 ' + last.t : ''}`;
+    paintCard();
+    card.addEventListener('click', () => { haptic('tap'); openPass(); });
+    const fresh = got.filter(x => !seen.includes(x.id));
+    if(fresh.length) setTimeout(() => { if(scrim && !scrim.hidden) return; if(typeof window.__toast === 'function') window.__toast('🛂 새 도장', `${fresh[fresh.length-1].e} ${fresh[fresh.length-1].t}${fresh.length>1?` 외 ${fresh.length-1}개`:''} 도장이 찍혔어요`); }, 2200);
+  }
+})();
+
+// ── 태국 하늘 라이브: 방콕 현지 시각에 맞춰 히어로 하늘(새벽·낮·노을·별밤)과 해/달 위치가 변함 ──
+(function(){
+  const hero = document.querySelector('header.hero'), orb = $('skyOrb'), starsEl = $('skyStars');
+  if(!hero || !orb) return;
+  // 12월 방콕 일출·일몰 근사값(현지 시각, 시)
+  const SR = 6.7, SS = 17.9;
+  starsEl.innerHTML = Array.from({length:16}, (_, i) =>
+    `<i style="left:${(6 + (i*61 % 88)).toFixed(0)}%;top:${(4 + (i*37 % 42)).toFixed(0)}%;--sd:${(i*0.37).toFixed(2)}s"></i>`).join('');
+  function tick(){
+    const t = new Date(), h = ((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60;
+    const day = h >= SR && h < SS;
+    const phase = h >= SR-.8 && h < SR+.7 ? 'dawn' : h >= SR+.7 && h < SS-1.1 ? 'day' : h >= SS-1.1 && h < SS+.6 ? 'dusk' : 'night';
+    const p = day ? (h - SR)/(SS - SR) : ((h < SR ? h + 24 : h) - SS)/(24 - (SS - SR));
+    orb.textContent = day ? '☀️' : '🌙';
+    orb.style.left = (10 + p*80).toFixed(1) + '%';
+    orb.style.top = (78 - 60*Math.sin(Math.PI*p)).toFixed(0) + 'px';
+    hero.dataset.sky = phase;
+  }
+  tick(); setInterval(tick, 60000);
 })();
 
 /* ════════ 재미 요소 (모바일 전용) — 유휴 시간에 지연 초기화 (초기 파싱 부담 완화) ════════ */
