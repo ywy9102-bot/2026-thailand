@@ -1291,6 +1291,25 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 @keyframes pstampSlam{0%{opacity:0;transform:rotate(var(--rot,0deg)) scale(1.9)}100%{opacity:1;transform:rotate(var(--rot,0deg)) scale(1)}}
 .daily-card.passport-mode .nc-t{white-space:nowrap}
 
+/* ── 태국 빙고 ── */
+.bingo-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.bingo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.bcell{appearance:none;position:relative;aspect-ratio:1/1;min-width:0;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 3px;cursor:pointer;text-align:center;
+  font-family:inherit;-webkit-tap-highlight-color:transparent}
+.bcell .b-e{font-size:20px;line-height:1}
+.bcell .b-t{font-size:12px;font-weight:600;line-height:1.25;word-break:keep-all;overflow-wrap:anywhere;max-width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.bcell[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.bcell[aria-pressed="true"]::after{content:"✓";position:absolute;top:2px;right:5px;font-size:12px;font-weight:800;color:var(--gold-s)}
+.bcell.free{background:var(--gold-s);border-color:var(--gold);color:var(--gold-text);cursor:default}
+.bcell.line{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+@media (prefers-reduced-motion:no-preference){
+  .bcell{transition:background .15s,border-color .15s,transform .12s}
+  .bcell:active{transform:scale(.94)}
+  .bcell.pop{animation:bcellPop .42s cubic-bezier(.2,1.6,.4,1)}
+}
+@keyframes bcellPop{0%{transform:scale(.8)}100%{transform:scale(1)}}
+.bingo-msg{min-height:20px;margin:12px 2px 0;font-size:.813rem;font-weight:700;color:var(--gold-text);text-align:center}
 @media print{
   nav.tabs{display:none}
   .toast,.ptr,.hero-fx,.hero-sky,.flyplane,.confp,.hero-lanterns,.tab-fly,.tuktuk,.cd-plane,
@@ -1886,8 +1905,26 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     </div>
     <p class="wn-sub" id="passSub"></p>
     <div class="pass-body" id="passBody" tabindex="0" aria-label="도장 목록"></div>
-    <button class="wn-close" id="passShare" type="button">📤 카드로 공유하기</button>
+    <button class="wn-close" id="passBingo" type="button" style="margin-top:12px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎯 태국 빙고</button>
+    <button class="wn-close" id="passShare" type="button" style="margin-top:9px">📤 카드로 공유하기</button>
     <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 태국 빙고 -->
+<div class="wn-scrim" id="bingoScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="bingoTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🎯 BINGO</span>
+      <h2 class="wn-title" id="bingoTitle">태국 빙고</h2>
+    </div>
+    <p class="wn-sub" id="bingoSub"></p>
+    <div class="bingo-body" id="bingoBody">
+      <div class="bingo-grid" id="bingoGrid"></div>
+      <p class="bingo-msg" id="bingoMsg" role="status" aria-live="polite"></p>
+    </div>
+    <button class="wn-close" id="bingoReset" type="button" style="margin-top:12px;background:none;color:var(--ink2);border:1px solid var(--line);box-shadow:none">↺ 처음부터 다시</button>
+    <button class="wn-close" id="bingoClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 
@@ -1924,7 +1961,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.68';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.69';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3572,15 +3609,14 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🎯','태국 빙고 — 가족이 함께 채우는 5×5','뚝뚝 타기·망고 찰밥·일몰 사진·골프 버디… 여행 중 해볼 만한 24칸을 해본 대로 눌러 표시해요. 가로·세로·대각선 한 줄이 맞으면 빙고! 여권 도장첩 아래 "태국 빙고" 버튼에서 열려요. 12줄을 다 채우면 보너스 도장이 찍혀요'],
     ['🔒','정산완료 표시는 윤우열만','정산탭의 "정산완료" 표시와 할일탭 "정산 회수" 체크는 이제 수금 담당인 윤우열만 할 수 있어요. 다른 분들은 상태만 볼 수 있고, 정산 요청 메시지 복사는 그대로 쓸 수 있어요'],
     ['🛂','여권 도장첩 — 여행 도장 모으기','"오늘의 태국" 도장이 여권 페이지로 모여요. 여행이 시작되면 도착·골프 라운드·성탄·방콕 입성·신정·귀국 도장이 그날 저절로 찍혀요. 카드를 탭해서 열어보세요'],
     ['🌌','태국 하늘 라이브','히어로 배경이 방콕 현지 시각에 맞춰 새벽·낮·노을·별밤로 바뀌고, 해와 달이 하늘을 가로질러 움직여요 (12월 일출·일몰 기준 근사값)'],
     ['📤','가족 단톡 공유 카드','여권 도장첩에서 "오늘의 카드"(출발 전) 또는 "여권 카드"(여행 중)를 이미지로 만들어 카톡 등으로 바로 공유하거나 저장할 수 있어요'],
     ['🌴','오늘의 태국 — 하루에 한 장씩','출발 전까지 매일 자정에 바뀌는 카드가 히어로에 떠요. 태국어 한마디·음식·여행 팁이 돌아가며 나오고, 탭하면 오늘의 미션과 함께 도장이 찍혀요. 며칠 연속으로 모았는지도 알려줘요'],
     ['🎄','크리스마스·신정 축하 연출 추가','12/24-25 크리스마스, 12/31-1/1 신정에 접속하면 히어로 장식(트윙클라이트·불꽃)과 함께 축하 토스트가 떠요'],
-    ['🧠','O/X퀴즈 7문항 보강','태국 골프 퀴즈 24문항, 태국 문화 퀴즈 36문항으로 늘었어요 — 좌측통행·전압·화장실 문화 등 실전 팁 위주로 추가했어요'],
     ['🎒','출발 준비 카드 + D-day 리마인더','히어로에 "출발 준비" 카드가 새로 생겨서 지금 챙길 준비물(여행자보험·eSIM·환전·짐싸기 등)을 자동으로 알려줘요. 출발 전까지만 보이고, 출발 후엔 저절로 사라져요. D-30·D-14·D-7·D-3 카운트다운 알림에도 구체적인 준비물 힌트를 넣었어요'],
-    ['📔','여행 다이어리 (귀국일 요약)','1/2 귀국일에 접속하면 송별 인사에 이어 "며칠·골프 몇 라운드·정산 얼마" 같은 실제 여행 기록을 한 장으로 요약해서 보여줘요. 공유용 텍스트 복사도 가능해요'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose'), listEl=$('wnList');
   $('wnVer').textContent=APP_VER;
@@ -3734,6 +3770,11 @@ const FOODS = [
           return `<div class="pstamp mini jade" style="--rot:${[-4,3,-2,5][i%4]}deg"><i class="ps-e">${dd.e}</i><span class="ps-d">${d.getMonth()+1}/${d.getDate()}</span></div>`;
         }).join('') + '</div>';
     }
+    const bi = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0,checked:0};
+    html += `<h3 class="ps-h">보너스 도장 <b>${(bi.lines>=1?1:0)+(bi.lines>=12?1:0)}/2</b></h3><div class="ps-grid">` +
+      stampHTML({tone:'gold', e:'🎯', t:'빙고 한 줄', dl:`${bi.lines}줄`}, k++, false, bi.lines >= 1) +
+      stampHTML({tone:'coral', e:'🏆', t:'빙고 마스터', dl:'12줄'}, k++, false, bi.lines >= 12) + '</div>';
+    if($('passBingo')) $('passBingo').textContent = `🎯 태국 빙고 · ${bi.checked}/24칸 · ${bi.lines}줄`;
     body.innerHTML = html;
     const next = TRIP_STAMPS.find(x => new Date() < x.at);
     $('passSub').textContent = preTrip
@@ -3761,12 +3802,15 @@ const FOODS = [
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
     addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const focusables = [body, shareBtn, closeBtn];
+    const bingoBtn = $('passBingo'), focusables = [body, bingoBtn, shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
       e.preventDefault();
       const cur = focusables.indexOf(document.activeElement), n = focusables.length;
       focusables[e.shiftKey ? (cur <= 0 ? n-1 : cur-1) : (cur < 0 || cur === n-1 ? 0 : cur+1)].focus();
+    });
+    bingoBtn.addEventListener('click', () => {
+      closePass(); setTimeout(() => { if(typeof window.__openBingo === 'function') window.__openBingo(); }, 360);
     });
     shareBtn.addEventListener('click', async () => {
       const o = shareBtn.textContent; shareBtn.textContent = '⏳ 카드 만드는 중…';
@@ -3882,6 +3926,80 @@ const FOODS = [
     const fresh = got.filter(x => !seen.includes(x.id));
     if(fresh.length) setTimeout(() => { if(scrim && !scrim.hidden) return; if(typeof window.__toast === 'function') window.__toast('🛂 새 도장', `${fresh[fresh.length-1].e} ${fresh[fresh.length-1].t}${fresh.length>1?` 외 ${fresh.length-1}개`:''} 도장이 찍혔어요`); }, 2200);
   }
+})();
+
+// ── 태국 빙고: 여행 중 해볼 만한 미션 24칸 — 가족 모두 같은 판, 줄이 맞으면 빙고 ──
+(function(){
+  const scrim = $('bingoScrim'); if(!scrim) return;
+  const M = [
+    ['🛺','뚝뚝 타보기'],['🥭','망고 찰밥 먹기'],['🍜','팟타이 먹기'],['🥥','코코넛 마시기'],['🌅','일몰 사진 찍기'],
+    ['💆','태국 마사지'],['🏪','세븐일레븐 털기'],['🙏','컵쿤캅 인사하기'],['🌶️','마이 펫 말해보기'],['🧋','차옌 마시기'],
+    ['🐦','골프 버디 성공'],['🚗','그랩·볼트 타기'],null,['🦀','뿌팟퐁커리 먹기'],['🏊','수영장 물놀이'],
+    ['🏮','야시장 구경'],['🎄','성탄 저녁 함께'],['📸','3가족 단체사진'],['🥞','로띠 먹기'],['🍲','똠얌꿍 먹기'],
+    ['🍺','라운드 후 한 잔'],['🐘','코끼리 굿즈 사기'],['🎆','새해 맞이하기'],['🛍️','흥정 성공하기'],['⛳','18홀 완주 인증샷'],
+  ];
+  const FREE = 12, LSB = 'thai2026_bingo';
+  const LINES = [];
+  for(let r=0;r<5;r++){ LINES.push([0,1,2,3,4].map(c=>r*5+c)); LINES.push([0,1,2,3,4].map(c=>c*5+r)); }
+  LINES.push([0,6,12,18,24], [4,8,12,16,20]);
+  let on = new Set((()=>{ try{ const a = JSON.parse(localStorage.getItem(LSB)); return Array.isArray(a) ? a : []; }catch(e){ return []; } })());
+  on.add(FREE);
+  const save = () => { try{ localStorage.setItem(LSB, JSON.stringify([...on])); }catch(e){} };
+  const doneLines = () => LINES.filter(l => l.every(i => on.has(i)));
+  window.__bingoInfo = () => ({ lines: doneLines().length, checked: on.size - 1, total: 24 });
+
+  const grid = $('bingoGrid'), msg = $('bingoMsg'), sub = $('bingoSub'), resetBtn = $('bingoReset'), closeBtn = $('bingoClose');
+  let prevFocus = null, armed = 0;
+  function paint(popIdx){
+    const dl = doneLines(), inLine = new Set(dl.flat());
+    grid.innerHTML = M.map((m,i) => m
+      ? `<button class="bcell${inLine.has(i)?' line':''}${i===popIdx?' pop':''}" type="button" data-i="${i}" aria-pressed="${on.has(i)}"><span class="b-e" aria-hidden="true">${m[0]}</span><span class="b-t">${m[1]}</span></button>`
+      : `<button class="bcell free${inLine.has(i)?' line':''}" type="button" tabindex="-1" aria-pressed="true" aria-label="가운데 칸: 태국에 왔다! (기본 완료)"><span class="b-e" aria-hidden="true">🇹🇭</span><span class="b-t">태국에 왔다!</span></button>`
+    ).join('');
+    sub.textContent = `${on.size - 1}/24칸 · ${dl.length}줄 완성 — 해본 걸 눌러 표시하세요`;
+    if(popIdx != null){ const b = grid.querySelector(`[data-i="${popIdx}"]`); if(b) b.focus({preventScroll:true}); }
+  }
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('.bcell[data-i]'); if(!b) return;
+    const i = +b.dataset.i, before = doneLines().length;
+    if(on.has(i)) on.delete(i); else on.add(i);
+    save();
+    const after = doneLines().length;
+    paint(i);
+    if(on.has(i)) haptic('ok'); else haptic('tap');
+    if(after === 12) msg.textContent = '🏆 태국 빙고 마스터! 12줄을 전부 채웠어요';
+    else if(after > before) { msg.textContent = `🎯 빙고! ${after}줄 완성`; haptic('ok'); }
+    else msg.textContent = '';
+  });
+
+  function open(){
+    prevFocus = document.activeElement; armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; msg.textContent = '';
+    paint();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openBingo = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  resetBtn.addEventListener('click', () => {
+    if(!armed){ armed = 1; resetBtn.textContent = '한 번 더 누르면 초기화돼요'; setTimeout(()=>{ armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; }, 2600); return; }
+    on = new Set([FREE]); save(); armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; msg.textContent = ''; paint(); haptic('strong');
+  });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.bcell[data-i], #bingoReset, #bingoClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
 })();
 
 // ── 태국 하늘 라이브: 방콕 현지 시각에 맞춰 히어로 하늘(새벽·낮·노을·별밤)과 해/달 위치가 변함 ──
