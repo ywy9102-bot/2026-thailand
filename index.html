@@ -1293,6 +1293,29 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 @keyframes pstampSlam{0%{opacity:0;transform:rotate(var(--rot,0deg)) scale(1.9)}100%{opacity:1;transform:rotate(var(--rot,0deg)) scale(1)}}
 .daily-card.passport-mode .nc-t{white-space:nowrap}
 
+/* ── 우리 여행 퀴즈 ── */
+.pass-row{display:flex;gap:9px;margin-top:12px}
+.pass-row .wn-close{margin-top:0;flex:1;min-width:0}
+.tq-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.tq-q{font-family:'Fraunces',serif;font-size:1.063rem;font-weight:600;color:var(--jade-d);line-height:1.45;margin:4px 2px 14px;word-break:keep-all}
+.tq-opts{display:grid;gap:8px}
+.tq-opt{appearance:none;min-height:48px;text-align:left;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);
+  color:var(--ink);font-family:inherit;font-size:.875rem;font-weight:600;line-height:1.35;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tq-opt:disabled{cursor:default}
+.tq-opt.ok{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
+.tq-opt.no{background:var(--coral-s);border-color:var(--coral);color:var(--coral)}
+.tq-fb{margin:12px 2px 0;font-size:.813rem;line-height:1.6;color:var(--ink2)}
+.tq-fb b{color:var(--ink)}
+.tq-res{text-align:center;padding:10px 0 4px}
+.tq-score{font-family:'Fraunces',serif;font-size:64px;font-weight:700;line-height:1;color:var(--jade)}
+.tq-score small{font-size:24px;color:var(--ink3)}
+.tq-msg{margin:10px 0 4px;font-size:.938rem;font-weight:700;color:var(--ink)}
+.tq-rec{margin:0 0 14px;font-size:.813rem;color:var(--ink2)}
+@media (prefers-reduced-motion:no-preference){
+  .tq-opt{transition:background .15s,border-color .15s,transform .12s}
+  .tq-opt:active:not(:disabled){transform:scale(.98)}
+}
+
 /* ── 태국 빙고 ── */
 .bingo-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .bingo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
@@ -1912,9 +1935,26 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     </div>
     <p class="wn-sub" id="passSub"></p>
     <div class="pass-body" id="passBody" tabindex="0" aria-label="도장 목록"></div>
-    <button class="wn-close" id="passBingo" type="button" style="margin-top:12px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎯 태국 빙고</button>
+    <div class="pass-row">
+      <button class="wn-close" id="passBingo" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎯 태국 빙고</button>
+      <button class="wn-close" id="passQuiz" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🧠 여행 퀴즈</button>
+    </div>
     <button class="wn-close" id="passShare" type="button" style="margin-top:9px">📤 카드로 공유하기</button>
     <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 우리 여행 퀴즈 -->
+<div class="wn-scrim" id="tquizScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="tqTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🧠 QUIZ</span>
+      <h2 class="wn-title" id="tqTitle">우리 여행 퀴즈</h2>
+    </div>
+    <p class="wn-sub" id="tqSub"></p>
+    <div class="tq-body" id="tqBody" aria-live="polite"></div>
+    <button class="wn-close" id="tqNext" type="button" hidden style="margin-top:12px">다음 →</button>
+    <button class="wn-close" id="tqClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 
@@ -1968,7 +2008,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.70';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.71';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3631,13 +3671,13 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
     ['✅','골프 부킹·왕복밴 예약 전부 완료','12/17~12/31 골프 8라운드의 부킹과 티오프 시각이 모두 확정됐고, 라운드마다 가는 왕복밴 8건도 예약·결제(윤우열 선결제)까지 끝났어요. 남은 차량 예약은 골프 외 2건(12/30 가족2 티니디→GCP, 1/2 가족2 공항 샌딩)뿐이에요. 이용 1~2일 전 기사가 배정되어 확정서가 다시 오면 기사님 연락처를 받아두세요'],
+    ['🧠','우리 여행 퀴즈 — 5문제 도전','티오프 시각·밴 출발 시각·라운드 인원·픽업 순서처럼 이번 여행의 실제 일정으로 매번 새로 출제되는 5문제 퀴즈예요. 놀면서 일정도 익히고, 만점이면 여권에 "여행 박사" 보너스 도장이 찍혀요. 여권 도장첩의 "여행 퀴즈" 버튼에서 열어보세요'],
     ['⛳','라운드 데이 라이브 카운트다운','골프가 있는 날 히어로에 실시간 카드가 떠요 — 밴 출발까지 → 티오프까지 → 라운드 중 경과 시간 → 라운드 끝 순서로 초 단위로 바뀌고, 탭하면 오늘 라운드 카드(밴 시각·픽업 순서·바우처)가 바로 열려요. 방콕 현지 시각 기준이에요'],
     ['🎯','태국 빙고 — 가족이 함께 채우는 5×5','뚝뚝 타기·망고 찰밥·일몰 사진·골프 버디… 여행 중 해볼 만한 24칸을 해본 대로 눌러 표시해요. 가로·세로·대각선 한 줄이 맞으면 빙고! 여권 도장첩 아래 "태국 빙고" 버튼에서 열려요. 12줄을 다 채우면 보너스 도장이 찍혀요'],
     ['🔒','정산완료 표시는 윤우열만','정산탭의 "정산완료" 표시와 할일탭 "정산 회수" 체크는 이제 수금 담당인 윤우열만 할 수 있어요. 다른 분들은 상태만 볼 수 있고, 정산 요청 메시지 복사는 그대로 쓸 수 있어요'],
     ['🛂','여권 도장첩 — 여행 도장 모으기','"오늘의 태국" 도장이 여권 페이지로 모여요. 여행이 시작되면 도착·골프 라운드·성탄·방콕 입성·신정·귀국 도장이 그날 저절로 찍혀요. 카드를 탭해서 열어보세요'],
     ['🌌','태국 하늘 라이브','히어로 배경이 방콕 현지 시각에 맞춰 새벽·낮·노을·별밤로 바뀌고, 해와 달이 하늘을 가로질러 움직여요 (12월 일출·일몰 기준 근사값)'],
     ['🌴','오늘의 태국 — 하루에 한 장씩','출발 전까지 매일 자정에 바뀌는 카드가 히어로에 떠요. 태국어 한마디·음식·여행 팁이 돌아가며 나오고, 탭하면 오늘의 미션과 함께 도장이 찍혀요. 며칠 연속으로 모았는지도 알려줘요'],
-    ['🎒','출발 준비 카드 + D-day 리마인더','히어로에 "출발 준비" 카드가 새로 생겨서 지금 챙길 준비물(여행자보험·eSIM·환전·짐싸기 등)을 자동으로 알려줘요. 출발 전까지만 보이고, 출발 후엔 저절로 사라져요. D-30·D-14·D-7·D-3 카운트다운 알림에도 구체적인 준비물 힌트를 넣었어요'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose'), listEl=$('wnList');
   $('wnVer').textContent=APP_VER;
@@ -3792,10 +3832,13 @@ const FOODS = [
         }).join('') + '</div>';
     }
     const bi = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0,checked:0};
-    html += `<h3 class="ps-h">보너스 도장 <b>${(bi.lines>=1?1:0)+(bi.lines>=12?1:0)}/2</b></h3><div class="ps-grid">` +
+    const qi = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,plays:0,n:5};
+    html += `<h3 class="ps-h">보너스 도장 <b>${(bi.lines>=1?1:0)+(bi.lines>=12?1:0)+(qi.best>=qi.n?1:0)}/3</b></h3><div class="ps-grid">` +
       stampHTML({tone:'gold', e:'🎯', t:'빙고 한 줄', dl:`${bi.lines}줄`}, k++, false, bi.lines >= 1) +
-      stampHTML({tone:'coral', e:'🏆', t:'빙고 마스터', dl:'12줄'}, k++, false, bi.lines >= 12) + '</div>';
-    if($('passBingo')) $('passBingo').textContent = `🎯 태국 빙고 · ${bi.checked}/24칸 · ${bi.lines}줄`;
+      stampHTML({tone:'coral', e:'🏆', t:'빙고 마스터', dl:'12줄'}, k++, false, bi.lines >= 12) +
+      stampHTML({tone:'jade', e:'🧠', t:'여행 박사', dl:'퀴즈 만점'}, k++, false, qi.best >= qi.n) + '</div>';
+    if($('passBingo')) $('passBingo').textContent = `🎯 태국 빙고 · ${bi.lines}줄`;
+    if($('passQuiz')) $('passQuiz').textContent = qi.best ? `🧠 여행 퀴즈 · 최고 ${qi.best}/${qi.n}` : '🧠 여행 퀴즈';
     body.innerHTML = html;
     const next = TRIP_STAMPS.find(x => new Date() < x.at);
     $('passSub').textContent = preTrip
@@ -3823,7 +3866,7 @@ const FOODS = [
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
     addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const bingoBtn = $('passBingo'), focusables = [body, bingoBtn, shareBtn, closeBtn];
+    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
       e.preventDefault();
@@ -3832,6 +3875,9 @@ const FOODS = [
     });
     bingoBtn.addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openBingo === 'function') window.__openBingo(); }, 360);
+    });
+    quizBtn.addEventListener('click', () => {
+      closePass(); setTimeout(() => { if(typeof window.__openTquiz === 'function') window.__openTquiz(); }, 360);
     });
     shareBtn.addEventListener('click', async () => {
       const o = shareBtn.textContent; shareBtn.textContent = '⏳ 카드 만드는 중…';
@@ -4065,6 +4111,113 @@ const FOODS = [
     setTimeout(() => { const c = document.querySelector(`.gcard[data-d="${g.d}"]`); if(!c) return;
       c.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth'});
       if(!c.classList.contains('open')) c.querySelector('.gcard-head').click(); }, 420);
+  });
+})();
+
+// ── 우리 여행 퀴즈: 이 여행의 실제 일정 데이터로 매번 새로 출제되는 5문제 ──
+(function(){
+  const scrim = $('tquizScrim'); if(!scrim) return;
+  const LSQ = 'thai2026_tquiz', N = 5;
+  let st; try{ st = JSON.parse(localStorage.getItem(LSQ)) || {}; }catch(e){ st = {}; }
+  st.best = st.best || 0; st.plays = st.plays || 0;
+  const save = () => { try{ localStorage.setItem(LSQ, JSON.stringify(st)); }catch(e){} };
+  window.__tquizInfo = () => ({ best: st.best, plays: st.plays, n: N });
+
+  const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = (Math.random()*(i+1))|0; [a[i],a[j]] = [a[j],a[i]]; } return a; };
+  const rnd = a => a[(Math.random()*a.length)|0];
+  const uniq = a => [...new Set(a)];
+  const tm = s => ((s||'').match(/\d{1,2}:\d{2}/)||[''])[0];
+  const short = c => c.replace(/ (Golf|Country|GC|CC).*$/i,'');
+  const nm = k => PLACES[k].ko.replace(/ \(.*\)/,'');
+
+  // 출제기: {q, a(정답), d(오답 후보), e(해설)} 또는 null
+  const gens = [
+    () => { const g = rnd(GOLF), a = tm(g.tee); return {q:`${g.d} ${short(g.c)} 라운드 티오프 시각은?`, a, d:uniq(GOLF.map(x=>tm(x.tee))).filter(x=>x!==a), e:`${g.d} ${g.c}는 ${g.tee}이에요.`}; },
+    () => { const list = GOLF.filter(x=>x.van&&x.van.time), g = rnd(list), a = g.van.time; return {q:`${g.d} 골프 왕복밴은 몇 시에 출발할까요?`, a, d:uniq(list.map(x=>x.van.time)).filter(x=>x!==a), e:`${g.d} 밴은 ${a}에 출발해요.`}; },
+    () => { const g = rnd(GOLF), a = g.c; return {q:`${g.d}에 라운드하는 골프장은?`, a, d:uniq(GOLF.map(x=>x.c)).filter(x=>x!==a), e:`${g.d}은 ${a}예요.`}; },
+    () => { const g = rnd(GOLF), n = g.p.length; return {q:`${g.d} ${short(g.c)} 라운드에 함께하는 인원은?`, a:`${n}명`, d:[3,4,5,6].filter(x=>x!==n).map(x=>x+'명'), e:`${g.p.join('·')} ${n}명이에요.`}; },
+    () => { const n = GOLF.filter(g=>g.loc==='pat').length, m = GOLF.length - n; return {q:'파타야에서 라운드하는 날은 모두 며칠일까요?', a:`${n}번`, d:[n-2,n-1,n+1,n+2].filter(x=>x>0).map(x=>x+'번'), e:`파타야 ${n}번, 방콕 ${m}번 — 총 ${GOLF.length}라운드예요.`}; },
+    () => { const list = GOLF.filter(g=>GOLFERS.some(n=>!g.p.includes(n))); if(!list.length) return null; const g = rnd(list), a = rnd(GOLFERS.filter(n=>!g.p.includes(n))); if(g.p.length<3) return null;
+            return {q:`${g.d} ${short(g.c)} 라운드에 함께하지 않는 사람은?`, a, d:shuffle(g.p).slice(0,3), e:`${g.d}은 ${g.p.join('·')}이 함께해요.`}; },
+    () => { const g = GOLF.find(x=>x.van&&x.van.riders&&x.van.riders.length===3&&x.van.riders.length<x.p.length); if(!g) return null; const a = g.p.find(n=>!g.van.riders.includes(n));
+            return {q:`${g.d} 골프 밴에 타지 않고 직접 골프장으로 오는 사람은?`, a, d:g.van.riders.slice(), e:`${a}은 밴 없이 직접 와요. 밴은 ${g.van.riders.join('·')} 3명이 타요.`}; },
+    () => { const list = GOLF.filter(g=>g.amt).sort((x,y)=>y.amt-x.amt); if(list.length<4 || list[0].amt===list[1].amt) return null; const lab = g => `${g.d} ${short(g.c)}`;
+            return {q:'골프 라운드 총액이 가장 큰 날은?', a:lab(list[0]), d:list.slice(1).map(lab), e:`${lab(list[0])}이 ${won(list[0].amt)}원으로 가장 커요.`}; },
+    () => { const keys = BKK_GOLF_STAY['12/31']; if(!keys||keys.length<3) return null; const a = nm(keys[0]);
+            return {q:'12/31 방콕 골프 밴이 가장 먼저 픽업하는 호텔은?', a, d:[...keys.slice(1).map(nm), nm('holidayinn')], e:`픽업 순서는 ${keys.map(nm).join(' → ')} 이에요.`}; },
+    () => { const n = Math.ceil((tripDate('depart') - new Date())/864e5); if(n<10) return null; return {q:'오늘 기준 12/16 출발까지 며칠 남았을까요?', a:`D-${n}`, d:[`D-${n+1}`,`D-${n-1}`,`D-${n+7}`,`D-${n-7}`], e:`히어로 카운트다운이 오늘 D-${n}이에요.`}; },
+  ];
+  function build(){
+    const out = [];
+    for(const g of shuffle(gens)){
+      if(out.length >= N) break;
+      let q; try{ q = g(); }catch(e){ q = null; }
+      if(!q) continue;
+      const d = uniq(q.d).filter(x => x !== q.a);
+      if(d.length < 3) continue;
+      out.push({ q:q.q, a:q.a, e:q.e, opts: shuffle([q.a, ...shuffle(d).slice(0,3)]) });
+    }
+    return out;
+  }
+
+  const body = $('tqBody'), sub = $('tqSub'), nextBtn = $('tqNext'), closeBtn = $('tqClose');
+  let qs = [], idx = 0, score = 0, answered = false, prevFocus = null;
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function renderQ(){
+    const q = qs[idx]; answered = false; nextBtn.hidden = true;
+    sub.textContent = `문제 ${idx+1}/${qs.length} · 현재 ${score}점`;
+    body.innerHTML = `<p class="tq-q">${esc(q.q)}</p><div class="tq-opts">` +
+      q.opts.map((o,i) => `<button class="tq-opt" type="button" data-i="${i}">${esc(o)}</button>`).join('') + '</div><p class="tq-fb" id="tqFb"></p>';
+    const first = body.querySelector('.tq-opt'); if(first) first.focus({preventScroll:true});
+  }
+  function renderRes(){
+    st.plays++; if(score > st.best) st.best = score; save();
+    sub.textContent = '결과';
+    nextBtn.hidden = true;
+    const msg = score===qs.length ? '만점! 여행 박사 🏆 — 여권에 보너스 도장이 찍혔어요' : score>=qs.length-1 ? '거의 다 알아요 👏' : score>=3 ? '절반 넘게 알아요 🙂' : '일정 카드를 한 번 더 훑어봐요 🗓️';
+    body.innerHTML = `<div class="tq-res"><div class="tq-score">${score}<small>/${qs.length}</small></div><p class="tq-msg">${msg}</p><p class="tq-rec">최고 기록 ${st.best}/${qs.length} · 도전 ${st.plays}회</p>` +
+      `<button class="wn-close tq-again" type="button">🔁 다시 도전 (새 문제)</button></div>`;
+    haptic(score===qs.length ? 'ok' : 'tap');
+    const again = body.querySelector('.tq-again'); if(again) again.focus({preventScroll:true});
+  }
+  function start(){ qs = build(); idx = 0; score = 0; if(!qs.length) return; renderQ(); }
+
+  body.addEventListener('click', e => {
+    const again = e.target.closest('.tq-again'); if(again){ haptic('tap'); start(); return; }
+    const b = e.target.closest('.tq-opt'); if(!b || answered) return;
+    answered = true;
+    const q = qs[idx], picked = q.opts[+b.dataset.i], right = picked === q.a;
+    if(right) score++;
+    body.querySelectorAll('.tq-opt').forEach(x => { x.disabled = true; const o = q.opts[+x.dataset.i]; if(o === q.a) x.classList.add('ok'); else if(x === b) x.classList.add('no'); });
+    $('tqFb').innerHTML = right ? `<b>정답! ✅</b> ${esc(q.e)}` : `<b>땡! ❌</b> 정답은 “${esc(q.a)}” — ${esc(q.e)}`;
+    sub.textContent = `문제 ${idx+1}/${qs.length} · 현재 ${score}점`;
+    haptic(right ? 'ok' : 'strong');
+    nextBtn.textContent = idx+1 < qs.length ? '다음 →' : '결과 보기'; nextBtn.hidden = false;
+    nextBtn.focus({preventScroll:true});
+  });
+  nextBtn.addEventListener('click', () => { haptic('tap'); idx++; if(idx < qs.length) renderQ(); else renderRes(); });
+
+  function open(){
+    prevFocus = document.activeElement; start();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openTquiz = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .tq-again, #tqNext:not([hidden]), #tqClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
 })();
 
