@@ -2017,6 +2017,7 @@ const GOLF=[
   char:'1993년 개장한 27홀 클래식(마운틴·오션·레이크), Dennis Griffiths 설계. 망고·유칼립투스가 늘어선 파크랜드 구릉. 오션 코스 마지막 홀 티에서 파타야 시내·태국만 전망. 최근 리뷰는 페어웨이가 다소 무르고 그린이 느린 편.',
   van:{book:'200781406',amt:90951,per:30317,time:'06:30',riders:['윤우열','정유경','정유현'],label:'왕복밴 확정 (3인 탑승)',
        route:'06:30 빌라 통부라 로비 출발 → 피닉스 골드 도착 · 08:24 티오프 → 라운드 후 빌라 통부라 복귀 · 윤성욱은 직접 골프장으로 이동 (밴 미탑승)',
+       note:'📄 예약확정서 확인 — 유류·톨비 포함 · 팁·주차·추가시간 불포함. 골프장 도착 후 6시간까지 대기(초과 시 시간당 200바트). 라운딩 전 기사님 번호를 받아 캐디에게 전달, 가방은 직접 싣기, 팁은 200~300바트 권장',
        pay:'완료 · 윤우열 선결제'}},
  {d:'12/29',w:'화',loc:'bkk',c:'Nikanti Golf Club',p:['윤우열','이준영','윤성욱','정유현'],tee:'08:30 확정',amt:1023096,per:255774,st:'ok',
   book:'200698940',bid:'eec215',pid:'nikanti',
@@ -2101,6 +2102,7 @@ function vanBoxHTML(van){
   return `<div class="van-box">
     <div class="van-box-h"><span>🚐 ${van.label||'왕복밴 확정'} <span class="mono">#${van.book}</span></span><span class="van-per">인당 ${won(van.per)}원</span></div>
     <p class="van-route">${van.route}</p>
+    ${van.note?`<p class="van-route">${van.note}</p>`:''}
     <div class="van-pay">💳 결제 ${van.pay}</div>
   </div>`;
 }
@@ -2373,6 +2375,7 @@ const TODO=[
  {g:'🔍 확인사항',items:[
   '12/18 통부라 엑스트라베드 현지 최종 확인',
   '12/21 정유현·장모님·김윤후 개별일정 확정 (쿠킹클래스 등)',
+  '12/24 왕복밴 기사 배정 확인 — 이용 1~2일 전 확정서 재발송, 기사님 연락처 받아두기',
   '12/30 가족2 체크아웃 동선, 12/31 2대 배차 시간 조율',
  ]},
  {g:'💸 정산 회수',items:OWE.map(o=>`${o.n} → 윤우열 ${o.t.toLocaleString()}원`)},
