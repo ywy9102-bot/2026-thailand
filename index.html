@@ -230,6 +230,8 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .round-live{min-height:44px}
 .round-live .nc-t{font-variant-numeric:tabular-nums}
 .daily-card{flex-wrap:wrap;min-height:44px}
+.play-card{min-height:44px;border-color:rgba(181,138,40,.5);background:rgba(181,138,40,.12)}
+.play-card .nc-arrow{color:var(--gold-s)}
 .daily-card .dc-more{flex:1 1 100%;font-size:12px;line-height:1.55;color:#DCE8E2;padding-top:8px;border-top:1px dashed rgba(255,255,255,.2)}
 .daily-card .dc-more b{color:var(--gold-s);font-weight:700}
 .daily-card.open .nc-t{white-space:normal}
@@ -1515,6 +1517,11 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <span class="nc-arrow" id="dcArrow">열어보기 →</span>
       <span class="dc-more" id="dcMore" hidden></span>
     </button>
+    <button class="next-card play-card" id="playCard" type="button" aria-label="놀이터 열기: 여권 도장첩, 빙고, 퀴즈, 룰렛, 칭호, 나침반">
+      <span class="nc-tag">🎮 놀이터</span>
+      <span class="nc-body"><span class="nc-e" aria-hidden="true">🛂</span><span class="nc-t">여권·빙고·퀴즈·룰렛·칭호·나침반</span></span>
+      <span class="nc-arrow">열기 →</span>
+    </button>
     <div class="stats">
       <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">10명 함께</div></div>
       <div class="stat"><div class="n"><span id="stN2" data-to="8">0</span><small>/8</small></div><div class="l">⛳ 골프 확정</div></div>
@@ -2139,7 +2146,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.74';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.75';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3801,6 +3808,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🎮','첫 화면에 "놀이터" 버튼이 생겼어요','여권 도장첩·태국 빙고·여행 퀴즈·운명의 룰렛·여행 칭호·태국 나침반이 한곳에 모여 있어요. 첫 화면 "오늘의 태국" 카드 바로 아래의 금색 "놀이터" 버튼을 누르면 열려요. 이전에는 찾기 어려웠던 여권 도장첩을 바로 열 수 있어요'],
     ['✅','골프 부킹·왕복밴 예약 전부 완료','12/17~12/31 골프 8라운드의 부킹과 티오프 시각이 모두 확정됐고, 라운드마다 가는 왕복밴 8건도 예약·결제(윤우열 선결제)까지 끝났어요. 남은 차량 예약은 골프 외 2건(12/30 가족2 티니디→GCP, 1/2 가족2 공항 샌딩)뿐이에요. 이용 1~2일 전 기사가 배정되어 확정서가 다시 오면 기사님 연락처를 받아두세요'],
     ['🧭','태국 나침반 — 폰을 돌려 태국을 찾아요','폰의 방향 센서와 위치로 "태국은 저쪽!"을 실제로 가리켜요. 나침반을 켜고 폰을 수평으로 들어 천천히 돌리면, 파타야(또는 방콕·집)가 있는 방향에서 진동과 함께 금색으로 바뀌고 남은 거리·비행 시간도 알려줘요. "내 위치로"를 누르면 지금 서 있는 곳 기준으로 계산하고, 위치는 기기 안에서만 쓰고 어디에도 저장·전송하지 않아요. 센서가 없는 PC에서는 북쪽이 위인 지도 기준으로 보여요. 여권 도장첩의 "태국 나침반" 버튼에서 열어보세요'],
     ['🏷️','나의 여행 칭호 — 이름을 누르면 칭호가 붙어요','골프 라운드 수·코스 종류·같은 조 인원 같은 이번 여행의 실제 일정으로 사람마다 칭호가 계산돼요. 예: 8라운드 전부 출전하면 "개근 라운더", 라운드마다 다른 코스면 "코스 탐험가". 칭호는 복사해서 가족 단톡에 올릴 수 있어요. 여권 도장첩의 "여행 칭호" 버튼에서 열어보세요'],
@@ -4013,6 +4021,8 @@ const FOODS = [
     quizBtn.addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openTquiz === 'function') window.__openTquiz(); }, 360);
     });
+    const playCard = $('playCard');
+    if(playCard) playCard.addEventListener('click', () => { haptic('tap'); openPass(); });
     $('passCompass').addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openCompass === 'function') window.__openCompass(); }, 360);
     });
