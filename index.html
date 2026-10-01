@@ -1316,6 +1316,37 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tq-opt:active:not(:disabled){transform:scale(.98)}
 }
 
+/* ── 운명의 룰렛 ── */
+.wh-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.wh-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.wh-tab{appearance:none;min-height:44px;padding:6px 4px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink2);
+  font-family:inherit;font-size:.75rem;font-weight:700;line-height:1.25;cursor:pointer;word-break:keep-all}
+.wh-tab[aria-selected="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.wh-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.wh-chip{appearance:none;min-height:36px;padding:4px 11px;border:1.5px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);
+  font-family:inherit;font-size:.8125rem;font-weight:600;cursor:pointer}
+.wh-chip[aria-pressed="false"]{background:transparent;color:var(--ink3);text-decoration:line-through}
+.wh-chip[aria-pressed="true"]{border-color:var(--jade);background:var(--jade-s);color:var(--jade-d)}
+.wh-stage{display:flex;justify-content:center}
+.wh-wheelwrap{position:relative;width:min(300px,78vw);aspect-ratio:1/1;margin:6px 0 4px}
+.wh-wheel{width:100%;height:100%;display:block;filter:drop-shadow(0 8px 14px rgba(14,40,34,.22))}
+.wh-wheel .wh-rot{transform-origin:0 0}
+.wh-pin{position:absolute;left:50%;top:-6px;width:0;height:0;transform:translateX(-50%);z-index:2;
+  border-left:11px solid transparent;border-right:11px solid transparent;border-top:20px solid var(--coral);filter:drop-shadow(0 2px 2px rgba(14,40,34,.3))}
+.wh-teams{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin:6px 0 4px}
+.wh-team{border:1.5px solid var(--line);border-radius:14px;background:var(--card);padding:12px 12px 10px}
+.wh-team h3{margin:0 0 8px;font-family:'Fraunces',serif;font-size:.938rem;font-weight:600;color:var(--jade-d);word-break:keep-all}
+.wh-team ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.wh-team li{font-size:.875rem;font-weight:600;color:var(--ink)}
+.wh-res{min-height:2.6em;margin:8px 2px 0;text-align:center;font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700;color:var(--jade);word-break:keep-all}
+.wh-res small{display:block;font-family:inherit;font-size:.75rem;font-weight:500;color:var(--ink2);margin-top:2px}
+.wh-log{margin:6px 2px 0;text-align:center;font-size:.75rem;line-height:1.6;color:var(--ink3)}
+@media (prefers-reduced-motion:no-preference){
+  .wh-tab,.wh-chip{transition:background .15s,border-color .15s,color .15s}
+  .wh-res.pop{animation:whpop .5s cubic-bezier(.16,1,.3,1)}
+  @keyframes whpop{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+}
+
 /* ── 태국 빙고 ── */
 .bingo-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .bingo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
@@ -1939,6 +1970,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <button class="wn-close" id="passBingo" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎯 태국 빙고</button>
       <button class="wn-close" id="passQuiz" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🧠 여행 퀴즈</button>
     </div>
+    <button class="wn-close" id="passWheel" type="button" style="margin-top:9px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎡 운명의 룰렛 · 쏠 사람·메뉴·조 편성</button>
     <button class="wn-close" id="passShare" type="button" style="margin-top:9px">📤 카드로 공유하기</button>
     <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
@@ -1955,6 +1987,29 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <div class="tq-body" id="tqBody" aria-live="polite"></div>
     <button class="wn-close" id="tqNext" type="button" hidden style="margin-top:12px">다음 →</button>
     <button class="wn-close" id="tqClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 운명의 룰렛 -->
+<div class="wn-scrim" id="wheelScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="whTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🎡 ROULETTE</span>
+      <h2 class="wn-title" id="whTitle">운명의 룰렛</h2>
+    </div>
+    <div class="wh-body" id="whBody">
+      <div class="wh-tabs" role="tablist" aria-label="룰렛 종류" id="whTabs"></div>
+      <p class="wn-sub" id="whHint"></p>
+      <div class="wh-chips" id="whChips" aria-label="참가자 선택"></div>
+      <div class="wh-stage" id="whStage">
+        <div class="wh-wheelwrap" id="whWrap"><div class="wh-pin" aria-hidden="true"></div><svg class="wh-wheel" id="whWheel" viewBox="-100 -100 200 200" aria-hidden="true"></svg></div>
+        <div class="wh-teams" id="whTeams" hidden></div>
+      </div>
+      <p class="wh-res" id="whRes" aria-live="polite" role="status"></p>
+      <p class="wh-log" id="whLog"></p>
+    </div>
+    <button class="wn-close" id="whSpin" type="button" style="margin-top:12px">🎡 돌려요!</button>
+    <button class="wn-close" id="whClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 
@@ -2008,7 +2063,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.71';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.72';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3671,6 +3726,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
     ['✅','골프 부킹·왕복밴 예약 전부 완료','12/17~12/31 골프 8라운드의 부킹과 티오프 시각이 모두 확정됐고, 라운드마다 가는 왕복밴 8건도 예약·결제(윤우열 선결제)까지 끝났어요. 남은 차량 예약은 골프 외 2건(12/30 가족2 티니디→GCP, 1/2 가족2 공항 샌딩)뿐이에요. 이용 1~2일 전 기사가 배정되어 확정서가 다시 오면 기사님 연락처를 받아두세요'],
+    ['🎡','운명의 룰렛 — 누가 쏘지? 뭐 먹지?','돌림판 하나로 "오늘 커피 쏠 사람", "저녁 메뉴", "내기·벌칙"을 정하고, "조 편성"으로 골프 멤버를 두 팀으로 랜덤하게 나눠요. 빠질 사람은 이름을 눌러 제외할 수 있고, 최근 결과도 기록돼요. 여권 도장첩의 "운명의 룰렛" 버튼에서 열어보세요'],
     ['🧠','우리 여행 퀴즈 — 5문제 도전','티오프 시각·밴 출발 시각·라운드 인원·픽업 순서처럼 이번 여행의 실제 일정으로 매번 새로 출제되는 5문제 퀴즈예요. 놀면서 일정도 익히고, 만점이면 여권에 "여행 박사" 보너스 도장이 찍혀요. 여권 도장첩의 "여행 퀴즈" 버튼에서 열어보세요'],
     ['⛳','라운드 데이 라이브 카운트다운','골프가 있는 날 히어로에 실시간 카드가 떠요 — 밴 출발까지 → 티오프까지 → 라운드 중 경과 시간 → 라운드 끝 순서로 초 단위로 바뀌고, 탭하면 오늘 라운드 카드(밴 시각·픽업 순서·바우처)가 바로 열려요. 방콕 현지 시각 기준이에요'],
     ['🎯','태국 빙고 — 가족이 함께 채우는 5×5','뚝뚝 타기·망고 찰밥·일몰 사진·골프 버디… 여행 중 해볼 만한 24칸을 해본 대로 눌러 표시해요. 가로·세로·대각선 한 줄이 맞으면 빙고! 여권 도장첩 아래 "태국 빙고" 버튼에서 열려요. 12줄을 다 채우면 보너스 도장이 찍혀요'],
@@ -3866,7 +3922,7 @@ const FOODS = [
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
     addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, shareBtn, closeBtn];
+    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
       e.preventDefault();
@@ -3878,6 +3934,9 @@ const FOODS = [
     });
     quizBtn.addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openTquiz === 'function') window.__openTquiz(); }, 360);
+    });
+    $('passWheel').addEventListener('click', () => {
+      closePass(); setTimeout(() => { if(typeof window.__openWheel === 'function') window.__openWheel(); }, 360);
     });
     shareBtn.addEventListener('click', async () => {
       const o = shareBtn.textContent; shareBtn.textContent = '⏳ 카드 만드는 중…';
@@ -4216,6 +4275,142 @@ const FOODS = [
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .tq-again, #tqNext:not([hidden]), #tqClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 운명의 룰렛: 쏠 사람 · 저녁 메뉴 · 내기/벌칙 · 조 편성 (가족 단톡에서 "누가 쏘지?"를 3초에 정리) ──
+(function(){
+  const scrim = $('wheelScrim'); if(!scrim) return;
+  const LSW = 'thai2026_wheel';
+  const ALL = ['윤우열','정유경','정유현','장모님','김윤후','이준영','박지해','이동현','김태기','윤성욱'];
+  const BETS = ['커피 쏘기','건배사 하기','셀카 올리기','먼저 티샷','모닝콜 담당','과일 쏘기','칭찬 3가지','발마사지'];
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const rnd = a => a[(Math.random()*a.length)|0];
+  const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = (Math.random()*(i+1))|0; [a[i],a[j]] = [a[j],a[i]]; } return a; };
+  const MODES = [
+    { id:'pay',  tab:'☕ 쏠 사람',  hint:'오늘 커피·간식을 쏠 사람은? 빠질 사람은 이름을 눌러 제외하세요.', pool:ALL, chips:true, suffix:'오늘은 쏘는 날! ☕' },
+    { id:'menu', tab:'🍜 저녁 메뉴', hint:'뭐 먹을지 고민될 때 — 태국 음식 8개 중에서 골라요.', pool:null, chips:false, suffix:'오늘 저녁은 이걸로! 🍜' },
+    { id:'bet',  tab:'🎲 내기·벌칙', hint:'라운드 내기나 소소한 벌칙을 룰렛에 맡겨요.', pool:BETS, chips:false, suffix:'내기 당첨! 🎲' },
+    { id:'team', tab:'👥 조 편성',   hint:'골프 멤버를 두 팀으로 랜덤하게 나눠요. 빠지는 사람은 이름을 눌러 제외하세요.', pool:GOLFERS, chips:true }
+  ];
+  const COLORS = ['#1E4B41','#B58A28','#A94A2C','#2C6B4C','#7A5A17','#3D544D'];
+  let hist; try{ hist = JSON.parse(localStorage.getItem(LSW)); }catch(e){} if(!Array.isArray(hist)) hist = [];
+  let mode = MODES[0], off = {}, items = [], rot = 0, spinning = false, prevFocus = null;
+  const tabsEl = $('whTabs'), chipsEl = $('whChips'), wheel = $('whWheel'), wrap = $('whWrap'), teamsEl = $('whTeams'),
+        resEl = $('whRes'), logEl = $('whLog'), spinBtn = $('whSpin'), closeBtn = $('whClose'), hintEl = $('whHint');
+  const reduce = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function poolOf(m){
+    if(m.id === 'menu'){ if(!m._menu) m._menu = shuffle(FOODS.map(f => f[0])).slice(0,8); return m._menu; }
+    return m.chips ? m.pool.filter(n => !off[n]) : m.pool;
+  }
+  function drawWheel(){
+    items = poolOf(mode); const n = items.length, a = 360/n, R = 96;
+    const pt = (deg, r) => { const t = (deg-90)*Math.PI/180; return [(r*Math.cos(t)).toFixed(2), (r*Math.sin(t)).toFixed(2)]; };
+    let g = '';
+    for(let i=0;i<n;i++){
+      const [x1,y1] = pt(i*a,R), [x2,y2] = pt((i+1)*a,R), mid = i*a + a/2, lab = items[i].length > 7 ? items[i].slice(0,6)+'…' : items[i];
+      const path = n === 1 ? `<circle r="${R}" fill="${COLORS[0]}"/>` : `<path d="M0 0 L${x1} ${y1} A${R} ${R} 0 ${a>180?1:0} 1 ${x2} ${y2} Z" fill="${COLORS[i%COLORS.length]}" stroke="#F6F2E8" stroke-width="1.2"/>`;
+      g += path + `<text transform="rotate(${mid-90}) translate(${R*0.9} 0)" text-anchor="end" dominant-baseline="central" font-size="${n>8?8.5:10}" font-weight="700" fill="#F4EEDD" font-family="Inter,system-ui,sans-serif">${esc(lab)}</text>`;
+    }
+    g += `<circle r="9" fill="#F6F2E8" stroke="#B58A28" stroke-width="2"/>`;
+    wheel.innerHTML = `<g class="wh-rot" id="whRot" style="transform:rotate(${rot}deg)">${g}</g>`;
+  }
+  function renderChips(){
+    chipsEl.hidden = !mode.chips;
+    chipsEl.innerHTML = mode.chips ? mode.pool.map(n => `<button class="wh-chip" type="button" data-n="${esc(n)}" aria-pressed="${!off[n]}">${esc(n)}</button>`).join('') : '';
+  }
+  function renderLog(){
+    logEl.textContent = hist.length ? '최근 결과 · ' + hist.slice(0,5).map(h => h.t).join(' · ') : '';
+  }
+  function setMode(m){
+    if(spinning) return;
+    mode = m; resEl.textContent = ''; resEl.classList.remove('pop');
+    tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === m.id)));
+    hintEl.textContent = m.hint;
+    const isTeam = m.id === 'team';
+    wrap.hidden = isTeam; teamsEl.hidden = !isTeam;
+    spinBtn.textContent = isTeam ? '👥 섞어요!' : m.id === 'menu' ? '🍜 돌려요!' : '🎡 돌려요!';
+    renderChips();
+    if(isTeam) teamsEl.innerHTML = ''; else drawWheel();
+    updateSpin();
+  }
+  function updateSpin(){
+    const need = mode.id === 'team' ? 2 : 2, n = poolOf(mode).length;
+    spinBtn.disabled = n < need; spinBtn.setAttribute('aria-disabled', String(n < need));
+    if(n < need) resEl.innerHTML = '<small>2명 이상 선택해 주세요</small>';
+  }
+  function record(t){ hist.unshift({t}); hist = hist.slice(0,20); try{ localStorage.setItem(LSW, JSON.stringify(hist)); }catch(e){} renderLog(); }
+  function celebrate(msg){
+    if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🎡 룰렛', msg, ms:2600, at:resEl, dy:0, n:14, spread:90, petals:true });
+  }
+  function showWin(label){
+    resEl.classList.remove('pop'); void resEl.offsetWidth; resEl.classList.add('pop');
+    resEl.innerHTML = esc(label) + `<small>${esc(mode.suffix.trim())}</small>`;
+    record(label); haptic('ok'); celebrate(label + ' · ' + mode.suffix);
+  }
+  function spin(){
+    if(spinning || spinBtn.disabled) return;
+    if(mode.id === 'team'){ return doTeams(); }
+    const n = items.length, a = 360/n, win = (Math.random()*n)|0;
+    // 포인터(위쪽, 0°)가 win 칸의 중앙(±칸 폭 30%)에 오도록 최종 각도 계산
+    const jitter = (Math.random()-.5)*a*.6;
+    const target = 360*5 + (360 - (win*a + a/2) + jitter);
+    const base = rot - (rot % 360);
+    const next = base + target;
+    spinning = true; spinBtn.disabled = true; resEl.textContent = ''; haptic('tap');
+    const g = $('whRot'), done = () => { spinning = false; rot = next; spinBtn.disabled = false; spinBtn.setAttribute('aria-disabled','false'); showWin(items[win]); };
+    if(reduce()){ g.style.transform = `rotate(${next}deg)`; done(); return; }
+    g.style.transition = 'transform 4.2s cubic-bezier(.12,.72,.14,1)';
+    void g.getBoundingClientRect();
+    g.style.transform = `rotate(${next}deg)`;
+    let fin = false; const end = () => { if(fin) return; fin = true; g.style.transition = ''; done(); };
+    g.addEventListener('transitionend', end, {once:true}); setTimeout(end, 4600);
+  }
+  function doTeams(){
+    const ppl = shuffle(poolOf(mode)), half = Math.ceil(ppl.length/2), A = ppl.slice(0,half), B = ppl.slice(half);
+    const names = shuffle([['🦅 버디 팀','🐘 코끼리 팀'],['🔥 쏘이 팀','🥭 망고 팀'],['🐉 용 팀','🌴 야자 팀']])[0];
+    teamsEl.innerHTML = [[names[0],A],[names[1],B]].map(([t,m]) => `<div class="wh-team"><h3>${esc(t)}</h3><ul>${m.map(x => `<li>${dotSafe(x)}${esc(x)}</li>`).join('')}</ul></div>`).join('');
+    resEl.classList.remove('pop'); void resEl.offsetWidth; resEl.classList.add('pop');
+    resEl.innerHTML = '팀이 정해졌어요!<small>마음에 안 들면 다시 섞어요 😄</small>';
+    record(`${names[0].replace(/^\S+\s/,'')} ${A.length}:${B.length} ${names[1].replace(/^\S+\s/,'')}`); haptic('ok');
+    celebrate('조 편성 완료!');
+  }
+  const dotSafe = n => (typeof dot === 'function' ? dot(n) : '');
+
+  tabsEl.innerHTML = MODES.map(m => `<button class="wh-tab" role="tab" type="button" data-id="${m.id}" aria-selected="false">${m.tab}</button>`).join('');
+  tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(!b) return; haptic('tap'); setMode(MODES.find(m => m.id === b.dataset.id)); });
+  chipsEl.addEventListener('click', e => {
+    const b = e.target.closest('.wh-chip'); if(!b || spinning) return;
+    off[b.dataset.n] = !off[b.dataset.n]; b.setAttribute('aria-pressed', String(!off[b.dataset.n]));
+    haptic('tap'); resEl.textContent = '';
+    if(mode.id === 'team') teamsEl.innerHTML = ''; else drawWheel();
+    updateSpin();
+  });
+  spinBtn.addEventListener('click', spin);
+
+  function open(){
+    prevFocus = document.activeElement; renderLog(); setMode(mode);
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    try{ spinBtn.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openWheel = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.wh-tab, .wh-chip, #whSpin:not(:disabled), #whClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
