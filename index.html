@@ -1316,6 +1316,23 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tq-opt:active:not(:disabled){transform:scale(.98)}
 }
 
+/* ── 여행 칭호 ── */
+.tt-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.tt-card{border:1.5px solid var(--line);border-radius:16px;background:var(--card);padding:18px 16px 16px;text-align:center;min-height:200px;display:flex;flex-direction:column;justify-content:center}
+.tt-empty{color:var(--ink3);font-size:.875rem;line-height:1.6}
+.tt-who{font-size:.813rem;font-weight:700;color:var(--ink2);letter-spacing:.02em}
+.tt-e{font-size:46px;line-height:1.15;margin:6px 0 2px}
+.tt-name{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:var(--jade);line-height:1.25;word-break:keep-all}
+.tt-line{margin:8px 0 12px;font-size:.875rem;line-height:1.6;color:var(--ink);word-break:keep-all}
+.tt-stats{list-style:none;margin:0;padding:12px 0 0;border-top:1px dashed var(--line);display:grid;gap:5px;text-align:left}
+.tt-stats li{font-size:.813rem;color:var(--ink2);line-height:1.45}
+.tt-stats b{color:var(--ink)}
+@media (prefers-reduced-motion:no-preference){
+  .tt-card.pop .tt-e,.tt-card.pop .tt-name{animation:ttpop .55s cubic-bezier(.16,1,.3,1) both}
+  .tt-card.pop .tt-name{animation-delay:.08s}
+  @keyframes ttpop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+}
+
 /* ── 운명의 룰렛 ── */
 .wh-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .wh-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
@@ -1970,7 +1987,10 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <button class="wn-close" id="passBingo" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎯 태국 빙고</button>
       <button class="wn-close" id="passQuiz" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🧠 여행 퀴즈</button>
     </div>
-    <button class="wn-close" id="passWheel" type="button" style="margin-top:9px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎡 운명의 룰렛 · 쏠 사람·메뉴·조 편성</button>
+    <div class="pass-row" style="margin-top:9px">
+      <button class="wn-close" id="passWheel" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎡 운명의 룰렛</button>
+      <button class="wn-close" id="passTitleBtn" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🏷️ 여행 칭호</button>
+    </div>
     <button class="wn-close" id="passShare" type="button" style="margin-top:9px">📤 카드로 공유하기</button>
     <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
@@ -1987,6 +2007,23 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <div class="tq-body" id="tqBody" aria-live="polite"></div>
     <button class="wn-close" id="tqNext" type="button" hidden style="margin-top:12px">다음 →</button>
     <button class="wn-close" id="tqClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 여행 칭호 -->
+<div class="wn-scrim" id="titleScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="ttTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🏷️ TITLE</span>
+      <h2 class="wn-title" id="ttTitle">나의 여행 칭호</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem">이름을 누르면 이번 여행 일정 데이터로 칭호가 붙어요</p>
+    <div class="tt-body" id="ttBody">
+      <div class="wh-chips" id="ttChips" role="group" aria-label="이름 선택"></div>
+      <div class="tt-card" id="ttCard" aria-live="polite"></div>
+    </div>
+    <button class="wn-close" id="ttCopy" type="button" hidden style="margin-top:12px">📋 칭호 복사해서 단톡에 올리기</button>
+    <button class="wn-close" id="ttClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 
@@ -2063,7 +2100,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.72';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.73';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3726,6 +3763,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
     ['✅','골프 부킹·왕복밴 예약 전부 완료','12/17~12/31 골프 8라운드의 부킹과 티오프 시각이 모두 확정됐고, 라운드마다 가는 왕복밴 8건도 예약·결제(윤우열 선결제)까지 끝났어요. 남은 차량 예약은 골프 외 2건(12/30 가족2 티니디→GCP, 1/2 가족2 공항 샌딩)뿐이에요. 이용 1~2일 전 기사가 배정되어 확정서가 다시 오면 기사님 연락처를 받아두세요'],
+    ['🏷️','나의 여행 칭호 — 이름을 누르면 칭호가 붙어요','골프 라운드 수·코스 종류·같은 조 인원 같은 이번 여행의 실제 일정으로 사람마다 칭호가 계산돼요. 예: 8라운드 전부 출전하면 "개근 라운더", 라운드마다 다른 코스면 "코스 탐험가". 칭호는 복사해서 가족 단톡에 올릴 수 있어요. 여권 도장첩의 "여행 칭호" 버튼에서 열어보세요'],
     ['🎡','운명의 룰렛 — 누가 쏘지? 뭐 먹지?','돌림판 하나로 "오늘 커피 쏠 사람", "저녁 메뉴", "내기·벌칙"을 정하고, "조 편성"으로 골프 멤버를 두 팀으로 랜덤하게 나눠요. 빠질 사람은 이름을 눌러 제외할 수 있고, 최근 결과도 기록돼요. 여권 도장첩의 "운명의 룰렛" 버튼에서 열어보세요'],
     ['🧠','우리 여행 퀴즈 — 5문제 도전','티오프 시각·밴 출발 시각·라운드 인원·픽업 순서처럼 이번 여행의 실제 일정으로 매번 새로 출제되는 5문제 퀴즈예요. 놀면서 일정도 익히고, 만점이면 여권에 "여행 박사" 보너스 도장이 찍혀요. 여권 도장첩의 "여행 퀴즈" 버튼에서 열어보세요'],
     ['⛳','라운드 데이 라이브 카운트다운','골프가 있는 날 히어로에 실시간 카드가 떠요 — 밴 출발까지 → 티오프까지 → 라운드 중 경과 시간 → 라운드 끝 순서로 초 단위로 바뀌고, 탭하면 오늘 라운드 카드(밴 시각·픽업 순서·바우처)가 바로 열려요. 방콕 현지 시각 기준이에요'],
@@ -3922,7 +3960,7 @@ const FOODS = [
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
     addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), shareBtn, closeBtn];
+    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), $('passTitleBtn'), shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
       e.preventDefault();
@@ -3934,6 +3972,9 @@ const FOODS = [
     });
     quizBtn.addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openTquiz === 'function') window.__openTquiz(); }, 360);
+    });
+    $('passTitleBtn').addEventListener('click', () => {
+      closePass(); setTimeout(() => { if(typeof window.__openTitles === 'function') window.__openTitles(); }, 360);
     });
     $('passWheel').addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openWheel === 'function') window.__openWheel(); }, 360);
@@ -4275,6 +4316,89 @@ const FOODS = [
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .tq-again, #tqNext:not([hidden]), #tqClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 나의 여행 칭호: 일정 데이터(GOLF·FAMS)로 사람마다 칭호를 계산해서 붙여줌 ──
+(function(){
+  const scrim = $('titleScrim'); if(!scrim) return;
+  const chipsEl = $('ttChips'), card = $('ttCard'), copyBtn = $('ttCopy'), closeBtn = $('ttClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const NONGOLF = {
+    '장모님': ['🏡','가족1의 든든한 중심','가족 모두가 의지하는 든든한 분이에요'],
+    '김윤후': ['🎈','여행 분위기 담당','같이 있는 것만으로 여행이 더 신나요'],
+    '박지해': ['🤝','가족2 든든 서포터','가족2와 함께하는 든든한 동행이에요'],
+    '이동현': ['⚡','가족2 에너자이저','마지막 날까지 분위기를 이끌어요']
+  };
+  const people = FAMS.flatMap(f => f.rows.map(r => ({ n:r.n, p:r.p, g:r.g })));
+  function stats(n){
+    const r = GOLF.filter(x => x.p.includes(n)), co = {};
+    r.forEach(x => x.p.forEach(q => { if(q !== n) co[q] = (co[q]||0)+1; }));
+    const top = Object.entries(co).sort((a,b) => b[1]-a[1])[0];
+    const bkk = r.filter(x => x.loc !== 'pat').length;
+    return { r, n:r.length, courses:new Set(r.map(x => x.c)).size, bkk, pat:r.length-bkk, top, first:r[0] && r[0].d, last:r[r.length-1] && r[r.length-1].d };
+  }
+  function titleOf(n){
+    const m = NONGOLF[n]; if(m) return { e:m[0], t:m[1], line:m[2], rows:null };
+    const s = stats(n), total = GOLF.length;
+    let e, t, line;
+    if(s.n === total){ e='🏅'; t='개근 라운더'; line = `${total}라운드 전부 출전! 이 정도면 골프장 직원이에요`; }
+    else if(s.bkk === s.n){ e='✈️'; t='방콕 원정대'; line = `방콕 라운드 ${s.n}번에 출격! 이번 여행의 원정 대표예요`; }
+    else if(s.courses === s.n && s.n >= 3){ e='🧭'; t='코스 탐험가'; line = `라운드 ${s.n}번이 전부 다른 코스! 같은 코스는 사양이에요`; }
+    else if(!s.bkk){ e='🌴'; t='파타야 전담'; line = `파타야 라운드만 ${s.n}번! ${s.last}까지 알차게 달려요`; }
+    else { e='🚀'; t='뒷심 라운더'; line = `${s.first}부터 합류해서 ${s.last}까지 끝까지 달려요`; }
+    return { e, t, line, rows:s };
+  }
+  function render(n, anim){
+    const o = titleOf(n), who = people.find(x => x.n === n);
+    const rows = o.rows ? [
+      `⛳ 라운드 <b>${o.rows.n}회</b> (파타야 ${o.rows.pat} · 방콕 ${o.rows.bkk})`,
+      `🗺️ 코스 <b>${o.rows.courses}곳</b>`,
+      o.rows.top ? `🤝 단짝 <b>${esc(o.rows.top[0])}</b> (${o.rows.top[1]}번 같은 조)` : '',
+      `📅 첫 라운드 <b>${o.rows.first}</b> → 마지막 <b>${o.rows.last}</b>`
+    ] : [ `🛫 체류 <b>${esc(who ? who.p : '')}</b>` ];
+    card.className = 'tt-card' + (anim ? ' pop' : '');
+    card.innerHTML = `<div class="tt-who">${esc(n)}</div><div class="tt-e" aria-hidden="true">${o.e}</div><div class="tt-name">${esc(o.t)}</div>` +
+      `<p class="tt-line">${esc(o.line)}</p><ul class="tt-stats">${rows.filter(Boolean).map(x => `<li>${x}</li>`).join('')}</ul>`;
+    copyBtn.hidden = false; copyBtn.dataset.txt = `${n} · ${o.e} ${o.t}\n${o.line}\n(태국 겨울 여행 2026 · 나의 여행 칭호)`;
+  }
+  chipsEl.innerHTML = people.map(x => `<button class="wh-chip" type="button" data-n="${esc(x.n)}" aria-pressed="false" style="border-color:var(--line)">${esc(x.n)}</button>`).join('');
+  card.innerHTML = '<p class="tt-empty">위에서 이름을 눌러보세요 🏷️<br>골프 라운드 수·코스·같은 조 인원으로 칭호가 정해져요</p>';
+  chipsEl.addEventListener('click', e => {
+    const b = e.target.closest('.wh-chip'); if(!b) return;
+    chipsEl.querySelectorAll('.wh-chip').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    haptic('ok'); render(b.dataset.n, true);
+    if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🏷️ 칭호', msg:`${b.dataset.n} · ${titleOf(b.dataset.n).e} ${titleOf(b.dataset.n).t}`, ms:2200, at:card, dy:0, n:10, spread:80, petals:true });
+  });
+  copyBtn.addEventListener('click', async () => {
+    const txt = copyBtn.dataset.txt || ''; const o = copyBtn.textContent;
+    try{ await navigator.clipboard.writeText(txt); copyBtn.textContent = '✅ 복사했어요'; }
+    catch(e){ copyBtn.textContent = '⚠️ 복사 실패 — 직접 길게 눌러 복사하세요'; }
+    haptic('ok'); setTimeout(() => { copyBtn.textContent = o; }, 1800);
+  });
+  let prevFocus = null;
+  function open(){
+    prevFocus = document.activeElement;
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    const f = chipsEl.querySelector('.wh-chip'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openTitles = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.wh-chip, #ttCopy:not([hidden]), #ttClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
