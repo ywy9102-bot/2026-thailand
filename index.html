@@ -1316,6 +1316,22 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tq-opt:active:not(:disabled){transform:scale(.98)}
 }
 
+/* ── 태국 나침반 ── */
+.cp-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.cp-tabs{grid-template-columns:repeat(3,1fr)}
+.cp-stage{display:flex;justify-content:center;margin:4px 0 2px}
+.cp-svg{width:min(290px,76vw);aspect-ratio:1/1;display:block;filter:drop-shadow(0 8px 14px rgba(14,40,34,.2))}
+.cp-ring{fill:#F4EEDD;stroke:var(--jade);stroke-width:3;transition:stroke .25s,fill .25s}
+.cp-svg.lock .cp-ring{stroke:var(--gold);fill:var(--gold-s)}
+.cp-tick{stroke:var(--ink3);stroke-width:1}
+.cp-card{font-family:'Fraunces',serif;font-size:13px;font-weight:700;fill:var(--ink2)}
+.cp-card.n{fill:var(--coral)}
+.cp-pin{fill:var(--coral)}
+.cp-main{margin:6px 2px 0;text-align:center;font-family:'Fraunces',serif;font-size:1.188rem;font-weight:700;color:var(--jade);line-height:1.4;word-break:keep-all}
+.cp-sub{margin:2px 2px 0;text-align:center;font-size:.813rem;color:var(--ink2);line-height:1.5}
+.cp-hint{margin:6px 2px 0;text-align:center;font-size:.75rem;color:var(--ink3);line-height:1.5;min-height:1.5em}
+@media (prefers-reduced-motion:no-preference){ .cp-main.pop{animation:whpop .5s cubic-bezier(.16,1,.3,1)} }
+
 /* ── 여행 칭호 ── */
 .tt-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .tt-card{border:1.5px solid var(--line);border-radius:16px;background:var(--card);padding:18px 16px 16px;text-align:center;min-height:200px;display:flex;flex-direction:column;justify-content:center}
@@ -1991,6 +2007,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <button class="wn-close" id="passWheel" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎡 운명의 룰렛</button>
       <button class="wn-close" id="passTitleBtn" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🏷️ 여행 칭호</button>
     </div>
+    <button class="wn-close" id="passCompass" type="button" style="margin-top:9px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🧭 태국 나침반 · 폰을 돌려 태국을 찾아요</button>
     <button class="wn-close" id="passShare" type="button" style="margin-top:9px">📤 카드로 공유하기</button>
     <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
@@ -2007,6 +2024,28 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <div class="tq-body" id="tqBody" aria-live="polite"></div>
     <button class="wn-close" id="tqNext" type="button" hidden style="margin-top:12px">다음 →</button>
     <button class="wn-close" id="tqClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 태국 나침반 -->
+<div class="wn-scrim" id="compassScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="cpTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🧭 COMPASS</span>
+      <h2 class="wn-title" id="cpTitle">태국 나침반</h2>
+    </div>
+    <div class="cp-body" id="cpBody">
+      <div class="wh-tabs cp-tabs" role="tablist" aria-label="가리킬 곳" id="cpTabs"></div>
+      <div class="cp-stage"><svg class="cp-svg" id="cpSvg" viewBox="-110 -110 220 220" role="img" aria-label="나침반"></svg></div>
+      <p class="cp-main" id="cpMain" aria-live="polite"></p>
+      <p class="cp-sub" id="cpSub"></p>
+      <p class="cp-hint" id="cpHint"></p>
+    </div>
+    <div class="pass-row" style="margin-top:12px">
+      <button class="wn-close" id="cpStart" type="button">🧭 나침반 켜기</button>
+      <button class="wn-close" id="cpLoc" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">📍 내 위치로</button>
+    </div>
+    <button class="wn-close" id="cpClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 
@@ -2100,7 +2139,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.73';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.74';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3763,6 +3802,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
     ['✅','골프 부킹·왕복밴 예약 전부 완료','12/17~12/31 골프 8라운드의 부킹과 티오프 시각이 모두 확정됐고, 라운드마다 가는 왕복밴 8건도 예약·결제(윤우열 선결제)까지 끝났어요. 남은 차량 예약은 골프 외 2건(12/30 가족2 티니디→GCP, 1/2 가족2 공항 샌딩)뿐이에요. 이용 1~2일 전 기사가 배정되어 확정서가 다시 오면 기사님 연락처를 받아두세요'],
+    ['🧭','태국 나침반 — 폰을 돌려 태국을 찾아요','폰의 방향 센서와 위치로 "태국은 저쪽!"을 실제로 가리켜요. 나침반을 켜고 폰을 수평으로 들어 천천히 돌리면, 파타야(또는 방콕·집)가 있는 방향에서 진동과 함께 금색으로 바뀌고 남은 거리·비행 시간도 알려줘요. "내 위치로"를 누르면 지금 서 있는 곳 기준으로 계산하고, 위치는 기기 안에서만 쓰고 어디에도 저장·전송하지 않아요. 센서가 없는 PC에서는 북쪽이 위인 지도 기준으로 보여요. 여권 도장첩의 "태국 나침반" 버튼에서 열어보세요'],
     ['🏷️','나의 여행 칭호 — 이름을 누르면 칭호가 붙어요','골프 라운드 수·코스 종류·같은 조 인원 같은 이번 여행의 실제 일정으로 사람마다 칭호가 계산돼요. 예: 8라운드 전부 출전하면 "개근 라운더", 라운드마다 다른 코스면 "코스 탐험가". 칭호는 복사해서 가족 단톡에 올릴 수 있어요. 여권 도장첩의 "여행 칭호" 버튼에서 열어보세요'],
     ['🎡','운명의 룰렛 — 누가 쏘지? 뭐 먹지?','돌림판 하나로 "오늘 커피 쏠 사람", "저녁 메뉴", "내기·벌칙"을 정하고, "조 편성"으로 골프 멤버를 두 팀으로 랜덤하게 나눠요. 빠질 사람은 이름을 눌러 제외할 수 있고, 최근 결과도 기록돼요. 여권 도장첩의 "운명의 룰렛" 버튼에서 열어보세요'],
     ['🧠','우리 여행 퀴즈 — 5문제 도전','티오프 시각·밴 출발 시각·라운드 인원·픽업 순서처럼 이번 여행의 실제 일정으로 매번 새로 출제되는 5문제 퀴즈예요. 놀면서 일정도 익히고, 만점이면 여권에 "여행 박사" 보너스 도장이 찍혀요. 여권 도장첩의 "여행 퀴즈" 버튼에서 열어보세요'],
@@ -3960,7 +4000,7 @@ const FOODS = [
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
     addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), $('passTitleBtn'), shareBtn, closeBtn];
+    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), $('passTitleBtn'), $('passCompass'), shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
       e.preventDefault();
@@ -3972,6 +4012,9 @@ const FOODS = [
     });
     quizBtn.addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openTquiz === 'function') window.__openTquiz(); }, 360);
+    });
+    $('passCompass').addEventListener('click', () => {
+      closePass(); setTimeout(() => { if(typeof window.__openCompass === 'function') window.__openCompass(); }, 360);
     });
     $('passTitleBtn').addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openTitles === 'function') window.__openTitles(); }, 360);
@@ -4316,6 +4359,139 @@ const FOODS = [
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .tq-again, #tqNext:not([hidden]), #tqClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 태국 나침반: 폰의 방향 센서 + 위치로 "태국은 저쪽!"을 가리킴 (센서가 없으면 지도 기준으로 표시) ──
+(function(){
+  const scrim = $('compassScrim'); if(!scrim) return;
+  const svg = $('cpSvg'), tabsEl = $('cpTabs'), mainEl = $('cpMain'), subEl = $('cpSub'), hintEl = $('cpHint'),
+        startBtn = $('cpStart'), locBtn = $('cpLoc'), closeBtn = $('cpClose');
+  const ICN = {lat:37.4602, lon:126.4407, name:'인천'}, PAT = {lat:12.9236, lon:100.8825, name:'파타야'};
+  const TARGETS = [
+    { id:'pat', tab:'🏝️ 파타야', name:'파타야', e:'🏝️', lat:PAT.lat, lon:PAT.lon, tz:'한국보다 2시간 느려요' },
+    { id:'bkk', tab:'🏙️ 방콕',   name:'방콕',   e:'🏙️', lat:13.7563, lon:100.5018, tz:'한국보다 2시간 느려요' },
+    { id:'icn', tab:'🏠 집(인천)', name:'집(인천)', e:'🏠', lat:ICN.lat, lon:ICN.lon, tz:'' }
+  ];
+  const rad = d => d*Math.PI/180, deg = r => r*180/Math.PI;
+  function calc(a, b){
+    const f1 = rad(a.lat), f2 = rad(b.lat), dl = rad(b.lon-a.lon), dp = f2-f1;
+    const h = Math.sin(dp/2)**2 + Math.cos(f1)*Math.cos(f2)*Math.sin(dl/2)**2;
+    const km = 2*6371*Math.asin(Math.sqrt(h));
+    const brg = (deg(Math.atan2(Math.sin(dl)*Math.cos(f2), Math.cos(f1)*Math.sin(f2) - Math.sin(f1)*Math.cos(f2)*Math.cos(dl))) + 360) % 360;
+    return { km, brg };
+  }
+  let target = TARGETS[0], me = null, heading = null, hasSensor = false, listening = false, locked = false, prevFocus = null, bearing = 0;
+
+  // SVG 나침반 (rose = 회전판, 핀 = 고정)
+  function buildSvg(){
+    let t = '';
+    for(let i=0;i<72;i++){ const a = i*5, big = a%30===0, r1 = big ? 78 : 83; t += `<line class="cp-tick" x1="0" y1="${-r1}" x2="0" y2="-88" transform="rotate(${a})"/>`; }
+    const c = [['N',0],['E',90],['S',180],['W',270]].map(([l,a]) => `<text class="cp-card${l==='N'?' n':''}" transform="rotate(${a}) translate(0 -64)" text-anchor="middle" dominant-baseline="central"><tspan transform="rotate(${-a})">${l}</tspan></text>`).join('');
+    svg.innerHTML =
+      `<circle class="cp-ring" r="96"/><g id="cpRose">${t}${c}` +
+      `<g id="cpTgt"><line x1="0" y1="-16" x2="0" y2="-52" stroke="#1E4B41" stroke-width="3" stroke-linecap="round"/>` +
+      `<polygon points="0,-60 -8,-46 8,-46" fill="#1E4B41"/><text id="cpFlag" y="-76" font-size="22" text-anchor="middle" dominant-baseline="central">🏝️</text></g></g>` +
+      `<circle r="7" fill="#F6F2E8" stroke="#B58A28" stroke-width="2"/><polygon class="cp-pin" points="0,-104 -7,-93 7,-93"/>`;
+  }
+  const rose = () => $('cpRose'), tgt = () => $('cpTgt');
+  function paint(){
+    const h = heading == null ? 0 : heading;
+    rose().setAttribute('transform', `rotate(${-h})`);
+    tgt().setAttribute('transform', `rotate(${bearing})`);
+    $('cpFlag').textContent = target.e;
+    // 반대로 돌려서 이모지는 항상 똑바로
+    $('cpFlag').setAttribute('transform', `rotate(${-(bearing - h)} 0 -76)`);
+    const diff = ((bearing - h + 540) % 360) - 180;
+    const now = heading != null && Math.abs(diff) < 6;
+    svg.classList.toggle('lock', now);
+    if(now && !locked){
+      locked = true; mainEl.classList.remove('pop'); void mainEl.offsetWidth; mainEl.classList.add('pop');
+      try{ if(navigator.userActivation && navigator.userActivation.hasBeenActive) navigator.vibrate && navigator.vibrate([20,40,30]); }catch(e){}
+      if(typeof window.__toast === 'function') window.__toast(`${target.e} 찾았다!`, `바로 이쪽이 ${target.name} 방향이에요`, 2200);
+    } else if(!now && Math.abs(diff) > 14) locked = false;
+  }
+  function info(){
+    const from = me || (target.id === 'icn' ? PAT : ICN), r = calc(from, target);
+    bearing = r.brg;
+    const km = Math.round(r.km), dir = ['북','북동','동','남동','남','남서','서','북서'][Math.round(bearing/45)%8];
+    let t;
+    if(km < 3) t = '바로 여기예요! 🎉';
+    else if(km < 400) t = `약 ${km.toLocaleString()}km · 자동차로 약 ${Math.max(1, Math.round(km/60*2)/2)}시간`;
+    else { const hrs = Math.round((km/720 + 0.5)*2)/2; t = `약 ${km.toLocaleString()}km · 비행기로 약 ${Math.floor(hrs)}시간${hrs%1 ? ' 30분' : ''}`; }
+    mainEl.textContent = km < 3 ? t : `${target.name}까지 ${t.replace(/^약 /,'약 ')}`;
+    subEl.textContent = `${me ? '📍 내 위치' : '🛫 ' + from.name + ' 기준(기본)'}에서 ${dir}쪽 ${Math.round(bearing)}°` + (target.tz ? ` · ${target.tz}` : '');
+    paint();
+  }
+  function setHint(){
+    hintEl.textContent = hasSensor ? '폰을 수평으로 들고 천천히 돌려보세요. 방향이 맞으면 진동과 함께 금색으로 바뀌어요'
+      : listening ? '방향 센서 신호를 기다리는 중… 폰을 한 번 흔들어보세요'
+      : '나침반을 켜면 폰이 가리키는 방향으로 돌아가요 (센서가 없는 기기는 북쪽 기준 지도로 보여요)';
+  }
+  function onOrient(e){
+    let h = null;
+    if(typeof e.webkitCompassHeading === 'number') h = e.webkitCompassHeading;
+    else if(e.alpha != null && (e.absolute || e.type === 'deviceorientationabsolute')) h = (360 - e.alpha) % 360;
+    if(h == null || isNaN(h)) return;
+    if(heading == null) heading = h; else { const d = ((h - heading + 540) % 360) - 180; heading = (heading + d*0.3 + 360) % 360; }
+    if(!hasSensor){ hasSensor = true; setHint(); startBtn.textContent = '✅ 나침반 켜짐'; }
+    paint();
+  }
+  async function startSensor(){
+    if(listening) return;
+    try{
+      if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+        const r = await DeviceOrientationEvent.requestPermission();
+        if(r !== 'granted'){ hintEl.textContent = '방향 센서 권한이 거절됐어요. 설정 → Safari에서 허용해 주세요'; return; }
+      }
+    }catch(err){ hintEl.textContent = '방향 센서를 켤 수 없어요 (HTTPS 또는 권한 필요)'; return; }
+    addEventListener('deviceorientationabsolute', onOrient, true);
+    addEventListener('deviceorientation', onOrient, true);
+    listening = true; startBtn.textContent = '⏳ 센서 연결 중…'; setHint();
+    setTimeout(() => { if(!hasSensor){ startBtn.textContent = '🧭 센서 없음 (지도 기준)'; hintEl.textContent = '이 기기에서는 방향 센서를 쓸 수 없어요. 북쪽이 위인 지도 기준으로 보여드려요'; } }, 2500);
+  }
+  function locate(){
+    if(!navigator.geolocation){ hintEl.textContent = '이 기기는 위치 기능을 지원하지 않아요'; return; }
+    locBtn.textContent = '⏳ 위치 확인 중…';
+    navigator.geolocation.getCurrentPosition(pos => {
+      me = { lat:pos.coords.latitude, lon:pos.coords.longitude, name:'내 위치' };
+      locBtn.textContent = '✅ 내 위치 사용 중'; info();
+    }, () => { locBtn.textContent = '📍 내 위치로'; hintEl.textContent = '위치 권한이 없어서 기본 위치(인천·파타야) 기준으로 보여드려요'; },
+    { timeout:8000, maximumAge:600000 });
+  }
+  function setTarget(t){
+    target = t; locked = false;
+    tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === t.id)));
+    info();
+  }
+  tabsEl.innerHTML = TARGETS.map(t => `<button class="wh-tab" role="tab" type="button" data-id="${t.id}" aria-selected="false">${t.tab}</button>`).join('');
+  tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(b){ haptic('tap'); setTarget(TARGETS.find(t => t.id === b.dataset.id)); } });
+  startBtn.addEventListener('click', startSensor);
+  locBtn.addEventListener('click', locate);
+
+  function open(){
+    prevFocus = document.activeElement; if(!rose()) buildSvg();
+    setTarget(target); setHint();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    try{ startBtn.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openCompass = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.wh-tab, #cpStart, #cpLoc, #cpClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
