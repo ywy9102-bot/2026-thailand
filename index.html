@@ -1318,6 +1318,34 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tq-opt:active:not(:disabled){transform:scale(.98)}
 }
 
+/* ── 라운드 기록장 ── */
+.sc-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.sc-tabs{grid-template-columns:repeat(2,1fr)}
+.sc-rounds{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin:0 -2px;scrollbar-width:none}
+.sc-rounds::-webkit-scrollbar{display:none}
+.sc-round{appearance:none;flex:none;min-height:44px;padding:5px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink2);font-family:inherit;font-size:.75rem;font-weight:700;line-height:1.3;cursor:pointer;text-align:center}
+.sc-round b{display:block;font-size:.8125rem;color:var(--ink)}
+.sc-round[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)} .sc-round[aria-pressed="true"] b{color:var(--hero-fg)}
+.sc-round.has{border-color:var(--gold)}
+.sc-course{margin:2px 2px 8px;font-size:.8125rem;color:var(--ink2);line-height:1.5}
+.sc-card{border:1.5px solid var(--line);border-radius:14px;background:var(--card);padding:11px 12px;margin:0 0 8px}
+.sc-name{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.9375rem;font-weight:700;color:var(--ink)}
+.sc-score{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--ink2)}
+.sc-score input{width:68px;min-height:44px;border:1.5px solid var(--line);border-radius:10px;padding:4px 8px;font-family:'IBM Plex Mono',monospace;font-size:1rem;font-weight:700;text-align:center;color:var(--jade-d);background:var(--paper)}
+.sc-row{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:8px}
+.sc-ctr{display:flex;align-items:center;gap:4px;font-size:.75rem;color:var(--ink2)}
+.sc-ctr button{appearance:none;width:44px;height:44px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-family:inherit;font-size:1.125rem;font-weight:700;color:var(--jade-d);cursor:pointer}
+.sc-ctr button.plus{background:var(--jade-s);border-color:var(--jade)}
+.sc-ctr output{min-width:26px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:1rem;font-weight:700;color:var(--ink)}
+.sc-ho{appearance:none;min-height:44px;padding:4px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-family:inherit;font-size:.8125rem;font-weight:700;color:var(--ink2);cursor:pointer}
+.sc-ho[aria-pressed="true"]{background:var(--gold-s);border-color:var(--gold);color:var(--gold-text)}
+.sc-lb{width:100%;border-collapse:collapse;font-size:.75rem}
+.sc-lb th,.sc-lb td{padding:7px 4px;text-align:center;border-bottom:1px dashed var(--line);white-space:nowrap}
+.sc-lb th{color:var(--ink3);font-weight:600} .sc-lb td:first-child,.sc-lb th:first-child{text-align:left;font-weight:700;color:var(--ink)}
+.sc-badges{margin:10px 2px 0;font-size:.8125rem;line-height:1.7;color:var(--ink)}
+.sc-empty{margin:14px 2px;text-align:center;font-size:.8125rem;line-height:1.6;color:var(--ink3)}
+.sc-note{margin:8px 2px 0;font-size:.6875rem;line-height:1.5;color:var(--ink3);text-align:center}
+
 /* ── 태국어 듣기 ── */
 .th-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .th-tabs{grid-template-columns:repeat(4,1fr)}
@@ -1587,7 +1615,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 <section class="pnl on" id="golf" role="tabpanel" aria-labelledby="tb-golf">
   <div class="sec-row">
     <h2 class="sec"><span class="e">⛳</span>골프 8라운드</h2>
-    <button class="copy-btn" id="copyGolf" type="button">📋 텍스트로 복사</button>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="copy-btn" id="openScore" type="button">📝 라운드 기록장</button><button class="copy-btn" id="copyGolf" type="button">📋 텍스트로 복사</button></div>
   </div>
   <p class="sub">파타야 6회 · 방콕 2회 · 전액 윤우열 선지불 후 참여자별 1/N 정산 · 카드를 탭하면 코스·위치·바우처 정보가 열립니다</p>
 
@@ -2061,6 +2089,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <button class="wn-close" id="passCompass" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🧭 태국 나침반</button>
       <button class="wn-close" id="passThai" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🗣️ 태국어·맥주</button>
     </div>
+    <button class="wn-close" id="passScore" type="button" style="margin-top:9px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">📝 라운드 기록장 · 스코어·버디 기록</button>
     <button class="wn-close" id="passShare" type="button" style="margin-top:9px">📤 카드로 공유하기</button>
     <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
@@ -2077,6 +2106,22 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <div class="tq-body" id="tqBody" aria-live="polite"></div>
     <button class="wn-close" id="tqNext" type="button" hidden style="margin-top:12px">다음 →</button>
     <button class="wn-close" id="tqClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 라운드 기록장 -->
+<div class="wn-scrim" id="scoreScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="scTitle">
+    <div class="wn-head">
+      <span class="wn-badge">📝 SCORE</span>
+      <h2 class="wn-title" id="scTitle">라운드 기록장</h2>
+    </div>
+    <div class="sc-body" id="scBody">
+      <div class="wh-tabs sc-tabs" role="tablist" aria-label="보기" id="scTabs"></div>
+      <div id="scPane"></div>
+    </div>
+    <button class="wn-close" id="scCopy" type="button" style="margin-top:12px">📋 기록 텍스트로 복사 (단톡용)</button>
+    <button class="wn-close" id="scClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 
@@ -2209,7 +2254,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.84';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.85';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3919,6 +3964,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['📝','라운드 기록장 — 스코어·버디·홀인원 기록','골프 탭의 "라운드 기록장" 버튼(또는 여권 도장첩)에서 열어요. 라운드마다 참가자별 총 타수와 버디·이글 횟수, 홀인원을 기록하면 버디를 누를 때마다 응원 토스트가 뜨고, 이글·홀인원은 폭죽이 터져요. "리더보드" 탭에서는 최저타·평균·버디왕·이글·홀인원이 자동으로 정리되고, 단톡에 올릴 텍스트로 복사할 수 있어요. 기록은 각자 폰(브라우저)에만 저장돼요'],
     ['🚐','1/2 가족2 공항 샌딩 확정 · 일정 점검','1/2(토) 가족2(이준영·박지해·이동현 3인)는 08:30 그랜드 센터 포인트 랏차담리 1층 로비에서 출발해 수완나품 공항(OZ744 12:25)으로 가요. 예약번호 #200789323은 이준영 님이 직접 예약·결제해서 정산에는 포함하지 않고 일정·숙소·차량표에만 표시했어요. 일정을 점검하다가 12/21 비골퍼 인원이 "3인"으로 남아 있어 2인(정유현·장모님)으로 고쳤어요'],
     ['✅','정유경 님 정산 완료','정유경 님의 정산(2,254,856원)이 완료돼 정산탭에 "정산완료"로 표시돼요. 남은 정산은 5명(정유현·윤성욱·김태기·장모님·이준영)이에요'],
     ['👥','가족2 차량 3건은 이준영 님 개별 진행','가족2의 12/27 공항 픽업, 12/30 티니디→GCP 이동, 1/2 공항 샌딩은 이준영 님이 따로 진행해요. 앱에서는 "개별 이용"으로만 표시하고 예약 준비율·할일(예약·견적)·정산에서는 뺐어요. 예약 준비율은 숙소·골프·차량 28건 모두 확정으로 100%가 돼요'],
@@ -4128,7 +4174,7 @@ const FOODS = [
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
     addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), $('passTitleBtn'), $('passCompass'), $('passThai'), shareBtn, closeBtn];
+    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), $('passTitleBtn'), $('passCompass'), $('passThai'), $('passScore'), shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
       e.preventDefault();
@@ -4143,6 +4189,9 @@ const FOODS = [
     });
     const playCard = $('playCard');
     if(playCard) playCard.addEventListener('click', () => { haptic('tap'); openPass(); });
+    $('passScore').addEventListener('click', () => {
+      closePass(); setTimeout(() => { if(typeof window.__openScore === 'function') window.__openScore(); }, 360);
+    });
     $('passThai').addEventListener('click', () => {
       closePass(); setTimeout(() => { if(typeof window.__openThai === 'function') window.__openThai(); }, 360);
     });
@@ -4495,6 +4544,107 @@ const FOODS = [
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
+})();
+
+// ── 라운드 기록장: 라운드별 스코어·버디·이글·홀인원 기록 + 트립 리더보드 (이 기기에만 저장) ──
+(function(){
+  const scrim = $('scoreScrim'); if(!scrim) return;
+  const tabsEl = $('scTabs'), pane = $('scPane'), copyBtn = $('scCopy'), closeBtn = $('scClose');
+  const LSS = 'thai2026_scores';
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let data; try{ data = JSON.parse(localStorage.getItem(LSS)); }catch(e){} if(!data || typeof data !== 'object') data = {};
+  const save = () => { try{ localStorage.setItem(LSS, JSON.stringify(data)); }catch(e){} };
+  const short = c => c.replace(/^Siam CC /,'').replace(/ Golf( Resort| Club| & CC)?$/,'');
+  const rec = (d, n) => { data[d] = data[d] || {}; data[d][n] = data[d][n] || {s:null,b:0,e:0,h:0}; return data[d][n]; };
+  const bkkDay = () => { const t = new Date(Date.now() + 7*36e5); return `${t.getUTCMonth()+1}/${t.getUTCDate()}`; };
+  let sel = null, mode = 'rec', prevFocus = null;
+  const pickDefault = () => { const today = GOLF.find(g => g.d === bkkDay()); if(today) return today.d; const withData = GOLF.filter(g => data[g.d] && Object.keys(data[g.d]).length).pop(); return (withData || GOLF[0]).d; };
+  const hasData = d => !!(data[d] && Object.values(data[d]).some(r => r.s || r.b || r.e || r.h));
+  const toast = (a, b, ms) => { if(typeof window.__toast === 'function') window.__toast(a, b, ms || 1900); };
+
+  function renderRec(){
+    const g = GOLF.find(x => x.d === sel);
+    pane.innerHTML = `<div class="sc-rounds" role="group" aria-label="라운드 선택">` + GOLF.map(x => `<button class="sc-round${hasData(x.d) ? ' has' : ''}" type="button" data-d="${x.d}" aria-pressed="${x.d === sel}"><b>${x.d}</b>${esc(short(x.c))}</button>`).join('') + `</div>` +
+      `<p class="sc-course">⛳ ${esc(g.c)} · ${g.p.length}인 · 티오프 ${esc((g.tee||'').replace(' 확정',''))}</p>` +
+      g.p.map(n => { const r = rec(g.d, n); return `<div class="sc-card" data-n="${esc(n)}"><div class="sc-name"><span>${dot(n)}${esc(n)}</span>` +
+        `<label class="sc-score">총 타수 <input type="number" inputmode="numeric" min="40" max="200" step="1" placeholder="–" value="${r.s ?? ''}" data-act="score" aria-label="${esc(n)} 총 타수"></label></div>` +
+        `<div class="sc-row"><div class="sc-ctr">🐦 버디<button type="button" data-act="bm" aria-label="${esc(n)} 버디 빼기">−</button><output aria-live="polite">${r.b}</output><button class="plus" type="button" data-act="bp" aria-label="${esc(n)} 버디 더하기">+</button></div>` +
+        `<div class="sc-ctr">🦅 이글<button type="button" data-act="em" aria-label="${esc(n)} 이글 빼기">−</button><output aria-live="polite">${r.e}</output><button class="plus" type="button" data-act="ep" aria-label="${esc(n)} 이글 더하기">+</button></div>` +
+        `<button class="sc-ho" type="button" data-act="ho" aria-pressed="${!!r.h}">🕳️ 홀인원${r.h ? ' ✓' : ''}</button></div></div>`; }).join('') +
+      `<p class="sc-note">이 기기(브라우저)에만 저장돼요 · 단톡에는 아래 복사 버튼으로 공유</p>`;
+  }
+  function stats(){
+    const m = {};
+    GOLF.forEach(g => { Object.entries(data[g.d] || {}).forEach(([n, r]) => { const o = m[n] = m[n] || {n, rounds:0, scores:[], b:0, e:0, h:0}; if(r.s || r.b || r.e || r.h) o.rounds++; if(r.s) o.scores.push({s:r.s, d:g.d}); o.b += r.b||0; o.e += r.e||0; o.h += r.h?1:0; }); });
+    return Object.values(m).filter(o => o.rounds).map(o => ({...o, best: o.scores.length ? Math.min(...o.scores.map(x => x.s)) : null, avg: o.scores.length ? o.scores.reduce((a,x)=>a+x.s,0)/o.scores.length : null}));
+  }
+  function renderLb(){
+    const st = stats();
+    if(!st.length){ pane.innerHTML = '<p class="sc-empty">아직 기록이 없어요 ⛳<br>"✍️ 기록" 탭에서 라운드 후 스코어와 버디를 입력하면 여기에 순위가 생겨요</p>'; return; }
+    st.sort((a,b) => (a.best ?? 999) - (b.best ?? 999) || b.b - a.b);
+    const bestS = st.filter(x => x.best != null)[0], birdie = [...st].sort((a,b) => b.b - a.b)[0], eagle = st.filter(x => x.e)[0], hio = st.filter(x => x.h);
+    pane.innerHTML = `<table class="sc-lb"><thead><tr><th>이름</th><th>라운드</th><th>최저</th><th>평균</th><th>🐦</th><th>🦅</th><th>🕳️</th></tr></thead><tbody>` +
+      st.map(o => `<tr><td>${dot(o.n)}${esc(o.n)}</td><td>${o.rounds}</td><td>${o.best ?? '–'}</td><td>${o.avg != null ? o.avg.toFixed(1) : '–'}</td><td>${o.b}</td><td>${o.e}</td><td>${o.h}</td></tr>`).join('') + `</tbody></table>` +
+      `<div class="sc-badges">` + [bestS ? `🥇 <b>최저타</b> ${esc(bestS.n)} ${bestS.best}타` : '', birdie && birdie.b ? `🐦 <b>버디왕</b> ${esc(birdie.n)} ${birdie.b}개` : '', eagle ? `🦅 <b>이글</b> ${esc(eagle.n)} ${eagle.e}개` : '', hio.length ? `🕳️ <b>홀인원</b> ${hio.map(x => esc(x.n)).join('·')} 🎉` : ''].filter(Boolean).join('<br>') + `</div>` +
+      '<p class="sc-note">최저·평균은 총 타수를 입력한 라운드만 계산해요</p>';
+  }
+  function render(){ tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === mode))); if(mode === 'rec') renderRec(); else renderLb(); }
+  tabsEl.innerHTML = '<button class="wh-tab" role="tab" type="button" data-id="rec" aria-selected="true">✍️ 기록</button><button class="wh-tab" role="tab" type="button" data-id="lb" aria-selected="false">🏆 리더보드</button>';
+  tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(b){ haptic('tap'); mode = b.dataset.id; render(); } });
+  pane.addEventListener('click', e => {
+    const rb = e.target.closest('.sc-round'); if(rb){ sel = rb.dataset.d; haptic('tap'); renderRec(); return; }
+    const btn = e.target.closest('[data-act]'); if(!btn || btn.tagName === 'INPUT') return;
+    const card = btn.closest('.sc-card'); if(!card) return; const n = card.dataset.n, r = rec(sel, n), act = btn.dataset.act;
+    if(act === 'bp'){ r.b++; haptic('ok'); toast('🐦 버디!', `${n} · 이번 라운드 ${r.b}개째`); }
+    else if(act === 'bm') r.b = Math.max(0, r.b-1);
+    else if(act === 'ep'){ r.e++; haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🦅 이글!', msg:`${n} 이글!`, ms:2600, at:card, dy:0, n:20, spread:90, petals:true }); else toast('🦅 이글!', n, 2400); }
+    else if(act === 'em') r.e = Math.max(0, r.e-1);
+    else if(act === 'ho'){ r.h = r.h ? 0 : 1; if(r.h){ haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🕳️ 홀인원!!', msg:`${n} 홀인원! 오늘 저녁은 ${n}님이 쏘는 날?`, ms:4200, at:card, dy:0, n:34, spread:120, petals:true }); else toast('🕳️ 홀인원!!', n, 3000); } }
+    save(); renderRec();
+    const again = pane.querySelector(`.sc-card[data-n="${n}"] [data-act="${act}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){}
+  });
+  pane.addEventListener('change', e => {
+    const inp = e.target.closest('input[data-act="score"]'); if(!inp) return;
+    const n = inp.closest('.sc-card').dataset.n, r = rec(sel, n), v = parseInt(inp.value, 10);
+    r.s = (v >= 40 && v <= 200) ? v : null; if(inp.value && r.s == null) inp.value = '';
+    save(); haptic('tap');
+  });
+  function copyText(){
+    const lines = ['⛳ 태국 겨울 골프 기록'];
+    GOLF.forEach(g => { const rs = data[g.d]; if(!rs) return; const parts = g.p.filter(n => rs[n] && (rs[n].s || rs[n].b || rs[n].e || rs[n].h)).map(n => { const r = rs[n]; return `${n} ${r.s || '–'}${r.b ? ` 🐦${r.b}` : ''}${r.e ? ` 🦅${r.e}` : ''}${r.h ? ' 🕳️' : ''}`; }); if(parts.length) lines.push(`${g.d} ${short(g.c)}: ${parts.join(' · ')}`); });
+    const st = stats(), bs = st.filter(x => x.best != null).sort((a,b) => a.best - b.best)[0]; if(bs) lines.push(`🥇 최저타 ${bs.n} ${bs.best}타`);
+    return lines.length > 1 ? lines.join('\n') : '';
+  }
+  copyBtn.addEventListener('click', async () => {
+    const t = copyText(), o = copyBtn.textContent;
+    if(!t){ copyBtn.textContent = '기록이 아직 없어요'; setTimeout(() => { copyBtn.textContent = o; }, 1600); return; }
+    try{ await navigator.clipboard.writeText(t); copyBtn.textContent = '✅ 복사했어요'; }catch(err){ copyBtn.textContent = '⚠️ 복사 실패'; }
+    haptic('ok'); setTimeout(() => { copyBtn.textContent = o; }, 1800);
+  });
+  window.__scoreInfo = () => ({ data, stats });
+  function open(){
+    prevFocus = document.activeElement; sel = sel || pickDefault(); mode = 'rec'; render();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openScore = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.wh-tab, .sc-round, .sc-card input, .sc-ctr button, .sc-ho, #scCopy, #scClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+  const openBtn = $('openScore'); if(openBtn) openBtn.addEventListener('click', () => { haptic('tap'); open(); });
 })();
 
 // ── 태국어 · 숫자 · 맥주: 폰의 음성 합성(th-TH)으로 현지 발음 재생 + 숫자 공부 + 태국 맥주 이야기 (태국어 음성이 없는 기기는 글자만 표시) ──
