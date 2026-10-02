@@ -1924,6 +1924,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       </div></div>
     </div>
     <div class="warn">⚠ 12/30 티니디 체크아웃 → 당일 GCP 체크인 (자유일정)</div>
+    <div class="transit-note">🚐 공항 샌딩 밴 확정 <span class="mono">#200789323</span> · 1/2(토) 08:30 GCP 1층 로비 출발 → 수완나품 공항 · OZ744 12:25 BKK (가족2·3인 · 이준영 님 개별 예약·결제)</div>
   </div>
 
   <div class="lg-grp">
@@ -2208,7 +2209,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.83';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.84';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2357,7 +2358,7 @@ function triplocHTML(o){
 // 왕복밴 정보 — 코스·위치·바우처와 섞이지 않도록 별도 박스로 분리 (골프·일정탭 공통)
 function vanBoxHTML(van){
   return `<div class="van-box">
-    <div class="van-box-h"><span>🚐 ${van.label||'왕복밴 확정'} <span class="mono">#${van.book}</span></span><span class="van-per">인당 ${won(van.per)}원</span></div>
+    <div class="van-box-h"><span>🚐 ${van.label||'왕복밴 확정'} <span class="mono">#${van.book}</span></span>${van.per!=null?`<span class="van-per">인당 ${won(van.per)}원</span>`:''}</div>
     <p class="van-route">${van.route}</p>
     ${van.note?`<p class="van-route">${van.note}</p>`:''}
     <div class="van-pay">💳 결제 ${van.pay}</div>
@@ -2475,7 +2476,7 @@ const ITIN_A=[
    ['참고','전세밴 몽키트래블 문의 · 입장·투어 사전 예약 · 윤성욱 합류 가능'],
   ]},
  {...gday('12/21','파타야','정유현·장모님 개별일정'),
-  rec:'비골퍼 3인 — 쿠킹 클래스 등',
+  rec:'비골퍼 2인(정유현·장모님) — 쿠킹 클래스 등',
   recd:[
    ['Plan A','타이 쿠킹 클래스(시장투어 포함 반나절) — 아이 동반 가능한 곳으로'],
    ['Plan B','파타야 수상시장(배·간식·공예) + 스파(Let’s Relax·Health Land 등)'],
@@ -2576,8 +2577,9 @@ const ITIN_C=[
    ['Plan C','고대도시(Ancient Siam / 므앙보란) — 태국 전역 유적 축소판 대공원, 자전거·카트 + 에라완 박물관. <a href="https://www.ancientsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
    ['참고','1/2 호텔 08:00 출발 → 밤 늦지 않게'],
   ]},
- {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:25–19:50',x:'호텔 08:30 출발 (윤우열/가족1) · 가족2는 이준영 님 개별 진행',
-  van:{book:'200754276',per:11704,route:'윤우열/가족1 · 08:30 티니디 트렌디 카오산 출발 → 수완나품 공항 (OZ744 12:25 BKK, 성인 4인: 윤우열·정유경·정유현·장모님) · 가족2는 이준영 님 개별 진행',pay:'완료 · 윤우열 선결제',label:'이동 밴 확정 · 윤우열/가족1'}},
+ {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:25–19:50',x:'08:30 출발 — 윤우열/가족1: 티니디 · 가족2: GCP (별도 차량)',
+  van:{book:'200754276',per:11704,route:'윤우열/가족1 · 08:30 티니디 트렌디 카오산 출발 → 수완나품 공항 (OZ744 12:25 BKK, 성인 4인: 윤우열·정유경·정유현·장모님) · 가족2는 별도 차량(#200789323)',pay:'완료 · 윤우열 선결제',label:'이동 밴 확정 · 윤우열/가족1'},
+  van2:{book:'200789323',route:'가족2 · 08:30 그랜드 센터 포인트 랏차담리 1층 로비 출발 → 수완나품 공항 (OZ744 12:25 BKK, 성인 3인: 이준영·박지해·이동현) · 유류·톨비 포함',note:'📄 예약확정서 확인 — 팁·추가시간·주차 불포함. 이용 1~2일 전 기사 배정 후 확정서가 다시 발송돼요. 편도 팁 100바트 권장',pay:'이준영 님 개별 예약·결제 (정산 제외)',label:'공항 샌딩 밴 확정 · 가족2'}},
  {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
 ];
 
@@ -2611,7 +2613,7 @@ const T_CAR=[
  ['③ 12/31','로열 방파인 골프 왕복밴 (4인·12시간 렌탈)','160,247','ok','인당 40,062'],
  ['④ 12/30','티니디→GCP (가족2, 이준영 님 개별 진행)','–','info','개별 이용'],
  ['② 1/2','공항 샌딩 (윤우열/가족1·4인, 티니디출발)','46,816','ok','인당 11,704'],
- ['② 1/2','공항 샌딩 (가족2·3인, GCP출발, 이준영 님 개별 진행)','–','info','개별 이용'],
+ ['② 1/2','공항 샌딩 (가족2·3인, GCP 08:30 출발, 예약 #200789323 · 이준영 님 개별 결제)','–','info','개별 이용'],
 ];
 
 const TODO=[
@@ -3258,7 +3260,7 @@ function days(list,el,mon,yr){
   const now = new Date();
   const isToday = x => mon===now.getMonth()+1 && +x.d===now.getDate() && yr===now.getFullYear();
   $(el).innerHTML = list.map(x=>{
-    const hasDetail = !!(x.book||x.pid||x.van);
+    const hasDetail = !!(x.book||x.pid||x.van||x.van2);
     const hasRec = Array.isArray(x.recd) && x.recd.length;
     const expandable = hasDetail || hasRec;
     const today = isToday(x);
@@ -3282,6 +3284,7 @@ function days(list,el,mon,yr){
          ${hasDetail?`<div class="vsec">
            ${x.book?`<div class="gd-row"><span class="gd-k">예약번호</span><span class="gd-v">#${x.book}</span></div>`:''}
            ${x.van?vanBoxHTML(x.van):''}
+           ${x.van2?vanBoxHTML(x.van2):''}
            ${vsec}
          </div>`:''}
        </div></div>`:''}
@@ -3916,6 +3919,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🚐','1/2 가족2 공항 샌딩 확정 · 일정 점검','1/2(토) 가족2(이준영·박지해·이동현 3인)는 08:30 그랜드 센터 포인트 랏차담리 1층 로비에서 출발해 수완나품 공항(OZ744 12:25)으로 가요. 예약번호 #200789323은 이준영 님이 직접 예약·결제해서 정산에는 포함하지 않고 일정·숙소·차량표에만 표시했어요. 일정을 점검하다가 12/21 비골퍼 인원이 "3인"으로 남아 있어 2인(정유현·장모님)으로 고쳤어요'],
     ['✅','정유경 님 정산 완료','정유경 님의 정산(2,254,856원)이 완료돼 정산탭에 "정산완료"로 표시돼요. 남은 정산은 5명(정유현·윤성욱·김태기·장모님·이준영)이에요'],
     ['👥','가족2 차량 3건은 이준영 님 개별 진행','가족2의 12/27 공항 픽업, 12/30 티니디→GCP 이동, 1/2 공항 샌딩은 이준영 님이 따로 진행해요. 앱에서는 "개별 이용"으로만 표시하고 예약 준비율·할일(예약·견적)·정산에서는 뺐어요. 예약 준비율은 숙소·골프·차량 28건 모두 확정으로 100%가 돼요'],
     ['🚐','12/16·12/23 공항 차량비 반영 — 김태기 님은 사전 송금','12/16 수완나품→파타야 차량(116,532원)은 윤우열·김태기 2인이 이용해 인당 58,266원씩, 12/23 통부라→공항 차량(80,676원)은 김태기 님 단독 이용이에요. 김태기 님이 이 두 건(합계 138,942원)을 미리 송금해주셔서 정산(받을 금액)에서는 제외했고, 정산탭 김태기 카드에 "사전 송금"으로만 표시돼요. 윤우열 님 본인 부담분은 58,266원 늘어요. 김태기 님 정산 금액은 변동 없어요'],
