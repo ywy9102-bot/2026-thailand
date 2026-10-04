@@ -1318,6 +1318,26 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tq-opt:active:not(:disabled){transform:scale(.98)}
 }
 
+/* ── 바트 감각 · 힐링 사운드 ── */
+.bh-body,.ch-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.bh-item{text-align:center;padding:6px 0 2px}
+.bh-e{font-size:2.5rem;line-height:1.2}
+.bh-name{font-family:'Fraunces',serif;font-size:1.125rem;font-weight:700;color:var(--jade-d);margin:4px 0 2px;word-break:keep-all}
+.bh-price{font-family:'IBM Plex Mono',monospace;font-size:1.75rem;font-weight:700;color:var(--gold-text);margin:2px 0 12px}
+.bh-q{font-size:.875rem;color:var(--ink2);margin:0 0 10px}
+.bh-opts{display:grid;gap:8px;text-align:left}
+.ch-card{border:1.5px solid var(--line);border-radius:14px;background:var(--card);padding:12px;margin:0 0 9px}
+.ch-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ch-nm{font-size:.9375rem;font-weight:700;color:var(--ink)} .ch-ds{font-size:.75rem;color:var(--ink2);line-height:1.4}
+.ch-sw{appearance:none;min-width:84px;min-height:44px;padding:4px 14px;border:1.5px solid var(--line);border-radius:99px;background:var(--paper);font-family:inherit;font-size:.875rem;font-weight:700;color:var(--ink2);cursor:pointer}
+.ch-sw[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.ch-vol{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.75rem;color:var(--ink2)}
+.ch-vol input{flex:1;min-height:44px;accent-color:var(--jade)}
+.ch-timer{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
+.ch-timer .wh-chip[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg);text-decoration:none}
+.ch-timer .wh-chip[aria-pressed="false"]{background:var(--card);color:var(--ink);text-decoration:none}
+.ch-left{margin:2px 2px 8px;font-size:.8125rem;color:var(--ink2)}
+
 /* ── 골프 운세 · 먹킷리스트 ── */
 .fc-body,.et-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .fc-card{border:1.5px solid var(--line);border-radius:16px;background:var(--card);padding:16px 14px;min-height:180px}
@@ -2134,6 +2154,34 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   </div>
 </div>
 
+<!-- 바트 감각 테스트 -->
+<div class="wn-scrim" id="bahtScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="bhTitle">
+    <div class="wn-head">
+      <span class="wn-badge">💰 BAHT</span>
+      <h2 class="wn-title" id="bhTitle">바트 감각 테스트</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem" id="bhSub"></p>
+    <div class="bh-body" id="bhBody" aria-live="polite"></div>
+    <button class="wn-close" id="bhNext" type="button" hidden style="margin-top:12px">다음 →</button>
+    <button class="wn-close" id="bhClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 힐링 사운드 -->
+<div class="wn-scrim" id="chillScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="chTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🌴 CHILL</span>
+      <h2 class="wn-title" id="chTitle">태국 힐링 사운드</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem">파도·비·밤 벌레 소리를 폰에서 바로 만들어 들려줘요(파일·인터넷 없음). 켜면 소리가 나니 볼륨을 확인하세요</p>
+    <div class="ch-body" id="chBody"></div>
+    <button class="wn-close" id="chStop" type="button" style="margin-top:12px">⏹ 모두 끄기</button>
+    <button class="wn-close" id="chClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기 (소리는 계속 재생돼요)</button>
+  </div>
+</div>
+
 <!-- 놀이터 메뉴 -->
 <div class="wn-scrim" id="playScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="plTitle">
@@ -2187,7 +2235,8 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <div class="wh-tabs sc-tabs" role="tablist" aria-label="보기" id="scTabs"></div>
       <div id="scPane"></div>
     </div>
-    <button class="wn-close" id="scCopy" type="button" style="margin-top:12px">📋 기록 텍스트로 복사 (단톡용)</button>
+    <button class="wn-close" id="scImg" type="button" style="margin-top:12px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🖼️ 이 라운드 기록 이미지로 저장·공유</button>
+    <button class="wn-close" id="scCopy" type="button" style="margin-top:9px">📋 기록 텍스트로 복사 (단톡용)</button>
     <button class="wn-close" id="scClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
@@ -2321,7 +2370,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.86';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.87';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4031,6 +4080,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🌴','새 놀이 3가지 — 힐링 사운드 · 바트 감각 테스트 · 라운드 이미지','🌴 태국 힐링 사운드: 파도·열대 빗소리·밤 벌레 소리를 폰이 직접 만들어 들려줘요(파일·인터넷 없음). 각각 켜고 끄고 볼륨을 조절하며, 15/30/60분 수면 타이머가 지나면 부드럽게 꺼져요. 창을 닫아도 소리는 계속되고 놀이터 메뉴에서 다시 끌 수 있어요. 💰 바트 감각 테스트: 팟타이·마사지·택시 기본요금 같은 현지 가격을 보고 한국 돈으로 얼마인지 맞히는 5문제(화면의 환율 사용). 🖼️ 라운드 이미지: 라운드 기록장에서 그날 스코어·버디를 카드 이미지로 저장·공유해요. 모두 놀이터 메뉴에서 열려요'],
     ['🔮','새 놀이 2가지 — 오늘의 골프 운세 · 태국 먹킷리스트','🔮 오늘의 골프 운세: 이름을 누르면 오늘(방콕 날짜 기준) 라운드 운세가 나와요 — 총운, 티샷·아이언·숏게임·퍼팅·멘탈 별점, 행운의 클럽·홀, 오늘의 목표, 라운드 뒤 먹을 음식·맥주까지. 하루 동안 같은 결과이고 매일 바뀌어요. 🍜 태국 먹킷리스트: 팟타이·똠얌꿍·망고 찰밥부터 태국 밀크티·싱하 맥주까지 20가지를 먹을 때마다 체크하고, "오늘 뭐 먹지?"로 아직 안 먹은 것 중에서 골라줘요. 첫 화면 "놀이터" 버튼에서 열려요'],
     ['🎮','놀이터 메뉴 개편 + 나침반 켜기/끄기','첫 화면 "놀이터" 버튼이 이제 전체 놀이 메뉴(10가지 타일)를 바로 열어줘요. 여권 도장첩도 그 안의 타일 하나예요. 태국 나침반은 이제 버튼으로 켜고 끌 수 있고(창을 닫으면 자동으로 꺼짐), "내 위치"도 다시 눌러 끌 수 있어요'],
     ['📝','라운드 기록장 — 스코어·버디·홀인원 기록','골프 탭의 "라운드 기록장" 버튼(또는 여권 도장첩)에서 열어요. 라운드마다 참가자별 총 타수와 버디·이글 횟수, 홀인원을 기록하면 버디를 누를 때마다 응원 토스트가 뜨고, 이글·홀인원은 폭죽이 터져요. "리더보드" 탭에서는 최저타·평균·버디왕·이글·홀인원이 자동으로 정리되고, 단톡에 올릴 텍스트로 복사할 수 있어요. 기록은 각자 폰(브라우저)에만 저장돼요'],
@@ -4594,6 +4644,187 @@ const FOODS = [
   });
 })();
 
+// ── 바트 감각 테스트: "이 가격, 한국 돈으로 얼마?" 5문제 (환율은 화면의 ฿1 환율 사용, 없으면 대략 42원) ──
+(function(){
+  const scrim = $('bahtScrim'); if(!scrim) return;
+  const body = $('bhBody'), sub = $('bhSub'), nextBtn = $('bhNext'), closeBtn = $('bhClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = (Math.random()*(i+1))|0; [a[i],a[j]] = [a[j],a[i]]; } return a; };
+  // 대략적인 현지 가격(장소·시기별로 다름)
+  const ITEMS = [
+    ['💧','편의점 생수 600ml',10],['🍳','편의점 토스트 샌드위치',35],['🍝','길거리 팟타이 1접시',60],['🥗','로컬 식당 쏨땀 1접시',60],['🥥','노점 코코넛 워터 1개',50],
+    ['🍺','편의점 싱하 맥주 캔',50],['🥭','망고 찰밥 1접시',120],['🚕','방콕 택시 기본요금',35],['🚐','파타야 썽태우 1회(시내)',10],['💆','전통 마사지 1시간',400],['⛳','캐디 팁(라운드당 일반적)',400],['🛬','공항 택시 공항 수수료',50]
+  ];
+  const LSB = 'thai2026_baht'; let st; try{ st = JSON.parse(localStorage.getItem(LSB)); }catch(e){} st = st || {best:0,plays:0};
+  const save = () => { try{ localStorage.setItem(LSB, JSON.stringify(st)); }catch(e){} };
+  let rate = 42, qs = [], qi = 0, score = 0, answered = false, prevFocus = null;
+  const readRate = () => { const v = parseFloat(String($('fxThb') ? $('fxThb').textContent : '').replace(/[^\d.]/g,'')); rate = v > 10 && v < 100 ? v : 42; return rate; };
+  const roundW = w => w < 1000 ? Math.max(10, Math.round(w/10)*10) : Math.round(w/100)*100;
+  const fmt = n => n.toLocaleString('en-US') + '원';
+  function build(){
+    readRate();
+    qs = shuffle(ITEMS).slice(0,5).map(([e,n,b]) => {
+      const a = roundW(b*rate), cand = shuffle([0.35,0.5,2,3,5].map(m => roundW(b*rate*m))), d = [];
+      for(const c of cand){ if(c !== a && c > 0 && !d.includes(c)) d.push(c); if(d.length === 3) break; }
+      return { e, n, b, a, opts:[a, ...d].sort((x,y) => x-y) };
+    });
+    qi = 0; score = 0;
+  }
+  function renderQ(){
+    answered = false; nextBtn.hidden = true; const q = qs[qi];
+    sub.textContent = `문제 ${qi+1}/${qs.length} · 현재 ${score}점 · 1바트 ≈ ${rate.toFixed(rate % 1 ? 1 : 0)}원 기준`;
+    body.innerHTML = `<div class="bh-item"><div class="bh-e" aria-hidden="true">${q.e}</div><div class="bh-name">${esc(q.n)}</div><div class="bh-price">฿${q.b.toLocaleString()}</div><p class="bh-q">한국 돈으로 얼마쯤일까요?</p></div>` +
+      `<div class="bh-opts">${q.opts.map(o => `<button class="tq-opt" type="button" data-v="${o}">${fmt(o)}</button>`).join('')}</div><p class="tq-fb" id="bhFb"></p>`;
+    const f = body.querySelector('.tq-opt'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  function renderRes(){
+    st.plays++; st.best = Math.max(st.best, score); save(); sub.textContent = '결과';
+    const msg = score === qs.length ? '완벽한 바트 감각! 흥정도 문제없겠어요 💰' : score >= 3 ? '좋아요! 현지 물가가 감이 잡혀요 🛵' : '바트×' + Math.round(rate) + '원! 몇 번 더 하면 감이 와요 😄';
+    body.innerHTML = `<div class="tq-res"><div class="tq-score">${score}<small>/${qs.length}</small></div><p class="tq-msg">${msg}</p><p class="tq-rec">최고 기록 ${st.best}/${qs.length} · 도전 ${st.plays}회</p><button class="wn-close bh-again" type="button">🔁 다시 도전</button><p class="th-note" style="margin-top:10px">가격은 대략적인 예시이고 장소·시기에 따라 달라요</p></div>`;
+    nextBtn.hidden = true;
+  }
+  body.addEventListener('click', e => {
+    if(e.target.closest('.bh-again')){ haptic('tap'); build(); renderQ(); return; }
+    const b = e.target.closest('.tq-opt'); if(!b || answered) return; answered = true;
+    const q = qs[qi], v = +b.dataset.v, right = v === q.a; if(right) score++;
+    body.querySelectorAll('.tq-opt').forEach(x => { x.disabled = true; if(+x.dataset.v === q.a) x.classList.add('ok'); else if(x === b) x.classList.add('no'); });
+    $('bhFb').innerHTML = right ? `<b>정답! ✅</b> ฿${q.b.toLocaleString()} ≈ ${fmt(q.a)}` : `<b>땡! ❌</b> ฿${q.b.toLocaleString()} ≈ ${fmt(q.a)}`;
+    haptic(right ? 'ok' : 'strong'); sub.textContent = `문제 ${qi+1}/${qs.length} · 현재 ${score}점`;
+    nextBtn.textContent = qi+1 < qs.length ? '다음 →' : '결과 보기'; nextBtn.hidden = false; nextBtn.focus({preventScroll:true});
+  });
+  nextBtn.addEventListener('click', () => { haptic('tap'); qi++; if(qi < qs.length) renderQ(); else renderRes(); });
+  window.__bahtInfo = () => ({ best: st.best, plays: st.plays, rate: readRate() });
+  function open(){
+    prevFocus = document.activeElement; build(); renderQ();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openBaht = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .bh-again, #bhNext:not([hidden]), #bhClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 태국 힐링 사운드: Web Audio로 파도·비·밤 벌레 소리를 직접 합성 (파일·인터넷 없음, 켤 때만 재생, 수면 타이머) ──
+(function(){
+  const scrim = $('chillScrim'); if(!scrim) return;
+  const bodyEl = $('chBody'), stopBtn = $('chStop'), closeBtn = $('chClose');
+  const SND = [
+    { id:'wave', e:'🌊', n:'파도 소리', d:'파타야 해변의 잔잔한 밀물·썰물' },
+    { id:'rain', e:'🌧️', n:'열대 빗소리', d:'스콜이 지나가는 소리' },
+    { id:'bug',  e:'🦗', n:'밤 벌레 소리', d:'방콕 밤 정원의 귀뚜라미' }
+  ];
+  let ctx = null, master = null, timerEnd = 0, timerId = 0, tickId = 0, minutes = 30, prevFocus = null;
+  const on = {}, vol = { wave:.6, rain:.5, bug:.5 }, voices = {};
+  function ensure(){
+    if(ctx) return true; const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return false;
+    ctx = new AC(); master = ctx.createGain(); master.gain.value = .9; master.connect(ctx.destination); return true;
+  }
+  function noise(kind){
+    const len = ctx.sampleRate * 3, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0); let last = 0;
+    for(let i=0;i<len;i++){ const w = Math.random()*2-1; if(kind === 'brown'){ last = (last + .02*w)/1.02; d[i] = last*3.5; } else d[i] = w; }
+    const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true; return src;
+  }
+  function build(id){
+    const out = ctx.createGain(); out.gain.value = 0; out.connect(master); const stops = [];
+    const osc = (type, f) => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = f; o.start(); stops.push(() => { try{ o.stop(); }catch(e){} }); return o; };
+    const src = k => { const n = noise(k); n.start(); stops.push(() => { try{ n.stop(); }catch(e){} }); return n; };
+    if(id === 'wave'){
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 650; const g = ctx.createGain(); g.gain.value = .55;
+      const lfo = osc('sine', .11), lg = ctx.createGain(); lg.gain.value = .4; lfo.connect(lg); lg.connect(g.gain);
+      src('brown').connect(lp); lp.connect(g); g.connect(out);
+    } else if(id === 'rain'){
+      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1400; const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 9000; const g = ctx.createGain(); g.gain.value = .22;
+      src('white').connect(hp); hp.connect(lp); lp.connect(g); g.connect(out);
+    } else {
+      const car = osc('sine', 4300), a = ctx.createGain(), env = ctx.createGain(), trim = ctx.createGain(); a.gain.value = .5; env.gain.value = .5; trim.gain.value = .14;
+      const l1 = osc('sine', 27), l1g = ctx.createGain(); l1g.gain.value = .5; l1.connect(l1g); l1g.connect(a.gain);
+      const l2 = osc('square', 1.15), l2g = ctx.createGain(); l2g.gain.value = .5; l2.connect(l2g); l2g.connect(env.gain);
+      car.connect(a); a.connect(env); env.connect(trim); trim.connect(out);
+    }
+    return { out, stop: () => stops.forEach(f => f()) };
+  }
+  function setVol(id){ if(voices[id]) voices[id].out.gain.setTargetAtTime(vol[id], ctx.currentTime, .15); }
+  function toggle(id, force){
+    const want = force === undefined ? !on[id] : force;
+    if(want === !!on[id]) return;
+    if(want){
+      if(!ensure()){ if(typeof window.__toast === 'function') window.__toast('🔇 소리 없음', '이 기기에서는 소리를 만들 수 없어요'); return; }
+      if(ctx.state === 'suspended') ctx.resume();
+      voices[id] = build(id); on[id] = true; setVol(id);
+      if(!timerEnd && minutes) setTimer(minutes);
+    } else {
+      const v = voices[id]; on[id] = false; delete voices[id];
+      if(v){ v.out.gain.setTargetAtTime(0, ctx.currentTime, .12); setTimeout(() => v.stop(), 600); }
+      if(!Object.values(on).some(Boolean)) clearTimer();
+    }
+    paint();
+  }
+  function stopAll(){ Object.keys(on).forEach(id => toggle(id, false)); clearTimer(); }
+  function clearTimer(){ clearTimeout(timerId); clearInterval(tickId); timerEnd = 0; paintLeft(); }
+  function setTimer(m){
+    clearTimeout(timerId); clearInterval(tickId); minutes = m;
+    if(!m || !Object.values(on).some(Boolean)){ timerEnd = 0; paintLeft(); return; }
+    timerEnd = Date.now() + m*60000;
+    timerId = setTimeout(() => { if(master){ master.gain.setTargetAtTime(0, ctx.currentTime, 2.5); } setTimeout(() => { stopAll(); if(master) master.gain.value = .9; if(typeof window.__toast === 'function') window.__toast('🌙 수면 타이머', '소리를 껐어요. 좋은 꿈 꾸세요'); }, 7000); }, m*60000);
+    tickId = setInterval(paintLeft, 1000); paintLeft();
+  }
+  function paintLeft(){
+    const el = $('chLeft'); if(!el) return;
+    const left = timerEnd ? Math.max(0, Math.ceil((timerEnd - Date.now())/1000)) : 0;
+    el.textContent = timerEnd ? `⏲ ${Math.floor(left/60)}분 ${String(left%60).padStart(2,'0')}초 뒤 자동으로 꺼져요` : (Object.values(on).some(Boolean) ? '타이머 없음 — 직접 끌 때까지 재생돼요' : '');
+  }
+  function paint(){
+    bodyEl.innerHTML = `<div class="ch-timer" role="group" aria-label="수면 타이머">` + [15,30,60,0].map(m => `<button class="wh-chip" type="button" data-m="${m}" aria-pressed="${m === minutes}">${m ? m + '분 뒤 끄기' : '타이머 없음'}</button>`).join('') + `</div><p class="ch-left" id="chLeft" aria-live="off"></p>` +
+      SND.map(x => `<div class="ch-card"><div class="ch-top"><div><div class="ch-nm">${x.e} ${x.n}</div><div class="ch-ds">${x.d}</div></div><button class="ch-sw" type="button" data-id="${x.id}" aria-pressed="${!!on[x.id]}">${on[x.id] ? '끄기' : '켜기'}</button></div>` +
+        `<label class="ch-vol">🔈 <input type="range" min="5" max="100" value="${Math.round(vol[x.id]*100)}" data-vol="${x.id}" aria-label="${x.n} 볼륨"> 🔊</label></div>`).join('');
+    paintLeft();
+  }
+  bodyEl.addEventListener('click', e => {
+    const sw = e.target.closest('.ch-sw'); if(sw){ haptic('tap'); const id = sw.dataset.id; toggle(id); const again = bodyEl.querySelector(`.ch-sw[data-id="${id}"]`); if(again) again.focus({preventScroll:true}); return; }
+    const c = e.target.closest('.ch-timer .wh-chip'); if(c){ haptic('tap'); setTimer(+c.dataset.m); bodyEl.querySelectorAll('.ch-timer .wh-chip').forEach(x => x.setAttribute('aria-pressed', String(x === c))); }
+  });
+  bodyEl.addEventListener('input', e => { const r = e.target.closest('input[data-vol]'); if(!r) return; vol[r.dataset.vol] = +r.value/100; if(ctx) setVol(r.dataset.vol); });
+  stopBtn.addEventListener('click', () => { haptic('tap'); stopAll(); });
+  window.__chillInfo = () => ({ playing: SND.filter(x => on[x.id]).map(x => x.e).join(''), state: ctx ? ctx.state : null, timerEnd, minutes });
+  function open(){
+    prevFocus = document.activeElement; paint();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    const f = bodyEl.querySelector('.ch-sw'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openChill = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.ch-timer .wh-chip, .ch-sw, .ch-vol input, #chStop, #chClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
 // ── 놀이터 메뉴: 모든 놀이 기능을 한곳에서 (여권·빙고·퀴즈·룰렛·칭호·나침반·태국어·기록장·운세·먹킷리스트) ──
 (function(){
   const scrim = $('playScrim'); if(!scrim) return;
@@ -4608,8 +4839,10 @@ const FOODS = [
     ['🧭','태국 나침반', () => '폰을 돌려 태국 찾기', '__openCompass'],
     ['🗣️','태국어 · 숫자 · 맥주', () => '발음 듣기 · 숫자 · 맥주 이야기', '__openThai'],
     ['📝','라운드 기록장', () => { try{ const d = (window.__scoreInfo && window.__scoreInfo().data) || {}; const n = Object.keys(d).filter(k => Object.values(d[k]).some(r => r.s || r.b || r.e || r.h)).length; return n ? `${n}라운드 기록` : '스코어 · 버디 기록'; }catch(e){ return '스코어 · 버디 기록'; } }, '__openScore'],
-    ['🔮','오늘의 골프 운세', () => '매일 바뀌는 라운드 운세', '__openFortune', true],
-    ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats', true]
+    ['🔮','오늘의 골프 운세', () => '매일 바뀌는 라운드 운세', '__openFortune'],
+    ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats'],
+    ['💰','바트 감각 테스트', () => { try{ const b = window.__bahtInfo(); return b.best ? `최고 ${b.best}/5` : '이 가격, 한국 돈으로?'; }catch(err){ return '이 가격, 한국 돈으로?'; } }, '__openBaht', true],
+    ['🌴','태국 힐링 사운드', () => { try{ const c = window.__chillInfo(); return c.playing ? `재생 중 ${c.playing}` : '파도·비·밤 벌레 소리'; }catch(err){ return '파도·비·밤 벌레 소리'; } }, '__openChill', true]
   ];
   function paint(){
     grid.innerHTML = TILES.map((t,i) => `<button class="play-tile" type="button" data-i="${i}">${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`).join('');
@@ -4852,6 +5085,37 @@ const FOODS = [
     try{ await navigator.clipboard.writeText(t); copyBtn.textContent = '✅ 복사했어요'; }catch(err){ copyBtn.textContent = '⚠️ 복사 실패'; }
     haptic('ok'); setTimeout(() => { copyBtn.textContent = o; }, 1800);
   });
+  async function roundImage(){
+    const g = GOLF.find(x => x.d === sel), rs = data[g.d] || {}, rows = g.p.filter(n => rs[n] && (rs[n].s || rs[n].b || rs[n].e || rs[n].h));
+    if(!rows.length) return 'empty';
+    const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+    const gr = c.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#0E2822'); gr.addColorStop(1, '#1E4B41'); c.fillStyle = gr; c.fillRect(0, 0, W, H);
+    c.fillStyle = 'rgba(245,231,192,.08)'; c.beginPath(); c.arc(W-120, 160, 260, 0, 7); c.fill();
+    c.textAlign = 'left'; c.fillStyle = '#F5E7C0'; c.font = '600 44px Inter, system-ui, sans-serif'; c.fillText('⛳ ROUND CARD', 80, 130);
+    c.fillStyle = '#F4EEDD'; c.font = '700 84px Fraunces, Georgia, serif'; c.fillText(`${g.d} (${g.w})`, 80, 250);
+    c.font = '600 52px Inter, system-ui, sans-serif'; c.fillText(g.c.length > 26 ? g.c.slice(0, 25) + '…' : g.c, 80, 330);
+    c.fillStyle = '#B3CABF'; c.font = '500 36px Inter, system-ui, sans-serif'; c.fillText(`${g.p.length}인 라운드 · 티오프 ${(g.tee || '').replace(' 확정', '')}`, 80, 390);
+    const best = Math.min(...rows.map(n => rs[n].s || 999));
+    rows.slice(0, 5).forEach((n, i) => {
+      const r = rs[n], y = 470 + i*150; c.fillStyle = 'rgba(255,255,255,.08)'; c.beginPath(); c.roundRect(60, y, W-120, 126, 28); c.fill();
+      c.fillStyle = pc(n); c.beginPath(); c.arc(110, y+63, 16, 0, 7); c.fill();
+      c.fillStyle = '#F4EEDD'; c.font = '700 48px Inter, system-ui, sans-serif'; c.fillText(n, 148, y+78); const nw = c.measureText(n).width;
+      const badge = `${r.b ? ' 🐦' + r.b : ''}${r.e ? ' 🦅' + r.e : ''}${r.h ? ' 🕳️' : ''}`.trim(); c.fillStyle = '#F5E7C0'; c.font = '600 40px Inter, system-ui, sans-serif'; c.fillText(badge, 148 + nw + 28, y+78);
+      c.textAlign = 'right'; c.fillStyle = r.s && r.s === best ? '#F5E7C0' : '#F4EEDD'; c.font = '700 64px Fraunces, Georgia, serif'; c.fillText(r.s ? (r.s === best && rows.length > 1 ? '🥇 ' : '') + r.s : '–', W-100, y+82); c.textAlign = 'left';
+    });
+    c.fillStyle = '#B3CABF'; c.font = '500 34px Inter, system-ui, sans-serif'; c.fillText('태국 겨울 여행 2026 · 3가족 9명', 80, H-90);
+    const blob = await new Promise(res => cv.toBlob(res, 'image/png')); if(!blob) return 'fail';
+    const file = new File([blob], `round-${g.d.replace('/','-')}.png`, {type:'image/png'});
+    try{ if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:`${g.d} 라운드 기록`}); return 'shared'; } }catch(e){ if(e && e.name === 'AbortError') return 'cancel'; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); return 'saved';
+  }
+  const imgBtn = $('scImg');
+  imgBtn.addEventListener('click', async () => {
+    const o = imgBtn.textContent; imgBtn.textContent = '⏳ 이미지 만드는 중…';
+    const how = await roundImage();
+    imgBtn.textContent = how === 'empty' ? '기록이 아직 없어요' : how === 'saved' ? '✅ 이미지로 저장했어요' : how === 'shared' ? '✅ 공유했어요' : how === 'fail' ? '⚠️ 이미지를 만들지 못했어요' : o;
+    haptic('ok'); setTimeout(() => { imgBtn.textContent = o; }, 1800);
+  });
   window.__scoreInfo = () => ({ data, stats });
   function open(){
     prevFocus = document.activeElement; sel = sel || pickDefault(); mode = 'rec'; render();
@@ -4871,7 +5135,7 @@ const FOODS = [
   addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.wh-tab, .sc-round, .sc-card input, .sc-ctr button, .sc-ho, #scCopy, #scClose')];
+    const f = [...scrim.querySelectorAll('.wh-tab, .sc-round, .sc-card input, .sc-ctr button, .sc-ho, #scImg, #scCopy, #scClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
