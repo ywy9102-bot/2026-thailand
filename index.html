@@ -232,6 +232,8 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .daily-card{flex-wrap:wrap;min-height:44px}
 .play-card{min-height:44px;border-color:rgba(181,138,40,.5);background:rgba(181,138,40,.12)}
 .play-card .nc-arrow{color:var(--gold-s)}
+.map-card{min-height:44px;border-color:rgba(201,177,131,.6);background:rgba(241,228,195,.14)}
+.map-card .nc-arrow{color:#E9D9AE}
 .daily-card .dc-more{flex:1 1 100%;font-size:12px;line-height:1.55;color:#DCE8E2;padding-top:8px;border-top:1px dashed rgba(255,255,255,.2)}
 .daily-card .dc-more b{color:var(--gold-s);font-weight:700}
 .daily-card.open .nc-t{white-space:normal}
@@ -1318,6 +1320,36 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tq-opt:active:not(:disabled){transform:scale(.98)}
 }
 
+/* ── 파타야 맛집 대동여지도 ── */
+.fm-chips{flex:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -2px 8px;padding:0 2px}
+.fm-chips::-webkit-scrollbar{display:none}
+.fm-chips .wh-chip{flex:none;white-space:nowrap}
+.fm-chips .wh-chip[aria-pressed="false"]{background:var(--card);color:var(--ink);text-decoration:none}
+.fm-chips .wh-chip[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.fm-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px;border-radius:12px;border:1px solid #CDB78A;
+  background-color:#F1E4C3;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M26 0H0V26' fill='none' stroke='%235a3c14' stroke-opacity='.08'/%3E%3C/svg%3E")}
+.fm-card{background:#FBF4E1;border:1.5px solid #CDB78A;border-radius:12px;margin:0 0 9px;color:#3B2A14}
+.fm-head{appearance:none;width:100%;display:grid;grid-template-columns:42px 1fr auto;gap:2px 10px;align-items:center;min-height:64px;padding:9px 12px;border:0;background:none;text-align:left;font-family:inherit;color:inherit;cursor:pointer}
+.fm-seal{grid-row:1/3;width:42px;height:42px;border-radius:10px;background:#A94A2C;color:#FBF4E1;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.375rem;font-weight:700;transform:rotate(-4deg)}
+.fm-nm{font-size:.9688rem;font-weight:700;line-height:1.25;word-break:keep-all}
+.fm-en{font-size:.75rem;color:#6B5532;line-height:1.3}
+.fm-meta{grid-row:1/3;grid-column:3;text-align:right;font-size:.75rem;line-height:1.5;color:#6B5532;white-space:nowrap}
+.fm-meta b{display:block;font-family:'IBM Plex Mono',monospace;font-size:.8125rem;color:#3B2A14}
+.fm-det{padding:2px 12px 12px;border-top:1px dashed #CDB78A;font-size:.8125rem;line-height:1.65}
+.fm-det h4{margin:10px 0 3px;font-family:'Fraunces',serif;font-size:.875rem;color:#7A4A12}
+.fm-det ul{margin:0;padding-left:18px} .fm-det li{margin:0 0 3px;word-break:keep-all}
+.fm-det .pro::marker{content:"👍 "} .fm-det .con::marker{content:"⚠️ "}
+.fm-det p{margin:0 0 4px;word-break:keep-all}
+.fm-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.fm-tag{font-size:.75rem;font-weight:600;padding:2px 9px;border-radius:99px;background:#EADBB6;color:#5A3E12}
+.fm-act{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.fm-btn{appearance:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:6px 13px;border:1.5px solid #A8895A;border-radius:12px;background:#FBF4E1;color:#3B2A14;font-family:inherit;font-size:.8125rem;font-weight:700;text-decoration:none;cursor:pointer}
+.fm-btn.main{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.fm-map{margin-top:10px;border:1.5px solid #A8895A;border-radius:10px;overflow:hidden;background:#EADBB6}
+.fm-map iframe{display:block;width:100%;height:240px;border:0}
+.fm-map p{margin:0;padding:8px 10px;font-size:.75rem;color:#6B5532}
+.fm-foot{margin:10px 2px 2px;font-size:.75rem;line-height:1.6;color:#6B5532;text-align:center}
+
 /* ── 바트 감각 · 힐링 사운드 ── */
 .bh-body,.ch-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .bh-item{text-align:center;padding:6px 0 2px}
@@ -1643,6 +1675,11 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <button class="next-card play-card" id="playCard" type="button" aria-label="놀이터 열기: 여권, 빙고, 퀴즈, 룰렛, 칭호, 나침반, 태국어, 기록장, 운세, 먹킷리스트">
       <span class="nc-tag">🎮 놀이터</span>
       <span class="nc-body"><span class="nc-e" aria-hidden="true">🛂</span><span class="nc-t">빙고·퀴즈·룰렛·운세·먹킷리스트…</span></span>
+      <span class="nc-arrow">열기 →</span>
+    </button>
+    <button class="next-card map-card" id="foodMapCard" type="button" aria-label="파타야 맛집 대동여지도 열기: 검증된 맛집 12곳의 지도, 메뉴, 후기">
+      <span class="nc-tag">🗺️ 맛집지도</span>
+      <span class="nc-body"><span class="nc-e" aria-hidden="true">🍽️</span><span class="nc-t">파타야 맛집 대동여지도 · 12곳</span></span>
       <span class="nc-arrow">열기 →</span>
     </button>
     <div class="stats">
@@ -2182,6 +2219,20 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   </div>
 </div>
 
+<!-- 파타야 맛집 대동여지도 -->
+<div class="wn-scrim" id="foodScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="fmTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🗺️ 大東輿地圖</span>
+      <h2 class="wn-title" id="fmTitle">파타야 맛집 대동여지도</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem">후기 사이트 여러 곳에서 평가가 일관된 12곳만 모았어요 (2026-10 검색 기준 · 가격은 1인 대략값, 방문 전 지도에서 영업시간 확인)</p>
+    <div class="fm-chips wh-chips" id="fmChips" role="group" aria-label="종류 선택"></div>
+    <div class="fm-body" id="fmBody"></div>
+    <button class="wn-close" id="fmClose" type="button" style="margin-top:12px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
 <!-- 놀이터 메뉴 -->
 <div class="wn-scrim" id="playScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="plTitle">
@@ -2370,7 +2421,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.87';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.88';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4080,6 +4131,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🗺️','파타야 맛집 대동여지도 — 검증된 12곳','첫 화면 "놀이터" 바로 아래 "맛집지도" 카드에서 열어요. 인스타그램 맛집 30선(AI 콘텐츠) 중 후기 사이트 여러 곳에서 평가가 일관된 12곳만 골라, 肉(스테이크)·海(뷔페)·天(루프탑)·洋(파인다이닝)·亞(아시아)로 나눴어요. 식당마다 실제 구글 지도, 대표 메뉴, 1인 가격, 후기 요약(좋은 점·아쉬운 점), 이 여행에서의 활용 팁, 영문 주소 복사(Grab·Bolt용)가 들어 있어요. 별점·가격은 2026-10 검색으로 확인한 대략값이니 방문 전 지도에서 영업시간을 확인하세요'],
     ['🌴','새 놀이 3가지 — 힐링 사운드 · 바트 감각 테스트 · 라운드 이미지','🌴 태국 힐링 사운드: 파도·열대 빗소리·밤 벌레 소리를 폰이 직접 만들어 들려줘요(파일·인터넷 없음). 각각 켜고 끄고 볼륨을 조절하며, 15/30/60분 수면 타이머가 지나면 부드럽게 꺼져요. 창을 닫아도 소리는 계속되고 놀이터 메뉴에서 다시 끌 수 있어요. 💰 바트 감각 테스트: 팟타이·마사지·택시 기본요금 같은 현지 가격을 보고 한국 돈으로 얼마인지 맞히는 5문제(화면의 환율 사용). 🖼️ 라운드 이미지: 라운드 기록장에서 그날 스코어·버디를 카드 이미지로 저장·공유해요. 모두 놀이터 메뉴에서 열려요'],
     ['🔮','새 놀이 2가지 — 오늘의 골프 운세 · 태국 먹킷리스트','🔮 오늘의 골프 운세: 이름을 누르면 오늘(방콕 날짜 기준) 라운드 운세가 나와요 — 총운, 티샷·아이언·숏게임·퍼팅·멘탈 별점, 행운의 클럽·홀, 오늘의 목표, 라운드 뒤 먹을 음식·맥주까지. 하루 동안 같은 결과이고 매일 바뀌어요. 🍜 태국 먹킷리스트: 팟타이·똠얌꿍·망고 찰밥부터 태국 밀크티·싱하 맥주까지 20가지를 먹을 때마다 체크하고, "오늘 뭐 먹지?"로 아직 안 먹은 것 중에서 골라줘요. 첫 화면 "놀이터" 버튼에서 열려요'],
     ['🎮','놀이터 메뉴 개편 + 나침반 켜기/끄기','첫 화면 "놀이터" 버튼이 이제 전체 놀이 메뉴(10가지 타일)를 바로 열어줘요. 여권 도장첩도 그 안의 타일 하나예요. 태국 나침반은 이제 버튼으로 켜고 끌 수 있고(창을 닫으면 자동으로 꺼짐), "내 위치"도 다시 눌러 끌 수 있어요'],
@@ -4822,6 +4874,70 @@ const FOODS = [
     const f = [...scrim.querySelectorAll('.ch-timer .wh-chip, .ch-sw, .ch-vol input, #chStop, #chClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 파타야 맛집 대동여지도: 후기 사이트 여러 곳에서 평가가 일관된 12곳 — 지도(구글)·메뉴·후기·가격 ──
+(function(){
+  const scrim = $('foodScrim'); if(!scrim) return;
+  const chipsEl = $('fmChips'), bodyEl = $('fmBody'), closeBtn = $('fmClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const GROUPS = [['all','전체','🗺️'],['육','肉 스테이크'],['해','海 뷔페'],['천','天 루프탑'],['양','洋 파인다이닝'],['아','亞 아시아']];
+  const SEAL = {육:'肉',해:'海',천:'天',양:'洋',아:'亞'};
+  const R = [{"id": "harlans", "g": "육", "ko": "할란스 파타야", "en": "Harlan's Pattaya", "kind": "스테이크 · 셰프 메뉴", "google": "4.9 (1,584)", "ta": "Tripadvisor 방라뭉 지역 1위(104곳)", "price": "฿2,000+", "pnote": "세트 메뉴 일부는 ฿2,000 미만", "addr": "47/72-73 Moo 9, Soi Welcome Town, Pattaya Klang, Nongprue", "q": "Harlan's Pattaya Soi Welcome Town", "eng": "Harlan's Pattaya, 47/72-73 Moo 9, Soi Welcome Town, Pattaya Klang, Nongprue, Bang Lamung, Chon Buri", "menu": ["육즙 가득한 스테이크가 대표", "셰프가 여러 나라의 음식·술 문화를 반영한 셰프 메뉴"], "pros": ["\"인생 스테이크\"라는 후기가 많고 서비스·분위기 호평", "가격이 높아도 \"값어치 한다\"는 평이 거의 전부"], "cons": ["파타야 기준 가격대가 높은 편(฿2,000+)"], "tip": "특별한 날 저녁용. 인기가 많아 예약을 권해요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g1226133-d25007053-Reviews-Harlan_s-Bang_Lamung_Chonburi_Province.html"}, {"id": "terry", "g": "육", "ko": "테리 킴 스테이크하우스", "en": "Terry Kim Steakhouse", "kind": "스테이크 · 한국식 분위기", "google": "4.9 (2,358)", "ta": "Tripadvisor 4.9 · Restaurant Guru 4.8(1,151건)", "price": "฿1,000~2,000+", "pnote": "1인 기준, 스테이크 단품은 아래 참고", "addr": "571 Pattaya 24 Na Kluea 16/2 Alley (나클루아)", "q": "Terry Kim Steakhouse Pattaya Na Kluea", "eng": "Terry Kim Steakhouse, 571 Pattaya 24 Na Kluea 16/2 Alley, Pattaya City, Bang Lamung, Chon Buri 20150", "menu": ["피카냐 앵거스 200g ฿590 · 500g ฿1,499", "플랭크 스테이크 앵거스 250g ฿790", "호주산 와규 9+·앵거스, 파스타·샐러드"], "pros": ["물숙성(water aging) 방식으로 숙성한 소고기", "2층 한옥풍 목조 건물, 넓은 테라스, 청결"], "cons": ["예산은 1인 ฿1,000~2,000+ 잡는 게 안전해요"], "tip": "나클루아라 숙소에서는 이동이 필요해요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d27746281-Reviews-Terry_Kim_Steakhouse-Pattaya_Chonburi_Province.html"}, {"id": "longhorn", "g": "육", "ko": "롱혼 스테이크하우스 & 그릴", "en": "Longhorn Steakhouse & Grill", "kind": "스테이크 · 가성비", "google": "4.7 (2,147)", "ta": "Tripadvisor 4.7 · 파타야 32위", "price": "약 ฿1,000", "pnote": "호주산 안심 ฿595~", "addr": "Central Pattaya (정확한 번지는 지도에서 확인)", "q": "Longhorn Steakhouse & Grill Pattaya", "eng": "Longhorn Steakhouse & Grill, Central Pattaya", "menu": ["호주산 안심 스테이크 ฿595~", "블랙 앵거스 스페셜 ฿895", "페퍼 소스 호평"], "pros": ["\"이 가격에 이런 품질은 드물다\"는 가성비 후기", "서비스 친절, 굽기 정확"], "cons": ["사이드·소스는 평범하다는 후기도 있어요"], "tip": "스테이크 가성비 1순위 후보.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d12283373-Reviews-Longhorn_Steakhouse_Grill-Pattaya_Chonburi_Province.html"}, {"id": "flame", "g": "육", "ko": "플레임 파타야", "en": "Flame Pattaya", "kind": "스테이크 · 비스트로", "google": "4.6 (389)", "ta": "Tripadvisor 4.6 · 방라뭉 7위(90곳)", "price": "약 ฿900 안팎", "pnote": "일요일 로스트 ฿495~", "addr": "312/53 Soi Lengkee, Pattaya City", "q": "Flame Pattaya Soi Lengkee", "eng": "Flame Pattaya, 312/53 Soi Lengkee, Pattaya City, Bang Lamung, Chon Buri", "menu": ["비프 웰링턴", "선데이 로스트 ฿495~", "스테이크·버거·클래식 디저트, 태국 요리 일부"], "pros": ["플레이팅·편안한 분위기·친절한 직원", "일요일 로스트가 가성비 좋다는 평"], "cons": ["싼 편은 아니에요(그래도 \"값어치\" 평)"], "tip": "15:00~23:00 영업, 월요일 휴무.", "src": "https://www.tripadvisor.com/Restaurant_Review-g1226133-d25217639-Reviews-Flame_Pattaya-Bang_Lamung_Chonburi_Province.html"}, {"id": "bigfish", "g": "해", "ko": "빅피시 씨푸드 뷔페", "en": "Big Fish Seafood Buffet", "kind": "씨푸드 뷔페 · 만 전망", "google": "4.7 (838)", "ta": "Tripadvisor 4.9 · 파타야 11위", "price": "฿849 net~", "pnote": "6~12세 ฿759 net · 6세 미만 무료", "addr": "Siam@Siam Design Hotel 6층, 390 Moo 9 Pattaya Sai 2 Rd", "q": "Big Fish Seafood Buffet Siam@Siam Design Hotel Pattaya", "eng": "Big Fish Seafood Buffet, 6th floor Siam@Siam Design Hotel, 390 Moo 9 Pattaya Sai 2 Rd, Nongprue, Bang Lamung, Chon Buri 20150", "menu": ["라이브 그릴, 로우바(생해산물), 카빙 스테이션, 디저트·크레페 스테이션", "음료 패키지 ฿949(소프트)~฿1,839(스파클링 무제한)", "라이브 음악, 타이만 전망"], "pros": ["해산물 구성·서비스 호평", "약 4시간 즐기는 뷔페로 안내돼요"], "cons": ["현지 식당에 비하면 비싸다는 평도 있어요"], "tip": "수~일 17:30~21:30만 운영. 12/24(목)·12/25(금)은 가능한 요일이에요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d8260002-Reviews-Big_Fish_Seafood_Buffet_Pattaya-Pattaya_Chonburi_Province.html"}, {"id": "skybar", "g": "천", "ko": "스카이바 서머 클럽", "en": "Skybar Summer Club", "kind": "루프탑 레스토랑 · 바", "google": "4.9 (483)", "ta": "Tripadvisor 4.9 · 파타야 2위", "price": "저녁 ฿600~800", "pnote": "입장료 ฿500은 음식·음료 바우처로 환급", "addr": "Siam@Siam Design Hotel 27층, 390 Moo 9 Pattaya Sai 2 Rd", "q": "Skybar Summer Club Siam@Siam Pattaya", "eng": "Skybar Summer Club, 27th floor Siam@Siam Design Hotel, 390 Moo 9 Pattaya Sai 2 Rd, Pattaya 20150", "menu": ["루프탑 다이닝과 칵테일", "행복 시간(해피아워) 할인 있음"], "pros": ["일몰 전망, 음식 양·서빙 속도 호평"], "cons": ["음악이 크고 성인 위주 분위기라 어르신·아이와는 시끄러울 수 있어요"], "tip": "빅피시 뷔페와 같은 건물이라 식사 후 2차로 좋아요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d17325479-Reviews-Skybar_Summer_Club-Pattaya_Chonburi_Province.html"}, {"id": "moonwhale", "g": "천", "ko": "문웨일", "en": "Moon Whale", "kind": "루프탑 바 · 레스토랑", "google": "4.8 (2,564)", "ta": "Tripadvisor 4.9 · 파타야 10위", "price": "폭 넓음(฿100~1,800 안팎)", "pnote": "메뉴에 따라 달라요", "addr": "로열가든 플라자 3층, 비치로드 (게시물 속 카페와 같은 곳인지 지도에서 확인)", "q": "Moon Whale Pattaya Royal Garden Plaza", "eng": "Moon Whale, 3rd floor Royal Garden Plaza, Beach Road, Pattaya", "menu": ["트러플 프라이, 할라피뇨 포퍼", "연어 스테이크", "망고 찰밥 + 아이스크림, 크렘 브륄레", "칵테일"], "pros": ["고래 모양 바와 일몰 전망, 칵테일·서비스 호평"], "cons": ["검색된 정보와 게시물 속 카페(디저트 위주)가 같은 곳인지는 확인이 필요해요"], "tip": "일몰 시간대를 노려보세요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d28640595-Reviews-Moonwhale_Pattaya-Pattaya_Chonburi_Province.html"}, {"id": "yitong", "g": "천", "ko": "이통 차이니즈 & 스카이바", "en": "Yítóng Chinese Restaurant & Sky Bar", "kind": "중식(광동·사천) · 스카이바", "google": "4.8 (115)", "ta": "Tripadvisor 4.9 · 파타야 16위", "price": "฿900~1,000", "pnote": "상한가 기준", "addr": "Meliá Pattaya Hotel 최상층", "q": "Yitong Chinese Restaurant Sky Bar Melia Pattaya", "eng": "Yítóng Chinese Restaurant & Sky Bar, top floor Meliá Pattaya Hotel, Pattaya", "menu": ["북경오리 (후기 가장 많이 언급)", "딤섬"], "pros": ["고급스러운 분위기와 바다 전망, 합리적이라는 평"], "cons": ["Google 후기가 115건으로 적어요"], "tip": "어르신 동반 식사에 무난한 분위기예요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d33030842-Reviews-Yitong_Chinese_Restaurant_Sky_Bar-Pattaya_Chonburi_Province.html"}, {"id": "amis", "g": "양", "ko": "카페 데 자미 파인다이닝", "en": "Cafe des Amis Fine Dining", "kind": "프렌치 파인다이닝", "google": "4.8 (1,259)", "ta": "Tripadvisor 4.8 · 파타야 21위", "price": "약 ฿2,000", "pnote": "가격대 $16~91로 소스마다 달라요", "addr": "391/6 Moo 10, Soi 11 끝, Thappraya Rd", "q": "Cafe des Amis Fine Dining Pattaya Thappraya", "eng": "Cafe des Amis Fine Dining, 391/6 Moo 10, end of Soi 11 off Thappraya Rd, Pattaya", "menu": ["비프 웰링턴(시그니처)", "랍스터, 푸아그라", "진(gin) 셀렉션"], "pros": ["정원이 있는 발리풍 하우스, 조용한 골목", "플레이팅·서비스 호평"], "cons": ["특별한 날 가는 가격대예요"], "tip": "예약 권장.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d1594762-Reviews-Cafe_Des_Amis_Fine_Dining-Pattaya_Chonburi_Province.html"}, {"id": "indiagate", "g": "아", "ko": "인디아게이트", "en": "Indiagate Restaurant Pattaya", "kind": "인도 요리", "google": "4.8 (5,006)", "ta": "Tripadvisor 4.8(245건) · 파타야 23위", "price": "점심 ฿600~800", "pnote": "$$~$$$", "addr": "N Pattaya Rd, Thai Garden Resort (게시물 기준 · 비치로드 지점도 있어요)", "q": "Indiagate Restaurant Pattaya", "eng": "Indiagate Restaurant Pattaya, North Pattaya Rd, Thai Garden Resort, Pattaya", "menu": ["정통 인도 커리·난", "할랄 식당으로 등록"], "pros": ["서비스·맛 호평, 가격이 합리적이라는 후기"], "cons": ["양이 적다, 맵기가 약하다, 버터 난이 아쉽다는 후기도 있어요"], "tip": "현지인에게도 인기 많은 커리 맛집으로 소개돼요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g293919-d25189685-Reviews-Indiagate_Restaurant_Pattaya-Pattaya_Chonburi_Province.html"}, {"id": "nara", "g": "아", "ko": "나라 타이 퀴진 (터미널21)", "en": "Nara Thai Cuisine Terminal 21", "kind": "정통 태국 요리", "google": "4.6 (1,537)", "ta": "Tripadvisor 4.7 · Restaurant Guru 4.8", "price": "฿400~1,400", "pnote": "쇼핑몰 안 에어컨", "addr": "Terminal 21 Pattaya 2층", "q": "Nara Thai Cuisine Terminal 21 Pattaya", "eng": "Nara Thai Cuisine, 2nd floor Terminal 21 Pattaya", "menu": ["정통 태국 요리(대표 메뉴는 현장 메뉴판에서 확인)"], "pros": ["플레이팅·맛·빠른 서비스 호평"], "cons": ["가격은 높지만 입지·품질에 비해 합리적이라는 평"], "tip": "쇼핑몰 안이라 날씨와 상관없고 어르신과 가기 편해요.", "src": "https://www.tripadvisor.com/Restaurant_Review-g297916-d33241917-Reviews-Nara_Thai_Cuisine_Terminal_21_Pattaya-Chonburi_Chonburi_Province.html"}, {"id": "mays", "g": "아", "ko": "메이즈 파타야", "en": "MAYs Pattaya (Urban Thai Dine)", "kind": "모던 태국 요리", "google": "4.6 (1,265)", "ta": "Tripadvisor 4.6(664건) · 파타야 37위", "price": "฿800~1,200", "pnote": "예전 후기에선 더 저렴(재조회 필요)", "addr": "315/74 Moo 12, Thepprasit Rd (KTB 은행 맞은편)", "q": "MAYs Pattaya Thepprasit Road", "eng": "MAYs Pattaya, 315/74 Moo 12 Thepprasit Road, opposite KTB Bank, Pattaya 20150", "menu": ["길거리 음식을 세련되게 풀어낸 어반 타이", "직접 만든·신선한 재료"], "pros": ["향신료 맛이 살아있는 정통 태국 맛, 양이 많음", "사장님(May)이 친절", "\"5성급 플레이팅인데 가격은 1/3\"이라는 후기"], "cons": ["최근 가격대는 후기마다 달라 방문 전 확인"], "tip": "팁프라싯 도로변이라 숙소(빌라 통부라)와 같은 방향이에요.", "src": "https://restaurantguru.com/MAYs-Urban-Thai-Dine-Pattaya"}];
+  let cur = 'all', prevFocus = null;
+  const mapUrl = r => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.q);
+  const embedUrl = r => 'https://maps.google.com/maps?q=' + encodeURIComponent(r.q) + '&hl=ko&z=16&output=embed';
+  function render(){
+    chipsEl.innerHTML = GROUPS.map(([k,l]) => `<button class="wh-chip" type="button" data-g="${k}" aria-pressed="${k === cur}">${l}${k === 'all' ? ' ' + R.length : ' ' + R.filter(r => r.g === k).length}</button>`).join('');
+    const list = R.filter(r => cur === 'all' || r.g === cur);
+    bodyEl.innerHTML = list.map(r => `<article class="fm-card" data-id="${r.id}">` +
+      `<button class="fm-head" type="button" aria-expanded="false" aria-controls="fm-d-${r.id}"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span><span class="fm-meta"><b>★ ${esc(r.google.split(' ')[0])}</b>${esc(r.price)}</span></button>` +
+      `<div class="fm-det" id="fm-d-${r.id}" hidden>` +
+        `<div class="fm-tags"><span class="fm-tag">${esc(r.kind)}</span><span class="fm-tag">Google ${esc(r.google)} (게시물)</span><span class="fm-tag">${esc(r.ta)}</span></div>` +
+        `<h4>💰 가격</h4><p>${esc(r.price)} <span style="color:#6B5532">· ${esc(r.pnote)}</span></p>` +
+        `<h4>📍 위치</h4><p>${esc(r.addr)}</p>` +
+        `<h4>🍽️ 메뉴</h4><ul>${r.menu.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` +
+        `<h4>💬 후기 요약</h4><ul>${r.pros.map(m => `<li class="pro">${esc(m)}</li>`).join('')}${r.cons.map(m => `<li class="con">${esc(m)}</li>`).join('')}</ul>` +
+        `<h4>🧭 이 여행에서는</h4><p>${esc(r.tip)}</p>` +
+        `<div class="fm-act"><button class="fm-btn main" type="button" data-act="map">📍 지도 보기</button><a class="fm-btn" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 앱으로 열기 ↗</a>` +
+        `<button class="fm-btn tl-copy" type="button" data-copy="${esc(r.eng)}">📋 영문 주소 복사 · Grab·Bolt용</button><a class="fm-btn" href="${esc(r.src)}" target="_blank" rel="noopener">후기 원문 ↗</a></div>` +
+        `<div class="fm-map" hidden></div>` +
+      `</div></article>`).join('') + `<p class="fm-foot">별점·가격은 2026-10 검색으로 확인한 대략값이에요. 게시물(AI 콘텐츠)의 사진은 실제 음식이 아니니 참고하지 마세요. 영업시간·휴무는 지도에서 확인하세요.</p>`;
+  }
+  chipsEl.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; cur = b.dataset.g; haptic('tap'); render(); const again = chipsEl.querySelector(`[data-g="${cur}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
+  bodyEl.addEventListener('click', e => {
+    const head = e.target.closest('.fm-head');
+    if(head){ const det = $(head.getAttribute('aria-controls')), open = head.getAttribute('aria-expanded') !== 'true'; head.setAttribute('aria-expanded', String(open)); det.hidden = !open; haptic('tap'); if(open) det.scrollIntoView({block:'nearest'}); return; }
+    const mb = e.target.closest('[data-act="map"]'); if(!mb) return;
+    const card = mb.closest('.fm-card'), r = R.find(x => x.id === card.dataset.id), box = card.querySelector('.fm-map');
+    if(!box.hidden){ box.hidden = true; box.innerHTML = ''; mb.textContent = '📍 지도 보기'; return; }
+    box.hidden = false; mb.textContent = '📍 지도 닫기'; haptic('tap');
+    box.innerHTML = `<iframe src="${embedUrl(r)}" title="${esc(r.ko)} 지도" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe><p>지도가 안 보이면 "구글지도 앱으로 열기"를 눌러주세요.</p>`;
+  });
+  function open(){
+    prevFocus = document.activeElement; render();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    const f = chipsEl.querySelector('.wh-chip'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; bodyEl.querySelectorAll('.fm-map').forEach(b => { b.hidden = true; b.innerHTML = ''; }); }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openFoodMap = open; window.__foodMapInfo = () => ({ count: R.length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}) });
+  const fc = $('foodMapCard'); if(fc) fc.addEventListener('click', () => { haptic('tap'); open(); });
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.fm-chips .wh-chip, .fm-head, .fm-det:not([hidden]) .fm-btn, #fmClose')];
+    const cur2 = f.indexOf(document.activeElement), n = f.length;
+    if(cur2 === -1 || (!e.shiftKey && cur2 === n-1) || (e.shiftKey && cur2 === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
 })();
 
