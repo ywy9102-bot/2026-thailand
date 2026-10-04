@@ -1318,6 +1318,40 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tq-opt:active:not(:disabled){transform:scale(.98)}
 }
 
+/* ── 골프 운세 · 먹킷리스트 ── */
+.fc-body,.et-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.fc-card{border:1.5px solid var(--line);border-radius:16px;background:var(--card);padding:16px 14px;min-height:180px}
+.fc-empty{text-align:center;color:var(--ink3);font-size:.875rem;line-height:1.6;margin:40px 0}
+.fc-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.fc-name{font-size:.9375rem;font-weight:700;color:var(--ink)}
+.fc-tier{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700;color:var(--jade);word-break:keep-all}
+.fc-line{margin:10px 0 12px;font-size:.9375rem;line-height:1.6;color:var(--ink);word-break:keep-all}
+.fc-stats{display:grid;gap:5px;margin:0 0 12px}
+.fc-st{display:grid;grid-template-columns:62px 1fr 28px;align-items:center;gap:8px;font-size:.75rem;color:var(--ink2)}
+.fc-st i{display:block;height:7px;border-radius:99px;background:var(--jade-s);overflow:hidden} .fc-st i b{display:block;height:100%;background:var(--gold);border-radius:99px}
+.fc-st output{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--ink);text-align:right}
+.fc-facts{list-style:none;margin:0;padding:10px 0 0;border-top:1px dashed var(--line);display:grid;gap:5px;font-size:.8125rem;color:var(--ink2);line-height:1.5}
+.fc-facts b{color:var(--ink)}
+.et-prog{display:flex;align-items:center;gap:10px;margin:0 2px 10px;font-size:.8125rem;font-weight:700;color:var(--jade-d)}
+.et-bar{flex:1;height:9px;border-radius:99px;background:var(--jade-s);overflow:hidden} .et-fill{height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .35s cubic-bezier(.16,1,.3,1)}
+.et-list{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.et-item{appearance:none;display:grid;grid-template-columns:30px 1fr;gap:2px 10px;align-items:center;width:100%;min-height:56px;padding:8px 12px;text-align:left;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-family:inherit;color:var(--ink);cursor:pointer}
+.et-item .ck{grid-row:1/3;width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.875rem;color:transparent}
+.et-item .nm{font-size:.9375rem;font-weight:700;line-height:1.3;word-break:keep-all} .et-item .ds{font-size:.75rem;color:var(--ink2);line-height:1.4;word-break:keep-all}
+.et-item[aria-pressed="true"]{background:var(--ok-s);border-color:var(--ok)} .et-item[aria-pressed="true"] .ck{background:var(--ok);border-color:var(--ok);color:#fff}
+.et-item.pick{box-shadow:0 0 0 3px var(--gold)}
+@media (prefers-reduced-motion:reduce){ .et-fill{transition:none} }
+
+/* ── 놀이터 메뉴 ── */
+.pl-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 4px}
+.play-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.play-tile{appearance:none;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-height:84px;padding:10px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);text-align:left;font-family:inherit;cursor:pointer;color:var(--ink)}
+.play-tile .pe{font-size:1.5rem;line-height:1.2}
+.play-tile .pt{font-size:.9rem;font-weight:700;line-height:1.25;word-break:keep-all}
+.play-tile .ps{font-size:.72rem;color:var(--ink2);line-height:1.35;word-break:keep-all}
+.play-tile .pn{position:absolute;top:8px;right:9px;font-family:'IBM Plex Mono',monospace;font-size:.625rem;font-weight:700;color:var(--gold-text);background:var(--gold-s);border-radius:99px;padding:1px 7px}
+@media (prefers-reduced-motion:no-preference){ .play-tile{transition:border-color .15s,background .15s,transform .12s} .play-tile:active{transform:scale(.97)} }
+
 /* ── 라운드 기록장 ── */
 .sc-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .sc-tabs{grid-template-columns:repeat(2,1fr)}
@@ -1427,7 +1461,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   font-family:inherit;font-size:.75rem;font-weight:700;line-height:1.25;cursor:pointer;word-break:keep-all}
 .wh-tab[aria-selected="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
 .wh-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
-.wh-chip{appearance:none;min-height:36px;padding:4px 11px;border:1.5px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);
+.wh-chip{appearance:none;min-height:44px;padding:4px 11px;border:1.5px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);
   font-family:inherit;font-size:.8125rem;font-weight:600;cursor:pointer}
 .wh-chip[aria-pressed="false"]{background:transparent;color:var(--ink3);text-decoration:line-through}
 .wh-chip[aria-pressed="true"]{border-color:var(--jade);background:var(--jade-s);color:var(--jade-d)}
@@ -1586,9 +1620,9 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <span class="nc-arrow" id="dcArrow">열어보기 →</span>
       <span class="dc-more" id="dcMore" hidden></span>
     </button>
-    <button class="next-card play-card" id="playCard" type="button" aria-label="놀이터 열기: 여권 도장첩, 빙고, 퀴즈, 룰렛, 칭호, 나침반">
+    <button class="next-card play-card" id="playCard" type="button" aria-label="놀이터 열기: 여권, 빙고, 퀴즈, 룰렛, 칭호, 나침반, 태국어, 기록장, 운세, 먹킷리스트">
       <span class="nc-tag">🎮 놀이터</span>
-      <span class="nc-body"><span class="nc-e" aria-hidden="true">🛂</span><span class="nc-t">여권·빙고·퀴즈·룰렛·칭호·나침반</span></span>
+      <span class="nc-body"><span class="nc-e" aria-hidden="true">🛂</span><span class="nc-t">빙고·퀴즈·룰렛·운세·먹킷리스트…</span></span>
       <span class="nc-arrow">열기 →</span>
     </button>
     <div class="stats">
@@ -2068,6 +2102,51 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   </div>
 </div>
 
+<!-- 오늘의 골프 운세 -->
+<div class="wn-scrim" id="fortuneScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="fcTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🔮 FORTUNE</span>
+      <h2 class="wn-title" id="fcTitle">오늘의 골프 운세</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem">이름을 누르면 오늘(방콕 날짜 기준) 라운드 운세가 나와요 · 하루 동안 같은 결과, 재미로만 봐주세요</p>
+    <div class="fc-body" id="fcBody">
+      <div class="wh-chips" id="fcChips" role="group" aria-label="이름 선택"></div>
+      <div class="fc-card" id="fcCard" aria-live="polite"></div>
+    </div>
+    <button class="wn-close" id="fcCopy" type="button" hidden style="margin-top:12px">📋 운세 복사해서 단톡에 올리기</button>
+    <button class="wn-close" id="fcClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 태국 먹킷리스트 -->
+<div class="wn-scrim" id="eatsScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="etTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🍜 EATS</span>
+      <h2 class="wn-title" id="etTitle">태국 먹킷리스트</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem">먹어본 건 눌러서 체크 — 20가지를 모두 채워보세요</p>
+    <div class="et-prog"><div class="et-bar"><div class="et-fill" id="etFill"></div></div><span id="etCnt" aria-live="polite"></span></div>
+    <div class="et-body" id="etBody"><button class="wh-tab" id="etPick" type="button" style="width:100%;margin-bottom:8px">🎲 오늘 뭐 먹지? (아직 안 먹은 것 중에서)</button><ul class="et-list" id="etList"></ul></div>
+    <button class="wn-close" id="etCopy" type="button" style="margin-top:12px">📋 먹킷리스트 복사해서 단톡에 올리기</button>
+    <button class="wn-close" id="etClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
+<!-- 놀이터 메뉴 -->
+<div class="wn-scrim" id="playScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="plTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🎮 PLAY</span>
+      <h2 class="wn-title" id="plTitle">여행 놀이터</h2>
+    </div>
+    <p class="wn-sub">여행 전에도, 여행 중에도 — 하고 싶은 걸 골라보세요</p>
+    <div class="pl-body" id="plBody"><div class="play-grid" id="plGrid"></div></div>
+    <button class="wn-close" id="plClose" type="button" style="margin-top:12px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
 <!-- 여권 도장첩 -->
 <div class="wn-scrim" id="passScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="passTitle">
@@ -2077,19 +2156,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     </div>
     <p class="wn-sub" id="passSub"></p>
     <div class="pass-body" id="passBody" tabindex="0" aria-label="도장 목록"></div>
-    <div class="pass-row">
-      <button class="wn-close" id="passBingo" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎯 태국 빙고</button>
-      <button class="wn-close" id="passQuiz" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🧠 여행 퀴즈</button>
-    </div>
-    <div class="pass-row" style="margin-top:9px">
-      <button class="wn-close" id="passWheel" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎡 운명의 룰렛</button>
-      <button class="wn-close" id="passTitleBtn" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🏷️ 여행 칭호</button>
-    </div>
-    <div class="pass-row" style="margin-top:9px">
-      <button class="wn-close" id="passCompass" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🧭 태국 나침반</button>
-      <button class="wn-close" id="passThai" type="button" style="background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🗣️ 태국어·맥주</button>
-    </div>
-    <button class="wn-close" id="passScore" type="button" style="margin-top:9px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">📝 라운드 기록장 · 스코어·버디 기록</button>
+    <button class="wn-close" id="passPlay" type="button" style="margin-top:12px;background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)">🎮 놀이터 메뉴로 (빙고·퀴즈·룰렛·운세…)</button>
     <button class="wn-close" id="passShare" type="button" style="margin-top:9px">📤 카드로 공유하기</button>
     <button class="wn-close" id="passClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
@@ -2254,7 +2321,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.85';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.86';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3964,6 +4031,8 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🔮','새 놀이 2가지 — 오늘의 골프 운세 · 태국 먹킷리스트','🔮 오늘의 골프 운세: 이름을 누르면 오늘(방콕 날짜 기준) 라운드 운세가 나와요 — 총운, 티샷·아이언·숏게임·퍼팅·멘탈 별점, 행운의 클럽·홀, 오늘의 목표, 라운드 뒤 먹을 음식·맥주까지. 하루 동안 같은 결과이고 매일 바뀌어요. 🍜 태국 먹킷리스트: 팟타이·똠얌꿍·망고 찰밥부터 태국 밀크티·싱하 맥주까지 20가지를 먹을 때마다 체크하고, "오늘 뭐 먹지?"로 아직 안 먹은 것 중에서 골라줘요. 첫 화면 "놀이터" 버튼에서 열려요'],
+    ['🎮','놀이터 메뉴 개편 + 나침반 켜기/끄기','첫 화면 "놀이터" 버튼이 이제 전체 놀이 메뉴(10가지 타일)를 바로 열어줘요. 여권 도장첩도 그 안의 타일 하나예요. 태국 나침반은 이제 버튼으로 켜고 끌 수 있고(창을 닫으면 자동으로 꺼짐), "내 위치"도 다시 눌러 끌 수 있어요'],
     ['📝','라운드 기록장 — 스코어·버디·홀인원 기록','골프 탭의 "라운드 기록장" 버튼(또는 여권 도장첩)에서 열어요. 라운드마다 참가자별 총 타수와 버디·이글 횟수, 홀인원을 기록하면 버디를 누를 때마다 응원 토스트가 뜨고, 이글·홀인원은 폭죽이 터져요. "리더보드" 탭에서는 최저타·평균·버디왕·이글·홀인원이 자동으로 정리되고, 단톡에 올릴 텍스트로 복사할 수 있어요. 기록은 각자 폰(브라우저)에만 저장돼요'],
     ['🚐','1/2 가족2 공항 샌딩 확정 · 일정 점검','1/2(토) 가족2(이준영·박지해·이동현 3인)는 08:30 그랜드 센터 포인트 랏차담리 1층 로비에서 출발해 수완나품 공항(OZ744 12:25)으로 가요. 예약번호 #200789323은 이준영 님이 직접 예약·결제해서 정산에는 포함하지 않고 일정·숙소·차량표에만 표시했어요. 일정을 점검하다가 12/21 비골퍼 인원이 "3인"으로 남아 있어 2인(정유현·장모님)으로 고쳤어요'],
     ['✅','정유경 님 정산 완료','정유경 님의 정산(2,254,856원)이 완료돼 정산탭에 "정산완료"로 표시돼요. 남은 정산은 5명(정유현·윤성욱·김태기·장모님·이준영)이에요'],
@@ -4145,8 +4214,6 @@ const FOODS = [
       stampHTML({tone:'gold', e:'🎯', t:'빙고 한 줄', dl:`${bi.lines}줄`}, k++, false, bi.lines >= 1) +
       stampHTML({tone:'coral', e:'🏆', t:'빙고 마스터', dl:'12줄'}, k++, false, bi.lines >= 12) +
       stampHTML({tone:'jade', e:'🧠', t:'여행 박사', dl:'퀴즈 만점'}, k++, false, qi.best >= qi.n) + '</div>';
-    if($('passBingo')) $('passBingo').textContent = `🎯 태국 빙고 · ${bi.lines}줄`;
-    if($('passQuiz')) $('passQuiz').textContent = qi.best ? `🧠 여행 퀴즈 · 최고 ${qi.best}/${qi.n}` : '🧠 여행 퀴즈';
     body.innerHTML = html;
     const next = TRIP_STAMPS.find(x => new Date() < x.at);
     $('passSub').textContent = preTrip
@@ -4174,36 +4241,17 @@ const FOODS = [
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
     addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const bingoBtn = $('passBingo'), quizBtn = $('passQuiz'), focusables = [body, bingoBtn, quizBtn, $('passWheel'), $('passTitleBtn'), $('passCompass'), $('passThai'), $('passScore'), shareBtn, closeBtn];
+    const playBtn = $('passPlay'), focusables = [body, playBtn, shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
       e.preventDefault();
       const cur = focusables.indexOf(document.activeElement), n = focusables.length;
       focusables[e.shiftKey ? (cur <= 0 ? n-1 : cur-1) : (cur < 0 || cur === n-1 ? 0 : cur+1)].focus();
     });
-    bingoBtn.addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openBingo === 'function') window.__openBingo(); }, 360);
+    playBtn.addEventListener('click', () => {
+      closePass(); setTimeout(() => { if(typeof window.__openPlay === 'function') window.__openPlay(); }, 360);
     });
-    quizBtn.addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openTquiz === 'function') window.__openTquiz(); }, 360);
-    });
-    const playCard = $('playCard');
-    if(playCard) playCard.addEventListener('click', () => { haptic('tap'); openPass(); });
-    $('passScore').addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openScore === 'function') window.__openScore(); }, 360);
-    });
-    $('passThai').addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openThai === 'function') window.__openThai(); }, 360);
-    });
-    $('passCompass').addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openCompass === 'function') window.__openCompass(); }, 360);
-    });
-    $('passTitleBtn').addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openTitles === 'function') window.__openTitles(); }, 360);
-    });
-    $('passWheel').addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openWheel === 'function') window.__openWheel(); }, 360);
-    });
+    window.__openPass = openPass;
     shareBtn.addEventListener('click', async () => {
       const o = shareBtn.textContent; shareBtn.textContent = '⏳ 카드 만드는 중…';
       const how = await shareCard();
@@ -4541,6 +4589,189 @@ const FOODS = [
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .tq-again, #tqNext:not([hidden]), #tqClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 놀이터 메뉴: 모든 놀이 기능을 한곳에서 (여권·빙고·퀴즈·룰렛·칭호·나침반·태국어·기록장·운세·먹킷리스트) ──
+(function(){
+  const scrim = $('playScrim'); if(!scrim) return;
+  const grid = $('plGrid'), closeBtn = $('plClose');
+  const call = n => () => { if(typeof window[n] === 'function') window[n](); };
+  const TILES = [
+    ['🛂','여권 도장첩', () => '도장 모으기 · 공유 카드', '__openPass'],
+    ['🎯','태국 빙고', () => { const b = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0}; return `${b.lines}줄 완성`; }, '__openBingo'],
+    ['🧠','여행 퀴즈', () => { const q = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,n:5}; return q.best ? `최고 ${q.best}/${q.n}` : '우리 여행 5문제'; }, '__openTquiz'],
+    ['🎡','운명의 룰렛', () => '쏠 사람 · 메뉴 · 조 편성', '__openWheel'],
+    ['🏷️','여행 칭호', () => '이름 누르면 칭호가 붙어요', '__openTitles'],
+    ['🧭','태국 나침반', () => '폰을 돌려 태국 찾기', '__openCompass'],
+    ['🗣️','태국어 · 숫자 · 맥주', () => '발음 듣기 · 숫자 · 맥주 이야기', '__openThai'],
+    ['📝','라운드 기록장', () => { try{ const d = (window.__scoreInfo && window.__scoreInfo().data) || {}; const n = Object.keys(d).filter(k => Object.values(d[k]).some(r => r.s || r.b || r.e || r.h)).length; return n ? `${n}라운드 기록` : '스코어 · 버디 기록'; }catch(e){ return '스코어 · 버디 기록'; } }, '__openScore'],
+    ['🔮','오늘의 골프 운세', () => '매일 바뀌는 라운드 운세', '__openFortune', true],
+    ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats', true]
+  ];
+  function paint(){
+    grid.innerHTML = TILES.map((t,i) => `<button class="play-tile" type="button" data-i="${i}">${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`).join('');
+  }
+  let prevFocus = null;
+  function open(){
+    prevFocus = document.activeElement; paint();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    const f = grid.querySelector('.play-tile'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(silent){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    if(!silent) try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('.play-tile'); if(!b) return; const t = TILES[+b.dataset.i];
+    close(true); setTimeout(call(t[3]), 360);
+  });
+  window.__openPlay = open;
+  const pc = $('playCard'); if(pc) pc.addEventListener('click', () => { haptic('tap'); open(); });
+  closeBtn.addEventListener('click', () => close());
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.play-tile, #plClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 오늘의 골프 운세: 이름 + 방콕 날짜로 매일 바뀌는(하루 동안 고정) 라운드 운세 ──
+(function(){
+  const scrim = $('fortuneScrim'); if(!scrim) return;
+  const chipsEl = $('fcChips'), card = $('fcCard'), copyBtn = $('fcCopy'), closeBtn = $('fcClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const people = FAMS.flatMap(f => f.rows.map(r => r.n));
+  const CLUBS = ['드라이버','3번 우드','유틸리티','5번 아이언','7번 아이언','9번 아이언','피칭 웨지','샌드 웨지','퍼터'];
+  const GOALS = ['페어웨이 안착 7번 이상','3퍼트 없는 라운드','벙커에서 한 번에 탈출','파 세이브 5번','버디 퍼트는 한 번 과감하게','캐디님께 칭찬 한마디 건네기','OB 없이 18홀 마치기','첫 홀 티샷 깔끔하게','그린 적중 5번','동반자 칭찬 3번'];
+  const LINES = ['오늘은 드라이버가 슬라이스를 한 번쯤 봐줘요','그린 위에서는 캐디님의 라인이 정답이에요','연습 스윙보다 첫 티샷이 더 잘 맞는 날','바람을 잊고 거리를 믿으면 버디가 와요','벙커는 피해도 되고, 들어가면 즐겨도 돼요','가장 좋은 샷은 후반 9홀에 나와요','캐디님 말에 한 번 더 귀 기울이면 한 타 줄어요','숏게임이 스코어를 지켜주는 날','욕심 대신 템포, 템포 대신 미소','점심 뒤 첫 홀이 승부처예요','파4에서는 투온보다 안전한 레이업이 이득','퍼터가 말을 잘 듣는 날 — 오르막은 짧게 조심'];
+  const COLORS = ['제이드 그린','골드','코랄','하늘색','라벤더'];
+  const STATS = ['티샷','아이언','숏게임','퍼팅','멘탈'];
+  const bkkKey = () => { const t = new Date(Date.now() + 7*36e5); return `${t.getUTCFullYear()}-${t.getUTCMonth()+1}-${t.getUTCDate()}`; };
+  const hash = str => { let h = 2166136261; for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const rng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  function fortune(name){
+    const r = rng(hash(name + '|' + bkkKey())), pick = a => a[(r()*a.length)|0];
+    const st = STATS.map(l => [l, 1 + ((r()*5)|0)]), avg = st.reduce((a,x)=>a+x[1],0)/st.length;
+    const tier = avg >= 4 ? '🌟 대박 라운드' : avg >= 3.2 ? '😄 좋은 흐름' : avg >= 2.4 ? '🙂 무난한 하루' : '🛡️ 안전 운전의 날';
+    const today = typeof GOLF !== 'undefined' ? GOLF.find(g => { const t = new Date(Date.now() + 7*36e5); return g.d === `${t.getUTCMonth()+1}/${t.getUTCDate()}`; }) : null;
+    return { name, tier, st, line: pick(LINES), club: pick(CLUBS), hole: 1 + ((r()*18)|0), goal: pick(GOALS), color: pick(COLORS), food: pick(FOODS)[0], beer: pick(['싱하','레오','창']), today };
+  }
+  function render(n){
+    const f = fortune(n);
+    card.innerHTML = `<div class="fc-top"><span class="fc-name">${dot(n)}${esc(n)}</span><span class="fc-tier">${f.tier}</span></div>` +
+      `<p class="fc-line">“${esc(f.line)}”</p>` +
+      `<div class="fc-stats">${f.st.map(([l,v]) => `<div class="fc-st"><span>${l}</span><i><b style="width:${v*20}%"></b></i><output>${'★'.repeat(v)}</output></div>`).join('')}</div>` +
+      `<ul class="fc-facts"><li>🏌️ 행운의 클럽 <b>${esc(f.club)}</b> · 행운의 홀 <b>${f.hole}번</b></li><li>🎯 오늘의 목표 <b>${esc(f.goal)}</b></li><li>🎨 행운의 색 <b>${esc(f.color)}</b></li><li>🍜 라운드 뒤 <b>${esc(f.food)}</b> + 🍺 <b>${esc(f.beer)}</b></li>${f.today ? `<li>⛳ 오늘 라운드 <b>${esc(f.today.c)}</b> (${esc((f.today.tee||'').replace(' 확정',''))} 티오프)</li>` : ''}</ul>`;
+    copyBtn.hidden = false;
+    copyBtn.dataset.txt = `🔮 ${n}의 오늘 골프 운세 · ${f.tier}\n“${f.line}”\n행운의 클럽 ${f.club} · 행운의 홀 ${f.hole}번\n오늘의 목표: ${f.goal}\n(태국 겨울 여행 2026 · 재미로만!)`;
+  }
+  chipsEl.innerHTML = people.map(n => `<button class="wh-chip" type="button" data-n="${esc(n)}" aria-pressed="false" style="border-color:var(--line)">${esc(n)}</button>`).join('');
+  card.innerHTML = '<p class="fc-empty">위에서 이름을 눌러보세요 🔮<br>오늘 하루 동안의 라운드 운세가 나와요</p>';
+  chipsEl.addEventListener('click', e => {
+    const b = e.target.closest('.wh-chip'); if(!b) return;
+    chipsEl.querySelectorAll('.wh-chip').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    haptic('ok'); render(b.dataset.n);
+  });
+  copyBtn.addEventListener('click', async () => {
+    const o = copyBtn.textContent;
+    try{ await navigator.clipboard.writeText(copyBtn.dataset.txt || ''); copyBtn.textContent = '✅ 복사했어요'; }catch(e){ copyBtn.textContent = '⚠️ 복사 실패'; }
+    haptic('ok'); setTimeout(() => { copyBtn.textContent = o; }, 1800);
+  });
+  let prevFocus = null;
+  function open(){
+    prevFocus = document.activeElement;
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    const f = chipsEl.querySelector('.wh-chip'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openFortune = open; window.__fortuneFor = fortune;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.wh-chip, #fcCopy:not([hidden]), #fcClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 태국 먹킷리스트: 먹어본 음식·음료를 체크하며 20가지 채우기 (이 기기에만 저장) ──
+(function(){
+  const scrim = $('eatsScrim'); if(!scrim) return;
+  const listEl = $('etList'), fillEl = $('etFill'), cntEl = $('etCnt'), pickBtn = $('etPick'), copyBtn = $('etCopy'), closeBtn = $('etClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const ITEMS = [...FOODS, ['태국 밀크티 (차옌)','주황빛 차에 연유·얼음 — 더위 식히는 국민 음료'], ['코코넛 워터','야자 열매째 마시는 시원한 수분 보충'], ['망고 스무디','제철 망고를 갈아 만든 달콤한 한 잔'],
+    ['싱하 맥주','1934년 첫 출시된 태국 최초의 맥주'], ['창 맥주','코끼리 로고, 가볍고 부드러운 맛'], ['레오 맥주','표범 로고, 가볍고 부담 없는 맛']];
+  const LSE = 'thai2026_eats'; let got; try{ got = JSON.parse(localStorage.getItem(LSE)); }catch(e){} got = new Set(Array.isArray(got) ? got.filter(n => ITEMS.some(i => i[0] === n)) : []);
+  const save = () => { try{ localStorage.setItem(LSE, JSON.stringify([...got])); }catch(e){} };
+  const toast = (a, b, ms) => { if(typeof window.__toast === 'function') window.__toast(a, b, ms || 2200); };
+  let pickName = null;
+  function paint(){
+    listEl.innerHTML = ITEMS.map(([n,d]) => `<li><button class="et-item${n === pickName ? ' pick' : ''}" type="button" data-n="${esc(n)}" aria-pressed="${got.has(n)}"><span class="ck" aria-hidden="true">✓</span><span class="nm">${esc(n)}</span><span class="ds">${esc(d)}</span></button></li>`).join('');
+    const pct = Math.round(got.size / ITEMS.length * 100); fillEl.style.width = pct + '%'; cntEl.textContent = `${got.size}/${ITEMS.length}`;
+  }
+  listEl.addEventListener('click', e => {
+    const b = e.target.closest('.et-item'); if(!b) return; const n = b.dataset.n, was = got.has(n);
+    if(was) got.delete(n); else got.add(n); pickName = null; save(); haptic(was ? 'tap' : 'ok'); paint();
+    const again = listEl.querySelector(`.et-item[data-n="${n.replace(/"/g,'\\"')}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){}
+    if(!was){
+      const k = got.size, T = ITEMS.length;
+      if(k === T){ if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🍜 먹킷리스트', msg:`${T}가지 모두 먹어봤어요! 태국 미식가 인정 🎉`, ms:4200, at:fillEl, dy:0, n:34, spread:120, petals:true }); else toast('🍜 완주!', '20가지 모두 먹어봤어요', 3200); }
+      else if(k % 5 === 0) toast('🍜 먹킷리스트', `${k}/${T} — ${k === 5 ? '맛보기 시작!' : k === 10 ? '절반 달성!' : '거의 다 왔어요!'}`);
+    }
+  });
+  pickBtn.addEventListener('click', () => {
+    const left = ITEMS.filter(i => !got.has(i[0]));
+    if(!left.length){ toast('🍜 먹킷리스트', '이미 전부 먹어봤어요!'); return; }
+    pickName = left[(Math.random()*left.length)|0][0]; haptic('ok'); paint(); toast('🎲 오늘은 이거!', pickName);
+    const el = listEl.querySelector('.et-item.pick'); if(el) el.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth'});
+  });
+  copyBtn.addEventListener('click', async () => {
+    const o = copyBtn.textContent;
+    const txt = `🍜 태국 먹킷리스트 ${got.size}/${ITEMS.length}\n` + ITEMS.map(i => `${got.has(i[0]) ? '✅' : '⬜'} ${i[0]}`).join('\n');
+    try{ await navigator.clipboard.writeText(txt); copyBtn.textContent = '✅ 복사했어요'; }catch(e){ copyBtn.textContent = '⚠️ 복사 실패'; }
+    haptic('ok'); setTimeout(() => { copyBtn.textContent = o; }, 1800);
+  });
+  window.__eatsInfo = () => ({ done: got.size, total: ITEMS.length });
+  let prevFocus = null;
+  function open(){
+    prevFocus = document.activeElement; pickName = null; paint();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    try{ pickBtn.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openEats = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('#etPick, .et-item, #etCopy, #etClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
@@ -4887,7 +5118,7 @@ const FOODS = [
     const brg = (deg(Math.atan2(Math.sin(dl)*Math.cos(f2), Math.cos(f1)*Math.sin(f2) - Math.sin(f1)*Math.cos(f2)*Math.cos(dl))) + 360) % 360;
     return { km, brg };
   }
-  let target = TARGETS[0], me = null, heading = null, hasSensor = false, listening = false, locked = false, prevFocus = null, bearing = 0;
+  let sensorTimer = 0, target = TARGETS[0], me = null, heading = null, hasSensor = false, listening = false, locked = false, prevFocus = null, bearing = 0;
 
   // SVG 나침반 (rose = 회전판, 핀 = 고정)
   function buildSvg(){
@@ -4940,8 +5171,16 @@ const FOODS = [
     else if(e.alpha != null && (e.absolute || e.type === 'deviceorientationabsolute')) h = (360 - e.alpha) % 360;
     if(h == null || isNaN(h)) return;
     if(heading == null) heading = h; else { const d = ((h - heading + 540) % 360) - 180; heading = (heading + d*0.3 + 360) % 360; }
-    if(!hasSensor){ hasSensor = true; setHint(); startBtn.textContent = '✅ 나침반 켜짐'; }
+    if(!hasSensor){ hasSensor = true; setHint(); startBtn.textContent = '🧭 나침반 끄기'; }
     paint();
+  }
+  function stopSensor(){
+    removeEventListener('deviceorientationabsolute', onOrient, true);
+    removeEventListener('deviceorientation', onOrient, true);
+    clearTimeout(sensorTimer);
+    listening = false; hasSensor = false; heading = null; locked = false;
+    startBtn.textContent = '🧭 나침반 켜기'; startBtn.setAttribute('aria-pressed', 'false');
+    if(rose()){ paint(); } setHint();
   }
   async function startSensor(){
     if(listening) return;
@@ -4953,15 +5192,19 @@ const FOODS = [
     }catch(err){ hintEl.textContent = '방향 센서를 켤 수 없어요 (HTTPS 또는 권한 필요)'; return; }
     addEventListener('deviceorientationabsolute', onOrient, true);
     addEventListener('deviceorientation', onOrient, true);
-    listening = true; startBtn.textContent = '⏳ 센서 연결 중…'; setHint();
-    setTimeout(() => { if(!hasSensor){ startBtn.textContent = '🧭 센서 없음 (지도 기준)'; hintEl.textContent = '이 기기에서는 방향 센서를 쓸 수 없어요. 북쪽이 위인 지도 기준으로 보여드려요'; } }, 2500);
+    listening = true; startBtn.setAttribute('aria-pressed', 'true'); startBtn.textContent = '⏳ 센서 연결 중… (누르면 취소)'; setHint();
+    sensorTimer = setTimeout(() => {
+      if(!hasSensor && listening){ stopSensor(); startBtn.textContent = '🧭 다시 켜기 (센서 없음)'; hintEl.textContent = '이 기기에서는 방향 센서를 쓸 수 없어요. 북쪽이 위인 지도 기준으로 보여드려요'; }
+    }, 2500);
   }
+  const toggleSensor = () => { haptic('tap'); if(listening) stopSensor(); else startSensor(); };
   function locate(){
+    if(me){ me = null; locBtn.textContent = '📍 내 위치로'; locBtn.setAttribute('aria-pressed', 'false'); info(); return; }
     if(!navigator.geolocation){ hintEl.textContent = '이 기기는 위치 기능을 지원하지 않아요'; return; }
     locBtn.textContent = '⏳ 위치 확인 중…';
     navigator.geolocation.getCurrentPosition(pos => {
       me = { lat:pos.coords.latitude, lon:pos.coords.longitude, name:'내 위치' };
-      locBtn.textContent = '✅ 내 위치 사용 중'; info();
+      locBtn.textContent = '📍 내 위치 끄기'; locBtn.setAttribute('aria-pressed', 'true'); info();
     }, () => { locBtn.textContent = '📍 내 위치로'; hintEl.textContent = '위치 권한이 없어서 기본 위치(인천·파타야) 기준으로 보여드려요'; },
     { timeout:8000, maximumAge:600000 });
   }
@@ -4972,7 +5215,7 @@ const FOODS = [
   }
   tabsEl.innerHTML = TARGETS.map(t => `<button class="wh-tab" role="tab" type="button" data-id="${t.id}" aria-selected="false">${t.tab}</button>`).join('');
   tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(b){ haptic('tap'); setTarget(TARGETS.find(t => t.id === b.dataset.id)); } });
-  startBtn.addEventListener('click', startSensor);
+  startBtn.addEventListener('click', toggleSensor); startBtn.setAttribute('aria-pressed', 'false'); locBtn.setAttribute('aria-pressed', 'false');
   locBtn.addEventListener('click', locate);
 
   function open(){
@@ -4984,6 +5227,7 @@ const FOODS = [
   }
   function close(){
     if(scrim.hidden) return;
+    stopSensor();
     scrim.classList.remove('on'); document.documentElement.style.overflow = '';
     setTimeout(()=>{ scrim.hidden = true; }, 340);
     try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
