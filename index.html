@@ -1354,6 +1354,46 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .fm-taxbox{margin:8px 0 2px;padding:8px 10px;border-radius:10px;border:1px solid #CDB78A;background:#F6DDB8;color:#4A2C05}
 .fm-taxbox.net{background:#D8E6CC;color:#27481C;border-color:#A9C497} .fm-taxbox.unk{background:#E6E0D2;color:#4A4030}
 .fm-taxbox b{font-size:.8125rem} .fm-taxbox p{margin:3px 0 0}
+.fm-views{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 8px;padding:4px;border-radius:14px;background:#EADBB6}
+.fm-vbtn{appearance:none;min-height:44px;border:0;border-radius:10px;background:none;color:#4A3512;font-family:inherit;font-size:.875rem;font-weight:700;cursor:pointer}
+.fm-vbtn[aria-selected="true"]{background:var(--jade);color:var(--hero-fg)}
+.wn-sheet.fm-mapmode{height:92vh;height:92dvh;overflow-y:auto}
+.fm-mapmode .wn-sub{display:none}
+@media (min-width:640px){.wn-sheet.fm-mapmode{max-width:760px}}
+.fm-mapwrap{position:relative;flex:1 0 auto;min-height:260px;border-radius:12px;overflow:hidden;border:1px solid #CDB78A;background:#E9E1CB}
+.fm-mapwrap[hidden],.fm-body[hidden],.fm-mapfoot[hidden]{display:none}
+.fm-leaflet{position:absolute;inset:0;font-family:inherit}
+.fm-leaflet.leaflet-container{font-family:inherit;background:#E9E1CB}
+.fm-maptools{position:absolute;z-index:500;top:8px;right:8px;display:flex;flex-direction:column;gap:6px}
+.fm-tool{appearance:none;min-height:44px;min-width:44px;padding:6px 11px;border:1.5px solid #A8895A;border-radius:12px;background:#FBF4E1;color:#3B2A14;font-family:inherit;font-size:.8125rem;font-weight:700;box-shadow:0 2px 8px rgba(40,25,5,.25);cursor:pointer}
+.fm-tool[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.fm-mapmsg{position:absolute;z-index:500;left:8px;right:64px;top:8px;margin:0;padding:8px 11px;border-radius:12px;background:#FBF4E1;border:1.5px solid #A8895A;color:#3B2A14;font-size:.8125rem;line-height:1.5;box-shadow:0 2px 8px rgba(40,25,5,.25)}
+.fm-mapmsg[hidden],.fm-pick[hidden]{display:none}
+.fm-pin.leaflet-marker-icon{background:none;border:0}
+.fm-pin-in{position:absolute;left:5px;top:5px;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:2.5px solid #FBF4E1;color:#FBF4E1;font-family:'Fraunces',serif;font-size:1.0625rem;font-weight:700;box-shadow:0 2px 6px rgba(40,25,5,.45);transition:transform .15s}
+.fm-zlo .fm-pin-in{left:9px;top:9px;width:26px;height:26px;font-size:.875rem;border-width:2px}
+.fm-zlo .fm-pin.sel .fm-pin-in{transform:scale(1.3)}
+.fm-pin.g-육 .fm-pin-in{background:#A94A2C} .fm-pin.g-해 .fm-pin-in{background:#1F6F8B} .fm-pin.g-천 .fm-pin-in{background:#5B4B8A}
+.fm-pin.g-양 .fm-pin-in{background:#8A5A1F} .fm-pin.g-아 .fm-pin-in{background:#2F7A4D} .fm-pin.g-한 .fm-pin-in{background:#8E2F5B}
+.fm-pin.val .fm-pin-in::after{content:"";position:absolute;right:-5px;top:-5px;width:12px;height:12px;border-radius:50%;background:#F2B632;border:2px solid #FBF4E1}
+.fm-pin-n{position:absolute;left:-6px;top:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:99px;background:#1B1B1B;color:#FBF4E1;font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-style:normal;font-weight:700;line-height:18px;text-align:center;border:1.5px solid #FBF4E1}
+.fm-pin.sel .fm-pin-in{transform:scale(1.28);outline:3px solid #F2B632}
+.fm-pin:focus-visible .fm-pin-in{outline:3px solid #1B1B1B}
+.fm-me{width:18px;height:18px;border-radius:50%;background:#2A7BE4;border:3px solid #fff;box-shadow:0 0 0 6px rgba(42,123,228,.28)}
+.fm-pickact{display:grid;grid-template-columns:1.3fr 1fr 1.1fr 44px;gap:6px;margin-top:8px}
+.fm-pickact .fm-btn{min-width:0;padding:6px 4px;word-break:keep-all}
+.fm-pick{position:absolute;z-index:600;left:8px;right:8px;bottom:8px;max-height:55%;overflow-y:auto;padding:11px 12px;border-radius:14px;background:#FBF4E1;border:1.5px solid #A8895A;box-shadow:0 4px 12px rgba(40,25,5,.4);color:#3B2A14}
+.fm-pickhead{display:grid;grid-template-columns:36px 1fr 44px;gap:10px;align-items:center}
+.fm-pickhead .fm-seal{grid-row:auto;width:36px;height:36px;font-size:1.125rem}
+.fm-pickhead .fm-nm{display:block} .fm-pickhead .fm-en{display:block}
+.fm-x{appearance:none;width:44px;height:44px;border:0;border-radius:12px;background:none;color:#3B2A14;font-size:1.25rem;cursor:pointer}
+.fm-pickmeta{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0 0}
+.fm-pickmeta .fm-tag{font-size:.75rem}
+.fm-picksib{margin-top:8px;font-size:.75rem;color:#6B5532}
+.fm-picksib .fm-btn{min-height:44px;margin:4px 6px 0 0}
+.fm-mapfoot{flex:none;margin-top:8px;font-size:.75rem;line-height:1.55;color:#5B4426}
+.fm-mapfoot .fm-btn{min-height:44px;margin:4px 6px 0 0}
+.fm-dist{font-weight:700;color:#1F6F8B}
 .fm-foot{margin:10px 2px 2px;font-size:.75rem;line-height:1.6;color:#6B5532;text-align:center}
 
 /* ── 바트 감각 · 힐링 사운드 ── */
@@ -1683,9 +1723,9 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <span class="nc-body"><span class="nc-e" aria-hidden="true">🛂</span><span class="nc-t">빙고·퀴즈·룰렛·운세·먹킷리스트…</span></span>
       <span class="nc-arrow">열기 →</span>
     </button>
-    <button class="next-card map-card" id="foodMapCard" type="button" aria-label="파타야 맛집 대동여지도 열기: 맛집 30곳의 지도, 메뉴, 후기, 세금 표기">
+    <button class="next-card map-card" id="foodMapCard" type="button" aria-label="파타야 맛집 대동여지도 열기: 맛집 30곳을 지도에서 한눈에 보기, 메뉴, 후기, 세금 표기">
       <span class="nc-tag">🗺️ 맛집지도</span>
-      <span class="nc-body"><span class="nc-e" aria-hidden="true">🍽️</span><span class="nc-t">파타야 맛집 대동여지도 · 30곳</span></span>
+      <span class="nc-body"><span class="nc-e" aria-hidden="true">🍽️</span><span class="nc-t">파타야 맛집 대동여지도 · 30곳 지도로 한눈에</span></span>
       <span class="nc-arrow">열기 →</span>
     </button>
     <div class="stats">
@@ -2233,8 +2273,23 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <h2 class="wn-title" id="fmTitle">파타야 맛집 대동여지도</h2>
     </div>
     <p class="wn-sub" style="font-size:.8125rem">인스타 맛집 12곳 + 가성비·고평점·미쉐린 18곳 = 30곳 (2026-10 검색 기준 · 가격은 1인 대략값, 방문 전 지도에서 영업시간 확인)</p>
+    <div class="fm-views" role="tablist" aria-label="보기 방식">
+      <button class="fm-vbtn" id="fmTabMap" type="button" role="tab" aria-selected="true" aria-controls="fmMapWrap" data-view="map">🗺️ 지도로 한눈에</button>
+      <button class="fm-vbtn" id="fmTabList" type="button" role="tab" aria-selected="false" aria-controls="fmBody" data-view="list">📋 목록·후기</button>
+    </div>
     <div class="fm-chips wh-chips" id="fmChips" role="group" aria-label="종류 선택"></div>
-    <div class="fm-body" id="fmBody"></div>
+    <div class="fm-body" id="fmBody" role="tabpanel" aria-labelledby="fmTabList" hidden></div>
+    <div class="fm-mapwrap" id="fmMapWrap" role="tabpanel" aria-labelledby="fmTabMap">
+      <div class="fm-leaflet" id="fmLeaflet" aria-label="파타야 맛집 지도"></div>
+      <div class="fm-maptools">
+        <button class="fm-tool" id="fmCore" type="button" aria-label="파타야 중심가로 보기">🎯 중심가</button>
+        <button class="fm-tool" id="fmAll" type="button" aria-label="모든 식당이 보이게 줄이기">🌏 전체</button>
+        <button class="fm-tool" id="fmLoc" type="button" aria-label="내 위치 보기">📍 내 위치</button>
+      </div>
+      <p class="fm-mapmsg" id="fmMapMsg" role="status" hidden></p>
+      <div class="fm-pick" id="fmPick" hidden></div>
+    </div>
+    <div class="fm-mapfoot" id="fmMapFoot" hidden></div>
     <button class="wn-close" id="fmClose" type="button" style="margin-top:12px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
@@ -2427,7 +2482,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.90';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.91';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4137,6 +4192,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🗺️','맛집지도를 지도 위에서 한눈에 보기','대동여지도 맨 위 "🗺️ 지도로 한눈에"에서 맛집 27곳을 실제 지도에 핀으로 볼 수 있어요. 핀을 누르면 이름·평점·가격·세금 표기가 뜨고, 바로 구글지도 열기·길찾기·영문 주소 복사·메뉴/후기로 이어져요. 종류 칩으로 가성비·미쉐린만 걸러 볼 수 있고, 📍 내 위치를 누르면 식당까지 거리를 보여줘요. 핀 위치는 대략값(±수백 m)이라 정확한 위치는 구글지도 열기를 쓰세요. 수원왕갈비·한우리·산디 호미 타이는 좌표를 못 찾아 핀 없이 카드로만 열려요'],
     ['🍜','맛집지도 12곳 → 30곳','가성비 식당(피어21 푸드코트, 야시장, 한우리, 타르카 하우스 등), 평점 높은 곳(마하 타이, 더 뷰, 프레고, 마하라니 등), 미쉐린 빕구르망 4곳(라 보이, 룽 샬, 크루아 래우 태 아롬, 플라디즈), 한식 2곳을 더했어요. 위 칩에서 💸 가성비 / 🏅 미쉐린 / 韓 한식으로 걸러 볼 수 있고, 모든 식당에 부가세·봉사료 표기가 있어요. 평점·가격은 검색으로 확인한 대략값이라 출처가 없는 항목은 "—"로 표시했어요'],
     ['🧾','맛집지도에 부가세·봉사료 표기','식당마다 부가세(7%)·봉사료가 별도인지 목록과 상세에 표시했어요. 확인된 곳(스카이바·메이즈 10%+7%, 테리킴 5%, 문웨일·나라 10% 등)과 확인 못 한 곳을 구분했고, 미확인은 방문 시 직접 물어보시라고 적었어요. 별도면 표시가 × 약 1.177이에요'],
     ['🗺️','파타야 맛집 대동여지도 — 검증된 12곳','첫 화면 "놀이터" 바로 아래 "맛집지도" 카드에서 열어요. 인스타그램 맛집 30선(AI 콘텐츠) 중 후기 사이트 여러 곳에서 평가가 일관된 12곳만 골라, 肉(스테이크)·海(뷔페)·天(루프탑)·洋(파인다이닝)·亞(아시아)로 나눴어요. 식당마다 실제 구글 지도, 대표 메뉴, 1인 가격, 후기 요약(좋은 점·아쉬운 점), 이 여행에서의 활용 팁, 영문 주소 복사(Grab·Bolt용)가 들어 있어요. 별점·가격은 2026-10 검색으로 확인한 대략값이니 방문 전 지도에서 영업시간을 확인하세요'],
@@ -4912,13 +4968,28 @@ const FOODS = [
   };
   const TAXLV = {sep:'⚠️ 별도', net:'✅ 포함', unk:'❔ 확인'};
   let cur = 'all', prevFocus = null;
+  // 핀 좌표(위도·경도): 여행 정보 사이트·미쉐린 등의 위치 정보 기준 대략값이라 ±수백 m 오차가 있을 수 있어요. 못 찾은 곳은 지도에 찍지 않아요
+  const COORD = {harlans:[12.9329,100.8988], terry:[12.9585,100.8886], longhorn:[12.9308,100.8820], flame:[12.9284,100.8858], bigfish:[12.9458,100.8887], skybar:[12.9458,100.8887],
+    moonwhale:[12.9296,100.8778], yitong:[12.9401,100.8881], amis:[12.9133,100.8733], indiagate:[12.9507,100.8917], nara:[12.9496,100.8904], mays:[12.9054,100.8731],
+    maha:[12.9296,100.8778], theview:[12.9111,100.8563], prego:[12.9481,100.8855], maharani:[12.9235,100.8602], tarka:[12.9276,100.8764], moomaroi:[12.9787,100.9113],
+    pier21:[12.9496,100.8904], jasmin:[12.9373,100.8851], lavoi:[12.8794,100.8921], kruaLaew:[12.9471,100.9034], lungshall:[12.9200,100.9415], pladids:[12.9313,100.9663],
+    thepprasit:[12.9086,100.8931], lanpho:[12.9732,100.9062], pupen:[12.8615,100.8955]};
+  const CORE = {lat:[12.90,12.96], lng:[100.85,100.91]};   // "중심가" 보기 범위
+  const LF_JS = ['https://unpkg.com/leaflet@1.9.4/dist/leaflet.js','https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'];
+  const LF_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  let view = 'map', map = null, pinLayer = null, pins = {}, meMarker = null, me = null, selId = null, lfLoad = null;
+  try{ const v = localStorage.getItem('thai2026_fmview'); if(v === 'list' || v === 'map') view = v; }catch(e){}
+  const tabMap = $('fmTabMap'), tabList = $('fmTabList'), mapWrap = $('fmMapWrap'), pickEl = $('fmPick'), msgEl = $('fmMapMsg'), footEl = $('fmMapFoot'), sheet = scrim.querySelector('.wn-sheet');
+  const km = (a, b) => { const t = x => x*Math.PI/180, dLa = t(b[0]-a[0]), dLo = t(b[1]-a[1]), h = Math.sin(dLa/2)**2 + Math.cos(t(a[0]))*Math.cos(t(b[0]))*Math.sin(dLo/2)**2; return 12742*Math.asin(Math.sqrt(h)); };
+  const distTxt = r => { if(!me || !COORD[r.id]) return ''; const d = km(me, COORD[r.id]); return d < 1 ? `${Math.max(50, Math.round(d*10)*100)}m` : `${d.toFixed(1)}km`; };
+  const dirUrl = r => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(r.q);
   const mapUrl = r => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.q);
   const embedUrl = r => 'https://maps.google.com/maps?q=' + encodeURIComponent(r.q) + '&hl=ko&z=16&output=embed';
   function render(){
     chipsEl.innerHTML = GROUPS.map(([k,l]) => `<button class="wh-chip" type="button" data-g="${k}" aria-pressed="${k === cur}">${l} ${R.filter(r => inGrp(r,k)).length}</button>`).join('');
     const list = R.filter(r => inGrp(r,cur));
     bodyEl.innerHTML = list.map(r => `<article class="fm-card" data-id="${r.id}">` +
-      `<button class="fm-head" type="button" aria-expanded="false" aria-controls="fm-d-${r.id}"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span><span class="fm-meta"><b>★ ${esc(r.star || r.google.split(' ')[0])}</b>${esc(r.price)}</span><span class="fm-tx ${TAX[r.id].lv}"><b>${TAXLV[TAX[r.id].lv]}</b> 부가세·봉사료: ${esc(TAX[r.id].s)}</span></button>` +
+      `<button class="fm-head" type="button" aria-expanded="false" aria-controls="fm-d-${r.id}"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span><span class="fm-meta"><b>★ ${esc(r.star || r.google.split(' ')[0])}</b>${esc(r.price)}${distTxt(r) ? `<br><span class="fm-dist">📏 ${distTxt(r)}</span>` : ''}</span><span class="fm-tx ${TAX[r.id].lv}"><b>${TAXLV[TAX[r.id].lv]}</b> 부가세·봉사료: ${esc(TAX[r.id].s)}</span></button>` +
       `<div class="fm-det" id="fm-d-${r.id}" hidden>` +
         `<div class="fm-tags"><span class="fm-tag">${esc(r.kind)}</span>${r.google ? `<span class="fm-tag">Google ${esc(r.google)} ${r.gsrc || '(게시물)'}</span>` : ''}${r.badge ? `<span class="fm-tag fm-badge">🏅 ${esc(r.badge)}</span>` : ''}${r.val ? '<span class="fm-tag fm-badge">💸 가성비</span>' : ''}${r.add ? '<span class="fm-tag">➕ 추가 선정</span>' : ''}<span class="fm-tag">${esc(r.ta)}</span></div>` +
         `<h4>💰 가격</h4><p>${esc(r.price)} <span style="color:#6B5532">· ${esc(r.pnote)}</span></p>` +
@@ -4927,42 +4998,172 @@ const FOODS = [
         `<h4>🍽️ 메뉴</h4><ul>${r.menu.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` +
         `<h4>💬 후기 요약</h4><ul>${r.pros.map(m => `<li class="pro">${esc(m)}</li>`).join('')}${r.cons.map(m => `<li class="con">${esc(m)}</li>`).join('')}</ul>` +
         `<h4>🧭 이 여행에서는</h4><p>${esc(r.tip)}</p>` +
-        `<div class="fm-act"><button class="fm-btn main" type="button" data-act="map">📍 지도 보기</button><a class="fm-btn" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 앱으로 열기 ↗</a>` +
+        `<div class="fm-act">${COORD[r.id] ? `<button class="fm-btn" type="button" data-act="onmap">🗺️ 큰 지도에서 보기</button>` : ''}<button class="fm-btn main" type="button" data-act="map">📍 이 식당 지도</button><a class="fm-btn" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 앱으로 열기 ↗</a>` +
         `<button class="fm-btn tl-copy" type="button" data-copy="${esc(r.eng)}">📋 영문 주소 복사 · Grab·Bolt용</button><a class="fm-btn" href="${esc(r.src)}" target="_blank" rel="noopener">후기 원문 ↗</a></div>` +
         `<div class="fm-map" hidden></div>` +
       `</div></article>`).join('') + `<p class="fm-foot">별점·가격은 2026-10 검색으로 확인한 대략값이에요. 게시물(AI 콘텐츠)의 사진은 실제 음식이 아니니 참고하지 마세요. 영업시간·휴무는 지도에서 확인하세요.<br>🧾 태국 식당은 메뉴 가격에 봉사료 10% + 부가세 7%가 따로 붙는 곳이 많아요(\"++\" 표기, 표시가 × 약 1.177). 정확한 표기는 방문 시 메뉴판 하단과 직원에게 확인하세요.</p>`;
   }
-  chipsEl.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; cur = b.dataset.g; haptic('tap'); render(); const again = chipsEl.querySelector(`[data-g="${cur}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
+  chipsEl.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; cur = b.dataset.g; haptic('tap'); render(); if(view === 'map') refreshMap(true); const again = chipsEl.querySelector(`[data-g="${cur}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
   bodyEl.addEventListener('click', e => {
     const head = e.target.closest('.fm-head');
     if(head){ const det = $(head.getAttribute('aria-controls')), open = head.getAttribute('aria-expanded') !== 'true'; head.setAttribute('aria-expanded', String(open)); det.hidden = !open; haptic('tap'); if(open) det.scrollIntoView({block:'nearest'}); return; }
+    const om = e.target.closest('[data-act="onmap"]');
+    if(om){ const id = om.closest('.fm-card').dataset.id; haptic('tap'); setView('map', id); return; }
     const mb = e.target.closest('[data-act="map"]'); if(!mb) return;
     const card = mb.closest('.fm-card'), r = R.find(x => x.id === card.dataset.id), box = card.querySelector('.fm-map');
-    if(!box.hidden){ box.hidden = true; box.innerHTML = ''; mb.textContent = '📍 지도 보기'; return; }
+    if(!box.hidden){ box.hidden = true; box.innerHTML = ''; mb.textContent = '📍 이 식당 지도'; return; }
     box.hidden = false; mb.textContent = '📍 지도 닫기'; haptic('tap');
     box.innerHTML = `<iframe src="${embedUrl(r)}" title="${esc(r.ko)} 지도" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe><p>지도가 안 보이면 "구글지도 앱으로 열기"를 눌러주세요.</p>`;
   });
-  function open(){
-    prevFocus = document.activeElement; render();
+  // ── 지도 보기 ──
+  const visible = () => R.filter(r => inGrp(r, cur));
+  function say(t){ if(!t){ msgEl.hidden = true; return; } msgEl.textContent = t; msgEl.hidden = false; }
+  function loadScript(u){ return new Promise((ok, no) => { const el = document.createElement('script'); el.src = u; el.async = true; const t = setTimeout(() => { el.remove(); no(new Error('timeout')); }, 12000); el.onload = () => { clearTimeout(t); ok(); }; el.onerror = () => { clearTimeout(t); el.remove(); no(new Error('load')); }; document.head.appendChild(el); }); }
+  function loadLeaflet(){
+    if(window.L && L.map) return Promise.resolve();
+    if(lfLoad) return lfLoad;
+    if(!document.querySelector('link[data-fm-lf]')){ const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = LF_CSS; l.setAttribute('data-fm-lf', ''); document.head.appendChild(l); }
+    lfLoad = LF_JS.reduce((p, u) => p.catch(() => loadScript(u)), Promise.reject()).then(() => { if(!(window.L && L.map)) throw new Error('no L'); }).catch(e => { lfLoad = null; throw e; });
+    return lfLoad;
+  }
+  function initMap(){
+    if(map) return;
+    map = L.map('fmLeaflet', {zoomControl:true, minZoom:9, maxZoom:19, zoomSnap:.5}).setView([12.935,100.885], 12);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(map);
+    pinLayer = L.layerGroup().addTo(map);
+    map.on('click', () => closePick());
+    const zc = () => $('fmLeaflet').classList.toggle('fm-zlo', map.getZoom() < 13.5);
+    map.on('zoomend', zc); zc();
+  }
+  function refreshMap(fit){
+    if(!map) return;
+    pinLayer.clearLayers(); pins = {};
+    const list = visible(), have = list.filter(r => COORD[r.id]);
+    const groups = {};   // 같은 건물(좌표 동일)에 있는 곳은 핀 하나로 묶고 숫자로 표시해요
+    have.forEach(r => { const k = COORD[r.id].join(','); (groups[k] = groups[k] || []).push(r); });
+    Object.values(groups).forEach(g => {
+      const r = g[0], n = g.length, isSel = g.some(x => x.id === selId);
+      const icon = L.divIcon({className:`fm-pin g-${r.g}${g.some(x => x.val) ? ' val' : ''}${isSel ? ' sel' : ''}`, html:`<span class="fm-pin-in" aria-hidden="true">${SEAL[r.g]}${n > 1 ? `<i class="fm-pin-n">${n}</i>` : ''}</span>`, iconSize:[44,44], iconAnchor:[22,22]});
+      const m = L.marker(COORD[r.id], {icon, title:g.map(x => x.ko).join(' · '), alt:g.map(x => x.ko).join(', ') + ' 핀', keyboard:true, riseOnHover:true});
+      m.on('click', ev => { if(ev.originalEvent) L.DomEvent.stopPropagation(ev); pick(r.id, false); });
+      m.addTo(pinLayer); g.forEach(x => { pins[x.id] = m; });
+    });
+    const no = list.filter(r => !COORD[r.id]);
+    const inCore = c => c[0] >= CORE.lat[0] && c[0] <= CORE.lat[1] && c[1] >= CORE.lng[0] && c[1] <= CORE.lng[1], outN = Object.keys(groups).length ? have.filter(r => !inCore(COORD[r.id])).length : 0;
+    footEl.hidden = false;
+    footEl.innerHTML = `<span>${outN ? `중심가 밖 ${outN}곳은 <b>🌏 전체</b>에서 · ` : ''}핀 위치는 대략값(±수백 m) · <b>금색 점</b>은 가성비</span>` +
+      (no.length ? `<br><span>핀 없음 ${no.length}곳: </span>${no.map(r => `<button class="fm-btn" type="button" data-nopin="${r.id}">${esc(r.ko)}</button>`).join('')}` : '');
+    if(selId && !pins[selId] && !no.some(r => r.id === selId)) closePick();
+    if(fit) fitView(false);
+  }
+  function fitView(all){
+    if(!map) return;
+    const pts = visible().filter(r => COORD[r.id]).map(r => COORD[r.id]);
+    const use = all ? pts : pts.filter(c => c[0] >= CORE.lat[0] && c[0] <= CORE.lat[1] && c[1] >= CORE.lng[0] && c[1] <= CORE.lng[1]);
+    const set = use.length ? use : pts;
+    if(!set.length) return;
+    if(set.length === 1) { map.setView(set[0], 15); return; }
+    map.fitBounds(L.latLngBounds(set), {padding:[44,44], maxZoom:15});
+  }
+  function pickHtml(r){
+    const tx = TAX[r.id], d = distTxt(r), sib = Object.keys(COORD).filter(k => k !== r.id && COORD[r.id] && km(COORD[r.id], COORD[k]) < 0.12).map(k => R.find(x => x.id === k)).filter(x => x && inGrp(x, cur));
+    return `<div class="fm-pickhead"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><div><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span></div><button class="fm-x" type="button" data-pickx aria-label="닫기">✕</button></div>` +
+      `<div class="fm-pickmeta"><span class="fm-tag">★ ${esc(r.star || r.google.split(' ')[0])}</span><span class="fm-tag">${esc(r.price)}</span><span class="fm-tag fm-badge">🧾 ${esc(tx.s)}</span>${r.val ? '<span class="fm-tag fm-badge">💸 가성비</span>' : ''}${r.badge ? '<span class="fm-tag fm-badge">🏅 미쉐린</span>' : ''}${d ? `<span class="fm-tag fm-dist">📏 ${d}</span>` : ''}</div>` +
+      `<div class="fm-pickact"><a class="fm-btn main" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 ↗</a><a class="fm-btn" href="${dirUrl(r)}" target="_blank" rel="noopener">길찾기 ↗</a><button class="fm-btn" type="button" data-pickdet="${r.id}">메뉴·후기</button><button class="fm-btn tl-copy" type="button" data-copy="${esc(r.eng)}" aria-label="영문 주소 복사 (Grab·Bolt용)">📋</button></div>` +
+      (sib.length ? `<div class="fm-picksib">같은 건물·바로 근처: ${sib.map(x => `<button class="fm-btn" type="button" data-picksib="${x.id}">${esc(x.ko)}</button>`).join('')}</div>` : '');
+  }
+  function pick(id, pan){
+    const r = R.find(x => x.id === id); if(!r) return;
+    const prev = selId; selId = id;
+    [prev, id].forEach(k => { const m = pins[k]; if(m && m._icon) m._icon.classList.toggle('sel', k === id); });
+    if(pins[id]) pins[id].setZIndexOffset(1000);
+    if(prev && prev !== id && pins[prev]) pins[prev].setZIndexOffset(0);
+    pickEl.innerHTML = pickHtml(r); pickEl.hidden = false; haptic('tap');
+    if(pan && pins[id] && map) map.setView(pins[id].getLatLng(), Math.max(map.getZoom(), 16), {animate:true});
+    else if(pins[id] && map){   // 카드에 가려지지 않게 핀을 위쪽으로
+      const p = map.latLngToContainerPoint(pins[id].getLatLng()), h = map.getSize().y, cardH = pickEl.offsetHeight + 24;
+      if(p.y > h - cardH - 20) map.panBy([0, p.y - (h - cardH - 40)], {animate:true});
+    }
+  }
+  function closePick(){
+    if(pickEl.hidden) return false;
+    const id = selId; selId = null; pickEl.hidden = true; pickEl.innerHTML = '';
+    if(pins[id] && pins[id]._icon) pins[id].setZIndexOffset(0), pins[id]._icon.classList.remove('sel');
+    return true;
+  }
+  function locate(){
+    const btn = $('fmLoc');
+    if(!navigator.geolocation){ say('이 기기에서는 내 위치를 쓸 수 없어요.'); return; }
+    say('내 위치를 찾는 중이에요…'); btn.setAttribute('aria-pressed', 'true');
+    navigator.geolocation.getCurrentPosition(p => {
+      btn.setAttribute('aria-pressed', 'false');
+      const c = [p.coords.latitude, p.coords.longitude];
+      if(km(c, [12.935,100.885]) > 80){ say('지금은 파타야에서 멀리 계셔서 거리는 표시하지 않아요. 파타야에 도착하면 다시 눌러보세요.'); setTimeout(() => say(''), 5200); return; }
+      me = c; say('');
+      if(map){
+        if(meMarker) meMarker.setLatLng(c); else meMarker = L.marker(c, {icon:L.divIcon({className:'', html:'<div class="fm-me"></div>', iconSize:[18,18], iconAnchor:[9,9]}), interactive:false, keyboard:false}).addTo(map);
+        map.setView(c, Math.max(map.getZoom(), 14));
+      }
+      render(); if(selId){ const r = R.find(x => x.id === selId); if(r) pickEl.innerHTML = pickHtml(r); }
+      haptic('ok');
+    }, () => { btn.setAttribute('aria-pressed', 'false'); say('위치를 가져오지 못했어요. 브라우저의 위치 권한을 확인해 주세요.'); setTimeout(() => say(''), 5200); }, {enableHighAccuracy:true, timeout:10000, maximumAge:60000});
+  }
+  function setView(v, focusId){
+    view = v; try{ localStorage.setItem('thai2026_fmview', v); }catch(e){}
+    const isMap = v === 'map';
+    tabMap.setAttribute('aria-selected', String(isMap)); tabList.setAttribute('aria-selected', String(!isMap));
+    sheet.classList.toggle('fm-mapmode', isMap);
+    mapWrap.hidden = !isMap; bodyEl.hidden = isMap; footEl.hidden = !isMap;
+    if(!isMap){ closePick(); if(focusId) openDetail(focusId); return; }
+    say('지도를 불러오는 중이에요…');
+    loadLeaflet().then(() => {
+      if(view !== 'map') return;
+      say(''); initMap(); map.invalidateSize(); refreshMap(!focusId);
+      if(focusId){ const r = R.find(x => x.id === focusId); if(r && !inGrp(r, cur)){ cur = 'all'; render(); refreshMap(false); } pick(focusId, true); }
+    }).catch(() => { say('지도를 불러오지 못했어요. 인터넷 연결을 확인하거나 "목록·후기"에서 식당별 구글지도를 쓰세요.'); footEl.hidden = true; });
+  }
+  function openDetail(id){
+    const r = R.find(x => x.id === id); if(!r) return;
+    if(!inGrp(r, cur)){ cur = 'all'; render(); }
+    const card = bodyEl.querySelector(`.fm-card[data-id="${id}"]`); if(!card) return;
+    const head = card.querySelector('.fm-head'), det = $(head.getAttribute('aria-controls'));
+    head.setAttribute('aria-expanded', 'true'); det.hidden = false;
+    card.scrollIntoView({block:'start'}); try{ head.focus({preventScroll:true}); }catch(e){}
+  }
+  tabMap.addEventListener('click', () => { if(view !== 'map'){ haptic('tap'); setView('map'); } });
+  tabList.addEventListener('click', () => { if(view !== 'list'){ haptic('tap'); setView('list'); } });
+  $('fmCore').addEventListener('click', () => { haptic('tap'); fitView(false); });
+  $('fmAll').addEventListener('click', () => { haptic('tap'); fitView(true); });
+  $('fmLoc').addEventListener('click', () => { haptic('tap'); locate(); });
+  pickEl.addEventListener('click', e => {
+    if(e.target.closest('[data-pickx]')){ closePick(); return; }
+    const det = e.target.closest('[data-pickdet]'); if(det){ setView('list', det.dataset.pickdet); return; }
+    const sib = e.target.closest('[data-picksib]'); if(sib){ pick(sib.dataset.picksib, true); }
+  });
+  footEl.addEventListener('click', e => { const b = e.target.closest('[data-nopin]'); if(!b) return; const r = R.find(x => x.id === b.dataset.nopin); if(!r) return; selId = r.id; pickEl.innerHTML = pickHtml(r); pickEl.hidden = false; haptic('tap'); });
+  function open(v){
+    prevFocus = document.activeElement; if(v === 'map' || v === 'list') view = v;
+    selId = null; pickEl.hidden = true; render();
     scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
     void scrim.offsetHeight; scrim.classList.add('on');
-    const f = chipsEl.querySelector('.wh-chip'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+    setView(view);
+    const f = view === 'map' ? tabMap : tabList; try{ f.focus({preventScroll:true}); }catch(e){}
   }
   function close(){
     if(scrim.hidden) return;
     scrim.classList.remove('on'); document.documentElement.style.overflow = '';
-    setTimeout(()=>{ scrim.hidden = true; bodyEl.querySelectorAll('.fm-map').forEach(b => { b.hidden = true; b.innerHTML = ''; }); }, 340);
+    closePick(); setTimeout(()=>{ scrim.hidden = true; bodyEl.querySelectorAll('.fm-map').forEach(b => { b.hidden = true; b.innerHTML = ''; }); }, 340);
     try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
     haptic('tap');
   }
-  window.__openFoodMap = open; window.__foodMapInfo = () => ({ count: R.length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}), val: R.filter(r => r.val).length, mic: R.filter(r => r.badge).length });
+  window.__openFoodMap = open; window.__foodMapInfo = () => ({ pinned: Object.keys(COORD).length, count: R.length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}), val: R.filter(r => r.val).length, mic: R.filter(r => r.badge).length });
   const fc = $('foodMapCard'); if(fc) fc.addEventListener('click', () => { haptic('tap'); open(); });
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden){ if(view === 'map' && closePick()) return; close(); } });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.fm-chips .wh-chip, .fm-head, .fm-det:not([hidden]) .fm-btn, #fmClose')];
+    const f = [...scrim.querySelectorAll('.fm-vbtn, .fm-chips .wh-chip, .fm-maptools .fm-tool, .fm-pick:not([hidden]) .fm-x, .fm-pick:not([hidden]) .fm-btn, .fm-mapfoot:not([hidden]) .fm-btn, .fm-body:not([hidden]) .fm-head, .fm-det:not([hidden]) .fm-btn, #fmClose')].filter(x => x.offsetParent !== null);
     const cur2 = f.indexOf(document.activeElement), n = f.length;
     if(cur2 === -1 || (!e.shiftKey && cur2 === n-1) || (e.shiftKey && cur2 === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
