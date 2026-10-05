@@ -761,12 +761,14 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .cd-num.mini{font-size:16px}
   .cd-head{font-size:15.5px}
   .cd-sub{font-size:11px;margin-top:4px}
-  .hw{flex-wrap:wrap;gap:2px 6px;margin-bottom:7px;font-size:11px;padding:8px 5px}
-  .hw-k,.wx-loc{order:1}
-  .hw-ago{order:2;margin-left:auto}
-  .hw-more{order:3}
-  .hw-main{order:4;flex:1 1 100%;padding-left:2px}
+  /* 날씨·환율: 한 줄로 압축 (키 · 값 · N분 전 · ↗). 폭이 모자라면 값이 다음 줄로 내려가요 */
+  .hw{flex-wrap:wrap;align-items:center;gap:0 6px;margin-bottom:3px;font-size:11px;padding:4px 5px}
+  .hw-k,.wx-loc{order:1;align-self:center}
+  .hw-main{order:2;flex:1 1 130px;padding-left:2px;line-height:1.6}
+  .hw-ago{order:3;margin-left:auto;align-self:center}
+  .hw-more{order:4;align-self:center;margin:0 -4px 0 0;padding:5px 4px}
   .hw-sub{font-size:11px}
+  .hw:not(.err):not(.needs-sync):not(.stale):not(.loading) .hw-sub{display:none}   /* 정상일 땐 출처 줄 숨김 (N분 전으로 충분) */
   .next-card{padding:9px 12px;margin-bottom:10px;gap:8px}
   .nc-tag{font-size:11px;padding:2px 7px}
   .nc-e{font-size:14px}
@@ -2493,7 +2495,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.93';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.94';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4194,6 +4196,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['📱','첫 화면 날씨·환율을 한 줄로 압축','폰 첫 화면에서 날씨와 환율이 차지하던 자리를 줄여 맛집 대동여지도 카드가 더 위에 보여요. 날씨·환율 모두 "이름 · 값 · N분 전 · ↗"를 한 줄에 보여주고, 출처 줄은 데이터가 오래됐거나 오류일 때만 나타나요'],
     ['🗺️','첫 화면 맨 위로 올라온 맛집지도','첫 화면의 "예약 준비" 진행률 막대를 없애고, 그 자리에 맛집 대동여지도 카드를 크게 올렸어요. 폰에서 열자마자 보이고 한 번 누르면 지도가 열려요'],
     ['🏠','맛집지도에 집 핀과 집 근처 맛집 추가','지도에 🏠 빌라 통부라와 🏠 홀리데이인 파타야 핀이 생겼어요. 위쪽 "🏠 빌라"·"🏠 호텔" 버튼으로 바로 이동하고, 집 핀을 누르면 가까운 맛집이 거리와 함께 나와요. 맛집 카드에도 두 집에서의 직선 거리가 표시돼요. 집에서 1.5km 안은 "🏠 집 근처" 칩으로 모아 볼 수 있어요. 빌라와 같은 골목의 제이 툼 키친, 팁프라싯 파타야 시푸드, 홀리데이인 근처 피파·말리브루·온 더 로드, 림파 라팡·반 암퍼를 새로 넣었고, 핀을 못 찍던 수원왕갈비·한우리·산디 호미 타이는 뺐어요. 림파 라팡·반 암퍼는 빌라에서 직선 약 11km라 일정 메모의 이동 시간과 다를 수 있어요'],
     ['🗺️','맛집지도를 지도 위에서 한눈에 보기','대동여지도 맨 위 "🗺️ 지도로 한눈에"에서 맛집 27곳을 실제 지도에 핀으로 볼 수 있어요. 핀을 누르면 이름·평점·가격·세금 표기가 뜨고, 바로 구글지도 열기·길찾기·영문 주소 복사·메뉴/후기로 이어져요. 종류 칩으로 가성비·미쉐린만 걸러 볼 수 있고, 📍 내 위치를 누르면 식당까지 거리를 보여줘요. 핀 위치는 대략값(±수백 m)이라 정확한 위치는 구글지도 열기를 쓰세요. 수원왕갈비·한우리·산디 호미 타이는 좌표를 못 찾아 핀 없이 카드로만 열려요'],
