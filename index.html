@@ -232,8 +232,13 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .daily-card{flex-wrap:wrap;min-height:44px}
 .play-card{min-height:44px;border-color:rgba(181,138,40,.5);background:rgba(181,138,40,.12)}
 .play-card .nc-arrow{color:var(--gold-s)}
-.map-card{min-height:44px;border-color:rgba(201,177,131,.6);background:rgba(241,228,195,.14)}
-.map-card .nc-arrow{color:#E9D9AE}
+.map-hero{appearance:none;display:flex;align-items:center;gap:12px;width:100%;min-height:68px;margin:0 0 12px;padding:12px 14px;border:1.5px solid #CDB78A;border-radius:14px;background:#F1E4C3;color:#3B2A14;text-align:left;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.map-hero:active{transform:scale(.99)}
+.mh-ico{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:#A94A2C;font-size:1.375rem}
+.mh-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.mh-txt b{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;line-height:1.25;color:#2E1F0C}
+.mh-txt span{font-size:.8125rem;line-height:1.35;color:#5B4426;word-break:keep-all}
+.mh-go{flex:none;font-family:'IBM Plex Mono',monospace;font-size:.8125rem;font-weight:700;color:#7A4A12;white-space:nowrap}
 .daily-card .dc-more{flex:1 1 100%;font-size:12px;line-height:1.55;color:#DCE8E2;padding-top:8px;border-top:1px dashed rgba(255,255,255,.2)}
 .daily-card .dc-more b{color:var(--gold-s);font-weight:700}
 .daily-card.open .nc-t{white-space:normal}
@@ -1699,11 +1704,11 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
         <div class="cd-back-dots" id="cdBackDots" aria-hidden="true"></div>
       </div>
     </div>
-    <div class="prog-wrap">
-      <span class="prog-lbl">예약 준비</span>
-      <div class="prog-bar"><div class="prog-fill" id="pfill"></div></div>
-      <span class="prog-pct" id="ppct">0%</span>
-    </div>
+    <button class="map-hero" id="foodMapCard" type="button" aria-label="파타야 맛집 대동여지도 열기: 맛집 34곳과 집(숙소)을 지도에서 한눈에 보기, 메뉴, 후기, 세금 표기">
+      <span class="mh-ico" aria-hidden="true">🗺️</span>
+      <span class="mh-txt"><b>파타야 맛집 대동여지도</b><span>맛집 34곳 · 집 근처 맛집을 지도에서 한눈에</span></span>
+      <span class="mh-go">열기 →</span>
+    </button>
     <button class="next-card" id="nextCard" type="button" style="display:none">
       <span class="nc-tag" id="ncTag">다음 일정</span>
       <span class="nc-body"><span class="nc-e" id="ncE"></span><span class="nc-t" id="ncT"></span></span>
@@ -1728,11 +1733,6 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <button class="next-card play-card" id="playCard" type="button" aria-label="놀이터 열기: 여권, 빙고, 퀴즈, 룰렛, 칭호, 나침반, 태국어, 기록장, 운세, 먹킷리스트">
       <span class="nc-tag">🎮 놀이터</span>
       <span class="nc-body"><span class="nc-e" aria-hidden="true">🛂</span><span class="nc-t">빙고·퀴즈·룰렛·운세·먹킷리스트…</span></span>
-      <span class="nc-arrow">열기 →</span>
-    </button>
-    <button class="next-card map-card" id="foodMapCard" type="button" aria-label="파타야 맛집 대동여지도 열기: 맛집 34곳과 집(숙소)을 지도에서 한눈에 보기, 메뉴, 후기, 세금 표기">
-      <span class="nc-tag">🗺️ 맛집지도</span>
-      <span class="nc-body"><span class="nc-e" aria-hidden="true">🍽️</span><span class="nc-t">파타야 맛집 대동여지도 · 34곳 지도로 한눈에</span></span>
       <span class="nc-arrow">열기 →</span>
     </button>
     <div class="stats">
@@ -2493,7 +2493,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.92';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.93';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3420,15 +3420,6 @@ window.__ensureRain = (function(){
   card.addEventListener('click', ()=>{ haptic('tap'); go($('tb-todo')); });
 })();
 
-// progress (예약 확정 기준: 숙소7 + 골프8 + 차량13 = 28건 / 전체 28건 · 가족2 차량 3건은 이준영 님 개별 진행이라 제외)
-(function(){
-  const done = 7 + 8 + 13;  // 숙소7(전부확정·개별결제 포함) 골프8(전 라운드 티오프 확정) 차량13(전부 확정)
-  const total = 7 + 8 + 13; // 숙소7 골프8 차량13
-  const pct = Math.round(done/total*100);
-  $('ppct').textContent = pct+'%';
-  setTimeout(()=>{$('pfill').style.width=pct+'%';},260);
-})();
-
 // golf cards
 function golfCard(g){
   // 파타야 라운드는 왕복밴으로 이동 → 골프장 주소보다 탑승 숙소(홀리데이인·통부라) 주소가 실용적
@@ -4203,6 +4194,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🗺️','첫 화면 맨 위로 올라온 맛집지도','첫 화면의 "예약 준비" 진행률 막대를 없애고, 그 자리에 맛집 대동여지도 카드를 크게 올렸어요. 폰에서 열자마자 보이고 한 번 누르면 지도가 열려요'],
     ['🏠','맛집지도에 집 핀과 집 근처 맛집 추가','지도에 🏠 빌라 통부라와 🏠 홀리데이인 파타야 핀이 생겼어요. 위쪽 "🏠 빌라"·"🏠 호텔" 버튼으로 바로 이동하고, 집 핀을 누르면 가까운 맛집이 거리와 함께 나와요. 맛집 카드에도 두 집에서의 직선 거리가 표시돼요. 집에서 1.5km 안은 "🏠 집 근처" 칩으로 모아 볼 수 있어요. 빌라와 같은 골목의 제이 툼 키친, 팁프라싯 파타야 시푸드, 홀리데이인 근처 피파·말리브루·온 더 로드, 림파 라팡·반 암퍼를 새로 넣었고, 핀을 못 찍던 수원왕갈비·한우리·산디 호미 타이는 뺐어요. 림파 라팡·반 암퍼는 빌라에서 직선 약 11km라 일정 메모의 이동 시간과 다를 수 있어요'],
     ['🗺️','맛집지도를 지도 위에서 한눈에 보기','대동여지도 맨 위 "🗺️ 지도로 한눈에"에서 맛집 27곳을 실제 지도에 핀으로 볼 수 있어요. 핀을 누르면 이름·평점·가격·세금 표기가 뜨고, 바로 구글지도 열기·길찾기·영문 주소 복사·메뉴/후기로 이어져요. 종류 칩으로 가성비·미쉐린만 걸러 볼 수 있고, 📍 내 위치를 누르면 식당까지 거리를 보여줘요. 핀 위치는 대략값(±수백 m)이라 정확한 위치는 구글지도 열기를 쓰세요. 수원왕갈비·한우리·산디 호미 타이는 좌표를 못 찾아 핀 없이 카드로만 열려요'],
     ['🍜','맛집지도 12곳 → 30곳','가성비 식당(피어21 푸드코트, 야시장, 한우리, 타르카 하우스 등), 평점 높은 곳(마하 타이, 더 뷰, 프레고, 마하라니 등), 미쉐린 빕구르망 4곳(라 보이, 룽 샬, 크루아 래우 태 아롬, 플라디즈), 한식 2곳을 더했어요. 위 칩에서 💸 가성비 / 🏅 미쉐린 / 韓 한식으로 걸러 볼 수 있고, 모든 식당에 부가세·봉사료 표기가 있어요. 평점·가격은 검색으로 확인한 대략값이라 출처가 없는 항목은 "—"로 표시했어요'],
@@ -6550,22 +6542,6 @@ function __initFunElements(){
       toast('🌴', '곧 만나요, 태국', 2800); haptic('ok');
     }, 550); });
     ['pointerup','pointerleave','pointercancel'].forEach(ev=> t.addEventListener(ev, ()=> clearTimeout(hold)));
-  })();
-
-  // ── O. 진행바 탭 → 잠깐 100% ──
-  (function(){
-    const bar = document.querySelector('.prog-bar'), fill = $('pfill'), pct = $('ppct');
-    if(!bar || !fill) return;
-    let busy = false;
-    bar.addEventListener('click', ()=>{
-      if(busy) return; busy = true;
-      const w = fill.style.width, p = pct.textContent;
-      if(!rm) fill.style.transition = 'width .5s ease';
-      fill.style.width = '100%'; pct.textContent = '100%'; haptic('ok');
-      toast('😌', '예약 다 끝났으면 좋겠다…', 2400);
-      setTimeout(()=>{ fill.style.width = w; pct.textContent = p;
-        setTimeout(()=>{ fill.style.transition = ''; busy = false; }, 550); }, 950);
-    });
   })();
 
   // ── P. 다섯 탭 빠르게 다 둘러보면 → 탐험가 ──
