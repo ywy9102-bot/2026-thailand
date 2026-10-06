@@ -591,6 +591,36 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .cost-hero .l{font-size:12px;color:#BCCDC4;margin-bottom:4px}
 .cost-hero .a{font-family:'Fraunces',serif;font-size:30px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
 .cost-hero .a small{font-size:14px;font-weight:400;color:#D6E2DC;margin-left:3px}
+.bg-stack{display:flex;gap:2px;height:12px;margin:12px 0 8px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.12)}
+.bg-stack i{display:block;min-width:3px}
+.bg-legend{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:12px;color:#D6E2DC}
+.bg-legend li{display:flex;align-items:center;gap:7px}
+.bg-legend li i{flex:none;width:10px;height:10px;border-radius:50%}
+.bg-legend li b{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-weight:600;color:inherit}
+.bg-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.bg-two>div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.1)}
+.bg-two span{display:block;font-size:12px;color:#BCCDC4}
+.bg-two b{display:block;font-family:'Fraunces',serif;font-size:20px;font-weight:600;line-height:1.25;color:inherit;font-variant-numeric:tabular-nums}
+.bg-two b small{font-size:12px;font-weight:400;color:#D6E2DC;margin-left:2px}
+.bg-two em{display:block;font-style:normal;font-size:12px;color:#BCCDC4;margin-top:1px}
+.bg-cats{display:grid;gap:9px;margin-bottom:14px}
+.bg-cat{display:grid;grid-template-columns:1fr auto auto;gap:2px 10px;align-items:baseline;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.bg-cat .bc-n{font-weight:700;color:var(--ink)}
+.bg-cat b{font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--jade-d)}
+.bg-cat .bc-p{font-size:12px;color:var(--ink2);min-width:34px;text-align:right}
+.bg-cat .bc-t{grid-column:1/-1;height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:5px}
+.bg-cat .bc-t i{display:block;height:100%;border-radius:99px;background:var(--jade)}
+.bg-fun{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:13px 14px;margin-bottom:16px}
+.bgf-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -2px 8px;padding:0 2px}
+.bgf-chips::-webkit-scrollbar{display:none}
+.bgf-chips .wh-chip{flex:none;white-space:nowrap}
+.bgf-chips .wh-chip[aria-pressed="false"]{background:var(--card);color:var(--ink);text-decoration:none}
+.bgf-chips .wh-chip[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg);text-decoration:none}
+.bgf-main{display:flex;align-items:center;gap:12px;padding:6px 0}
+.bgf-e{font-size:2.25rem;line-height:1}
+.bgf-main b{font-family:'Fraunces',serif;font-size:1.1875rem;color:var(--jade-d)}
+.bgf-main small{font-size:.8125rem;color:var(--ink2)}
+.bgf-sub{margin:6px 0 0;font-size:.8125rem;line-height:1.6;color:var(--ink2);word-break:keep-all}
 .cost-hero .s{font-size:11.5px;color:#A5BAB0;margin-top:7px;line-height:1.6}
 
 .whoami{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px}
@@ -1750,7 +1780,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <button class="tb tb-lg on" data-t="golf" role="tab" aria-selected="true" tabindex="0" id="tb-golf"><span class="ico">⛳</span>골프</button>
     <button class="tb tb-lg" data-t="itin" role="tab" aria-selected="false" tabindex="-1" id="tb-itin"><span class="ico">🗓️</span>일정</button>
     <button class="tb tb-sm" data-t="stay" role="tab" aria-selected="false" tabindex="-1" id="tb-stay"><span class="ico">🏨</span>숙소·멤버</button>
-    <button class="tb tb-sm" data-t="cost" role="tab" aria-selected="false" tabindex="-1" id="tb-cost"><span class="ico">💰</span>정산</button>
+    <button class="tb tb-sm" data-t="cost" role="tab" aria-selected="false" tabindex="-1" id="tb-cost"><span class="ico">💰</span>예산·경비</button>
     <button class="tb tb-sm" data-t="todo" role="tab" aria-selected="false" tabindex="-1" id="tb-todo"><span class="ico">✅</span>할일<span class="badge-n" id="tdN">0</span></button>
   </div>
 </nav>
@@ -2125,30 +2155,39 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 
 <!-- 💰 COST -->
 <section class="pnl" id="cost" role="tabpanel" aria-labelledby="tb-cost">
-  <h2 class="sec"><span class="e">💰</span>정산</h2>
-  <p class="sub">이준영 픽업·숙박 2건, 김태기 숙박은 개별결제라 정산 제외. 막대를 탭하면 항목별 내역이 열려요.</p>
+  <h2 class="sec"><span class="e">💰</span>예산·경비</h2>
+  <p class="sub">여행에 들어가는 전체 비용과 정산 현황이에요. 개별결제(이준영 픽업·숙박 2건, 김태기 숙박)는 제외했어요. 막대를 탭하면 항목별 내역이 열려요.</p>
 
-  <div class="cost-hero">
-    <div class="l">윤우열이 받아야 할 금액</div>
-    <div class="a" id="oweTotal">–</div>
-    <div class="s" id="oweBreak">계산중…</div>
-    <div class="s" id="oweSettled" style="margin-top:2px"></div>
-    <div class="s" id="oweSelf" style="margin-top:2px"></div>
-    <div class="prog-wrap" id="oweProgWrap" style="margin-top:10px">
-      <span class="prog-lbl">정산 진행</span>
-      <div class="prog-bar"><div class="prog-fill" id="oweProgFill"></div></div>
-      <span class="prog-pct" id="oweProgPct">0%</span>
+  <div class="cost-hero" id="budgetHero">
+    <div class="l">여행 전체 비용 (공동 경비)</div>
+    <div class="a" id="bgTotal">–</div>
+    <div class="s" id="bgNote"></div>
+    <div class="bg-stack" id="bgStack" role="img" aria-label="정산 현황 막대"></div>
+    <ul class="bg-legend" id="bgLegend"></ul>
+    <div class="bg-two">
+      <div><span>정산 완료</span><b id="bgDone">–</b><em id="bgDonePct"></em></div>
+      <div><span>남은 정산</span><b id="bgLeft">–</b><em id="oweSettled"></em></div>
     </div>
-    <div class="s" id="oweMine" style="display:none;margin-top:4px"></div>
+  </div>
+
+  <h3 class="stbl"><span class="i">◈</span>항목별 비용</h3>
+  <div class="bg-cats" id="bgCats"></div>
+
+  <h3 class="stbl"><span class="i">🎈</span>경비로 보는 태국</h3>
+  <div class="bg-fun">
+    <div class="bgf-chips" id="bgfChips" role="group" aria-label="무엇으로 환산할까요"></div>
+    <div class="bgf-main" id="bgfMain" role="status" aria-live="polite"></div>
+    <p class="bgf-sub" id="bgfSub"></p>
   </div>
 
   <div class="whoami" id="whoami">
     <span class="whoami-lbl">이 중에 나예요</span>
     <div class="whoami-chips" id="whoamiChips"></div>
     <p class="whoami-note" id="whoamiNote"></p>
+    <div class="s" id="oweMine" style="display:none;margin-top:6px;font-size:12.5px"></div>
   </div>
 
-  <h3 class="stbl"><span class="i">◈</span>사람별 정산액</h3>
+  <h3 class="stbl"><span class="i">◈</span>사람별 정산 현황</h3>
   <div class="bar-list" id="bars"></div>
 
   <div class="cost-tbl" id="ctStay">
@@ -2495,7 +2534,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.95';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.96';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3745,17 +3784,7 @@ wireExpand(['iA','iB','iC'], '.day-head', '.day');
 
 // cost
 const oweSum = OWE.reduce((a,o)=>a+o.t,0);
-$('oweTotal').innerHTML = won(oweSum)+'<small>원</small>';
 
-// 정산 요약 문구 — 하드코딩 대신 개인별 정산 항목(owedItems)을 분류별로 합산 (총액과 항상 일치)
-(function(){
-  const cat = {stay:0, golf:0, car:0};
-  OWE.forEach(o => owedItems(o.n).forEach(it => { cat[/^🏨/.test(it.label) ? 'stay' : /^⛳/.test(it.label) ? 'golf' : 'car'] += it.amt; }));
-  const pendingGolf = GOLF.filter(g=>!g.amt).length;
-  $('oweBreak').textContent =
-    `숙박 ${won(cat.stay)} + 골프 ${won(cat.golf)} + 차량 ${won(cat.car)}`+
-    (pendingGolf ? ` · 미확정 골프 ${pendingGolf}건 제외` : '');
-})();
 const oweMax = Math.max(...OWE.map(o=>o.t));
 
 // 사람별 정산 항목 상세 (골프+숙박+차량 원본 데이터에서 동적 산출)
@@ -3883,7 +3912,6 @@ function renderBars(){
     setTimeout(()=>b.style.width=b.dataset.w+'%', i*70);});},300);
 }
 renderBars();
-$('oweSelf').textContent = `윤우열 본인 부담 ${won(selfTotal)}원 (선지불 · 받을 금액 제외) · 김태기 차량비 사전 송금 ${won(prepaidTotal)}원 · 전체 비용 ${won(oweSum+selfTotal+prepaidTotal)}원`;
 
 // "이 중에 나예요" 선택 — 내 항목 강조 + 상단 고정 (localStorage 저장)
 function renderWhoami(){
@@ -3910,7 +3938,53 @@ $('whoamiChips').addEventListener('click', e=>{
   haptic('tap');
 });
 
-// 정산탭 뱃지·요약문구를 store.done과 동기화 (할일탭에서 체크/해제해도 여기 반영)
+// ── 예산·경비: 전체 비용 · 정산 현황 · 항목별 비용 ──
+function budgetCats(){
+  const cat = {stay:0, golf:0, car:0}, add = it => { cat[/^🏨/.test(it.label) ? 'stay' : /^⛳/.test(it.label) ? 'golf' : 'car'] += it.amt; };
+  OWE.forEach(o => owedItems(o.n).forEach(add)); selfItems().forEach(add); Object.values(PREPAID).flat().forEach(add);
+  return cat;
+}
+function renderBudget(done, total){
+  const cat = budgetCats(), T = cat.stay + cat.golf + cat.car;
+  const paidSum = OWE.reduce((a,o)=> a + (store.done[paidKey(o)] ? o.t : 0), 0), owner = selfTotal + prepaidTotal, doneAmt = paidSum + owner, left = T - doneAmt;
+  const pct = T ? Math.round(doneAmt/T*100) : 0;
+  $('bgTotal').innerHTML = won(T) + '<small>원</small>';
+  $('bgNote').textContent = `숙박 + 골프 + 차량 · 참가자 9명 · 1인 평균 약 ${won(Math.round(T/9))}원`;
+  const seg = (v,c) => v > 0 ? `<i style="flex:${v};background:${c}"></i>` : '';
+  $('bgStack').innerHTML = seg(paidSum,'#7FD8A4') + seg(owner,'#8FB7E8') + seg(left,'#E3C169');
+  $('bgLegend').innerHTML =
+    `<li><i style="background:#7FD8A4"></i>입금 확인 <b>${won(paidSum)}원</b></li>` +
+    `<li><i style="background:#8FB7E8"></i>윤우열 본인 부담·사전 송금 <b>${won(owner)}원</b></li>` +
+    `<li><i style="background:#E3C169"></i>입금 대기 <b>${won(left)}원</b></li>`;
+  $('bgDone').innerHTML = won(doneAmt) + '<small>원</small>'; $('bgDonePct').textContent = `전체의 ${pct}%`;
+  $('bgLeft').innerHTML = won(left) + '<small>원</small>';
+  $('oweSettled').textContent = done === total ? '✅ 전원 정산완료' : `${total-done}명 입금 대기`;
+  const rows = [['🏨','숙박',cat.stay],['⛳','골프',cat.golf],['🚐','차량',cat.car]];
+  $('bgCats').innerHTML = rows.map(([e,n,v]) => { const p = T ? Math.round(v/T*100) : 0;
+    return `<div class="bg-cat"><span class="bc-n">${e} ${n}</span><b>${won(v)}원</b><span class="bc-p">${p}%</span><div class="bc-t"><i style="width:${p}%"></i></div></div>`; }).join('');
+  renderFun();
+}
+// 경비 환산: 현지 물가(바트 감각 테스트와 같은 대략 가격)로 전체 경비·1인 평균을 환산
+const FUN_UNITS = [['🍜','팟타이',60,'접시'],['🍺','싱하 맥주 캔',50,'캔'],['💆','마사지 1시간',400,'회'],['🥭','망고 찰밥',120,'접시'],['🥥','코코넛 워터',50,'개']];
+let funIdx = 0;
+function funRate(){ const v = parseFloat(String($('fxThb') ? $('fxThb').textContent : '').replace(/[^\d.]/g,'')); return v > 10 && v < 100 ? v : 42; }
+function renderFun(){
+  if(!$('bgfChips')) return;
+  const cat = budgetCats(), T = cat.stay + cat.golf + cat.car, rate = funRate(), [e,n,b,u] = FUN_UNITS[funIdx];
+  $('bgfChips').innerHTML = FUN_UNITS.map(([ee,nn],i) => `<button class="wh-chip" type="button" data-i="${i}" aria-pressed="${i===funIdx}">${ee} ${nn}</button>`).join('');
+  const unitWon = b*rate, all = Math.round(T/unitWon), each = Math.round(T/9/unitWon);
+  $('bgfMain').innerHTML = `<span class="bgf-e" aria-hidden="true">${e}</span><span>전체 경비는 <b>${n} ${all.toLocaleString()}${u}</b>어치<br><small>1인 평균 약 ${each.toLocaleString()}${u}</small></span>`;
+  let pr = 0; GOLF.forEach(g => { if(g.amt) pr += g.p.length; });
+  const hole = pr ? Math.round(cat.golf/(pr*18)) : 0;
+  $('bgfSub').textContent = `⛳ 골프는 한 사람이 홀 하나를 칠 때마다 약 ${won(hole)}원이에요 (${pr}인·라운드 × 18홀). ฿1 ≈ ${rate % 1 ? rate.toFixed(1) : rate}원, ${n} 1${u} ≈ ฿${b} 기준의 대략값이에요.`;
+}
+(function(){
+  const chips = $('bgfChips'); if(!chips) return;
+  chips.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; funIdx = +b.dataset.i; haptic('tap'); renderFun(); const again = chips.querySelector(`[data-i="${funIdx}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
+  if($('fxThb') && window.MutationObserver) new MutationObserver(() => renderFun()).observe($('fxThb'), {childList:true, characterData:true, subtree:true});
+})();
+
+// 예산·경비 탭 뱃지·요약문구를 store.done과 동기화 (할일탭에서 체크/해제해도 여기 반영)
 function refreshSettled(){
   let done=0;
   document.querySelectorAll('.bar-row:not(.self)').forEach(row=>{
@@ -3924,10 +3998,7 @@ function refreshSettled(){
     if(paid) done++;
   });
   const total = OWE.length;
-  $('oweSettled').textContent = done===total ? '✅ 전원 정산완료' : `${done}/${total}명 정산완료`;
-  const pct = total ? Math.round(done/total*100) : 0;
-  $('oweProgPct').textContent = pct+'%';
-  setTimeout(()=>{ $('oweProgFill').style.width = pct+'%'; }, 260);
+  renderBudget(done, total);
   if(typeof updateMineLine === 'function') updateMineLine();
   syncPayLocks();
 }
@@ -4196,6 +4267,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['💰','정산 탭 → 예산·경비 탭으로 개편','탭 이름을 "예산·경비"로 바꾸고, 맨 위의 "윤우열이 받아야 할 금액"은 없앴어요. 대신 여행 전체 비용, 정산 완료 금액과 남은 금액, 숙박·골프·차량 항목별 비용이 한눈에 보여요. "경비로 보는 태국"에서는 전체 경비를 팟타이·싱하 맥주·마사지 몇 번어치인지, 골프 한 홀당 얼마인지 환산해 볼 수 있어요'],
     ['✅','정산 입금 확인 — 김태기·윤성욱·이준영 님 완료','김태기 님 1,309,101원, 윤성욱 님 1,921,615원, 이준영 님 556,272원이 윤우열 님께 입금된 것으로 정산완료 처리했어요. 이제 남은 입금은 정유현 님과 장모님이에요'],
     ['📱','첫 화면 날씨·환율을 한 줄로 압축','폰 첫 화면에서 날씨와 환율이 차지하던 자리를 줄여 맛집 대동여지도 카드가 더 위에 보여요. 날씨·환율 모두 "이름 · 값 · N분 전 · ↗"를 한 줄에 보여주고, 출처 줄은 데이터가 오래됐거나 오류일 때만 나타나요'],
     ['🗺️','첫 화면 맨 위로 올라온 맛집지도','첫 화면의 "예약 준비" 진행률 막대를 없애고, 그 자리에 맛집 대동여지도 카드를 크게 올렸어요. 폰에서 열자마자 보이고 한 번 누르면 지도가 열려요'],
