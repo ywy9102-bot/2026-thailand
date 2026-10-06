@@ -610,17 +610,6 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .bg-cat .bc-p{font-size:12px;color:var(--ink2);min-width:34px;text-align:right}
 .bg-cat .bc-t{grid-column:1/-1;height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:5px}
 .bg-cat .bc-t i{display:block;height:100%;border-radius:99px;background:var(--jade)}
-.bg-fun{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:13px 14px;margin-bottom:16px}
-.bgf-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -2px 8px;padding:0 2px}
-.bgf-chips::-webkit-scrollbar{display:none}
-.bgf-chips .wh-chip{flex:none;white-space:nowrap}
-.bgf-chips .wh-chip[aria-pressed="false"]{background:var(--card);color:var(--ink);text-decoration:none}
-.bgf-chips .wh-chip[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg);text-decoration:none}
-.bgf-main{display:flex;align-items:center;gap:12px;padding:6px 0}
-.bgf-e{font-size:2.25rem;line-height:1}
-.bgf-main b{font-family:'Fraunces',serif;font-size:1.1875rem;color:var(--jade-d)}
-.bgf-main small{font-size:.8125rem;color:var(--ink2)}
-.bgf-sub{margin:6px 0 0;font-size:.8125rem;line-height:1.6;color:var(--ink2);word-break:keep-all}
 .cost-hero .s{font-size:11.5px;color:#A5BAB0;margin-top:7px;line-height:1.6}
 
 .whoami{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px}
@@ -1361,6 +1350,12 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .fm-chips,.wh-chips.fm-chips{flex:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -2px 8px;padding:0 2px}
 .fm-chips::-webkit-scrollbar{display:none}
 .fm-chips .wh-chip{flex:none;white-space:nowrap}
+.fm-chips .fm-dice{background:#F2B632;border-color:#C98F10;color:#2B1D05;text-decoration:none}
+.fm-roll{display:flex;align-items:center;gap:12px;padding:6px 4px}
+.fm-roll span{font-size:1.75rem}
+.fm-roll b{font-family:'Fraunces',serif;font-size:1.125rem;color:#2E1F0C;word-break:keep-all}
+.fm-dice-tag{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-2px 0 8px;padding:2px 2px 2px 10px;border-radius:10px;background:#F6DDB8;color:#6A3A05;font-size:.8125rem;font-weight:700}
+.fm-dice-tag .fm-btn{min-height:44px;padding:4px 10px}
 .fm-chips .wh-chip[aria-pressed="false"]{background:var(--card);color:var(--ink);text-decoration:none}
 .fm-chips .wh-chip[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
 .fm-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px;border-radius:12px;border:1px solid #CDB78A;
@@ -1424,13 +1419,13 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .fm-pickact.home{grid-template-columns:1.3fr 1fr 44px}
 .fm-seal.home{background:#0F3D32}
 .fm-pickact .fm-btn{min-width:0;padding:6px 4px;word-break:keep-all}
-.fm-pick{position:absolute;z-index:600;left:8px;right:8px;bottom:8px;max-height:55%;overflow-y:auto;padding:11px 12px;border-radius:14px;background:#FBF4E1;border:1.5px solid #A8895A;box-shadow:0 4px 12px rgba(40,25,5,.4);color:#3B2A14}
+.fm-pick{position:absolute;z-index:600;left:8px;right:8px;bottom:8px;max-height:62%;overflow-y:auto;padding:11px 12px;border-radius:14px;background:#FBF4E1;border:1.5px solid #A8895A;box-shadow:0 4px 12px rgba(40,25,5,.4);color:#3B2A14}
 .fm-pickhead{display:grid;grid-template-columns:36px 1fr 44px;gap:10px;align-items:center}
 .fm-pickhead .fm-seal{grid-row:auto;width:36px;height:36px;font-size:1.125rem}
 .fm-pickhead .fm-nm{display:block} .fm-pickhead .fm-en{display:block}
 .fm-x{appearance:none;width:44px;height:44px;border:0;border-radius:12px;background:none;color:#3B2A14;font-size:1.25rem;cursor:pointer}
 .fm-pickmeta{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0 0}
-.fm-pickmeta .fm-tag{font-size:.75rem}
+.fm-pickmeta .fm-tag{font-size:.75rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fm-picksib{margin-top:8px;font-size:.75rem;color:#6B5532}
 .fm-sibrow{display:flex;gap:6px;overflow-x:auto;margin-top:4px;padding-bottom:2px;scrollbar-width:none}
 .fm-sibrow::-webkit-scrollbar{display:none}
@@ -1440,6 +1435,27 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .fm-dist{font-weight:700;color:#1F6F8B}
 .fm-foot{margin:10px 2px 2px;font-size:.75rem;line-height:1.6;color:#6B5532;text-align:center}
 
+/* ── 티오프 전 스트레칭 ── */
+.st-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;text-align:center}
+.st-dots{display:flex;gap:7px;justify-content:center;margin:2px 0 8px}
+.st-dots i{display:block;width:10px;height:10px;border-radius:50%;background:var(--line)}
+.st-dots i.done{background:var(--jade)} .st-dots i.cur{background:var(--gold);outline:2px solid var(--gold-s);outline-offset:1px}
+.st-ring{position:relative;width:168px;height:168px;margin:2px auto 6px}
+.st-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.st-ring .bg{fill:none;stroke:var(--line);stroke-width:9}
+.st-ring .fg{fill:none;stroke:var(--jade);stroke-width:9;stroke-linecap:round}
+.st-ring .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.st-ring .e{font-size:2.5rem;line-height:1.1}
+.st-ring .t{font-family:'IBM Plex Mono',monospace;font-size:1.75rem;font-weight:700;color:var(--jade-d);font-variant-numeric:tabular-nums}
+.st-name{font-family:'Fraunces',serif;font-size:1.1875rem;font-weight:700;color:var(--jade-d);margin:4px 0 2px;word-break:keep-all}
+.st-cue{margin:0 auto;max-width:340px;font-size:.875rem;line-height:1.7;color:var(--ink2);word-break:keep-all}
+.st-next{margin:8px 0 0;font-size:.8125rem;color:var(--ink3)}
+.st-end{padding:14px 6px}
+.st-end .e{font-size:3rem}
+.st-ctl{flex:none;display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;margin-top:10px}
+.st-btn{appearance:none;min-height:48px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font-family:inherit;font-size:.9375rem;font-weight:700;cursor:pointer}
+.st-btn.main{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.st-btn:disabled{opacity:.45;cursor:default}
 /* ── 바트 감각 · 힐링 사운드 ── */
 .bh-body,.ch-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .bh-item{text-align:center;padding:6px 0 2px}
@@ -2173,13 +2189,6 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   <h3 class="stbl"><span class="i">◈</span>항목별 비용</h3>
   <div class="bg-cats" id="bgCats"></div>
 
-  <h3 class="stbl"><span class="i">🎈</span>경비로 보는 태국</h3>
-  <div class="bg-fun">
-    <div class="bgf-chips" id="bgfChips" role="group" aria-label="무엇으로 환산할까요"></div>
-    <div class="bgf-main" id="bgfMain" role="status" aria-live="polite"></div>
-    <p class="bgf-sub" id="bgfSub"></p>
-  </div>
-
   <div class="whoami" id="whoami">
     <span class="whoami-lbl">이 중에 나예요</span>
     <div class="whoami-chips" id="whoamiChips"></div>
@@ -2310,6 +2319,24 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <div class="ch-body" id="chBody"></div>
     <button class="wn-close" id="chStop" type="button" style="margin-top:12px">⏹ 모두 끄기</button>
     <button class="wn-close" id="chClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기 (소리는 계속 재생돼요)</button>
+  </div>
+</div>
+
+<!-- 티오프 전 스트레칭 -->
+<div class="wn-scrim" id="stretchScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="stTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🧘 WARM-UP</span>
+      <h2 class="wn-title" id="stTitle">티오프 전 5분 스트레칭</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem" id="stSub">여섯 동작을 45초씩, 총 4분 30초예요. 시작을 누르면 알아서 다음 동작으로 넘어가요. 통증이 느껴지면 바로 멈추세요</p>
+    <div class="st-body" id="stBody"></div>
+    <div class="st-ctl" id="stCtl">
+      <button class="st-btn" id="stPrev" type="button" aria-label="이전 동작">◀ 이전</button>
+      <button class="st-btn main" id="stGo" type="button">▶ 시작</button>
+      <button class="st-btn" id="stNext" type="button" aria-label="다음 동작">다음 ▶</button>
+    </div>
+    <button class="wn-close" id="stClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 
@@ -2534,7 +2561,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v9.96';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v9.97';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3962,28 +3989,7 @@ function renderBudget(done, total){
   const rows = [['🏨','숙박',cat.stay],['⛳','골프',cat.golf],['🚐','차량',cat.car]];
   $('bgCats').innerHTML = rows.map(([e,n,v]) => { const p = T ? Math.round(v/T*100) : 0;
     return `<div class="bg-cat"><span class="bc-n">${e} ${n}</span><b>${won(v)}원</b><span class="bc-p">${p}%</span><div class="bc-t"><i style="width:${p}%"></i></div></div>`; }).join('');
-  renderFun();
 }
-// 경비 환산: 현지 물가(바트 감각 테스트와 같은 대략 가격)로 전체 경비·1인 평균을 환산
-const FUN_UNITS = [['🍜','팟타이',60,'접시'],['🍺','싱하 맥주 캔',50,'캔'],['💆','마사지 1시간',400,'회'],['🥭','망고 찰밥',120,'접시'],['🥥','코코넛 워터',50,'개']];
-let funIdx = 0;
-function funRate(){ const v = parseFloat(String($('fxThb') ? $('fxThb').textContent : '').replace(/[^\d.]/g,'')); return v > 10 && v < 100 ? v : 42; }
-function renderFun(){
-  if(!$('bgfChips')) return;
-  const cat = budgetCats(), T = cat.stay + cat.golf + cat.car, rate = funRate(), [e,n,b,u] = FUN_UNITS[funIdx];
-  $('bgfChips').innerHTML = FUN_UNITS.map(([ee,nn],i) => `<button class="wh-chip" type="button" data-i="${i}" aria-pressed="${i===funIdx}">${ee} ${nn}</button>`).join('');
-  const unitWon = b*rate, all = Math.round(T/unitWon), each = Math.round(T/9/unitWon);
-  $('bgfMain').innerHTML = `<span class="bgf-e" aria-hidden="true">${e}</span><span>전체 경비는 <b>${n} ${all.toLocaleString()}${u}</b>어치<br><small>1인 평균 약 ${each.toLocaleString()}${u}</small></span>`;
-  let pr = 0; GOLF.forEach(g => { if(g.amt) pr += g.p.length; });
-  const hole = pr ? Math.round(cat.golf/(pr*18)) : 0;
-  $('bgfSub').textContent = `⛳ 골프는 한 사람이 홀 하나를 칠 때마다 약 ${won(hole)}원이에요 (${pr}인·라운드 × 18홀). ฿1 ≈ ${rate % 1 ? rate.toFixed(1) : rate}원, ${n} 1${u} ≈ ฿${b} 기준의 대략값이에요.`;
-}
-(function(){
-  const chips = $('bgfChips'); if(!chips) return;
-  chips.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; funIdx = +b.dataset.i; haptic('tap'); renderFun(); const again = chips.querySelector(`[data-i="${funIdx}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
-  if($('fxThb') && window.MutationObserver) new MutationObserver(() => renderFun()).observe($('fxThb'), {childList:true, characterData:true, subtree:true});
-})();
-
 // 예산·경비 탭 뱃지·요약문구를 store.done과 동기화 (할일탭에서 체크/해제해도 여기 반영)
 function refreshSettled(){
   let done=0;
@@ -4267,7 +4273,8 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
-    ['💰','정산 탭 → 예산·경비 탭으로 개편','탭 이름을 "예산·경비"로 바꾸고, 맨 위의 "윤우열이 받아야 할 금액"은 없앴어요. 대신 여행 전체 비용, 정산 완료 금액과 남은 금액, 숙박·골프·차량 항목별 비용이 한눈에 보여요. "경비로 보는 태국"에서는 전체 경비를 팟타이·싱하 맥주·마사지 몇 번어치인지, 골프 한 홀당 얼마인지 환산해 볼 수 있어요'],
+    ['🧘','새 놀이 2가지 — 티오프 5분 스트레칭 · 맛집 뽑기','놀이터의 "티오프 5분 스트레칭"은 목·어깨부터 빈 스윙까지 여섯 동작을 45초씩 타이머로 안내해요(소리·진동, 화면 꺼짐 방지). 맛집 대동여지도 칩 맨 앞의 "🎲 오늘 어디 가지?"는 지금 보이는 맛집 중 하나를 슬롯처럼 돌려 뽑고 지도에 핀을 보여줘요. 집 근처·가성비 칩을 먼저 골라 두면 그 안에서 뽑아요'],
+    ['💰','정산 탭 → 예산·경비 탭으로 개편','탭 이름을 "예산·경비"로 바꾸고, 맨 위의 "윤우열이 받아야 할 금액"은 없앴어요. 대신 여행 전체 비용, 정산 완료 금액과 남은 금액, 숙박·골프·차량 항목별 비용이 한눈에 보여요.'],
     ['✅','정산 입금 확인 — 김태기·윤성욱·이준영 님 완료','김태기 님 1,309,101원, 윤성욱 님 1,921,615원, 이준영 님 556,272원이 윤우열 님께 입금된 것으로 정산완료 처리했어요. 이제 남은 입금은 정유현 님과 장모님이에요'],
     ['📱','첫 화면 날씨·환율을 한 줄로 압축','폰 첫 화면에서 날씨와 환율이 차지하던 자리를 줄여 맛집 대동여지도 카드가 더 위에 보여요. 날씨·환율 모두 "이름 · 값 · N분 전 · ↗"를 한 줄에 보여주고, 출처 줄은 데이터가 오래됐거나 오류일 때만 나타나요'],
     ['🗺️','첫 화면 맨 위로 올라온 맛집지도','첫 화면의 "예약 준비" 진행률 막대를 없애고, 그 자리에 맛집 대동여지도 카드를 크게 올렸어요. 폰에서 열자마자 보이고 한 번 누르면 지도가 열려요'],
@@ -5021,6 +5028,97 @@ const FOODS = [
   });
 })();
 
+// ── 티오프 전 5분 스트레칭: 6동작 × 45초 타이머 (자동 넘김·소리·진동, 화면 꺼짐 방지) ──
+(function(){
+  const scrim = $('stretchScrim'); if(!scrim) return;
+  const body = $('stBody'), goBtn = $('stGo'), prevBtn = $('stPrev'), nextBtn = $('stNext'), closeBtn = $('stClose'), sub = $('stSub');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const SEC = 45;
+  const STEPS = [
+    ['🙆','목·어깨 풀기','목을 천천히 좌우로 기울이고, 어깨를 앞뒤로 크게 돌려요.'],
+    ['🤗','팔·가슴 열기','한 팔을 가슴 앞으로 당겨 15초, 반대쪽도 15초. 마지막은 두 손을 뒤로 깍지 끼고 가슴을 열어요.'],
+    ['🌀','몸통 회전','클럽을 어깨 뒤에 걸치고(없으면 팔짱) 상체를 좌우로 천천히 돌려요. 골반은 앞을 보게 두세요.'],
+    ['🧎','허리·허벅지 뒤','무릎을 살짝 굽히고 상체를 숙여 허벅지 뒤를 늘려요. 반동은 주지 말고 숨은 편하게 쉬세요.'],
+    ['🦵','런지·고관절','한 발을 크게 내딛고 골반을 천천히 낮춰요. 좌우 번갈아 해요.'],
+    ['🏌️','손목 풀기·빈 스윙','손목을 돌리고, 클럽으로 가볍게 빈 스윙 5번. 점점 크게 휘두르세요.']
+  ];
+  const LS = 'thai2026_stretch'; let st; try{ st = JSON.parse(localStorage.getItem(LS)); }catch(e){} st = st || {done:0};
+  const save = () => { try{ localStorage.setItem(LS, JSON.stringify(st)); }catch(e){} };
+  let idx = 0, left = SEC, running = false, finished = false, endAt = 0, timer = 0, prevFocus = null, wake = null, ctx = null;
+  const R = 80, C = 2*Math.PI*R;
+  function beep(freq, dur){
+    try{
+      const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return; ctx = ctx || new AC(); if(ctx.state === 'suspended') ctx.resume();
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = freq; o.connect(g); g.connect(ctx.destination);
+      const t = ctx.currentTime; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.18, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + dur); o.start(t); o.stop(t + dur + .02);
+    }catch(e){}
+  }
+  async function lock(){ try{ if(navigator.wakeLock && !wake){ wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } }catch(e){} }
+  function unlock(){ try{ if(wake){ wake.release(); } }catch(e){} wake = null; }
+  function render(){
+    if(finished){
+      body.innerHTML = `<div class="st-end"><div class="e" aria-hidden="true">🎉</div><div class="st-name">몸 풀기 끝!</div><p class="st-cue">오늘 라운드도 좋은 샷 많이 나오길 응원해요. 물 한 모금 마시고 티잉 그라운드로 가볼까요?</p></div>`;
+      goBtn.textContent = '🔁 한 번 더'; prevBtn.disabled = true; nextBtn.disabled = true; return;
+    }
+    const [e, n, cue] = STEPS[idx], nx = STEPS[idx+1];
+    body.innerHTML = `<div class="st-dots" aria-hidden="true">${STEPS.map((_, i) => `<i class="${i < idx ? 'done' : i === idx ? 'cur' : ''}"></i>`).join('')}</div>` +
+      `<div class="st-ring"><svg viewBox="0 0 176 176" aria-hidden="true"><circle class="bg" cx="88" cy="88" r="${R}"/><circle class="fg" id="stFg" cx="88" cy="88" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="0"/></svg><div class="in"><span class="e" aria-hidden="true">${e}</span><span class="t" id="stT">${left}</span></div></div>` +
+      `<div class="st-name">${idx+1}/${STEPS.length} · ${esc(n)}</div><p class="st-cue">${esc(cue)}</p><p class="st-next">${nx ? '다음: ' + esc(nx[0] + ' ' + nx[1]) : '마지막 동작이에요'}</p>`;
+    goBtn.textContent = running ? '⏸ 일시정지' : (left < SEC ? '▶ 계속' : '▶ 시작');
+    prevBtn.disabled = idx === 0; nextBtn.disabled = false; paintTime();
+  }
+  function paintTime(){
+    const t = $('stT'), fg = $('stFg'); if(t) t.textContent = left; if(fg) fg.setAttribute('stroke-dashoffset', (C * (1 - left/SEC)).toFixed(1));
+    sub.textContent = running ? `${STEPS[idx][1]} · 남은 ${left}초 (전체 ${STEPS.length - idx - 1}동작 남음)` : '여섯 동작을 45초씩, 총 4분 30초예요. 시작을 누르면 알아서 다음 동작으로 넘어가요. 통증이 느껴지면 바로 멈추세요';
+  }
+  function stop(){ clearInterval(timer); timer = 0; running = false; unlock(); }
+  function go(){
+    if(finished){ finished = false; idx = 0; left = SEC; render(); start(); return; }
+    running ? (stop(), render()) : start();
+  }
+  function start(){
+    running = true; endAt = Date.now() + left*1000; lock(); beep(660, .12); haptic('tap');
+    clearInterval(timer); timer = setInterval(tick, 250); render();
+  }
+  function tick(){
+    const l = Math.max(0, Math.ceil((endAt - Date.now())/1000));
+    if(l !== left){ left = l; paintTime(); if(l > 0 && l <= 3){ beep(520, .08); haptic('tap'); } }
+    if(l <= 0) advance(true);
+  }
+  function advance(auto){
+    if(idx >= STEPS.length - 1){ stop(); finished = true; st.done = (st.done||0) + 1; save(); beep(880, .3); haptic('strong'); render();
+      if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🧘 몸 풀기 끝', msg:'오늘 라운드 파이팅!', ms:2600, at:body, dy:0, n:16, spread:100, petals:true });
+      return; }
+    idx++; left = SEC; beep(740, .15); haptic('ok');
+    if(running){ endAt = Date.now() + left*1000; }
+    render();
+  }
+  function jump(d){ const was = running; idx = Math.min(STEPS.length - 1, Math.max(0, idx + d)); left = SEC; endAt = Date.now() + left*1000; haptic('tap'); render(); if(was) goBtn.textContent = '⏸ 일시정지'; }
+  goBtn.addEventListener('click', go);
+  prevBtn.addEventListener('click', () => jump(-1));
+  nextBtn.addEventListener('click', () => { if(idx >= STEPS.length - 1){ advance(false); } else jump(1); });
+  function open(){
+    prevFocus = document.activeElement; idx = 0; left = SEC; finished = false; running = false; render();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden'; void scrim.offsetHeight; scrim.classList.add('on');
+    try{ goBtn.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return; stop();
+    scrim.classList.remove('on'); document.documentElement.style.overflow = ''; setTimeout(() => { scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){} haptic('tap');
+  }
+  document.addEventListener('visibilitychange', () => { if(!document.hidden && running){ lock(); tick(); } });
+  window.__openStretch = open; window.__stretchInfo = () => ({ done: st.done||0, steps: STEPS.length, sec: SEC });
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key === 'Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [prevBtn, goBtn, nextBtn, closeBtn].filter(b => !b.disabled), cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
 // ── 파타야 맛집 대동여지도: 후기 사이트 여러 곳에서 평가가 일관된 12곳 — 지도(구글)·메뉴·후기·가격 ──
 (function(){
   const scrim = $('foodScrim'); if(!scrim) return;
@@ -5073,7 +5171,7 @@ const FOODS = [
   const mapUrl = r => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.q);
   const embedUrl = r => 'https://maps.google.com/maps?q=' + encodeURIComponent(r.q) + '&hl=ko&z=16&output=embed';
   function render(){
-    chipsEl.innerHTML = GROUPS.map(([k,l]) => `<button class="wh-chip" type="button" data-g="${k}" aria-pressed="${k === cur}">${l} ${R.filter(r => inGrp(r,k)).length}</button>`).join('');
+    chipsEl.innerHTML = `<button class="wh-chip fm-dice" type="button" data-act="dice" aria-label="오늘 어디 가지? 지금 보이는 맛집 중에서 하나를 뽑아요">🎲 오늘 어디 가지?</button>` + GROUPS.map(([k,l]) => `<button class="wh-chip" type="button" data-g="${k}" aria-pressed="${k === cur}">${l} ${R.filter(r => inGrp(r,k)).length}</button>`).join('');
     const list = R.filter(r => inGrp(r,cur));
     bodyEl.innerHTML = list.map(r => `<article class="fm-card" data-id="${r.id}">` +
       `<button class="fm-head" type="button" aria-expanded="false" aria-controls="fm-d-${r.id}"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span><span class="fm-meta"><b>★ ${esc(r.star || r.google.split(' ')[0])}</b>${esc(r.price)}${distTxt(r) ? `<br><span class="fm-dist">📏 ${distTxt(r)}</span>` : ''}</span><span class="fm-tx ${TAX[r.id].lv}"><b>${TAXLV[TAX[r.id].lv]}</b> 부가세·봉사료: ${esc(TAX[r.id].s)}</span></button>` +
@@ -5090,7 +5188,7 @@ const FOODS = [
         `<div class="fm-map" hidden></div>` +
       `</div></article>`).join('') + `<p class="fm-foot">별점·가격은 2026-10 검색으로 확인한 대략값이에요. 게시물(AI 콘텐츠)의 사진은 실제 음식이 아니니 참고하지 마세요. 영업시간·휴무는 지도에서 확인하세요.<br>🧾 태국 식당은 메뉴 가격에 봉사료 10% + 부가세 7%가 따로 붙는 곳이 많아요(\"++\" 표기, 표시가 × 약 1.177). 정확한 표기는 방문 시 메뉴판 하단과 직원에게 확인하세요.</p>`;
   }
-  chipsEl.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; cur = b.dataset.g; haptic('tap'); render(); if(view === 'map') refreshMap(true); const again = chipsEl.querySelector(`[data-g="${cur}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
+  chipsEl.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; if(b.dataset.act === 'dice'){ rollDice(); return; } cur = b.dataset.g; haptic('tap'); render(); if(view === 'map') refreshMap(true); const again = chipsEl.querySelector(`[data-g="${cur}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
   bodyEl.addEventListener('click', e => {
     const head = e.target.closest('.fm-head');
     if(head){ const det = $(head.getAttribute('aria-controls')), open = head.getAttribute('aria-expanded') !== 'true'; head.setAttribute('aria-expanded', String(open)); det.hidden = !open; haptic('tap'); if(open) det.scrollIntoView({block:'nearest'}); return; }
@@ -5160,10 +5258,10 @@ const FOODS = [
     if(set.length === 1) { map.setView(set[0], 15); return; }
     map.fitBounds(L.latLngBounds(set), {padding:[44,44], maxZoom:15});
   }
-  function pickHtml(r){
+  function pickHtml(r, tag){
     const tx = TAX[r.id], d = distTxt(r), sib = Object.keys(COORD).filter(k => k !== r.id && COORD[r.id] && km(COORD[r.id], COORD[k]) < 0.12).map(k => R.find(x => x.id === k)).filter(x => x && inGrp(x, cur));
-    return `<div class="fm-pickhead"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><div><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span></div><button class="fm-x" type="button" data-pickx aria-label="닫기">✕</button></div>` +
-      `<div class="fm-pickmeta"><span class="fm-tag">★ ${esc(r.star || r.google.split(' ')[0])}</span><span class="fm-tag">${esc(r.price)}</span><span class="fm-tag fm-badge">🧾 ${esc(tx.s)}</span>${r.val ? '<span class="fm-tag fm-badge">💸 가성비</span>' : ''}${r.badge ? '<span class="fm-tag fm-badge">🏅 미쉐린</span>' : ''}${d ? `<span class="fm-tag fm-dist">📏 ${d}</span>` : ''}${COORD[r.id] ? homeDist(r).map(t => `<span class="fm-tag">${t}</span>`).join('') : ''}</div>` +
+    return (tag ? `<div class="fm-dice-tag"><span>🎲 오늘의 선택!</span><button class="fm-btn" type="button" data-diceagain>다시 뽑기</button></div>` : '') + `<div class="fm-pickhead"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><div><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span></div><button class="fm-x" type="button" data-pickx aria-label="닫기">✕</button></div>` +
+      `<div class="fm-pickmeta"><span class="fm-tag">★ ${esc(r.star || r.google.split(' ')[0])}</span><span class="fm-tag">${esc(r.price)}</span><span class="fm-tag fm-badge">🧾 ${esc(tx.s)}</span>${r.val ? '<span class="fm-tag fm-badge">💸 가성비</span>' : ''}${r.badge ? '<span class="fm-tag fm-badge">🏅 미쉐린</span>' : ''}${d ? `<span class="fm-tag fm-dist">📏 ${d}</span>` : ''}${COORD[r.id] ? `<span class="fm-tag">${homeDist(r).join(' · ')}</span>` : ''}</div>` +
       `<div class="fm-pickact"><a class="fm-btn main" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 ↗</a><a class="fm-btn" href="${dirUrl(r)}" target="_blank" rel="noopener">길찾기 ↗</a><button class="fm-btn" type="button" data-pickdet="${r.id}">메뉴·후기</button><button class="fm-btn tl-copy" type="button" data-copy="${esc(r.eng)}" aria-label="영문 주소 복사 (Grab·Bolt용)">📋</button></div>` +
       (sib.length ? `<div class="fm-picksib">같은 건물·바로 근처<div class="fm-sibrow">${sib.map(x => `<button class="fm-btn" type="button" data-picksib="${x.id}">${esc(x.ko)}</button>`).join('')}</div></div>` : '');
   }
@@ -5182,7 +5280,7 @@ const FOODS = [
       if(Math.abs(dx) > 2 || Math.abs(dy) > 4) map.panBy([dx, dy], {animate:true});
     }
   }
-  function pick(id, pan){ const r = R.find(x => x.id === id); if(r) select(id, pickHtml(r), pan); }
+  function pick(id, pan, tag){ const r = R.find(x => x.id === id); if(r) select(id, pickHtml(r, tag), pan); }
   function homeHtml(k){
     const h = HOME[k], near = R.filter(r => COORD[r.id] && inGrp(r, cur)).map(r => [r, km(h.c, COORD[r.id])]).sort((a, b) => a[1] - b[1]).slice(0, 4);
     return `<div class="fm-pickhead"><span class="fm-seal home" aria-hidden="true">🏠</span><div><span class="fm-nm">${esc(h.ko)}</span><span class="fm-en">${esc(h.en)} · ${esc(h.note)}</span></div><button class="fm-x" type="button" data-pickx aria-label="닫기">✕</button></div>` +
@@ -5244,9 +5342,37 @@ const FOODS = [
   pickEl.addEventListener('click', e => {
     if(e.target.closest('[data-pickx]')){ closePick(); return; }
     const det = e.target.closest('[data-pickdet]'); if(det){ setView('list', det.dataset.pickdet); return; }
+    if(e.target.closest('[data-diceagain]')){ rollDice(); return; }
     const sib = e.target.closest('[data-picksib]'); if(sib){ pick(sib.dataset.picksib, true); }
   });
   footEl.addEventListener('click', e => { const b = e.target.closest('[data-nopin]'); if(!b) return; const r = R.find(x => x.id === b.dataset.nopin); if(!r) return; selId = r.id; pickEl.innerHTML = pickHtml(r); pickEl.hidden = false; haptic('tap'); });
+  // 🎲 오늘 어디 가지? — 지금 보이는 맛집(칩 필터 기준) 중 하나를 슬롯처럼 돌려서 뽑고, 지도에 핀을 보여줘요
+  let lastDice = '', diceBusy = false;
+  const calm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function rollDice(){
+    if(diceBusy) return;
+    const pool = visible(); if(!pool.length) return;
+    const opts = pool.filter(r => r.id !== lastDice), win = (opts.length ? opts : pool)[(Math.random() * (opts.length ? opts : pool).length) | 0];
+    lastDice = win.id; diceBusy = true; haptic('tap');
+    if(view !== 'map') setView('map');
+    let tries = 0;
+    const wait = () => {
+      if(map && view === 'map' && !mapWrap.hidden){ spin(); return; }
+      if(++tries > 60){ diceBusy = false; setView('list', win.id); return; }
+      setTimeout(wait, 150);
+    };
+    const spin = () => {
+      closePick(); let i = 0; const n = calm ? 1 : 14;
+      const tick = () => {
+        const r = pool[(Math.random() * pool.length) | 0];
+        pickEl.innerHTML = `<div class="fm-roll" role="status"><span aria-hidden="true">🎲</span><b>${esc(r.ko)}</b></div>`; pickEl.hidden = false; haptic('tap'); i++;
+        if(i < n) setTimeout(tick, 70 + i * 16); else { diceBusy = false; pick(win.id, true, true); haptic('ok'); }
+      };
+      tick();
+    };
+    wait();
+  }
+  window.__foodDice = rollDice;
   function open(v){
     prevFocus = document.activeElement; if(v === 'map' || v === 'list') view = v;
     selId = null; pickEl.hidden = true; render();
@@ -5292,6 +5418,7 @@ const FOODS = [
     ['🔮','오늘의 골프 운세', () => '매일 바뀌는 라운드 운세', '__openFortune'],
     ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats'],
     ['💰','바트 감각 테스트', () => { try{ const b = window.__bahtInfo(); return b.best ? `최고 ${b.best}/5` : '이 가격, 한국 돈으로?'; }catch(err){ return '이 가격, 한국 돈으로?'; } }, '__openBaht', true],
+    ['🧘','티오프 5분 스트레칭', () => { try{ const t = window.__stretchInfo(); return t.done ? `${t.done}번 했어요` : '라운드 전 몸 풀기 타이머'; }catch(err){ return '라운드 전 몸 풀기 타이머'; } }, '__openStretch', true],
     ['🌴','태국 힐링 사운드', () => { try{ const c = window.__chillInfo(); return c.playing ? `재생 중 ${c.playing}` : '파도·비·밤 벌레 소리'; }catch(err){ return '파도·비·밤 벌레 소리'; } }, '__openChill', true]
   ];
   function paint(){
