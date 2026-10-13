@@ -1467,6 +1467,17 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .fm-vis{appearance:none;width:44px;height:44px;border:1.5px solid var(--parch-line2);border-radius:12px;background:var(--parch-card);color:var(--parch-ink);font-size:1.125rem;cursor:pointer}
 .fm-vis[aria-pressed="true"],.fm-visit[aria-pressed="true"]{background:var(--tx-ok-bg);border-color:var(--tx-ok-ink);color:var(--tx-ok-ink)}
 .fm-card.vis .fm-nm::after{content:" ✓";color:var(--tx-ok-ink)}
+.fm-chips .fm-course{background:var(--parch-deep);border-color:var(--parch-deep);color:var(--parch-card);text-decoration:none}
+.fm-cbtn[aria-pressed="true"],.fm-ccard[aria-pressed="true"]{background:var(--tx-ok-bg);border-color:var(--tx-ok-ink);color:var(--tx-ok-ink)}
+.fm-clist{list-style:none;margin:6px 0 0;padding:0}
+.fm-crow{display:grid;grid-template-columns:1fr 44px;align-items:center;column-gap:6px;border-top:1px dashed var(--parch-line)}
+.fm-crow:first-child{border-top:0}
+.fm-cleg{flex:none;font-size:.75rem;font-style:normal;font-weight:700;color:var(--pin-sea)}
+.fm-cn2{flex:1 1 auto;min-width:0}
+.fm-cnm{display:flex;align-items:center;gap:8px;min-height:44px;font-size:.875rem;font-weight:700;word-break:keep-all}
+.fm-cnm b{flex:none;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--parch-deep);color:var(--parch-card);font-family:'IBM Plex Mono',monospace;font-size:.75rem}
+.fm-pickact.c{grid-template-columns:1fr 1fr}
+.fm-cempty{margin:8px 0 0;font-size:.8125rem;line-height:1.5;color:var(--parch-ink2)}
 .fm-pickhead .fm-seal{grid-row:auto;width:36px;height:36px;font-size:1.125rem}
 .fm-pickhead .fm-nm{display:block} .fm-pickhead .fm-en{display:block}
 .fm-x{appearance:none;width:44px;height:44px;border:0;border-radius:12px;background:none;color:var(--parch-ink);font-size:1.25rem;cursor:pointer}
@@ -2620,7 +2631,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v10.04';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v10.05';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4323,6 +4334,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🧳','대동여지도 "내 코스" — 담아서 가까운 순으로, 구글지도 길찾기까지','식당·볼거리 카드의 "🧳 코스에 담기"(지도에서는 선택 카드의 🧳)를 누르면 코스에 담겨요. 칩 줄의 "🧳 내 코스"에서 담은 곳을 순서대로 보고, "가까운 순"으로 정리하고, "구글지도"로 열면 경유지가 있는 길찾기가 한 번에 열려요(최대 10곳). 메신저로 보낼 수 있게 "📋 복사"도 있어요. 방콕에는 일정표 기준 추천 코스 4개(12/28 사원, 카오산 걷기, 12/30 GCP 쇼핑·저녁, 12/29 야경·야시장)가 들어 있어요. 거리는 직선 기준 대략값이고 코스는 이 기기에만 저장돼요'],
     ['🦀','방콕 지도에 쏨분 시푸드·램차런 시푸드 추가','쏨분 시푸드는 12/26 저녁 일정의 반탓통 본점과 수라웡 지점을 새로 넣었고(센트럴월드 지점은 12/30용으로 기존), 램차런 시푸드는 센트럴월드·시암 파라곤·아이콘시암 3곳을 넣었어요. "📌 꼭 가볼 곳" 표시가 붙어 있어요. 램차런은 지점마다 평가가 달라서(센트럴월드 4.2, 시암 파라곤 3.5, 아이콘시암은 후기 6건뿐) 센트럴월드를 먼저 권하고, 생선이 100g 단위 가격이라 주문 전에 총액을 확인하라고 적었어요. 쏨분 수라웡의 미쉐린 표기는 자료 1곳 기준이에요. 방콕 맛집은 31곳이에요'],
     ['🎡','방콕 대동여지도에 볼거리 19곳 + "가봤어요" 표시','방콕 지도 칩 줄 맨 끝의 "🎡 볼거리"를 누르면 왕궁·왓 포·왓 아룬·카오산·아이콘시암·짜뚜짝·마하나콘 스카이워크·에라완 사당·룸피니 공원·꽃시장 등 19곳이 지도에 핀으로 떠요. 입장료·시간은 일정표와 2026년 검색 자료로 적었고 못 찾은 곳은 "미확인"이에요(마하나콘은 자료마다 가격이 달라요). 숙소 핀을 누르면 가까운 볼거리가 거리순으로 나와요. 식당·볼거리 카드의 ☐를 눌러 "가봤어요"를 표시하면 핀에 ✓가 붙고, 도시 버튼에 가본 곳 수가 보여요(이 기기에만 저장돼요)'],
     ['📸','인스타 방콕 지도 추천 8곳 추가 — 방콕 26곳','박군투어 방콕 여행지도 두 장에 나온 식당 중 아직 없던 8곳(디 아일랜드, 브레드 스트리트 키친, 페퍼리 타이 시푸드, 카츠야, 팟 치킨 x 슬림 피그, 지지 이터리, 비수 방콕, 짐스 테라스)을 방콕 지도에 넣고 "📸 인스타 지도 추천" 표시를 붙였어요. 게시물의 "4.9" 평점은 근거를 찾지 못한 곳이 많아 실제로 확인한 평점(Tripadvisor 등)을 적었고, 못 찾은 곳은 "—"·"미확인"으로 표시했어요. 비수 방콕은 게시물의 "벤자키티 공원 근처"와 달리 랑수언 쪽이고, 짐스 테라스는 루프탑이 아니에요. 제이파이는 이미 지도에 있어요'],
@@ -5233,9 +5245,9 @@ const FOODS = [
   const CORE_BKK = {lat:[13.71,13.77], lng:[100.48,100.58]};
   const FOOT_TAX = '🧾 태국 식당은 메뉴 가격에 봉사료 10% + 부가세 7%가 따로 붙는 곳이 많아요(\"++\" 표기, 표시가 × 약 1.177). 정확한 표기는 방문 시 메뉴판 하단과 직원에게 확인하세요.';
   const CITY = {
-    pat:{name:'파타야', R:R_PAT, TAX:TAX_PAT, COORD:COORD_PAT, HOME:HOME_PAT, GROUPS:GROUPS_PAT, CORE:CORE_PAT, center:[12.935,100.885], zoom:12, nearTag:'🏠 집 근처',
+    pat:{presets:[], name:'파타야', R:R_PAT, TAX:TAX_PAT, COORD:COORD_PAT, HOME:HOME_PAT, GROUPS:GROUPS_PAT, CORE:CORE_PAT, center:[12.935,100.885], zoom:12, nearTag:'🏠 집 근처',
       sub:'인스타 맛집 12곳 + 가성비·고평점·미쉐린·집 근처 22곳 = 34곳 (2026-10 검색 기준 · 가격은 1인 대략값, 방문 전 지도에서 영업시간 확인)', foot:'별점·가격은 2026-10 검색으로 확인한 대략값이에요. 게시물(AI 콘텐츠)의 사진은 실제 음식이 아니니 참고하지 마세요. 영업시간·휴무는 지도에서 확인하세요.'},
-    bkk:{name:'방콕', R:R_BKK, TAX:TAX_BKK, COORD:COORD_BKK, HOME:HOME_BKK, GROUPS:GROUPS_BKK, CORE:CORE_BKK, center:[13.745,100.525], zoom:12, nearTag:'🏠 숙소 근처',
+    bkk:{presets:[['temple','12/28 사원 코스',['grandpalace','watpho','watarun','deck']],['khaosan','카오산 걷기',['rotimataba','phrasumen','khaosan','thipsamai','jayfai']],['gcp','12/30 GCP 쇼핑·저녁',['erawanshrine','centralworld','sealife','somboon']],['night','12/29 강변 야경·야시장',['iconsiam','joddfairs']]], name:'방콕', R:R_BKK, TAX:TAX_BKK, COORD:COORD_BKK, HOME:HOME_BKK, GROUPS:GROUPS_BKK, CORE:CORE_BKK, center:[13.745,100.525], zoom:12, nearTag:'🏠 숙소 근처',
       sub:'엄선 18곳 + 인스타 방콕 지도 추천 8곳 + 꼭 가볼 곳(📌) 쏨분·램차런 6곳 (미쉐린 등재 12곳) + 볼거리 19곳(🎡 칩) + 가족 숙소 3곳(티니디·오크우드·GCP) 핀 · 2026-10 검색 기준, 가격·입장료는 대략값, 방문 전 지도에서 영업시간 확인',
       sightFoot:'입장료·시간은 2026-10 검색 자료와 일정표 기준 대략값이에요(공식 사이트·현장 안내가 우선, 확인 못 한 곳은 "미확인"). 사원은 어깨·무릎을 가리세요. 핀 위치는 수백 m 어긋날 수 있어요. 가본 곳은 ☐를 눌러 ✅로 표시하세요(이 기기에만 저장돼요).', foot:'별점·가격은 2026-10 검색으로 확인한 대략값이에요(구글 평점은 확인된 곳만 적었어요). 핀 위치는 대략값이라 수백 m 어긋날 수 있어요 — 길찾기는 식당별 구글지도 버튼을 쓰세요. 영업시간·휴무는 자료마다 달라서 방문 전에 지도에서 확인하세요.'}
   };
@@ -5255,7 +5267,7 @@ const FOODS = [
   const mapUrl = r => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.q);
   const embedUrl = r => 'https://maps.google.com/maps?q=' + encodeURIComponent(r.q) + '&hl=ko&z=16&output=embed';
   function render(){
-    chipsEl.innerHTML = `<button class="wh-chip fm-dice" type="button" data-act="dice" aria-label="오늘 어디 가지? 지금 보이는 맛집 중에서 하나를 뽑아요">🎲 오늘 어디 가지?</button>` + GROUPS.map(([k,l]) => `<button class="wh-chip" type="button" data-g="${k}" aria-pressed="${k === cur}">${l} ${R.filter(r => inGrp(r,k)).length}</button>`).join('');
+    chipsEl.innerHTML = `<button class="wh-chip fm-dice" type="button" data-act="dice" aria-label="오늘 어디 가지? 지금 보이는 맛집 중에서 하나를 뽑아요">🎲 오늘 어디 가지?</button><button class="wh-chip fm-course" type="button" data-act="course" aria-label="내 코스 열기: 담은 곳을 가까운 순으로 보고 구글지도로 열어요">🧳 내 코스 ${myCourse().length}</button>` + GROUPS.map(([k,l]) => `<button class="wh-chip" type="button" data-g="${k}" aria-pressed="${k === cur}">${l} ${R.filter(r => inGrp(r,k)).length}</button>`).join('');
     const list = R.filter(r => inGrp(r,cur));
     bodyEl.innerHTML = list.map(r => `<article class="fm-card${VIS[r.id] ? ' vis' : ''}" data-id="${r.id}">` +
       `<button class="fm-head" type="button" aria-expanded="false" aria-controls="fm-d-${r.id}"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span><span class="fm-meta">${metaHtml(r)}</span><span class="fm-tx ${TAX[r.id].lv}">${txHead(r)}</span></button>` +
@@ -5268,13 +5280,14 @@ const FOODS = [
         `<h3>${r.sight ? '💬 알아둘 점' : '💬 후기 요약'}</h3><ul>${r.pros.map(m => `<li class="pro">${esc(m)}</li>`).join('')}${r.cons.map(m => `<li class="con">${esc(m)}</li>`).join('')}</ul>` +
         `<h3>🧭 이 여행에서는</h3><p>${esc(r.tip)}</p>` +
         `<div class="fm-act">${COORD[r.id] ? `<button class="fm-btn" type="button" data-act="onmap">🗺️ 큰 지도에서 보기</button>` : ''}<button class="fm-btn main" type="button" data-act="map">${r.sight ? '📍 이 장소 지도' : '📍 이 식당 지도'}</button><a class="fm-btn" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 앱으로 열기 ↗</a>` +
-        `<button class="fm-btn tl-copy" type="button" data-copy="${esc(r.eng)}">📋 영문 주소 복사 · Grab·Bolt용</button><a class="fm-btn" href="${esc(r.src)}" target="_blank" rel="noopener">${r.sight ? '자료 보기 ↗' : '후기 원문 ↗'}</a><button class="fm-btn fm-visit" type="button" data-visit="${r.id}" aria-pressed="${!!VIS[r.id]}">${VIS[r.id] ? '✅ 가봤어요' : '☐ 가봤어요 표시'}</button></div>` +
+        `<button class="fm-btn tl-copy" type="button" data-copy="${esc(r.eng)}">📋 영문 주소 복사 · Grab·Bolt용</button><a class="fm-btn" href="${esc(r.src)}" target="_blank" rel="noopener">${r.sight ? '자료 보기 ↗' : '후기 원문 ↗'}</a><button class="fm-btn fm-visit" type="button" data-visit="${r.id}" aria-pressed="${!!VIS[r.id]}">${VIS[r.id] ? '✅ 가봤어요' : '☐ 가봤어요 표시'}</button><button class="fm-btn fm-ccard" type="button" data-course="${r.id}" aria-pressed="${myCourse().includes(r.id)}">${myCourse().includes(r.id) ? '🧳 코스에 담김' : '🧳 코스에 담기'}</button></div>` +
         `<div class="fm-map" hidden></div>` +
       `</div></article>`).join('') + `<p class="fm-foot">${cur === 'see' ? CITY[city].sightFoot : CITY[city].foot + '<br>' + FOOT_TAX}</p>`;
   }
-  chipsEl.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; if(b.dataset.act === 'dice'){ rollDice(); return; } cur = b.dataset.g; haptic('tap'); render(); if(view === 'map') refreshMap(true); const again = chipsEl.querySelector(`[data-g="${cur}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
+  chipsEl.addEventListener('click', e => { const b = e.target.closest('.wh-chip'); if(!b) return; if(b.dataset.act === 'dice'){ rollDice(); return; } if(b.dataset.act === 'course'){ showCourse(); return; } cur = b.dataset.g; haptic('tap'); render(); if(view === 'map') refreshMap(true); const again = chipsEl.querySelector(`[data-g="${cur}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){} });
   bodyEl.addEventListener('click', e => {
     const vb = e.target.closest('[data-visit]'); if(vb){ toggleVisit(vb.dataset.visit); return; }
+    const cbn = e.target.closest('[data-course]'); if(cbn){ toggleCourse(cbn.dataset.course); return; }
     const head = e.target.closest('.fm-head');
     if(head){ const det = $(head.getAttribute('aria-controls')), open = head.getAttribute('aria-expanded') !== 'true'; head.setAttribute('aria-expanded', String(open)); det.hidden = !open; haptic('tap'); if(open) det.scrollIntoView({block:'nearest'}); return; }
     const om = e.target.closest('[data-act="onmap"]');
@@ -5331,7 +5344,7 @@ const FOODS = [
     footEl.hidden = false;
     footEl.innerHTML = `<span>${outN ? `중심가 밖 ${outN}곳은 <b>🌏 전체</b>에서 · ` : ''}핀 위치·거리는 대략값(직선) · <b>금색 점</b>은 가성비</span>` +
       (no.length ? `<br><span>핀 없음 ${no.length}곳: </span>${no.map(r => `<button class="fm-btn" type="button" data-nopin="${r.id}">${esc(r.ko)}</button>`).join('')}` : '');
-    if(selId && !pins[selId] && !no.some(r => r.id === selId)) closePick();
+    if(selId && selId !== 'course' && !pins[selId] && !no.some(r => r.id === selId)) closePick();
     if(fit) fitView(false);
   }
   function fitView(all){
@@ -5347,7 +5360,7 @@ const FOODS = [
     const tx = TAX[r.id], d = distTxt(r), sib = Object.keys(COORD).filter(k => k !== r.id && COORD[r.id] && km(COORD[r.id], COORD[k]) < 0.12).map(k => R.find(x => x.id === k)).filter(x => x && inGrp(x, cur));
     return (tag ? `<div class="fm-dice-tag"><span>🎲 오늘의 선택!</span><button class="fm-btn" type="button" data-diceagain>다시 뽑기</button></div>` : '') + `<div class="fm-pickhead v"><span class="fm-seal" aria-hidden="true">${SEAL[r.g]}</span><div><span class="fm-nm">${esc(r.ko)}</span><span class="fm-en">${esc(r.en)}</span></div>${visBtn(r.id)}<button class="fm-x" type="button" data-pickx aria-label="닫기">✕</button></div>` +
       `<div class="fm-pickmeta">${r.sight ? `<span class="fm-tag">${esc(r.star)}</span><span class="fm-tag">${esc(r.hrs)}</span><span class="fm-tag fm-badge">🎫 ${esc(tx.s)}</span>` : `<span class="fm-tag">★ ${esc(r.star || r.google.split(' ')[0])}</span><span class="fm-tag">${esc(r.price)}</span><span class="fm-tag fm-badge">🧾 ${esc(tx.s)}</span>`}${r.must ? '<span class="fm-tag fm-badge">📌 필수</span>' : ''}${r.val ? '<span class="fm-tag fm-badge">💸 가성비</span>' : ''}${r.badge ? '<span class="fm-tag fm-badge">🏅 미쉐린</span>' : ''}${d ? `<span class="fm-tag fm-dist">📏 ${d}</span>` : ''}${COORD[r.id] ? `<span class="fm-tag">${homeDist(r).join(' · ')}</span>` : ''}</div>` +
-      `<div class="fm-pickact"><a class="fm-btn main" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 ↗</a><a class="fm-btn" href="${dirUrl(r)}" target="_blank" rel="noopener">길찾기 ↗</a><button class="fm-btn" type="button" data-pickdet="${r.id}">${r.sight ? '자세히' : '메뉴·후기'}</button><button class="fm-btn tl-copy" type="button" data-copy="${esc(r.eng)}" aria-label="영문 주소 복사 (Grab·Bolt용)">📋</button></div>` +
+      `<div class="fm-pickact"><a class="fm-btn main" href="${mapUrl(r)}" target="_blank" rel="noopener">구글지도 ↗</a><a class="fm-btn" href="${dirUrl(r)}" target="_blank" rel="noopener">길찾기 ↗</a><button class="fm-btn" type="button" data-pickdet="${r.id}">${r.sight ? '자세히' : '메뉴·후기'}</button><button class="fm-btn fm-cbtn" type="button" data-course="${r.id}" aria-pressed="${myCourse().includes(r.id)}" aria-label="내 코스에 담기">🧳</button></div>` +
       (sib.length ? `<div class="fm-picksib">같은 건물·바로 근처<div class="fm-sibrow">${sib.map(x => `<button class="fm-btn" type="button" data-picksib="${x.id}">${esc(x.ko)}</button>`).join('')}</div></div>` : '');
   }
   function select(id, html, pan){
@@ -5422,6 +5435,48 @@ const FOODS = [
   tabList.addEventListener('click', () => { if(view !== 'list'){ haptic('tap'); setView('list'); } });
   $('fmHomeBar').addEventListener('click', e => { const b = e.target.closest('[data-home]'); if(!b || !map) return; haptic('tap'); const k = b.dataset.home; map.setView(HOME[k].c, 15, {animate:false}); pickHome(k, false); });
   // ── 도시 전환(파타야/방콕) ──
+  // 🧳 내 코스: 담은 곳을 가까운 순으로 정리하고 구글지도 길찾기(경유지)로 열어요. 이 기기에만 저장돼요
+  let COURSE = {};
+  try{ COURSE = JSON.parse(localStorage.getItem('thai2026_fmcourse') || '{}') || {}; }catch(e){ COURSE = {}; }
+  const myCourse = () => (COURSE[city] || []).filter(id => R.some(r => r.id === id));
+  const saveCourse = () => { try{ localStorage.setItem('thai2026_fmcourse', JSON.stringify(COURSE)); }catch(e){} };
+  const courseItems = () => myCourse().map(id => R.find(r => r.id === id));
+  const courseUrl = items => items.length === 1 ? mapUrl(items[0]) : 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(items[0].q) + '&destination=' + encodeURIComponent(items[items.length-1].q) + (items.length > 2 ? '&waypoints=' + items.slice(1, -1).map(r => encodeURIComponent(r.q)).join('%7C') : '');
+  const courseText = items => `🧳 ${CITY[city].name} 코스 (${items.length}곳)\n` + items.map((r, i) => `${i+1}. ${r.ko} (${r.en}) — ${r.addr}`).join('\n') + '\n' + courseUrl(items);
+  function syncCourseUi(){
+    const a = myCourse();
+    scrim.querySelectorAll('[data-course]').forEach(b => { if(b.classList.contains('fm-crm')) return; const on = a.includes(b.dataset.course); b.setAttribute('aria-pressed', String(on)); if(b.classList.contains('fm-ccard')) b.textContent = on ? '🧳 코스에 담김' : '🧳 코스에 담기'; });
+    const c = chipsEl.querySelector('.fm-course'); if(c) c.textContent = '🧳 내 코스 ' + a.length;
+  }
+  function courseHtml(){
+    const items = courseItems(), c = CITY[city]; let tot = 0;
+    const rows = items.map((r, i) => { const d = i && COORD[r.id] && COORD[items[i-1].id] ? km(COORD[items[i-1].id], COORD[r.id]) : null; if(d) tot += d; return `<li class="fm-crow"><span class="fm-cnm"><b>${i+1}</b><span class="fm-cn2">${esc(r.ko)}</span>${d != null ? `<em class="fm-cleg" title="앞 장소에서 직선 거리">↓${fmtKm(d)}</em>` : ''}</span><button class="fm-x fm-crm" type="button" data-course="${r.id}" aria-label="${esc(r.ko)} 코스에서 빼기">✕</button></li>`; }).join('');
+    return `<div class="fm-pickhead"><span class="fm-seal home" aria-hidden="true">🧳</span><div><span class="fm-nm">내 코스 · ${c.name}</span><span class="fm-en">${items.length}곳${items.length > 1 ? ` · 직선 합계 약 ${fmtKm(tot)}` : ''}</span></div><button class="fm-x" type="button" data-pickx aria-label="닫기">✕</button></div>` +
+      (items.length ? `<ol class="fm-clist">${rows}</ol><div class="fm-pickact c"><a class="fm-btn main" href="${courseUrl(items)}" target="_blank" rel="noopener">구글지도 ↗</a><button class="fm-btn" type="button" data-csort>가까운 순</button><button class="fm-btn" type="button" data-ccopy>📋 복사</button><button class="fm-btn" type="button" data-cclear>비우기</button></div>` : `<p class="fm-cempty">식당·볼거리의 🧳 버튼으로 담아 보세요. 담은 곳은 구글지도 길찾기(경유지)로 한 번에 열 수 있어요.</p>`) +
+      (c.presets.length ? `<div class="fm-picksib">추천 코스(일정표 기준)<div class="fm-sibrow">${c.presets.map(([k, l]) => `<button class="fm-btn" type="button" data-preset="${k}">${esc(l)}</button>`).join('')}</div></div>` : '');
+  }
+  function openCourse(){ select('course', courseHtml(), false); pickEl.scrollTop = 0; const f = pickEl.querySelector('.fm-crm, [data-pickx]'); if(f) try{ f.focus({preventScroll:true}); }catch(e){} }
+  function showCourse(){
+    haptic('tap');
+    if(view === 'map' && map && !mapWrap.hidden){ openCourse(); return; }
+    setView('map'); let tries = 0;
+    const wait = () => { if(map && view === 'map' && !mapWrap.hidden){ openCourse(); return; } if(++tries < 60) setTimeout(wait, 150); };
+    wait();
+  }
+  function toggleCourse(id){
+    const a = myCourse().slice(), i = a.indexOf(id);
+    if(i >= 0) a.splice(i, 1);
+    else if(a.length >= 10){ if(typeof window.__toast === 'function') window.__toast('🧳', '코스는 최대 10곳까지예요(구글지도 길찾기 한도)', 2800); return; }
+    else a.push(id);
+    COURSE[city] = a; saveCourse(); haptic(i >= 0 ? 'tap' : 'ok'); syncCourseUi();
+    if(selId === 'course') openCourse();
+  }
+  function sortCourse(){
+    const all = courseItems(), pts = all.filter(r => COORD[r.id]), rest = all.filter(r => !COORD[r.id]); if(pts.length < 3) return;
+    const out = [pts.shift()];
+    while(pts.length){ const l = COORD[out[out.length-1].id]; let bi = 0, bd = 1e9; pts.forEach((r, i) => { const d = km(l, COORD[r.id]); if(d < bd){ bd = d; bi = i; } }); out.push(pts.splice(bi, 1)[0]); }
+    COURSE[city] = out.concat(rest).map(r => r.id); saveCourse(); haptic('ok'); openCourse();
+  }
   const visN = k => CITY[k].R.filter(r => VIS[r.id]).length;
   function renderCities(){
     $('fmCities').innerHTML = Object.entries(CITY).map(([k, v]) => `<button class="fm-city" type="button" data-city="${k}" aria-pressed="${k === city}">${v.name} <b>${v.R.filter(r => !r.sight).length}곳${v.R.some(r => r.sight) ? '+볼거리' : ''}${visN(k) ? ' · ✓' + visN(k) : ''}</b></button>`).join('');
@@ -5459,6 +5514,17 @@ const FOODS = [
   $('fmLoc').addEventListener('click', () => { haptic('tap'); locate(); });
   pickEl.addEventListener('click', e => {
     const pv = e.target.closest('[data-visit]'); if(pv){ toggleVisit(pv.dataset.visit); return; }
+    const pc = e.target.closest('[data-course]'); if(pc){ toggleCourse(pc.dataset.course); return; }
+    const pp = e.target.closest('[data-preset]'); if(pp){ const pr = CITY[city].presets.find(x => x[0] === pp.dataset.preset); if(pr){ COURSE[city] = pr[2].filter(id => R.some(r => r.id === id)); saveCourse(); haptic('ok'); syncCourseUi(); openCourse(); } return; }
+    if(e.target.closest('[data-csort]')){ sortCourse(); return; }
+    if(e.target.closest('[data-cclear]')){ COURSE[city] = []; saveCourse(); haptic('tap'); syncCourseUi(); openCourse(); return; }
+    const cc = e.target.closest('[data-ccopy]'); if(cc){
+      const txt = courseText(courseItems());
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).catch(() => { const ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e2){} ta.remove(); });
+      haptic('ok'); const o = cc.textContent; cc.textContent = '✅ 복사됨'; setTimeout(() => { cc.textContent = o; }, 1800);
+      if(typeof window.__toast === 'function') window.__toast('🧳', '코스 복사 완료 — 메신저에 붙여넣기', 2400);
+      return;
+    }
     if(e.target.closest('[data-pickx]')){ closePick(); return; }
     const det = e.target.closest('[data-pickdet]'); if(det){ setView('list', det.dataset.pickdet); return; }
     if(e.target.closest('[data-diceagain]')){ rollDice(); return; }
@@ -5510,7 +5576,7 @@ const FOODS = [
     try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
     haptic('tap');
   }
-  window.__openFoodMap = open; window.__foodMapInfo = () => ({ city, pinned: Object.keys(COORD).length, homes: Object.keys(HOME).length, count: R.filter(r => !r.sight).length, sights: R.filter(r => r.sight).length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}), val: R.filter(r => r.val).length, mic: R.filter(r => r.badge).length });
+  window.__openFoodMap = open; window.__foodMapInfo = () => ({ city, course: myCourse().length, pinned: Object.keys(COORD).length, homes: Object.keys(HOME).length, count: R.filter(r => !r.sight).length, sights: R.filter(r => r.sight).length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}), val: R.filter(r => r.val).length, mic: R.filter(r => r.badge).length });
   const fc = $('foodMapCard'); if(fc) fc.addEventListener('click', () => { haptic('tap'); open(); });
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
