@@ -266,8 +266,13 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .round-live{min-height:44px}
 .round-live .nc-t{font-variant-numeric:tabular-nums}
 .daily-card{flex-wrap:wrap;min-height:44px}
-.play-card{min-height:44px;border-color:rgba(181,138,40,.5);background:rgba(181,138,40,.12)}
-.play-card .nc-arrow{color:var(--gold-s)}
+.play-card{min-height:68px;gap:12px;padding:12px 14px;border:1.5px solid var(--gold-text);border-radius:14px;background:var(--gold-s);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.play-card:hover{background:var(--gold-s);border-color:var(--gold-text)}
+.pc-ico{flex:none;font-size:2rem;line-height:1}
+.pc-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;color:var(--ink)}
+.pc-txt b{font-size:1rem;font-weight:800;line-height:1.3;color:var(--ink)}
+.pc-txt span{font-size:.8125rem;line-height:1.35;color:var(--gold-text);font-weight:600}
+.pc-go{flex:none;font-family:'IBM Plex Mono',monospace;font-size:.8125rem;font-weight:700;color:var(--gold-text);white-space:nowrap}
 .map-hero{appearance:none;display:flex;align-items:center;gap:12px;width:100%;min-height:68px;margin:0 0 12px;padding:12px 14px;border:1.5px solid var(--parch-line);border-radius:14px;background:var(--parch);color:var(--parch-ink);text-align:left;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 .map-hero:active{transform:scale(.99)}
 .mh-ico{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:#A94A2C;font-size:1.375rem}
@@ -1906,10 +1911,10 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <span class="nc-arrow" id="dcArrow">열어보기 →</span>
       <span class="dc-more" id="dcMore" hidden></span>
     </button>
-    <button class="next-card play-card" id="playCard" type="button" aria-label="놀이터 열기: 여권, 빙고, 퀴즈, 룰렛, 칭호, 나침반, 태국어, 기록장, 운세, 먹킷리스트">
-      <span class="nc-tag">🎮 놀이터</span>
-      <span class="nc-body"><span class="nc-e" aria-hidden="true">🛂</span><span class="nc-t">빙고·퀴즈·룰렛·운세·먹킷리스트…</span></span>
-      <span class="nc-arrow">열기 →</span>
+    <button class="next-card play-card" id="playCard" type="button" aria-label="놀이터 열기: 태국 이야기 카드 51장, 맛집 월드컵, 퀴즈, 룰렛, 골프 운세, 먹킷리스트 등">
+      <span class="pc-ico" aria-hidden="true">📖</span>
+      <span class="pc-txt"><b>놀이터 · 태국 이야기 카드</b><span>큰 글씨 이야기 51장 · 맛집 월드컵 · 퀴즈 · 룰렛</span></span>
+      <span class="pc-go">열기 →</span>
     </button>
     <div class="stats">
       <div class="stat"><div class="n"><span id="stN1" data-to="3">0</span><small>가족</small></div><div class="l">9명 함께</div></div>
