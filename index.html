@@ -1593,6 +1593,18 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 /* ── 놀이터 메뉴 ── */
 .pl-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 4px}
 .play-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.play-more{grid-column:1/-1;appearance:none;min-height:44px;border:1.5px dashed var(--line);border-radius:14px;background:none;color:var(--ink2);font-family:inherit;font-size:.875rem;font-weight:700;cursor:pointer}
+.play-tile[hidden]{display:none}
+.st-card{flex:1 1 auto;min-height:0;overflow-y:auto;padding:8px 4px 4px;text-align:center}
+.st-e{font-size:3.5rem;line-height:1.15}
+.st-t{margin:6px 0 10px;font-family:'Fraunces',serif;font-size:1.375rem;line-height:1.35;color:var(--jade-d);word-break:keep-all}
+.st-b{margin:0 0 12px;font-size:1.0625rem;line-height:1.75;color:var(--ink);text-align:left;word-break:keep-all}
+.st-trip{margin:0;padding:10px 12px;border-radius:12px;background:var(--gold-s);color:var(--gold-text);font-size:.9375rem;line-height:1.6;text-align:left;word-break:keep-all}
+.st-nav{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:10px}
+.st-btn{appearance:none;min-height:56px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font-family:inherit;font-size:1.0625rem;font-weight:700;cursor:pointer}
+.st-main{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.st-auto{appearance:none;width:100%;min-height:48px;margin-top:8px;border:1.5px dashed var(--line);border-radius:12px;background:none;color:var(--ink2);font-family:inherit;font-size:.9375rem;font-weight:700;cursor:pointer}
+.st-auto[aria-pressed="true"]{border-style:solid;border-color:var(--jade);color:var(--jade-d)}
 .play-tile{appearance:none;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-height:84px;padding:10px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);text-align:left;font-family:inherit;cursor:pointer;color:var(--ink)}
 .play-tile .pe{font-size:1.5rem;line-height:1.2}
 .play-tile .pt{font-size:.9rem;font-weight:700;line-height:1.25;word-break:keep-all}
@@ -2411,6 +2423,21 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   </div>
 </div>
 
+<!-- 태국 이야기 카드 -->
+<div class="wn-scrim" id="storyScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="syTitle">
+    <div class="wn-head">
+      <span class="wn-badge">📖 STORY</span>
+      <h2 class="wn-title" id="syTitle">태국 이야기 카드</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem" id="sySub"></p>
+    <div class="st-card" id="syCard" tabindex="0" aria-live="polite"></div>
+    <div class="st-nav"><button class="st-btn" id="syPrev" type="button" aria-label="이전 카드">◀ 이전</button><button class="st-btn st-main" id="syNext" type="button" aria-label="다음 카드">다음 ▶</button></div>
+    <button class="st-auto" id="syAuto" type="button" aria-pressed="false">▶ 자동으로 넘기기 (9초)</button>
+    <button class="wn-close" id="syClose" type="button" style="margin-top:12px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
 <!-- 힐링 사운드 -->
 <div class="wn-scrim" id="chillScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="chTitle">
@@ -2662,7 +2689,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v10.06';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v10.07';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4365,6 +4392,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['📖','새 놀이 — 태국 이야기 카드 (보기만 해도 재미)','놀이터의 "태국 이야기 카드"는 큰 글씨 카드를 한 장씩 넘겨 보는 읽을거리 22장이에요. 방콕 정식 이름, 에메랄드 불상, 와불 46m, 푸팟퐁 커리, 와이 인사 예절, 골프·12월 날씨까지 이번 여행 일정과 이어지는 이야기가 들어 있어요. 손가락으로 밀어서 넘기거나 "자동으로 넘기기"(9초)를 켜 두고 보셔도 돼요. 놀이터는 잘 안 쓰는 "여권 도장첩"과 "태국 빙고"를 "더 보기"로 접어 정리했어요(기록은 그대로예요)'],
     ['🏆','새 놀이 — 맛집 월드컵','놀이터의 "맛집 월드컵"에서 파타야 34곳 또는 방콕 31곳 중 8강/16강 이상형 월드컵을 해요. 두 식당 중 끌리는 곳을 계속 고르면 우승 식당이 나오고, 바로 "코스에 담기", "지도에서 보기", "결과 복사(가족 단체방용)"를 할 수 있어요. 최다 우승 식당은 놀이터 타일에 보여요(이 기기에만 저장). 메뉴 정하기 싸움이 날 때 써보세요'],
     ['🧳','대동여지도 "내 코스" — 담아서 가까운 순으로, 구글지도 길찾기까지','식당·볼거리 카드의 "🧳 코스에 담기"(지도에서는 선택 카드의 🧳)를 누르면 코스에 담겨요. 칩 줄의 "🧳 내 코스"에서 담은 곳을 순서대로 보고, "가까운 순"으로 정리하고, "구글지도"로 열면 경유지가 있는 길찾기가 한 번에 열려요(최대 10곳). 메신저로 보낼 수 있게 "📋 복사"도 있어요. 방콕에는 일정표 기준 추천 코스 4개(12/28 사원, 카오산 걷기, 12/30 GCP 쇼핑·저녁, 12/29 야경·야시장)가 들어 있어요. 거리는 직선 기준 대략값이고 코스는 이 기기에만 저장돼요'],
     ['🦀','방콕 지도에 쏨분 시푸드·램차런 시푸드 추가','쏨분 시푸드는 12/26 저녁 일정의 반탓통 본점과 수라웡 지점을 새로 넣었고(센트럴월드 지점은 12/30용으로 기존), 램차런 시푸드는 센트럴월드·시암 파라곤·아이콘시암 3곳을 넣었어요. "📌 꼭 가볼 곳" 표시가 붙어 있어요. 램차런은 지점마다 평가가 달라서(센트럴월드 4.2, 시암 파라곤 3.5, 아이콘시암은 후기 6건뿐) 센트럴월드를 먼저 권하고, 생선이 100g 단위 가격이라 주문 전에 총액을 확인하라고 적었어요. 쏨분 수라웡의 미쉐린 표기는 자료 1곳 기준이에요. 방콕 맛집은 31곳이에요'],
@@ -5125,6 +5153,63 @@ const FOODS = [
   });
 })();
 
+// ── 태국 이야기 카드: 보기만 해도 재미있는 큰 글씨 카드 (넘기기·자동 넘김·스와이프) ──
+(function(){
+  const scrim = $('storyScrim'); if(!scrim) return;
+  const card = $('syCard'), sub = $('sySub'), prevBtn = $('syPrev'), nextBtn = $('syNext'), autoBtn = $('syAuto'), closeBtn = $('syClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const CARDS = [["🏙️", "방콕의 진짜 이름은 엄청 길어요", "방콕의 정식 이름(끄룽 텝 마하 나콘…)은 세계에서 가장 긴 수도 이름으로 알려져 있어요. 현지에서는 줄여서 \"끄룽텝\"(천사의 도시)이라고 불러요.", "12/26부터 머무는 도시예요. 택시 기사님께 \"끄룽텝\"이라고 하면 알아들어요."], ["💚", "에메랄드 불상은 옷을 갈아입어요", "왓 프라깨우의 에메랄드 불상은 계절에 맞춰 옷을 갈아입히는 의식이 있어요. 작은 불상이라 높은 곳에 모셔져 있어요.", "12/28 왕궁 코스의 첫 번째 볼거리예요. 어깨·무릎을 가리고 가세요."], ["😴", "왓 포의 와불은 길이 46m", "왓 포의 누워 있는 부처님은 길이 약 46m, 높이 약 15m예요. 발바닥에는 108가지 길상 무늬가 자개로 새겨져 있어요.", "12/28 왕궁에서 도보 5분. 발바닥 무늬는 꼭 가까이서 보세요."], ["🌅", "왓 아룬은 \"새벽\"이라는 뜻", "왓 아룬의 \"아룬\"은 새벽을 뜻해요. 중앙 탑에는 도자기 조각이 촘촘히 붙어 있어서 햇빛에 반짝여요.", "12/28 마지막 코스. 강 건너에서 보는 일몰이 특히 예뻐요."], ["🦀", "푸팟퐁 커리를 유명하게 만든 집", "게를 카레 가루와 달걀로 볶은 푸팟퐁 커리는 쏨분 시푸드가 대중화한 요리로 알려져 있어요. 달걀이 들어가 순하고 고소해요.", "12/26(반탓통·수라웡)과 12/30(센트럴월드) 저녁에 먹을 후보예요."], ["🥭", "망고 찰밥은 코코넛 밀크의 맛", "따뜻한 찰밥에 코코넛 밀크를 얹고 잘 익은 망고를 곁들인 디저트예요. 달콤·고소·짭짤함이 한 접시에 있어요.", "왓 포 근처 꼬 파니치에서 먹어볼 만해요. 망고 품질은 계절에 따라 달라요."], ["🍲", "똠얌꿍은 허브의 맛", "레몬그라스·갈랑가·라임잎을 넣어 새콤하고 매콤하게 끓인 새우 수프예요. 맑은 국물과 우유를 넣은 진한 국물 두 가지가 있어요.", "맵기가 걱정이면 \"마이 펫\"(안 맵게)이라고 해보세요."], ["🍜", "팟타이는 나라가 키운 국민 음식", "1930~40년대에 정부가 쌀국수 요리를 장려하면서 팟타이가 국민 음식이 됐다고 해요. 땅콩·숙주·라임을 곁들여 먹어요.", "카오산 근처 팁싸마이와 팟타이 파이타루에서 비교해 보세요."], ["🙏", "인사는 두 손을 모아서", "\"와이\"는 두 손을 가슴 앞에 모으는 인사예요. 손이 높을수록 존경이 커서 어른께는 코 높이쯤에서 합니다. 어른이 먼저 하시는 게 예의예요.", "\"사와디 캅(남자)/카(여자)\"를 같이 해보세요."], ["🧑‍🦳", "머리는 높게, 발은 낮게", "태국에서는 머리를 신성하게 여겨 아이 머리도 함부로 쓰다듬지 않아요. 발은 낮은 곳이라 발로 물건을 가리키거나 불상 쪽으로 뻗지 않아요.", "사원에서 앉을 때 발바닥이 불상을 향하지 않게 하세요."], ["👑", "왕실에 대한 존중", "태국에서는 왕실에 대한 존중이 매우 커요. 돈에 있는 왕의 얼굴을 밟거나 가볍게 말하는 건 큰 실례예요.", "떨어진 동전을 발로 밟아 잡지 마세요."], ["🛺", "툭툭 이름은 엔진 소리에서", "세 바퀴 택시 \"툭툭\"은 엔진 소리를 흉내 낸 이름이라고 해요. 미터기가 없어서 타기 전에 요금을 정해야 해요.", "관광지 앞에서는 그랩·볼트 호출이 더 편하고 가격도 미리 보여요."], ["🐘", "코끼리는 태국의 상징", "태국 코끼리는 나라를 상징하는 동물이에요. 옛 국기에도 흰 코끼리가 있었고 지금도 기념품·장식에서 많이 보여요.", "기념품 가게의 코끼리 바지·장식을 눈여겨보세요."], ["🏖️", "파타야는 어촌이었어요", "파타야는 작은 어촌이었다가 1960년대 미군 휴양지로 알려지면서 지금의 해변 도시로 커졌다고 해요.", "12/16~12/26 머무는 곳이에요. 통부라 빌라에서 바다까지 이동을 계획해 보세요."], ["⛳", "골프 천국 태국", "태국은 골프장이 많고 캐디가 한 명씩 붙어 코스를 안내해 주는 곳이 많아요. 겨울(건기)이 골프하기 좋은 시기예요.", "12/17부터 라운드가 이어져요. 캐디 팁은 현금(밧)으로 준비하세요."], ["🌤️", "12월은 여행하기 좋은 계절", "12~1월은 비가 적고 상대적으로 선선한 건기예요. 한낮엔 여전히 덥지만 아침저녁은 지내기 편해요.", "사원 투어는 오전 일찍, 한낮엔 쇼핑몰에서 쉬는 일정이 좋아요."], ["🎆", "새해 카운트다운은 강변과 쇼핑가에서", "방콕 새해 카운트다운은 센트럴월드와 아이콘시암 같은 곳에서 큰 행사가 열려요. 자정 불꽃놀이가 하이라이트예요.", "12/31 일정에 두 곳이 후보로 들어 있어요. 인파가 많으니 일찍 가세요."], ["🏪", "편의점이 정말 많아요", "태국에는 세븐일레븐 같은 편의점이 곳곳에 있어서 물·간식·간단한 음식을 쉽게 살 수 있어요.", "생수는 편의점에서 사 마시고, 수돗물은 마시지 마세요."], ["🚤", "짜오프라야 강이 방콕의 길", "방콕 한가운데를 흐르는 짜오프라야 강에는 보트와 나룻배가 다녀요. 왓 포 쪽 타 띠안에서 왓 아룬으로 건너는 나룻배는 몇 밧이에요.", "12/28 코스에서 타 띠안 나룻배를 타 보세요."], ["💐", "꽃시장은 밤에도 열려요", "팍클렁딸랏 꽃시장은 24시간 열려 있고 한밤~새벽이 가장 활기차다고 해요. 낮에는 한적하게 구경할 수 있어요.", "왕궁·왓 아룬 코스 중간에 잠깐 들르기 좋아요."], ["💆", "마사지는 태국의 일상", "전통 마사지는 가게마다 가격이 달라요. 마사지를 받고 나서 마사지사에게 작은 팁을 주는 문화가 있어요.", "왓 포는 마사지 본원으로 유명해요. 장모님 코스 후보예요."], ["🧭", "태국은 불교의 나라", "대부분의 국민이 불교 신자이고 아침에 스님께 음식을 올리는 풍경을 볼 수 있어요. 사원에서는 조용히, 복장은 단정하게 해요.", "스님께는 여성이 직접 물건을 건네지 않는 게 예의예요."]];
+  const LSS = 'thai2026_story'; let idx = 0; try{ idx = (+localStorage.getItem(LSS)) || 0; }catch(e){}
+  if(idx < 0 || idx >= CARDS.length) idx = 0;
+  let timer = null, prevFocus = null, tx = null;
+  const calm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function render(){
+    const c = CARDS[idx];
+    sub.textContent = `${idx + 1} / ${CARDS.length} · 넘겨서 읽어보세요`;
+    card.innerHTML = `<div class="st-e" aria-hidden="true">${c[0]}</div><h3 class="st-t">${esc(c[1])}</h3><p class="st-b">${esc(c[2])}</p><p class="st-trip"><b>이번 여행에서는</b> ${esc(c[3])}</p>`;
+    try{ localStorage.setItem(LSS, String(idx)); }catch(e){}
+  }
+  function go(d){ idx = (idx + d + CARDS.length) % CARDS.length; render(); haptic('tap'); }
+  function setAuto(on){
+    if(timer){ clearInterval(timer); timer = null; }
+    autoBtn.setAttribute('aria-pressed', String(on)); autoBtn.textContent = on ? '⏸ 자동 넘김 멈추기' : '▶ 자동으로 넘기기 (9초)';
+    if(on) timer = setInterval(() => go(1), 9000);
+  }
+  prevBtn.addEventListener('click', () => { setAuto(false); go(-1); });
+  nextBtn.addEventListener('click', () => { setAuto(false); go(1); });
+  autoBtn.addEventListener('click', () => { haptic('tap'); setAuto(autoBtn.getAttribute('aria-pressed') !== 'true'); });
+  card.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  card.addEventListener('touchend', e => { if(tx == null) return; const dx = e.changedTouches[0].clientX - tx; tx = null; if(Math.abs(dx) > 50){ setAuto(false); go(dx < 0 ? 1 : -1); } }, {passive:true});
+  window.__storyInfo = () => ({ n: CARDS.length, idx });
+  function open(){
+    prevFocus = document.activeElement; setAuto(false); render();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    try{ nextBtn.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    setAuto(false);
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(() => { scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openStory = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => {
+    if(scrim.hidden) return;
+    if(e.key === 'Escape') close();
+    else if(e.key === 'ArrowRight'){ setAuto(false); go(1); } else if(e.key === 'ArrowLeft'){ setAuto(false); go(-1); }
+  });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [prevBtn, nextBtn, autoBtn, closeBtn], cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
 // ── 태국 힐링 사운드: Web Audio로 파도·비·밤 벌레 소리를 직접 합성 (파일·인터넷 없음, 켤 때만 재생, 수면 타이머) ──
 (function(){
   const scrim = $('chillScrim'); if(!scrim) return;
@@ -5751,11 +5836,18 @@ const FOODS = [
     ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats'],
     ['💰','바트 감각 테스트', () => { try{ const b = window.__bahtInfo(); return b.best ? `최고 ${b.best}/5` : '이 가격, 한국 돈으로?'; }catch(err){ return '이 가격, 한국 돈으로?'; } }, '__openBaht', true],
     ['🧘','티오프 5분 스트레칭', () => { try{ const t = window.__stretchInfo(); return t.done ? `${t.done}번 했어요` : '라운드 전 몸 풀기 타이머'; }catch(err){ return '라운드 전 몸 풀기 타이머'; } }, '__openStretch', true],
+    ['📖','태국 이야기 카드', () => '큰 글씨로 한 장씩 · 보기만 해도 재미', '__openStory', true],
     ['🏆','맛집 월드컵', () => { try{ const w = window.__wcInfo(); return w.plays ? `최다 우승 ${w.top}` : '파타야·방콕 식당 이상형 월드컵'; }catch(err){ return '파타야·방콕 식당 이상형 월드컵'; } }, '__openWorldcup', true],
     ['🌴','태국 힐링 사운드', () => { try{ const c = window.__chillInfo(); return c.playing ? `재생 중 ${c.playing}` : '파도·비·밤 벌레 소리'; }catch(err){ return '파도·비·밤 벌레 소리'; } }, '__openChill', true]
   ];
+  // 잘 안 쓰는 놀이는 "더 보기"로 접어 둬요
+  const FOLD = ['__openPass', '__openBingo'];
+  let foldOpen = false;
   function paint(){
-    grid.innerHTML = TILES.map((t,i) => `<button class="play-tile" type="button" data-i="${i}">${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`).join('');
+    const tile = (t, i) => `<button class="play-tile${FOLD.includes(t[3]) ? ' play-fold' : ''}" type="button" data-i="${i}"${FOLD.includes(t[3]) && !foldOpen ? ' hidden' : ''}>${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`;
+    grid.innerHTML = TILES.map((t, i) => FOLD.includes(t[3]) ? '' : tile(t, i)).join('') +
+      `<button class="play-more" type="button" aria-expanded="${foldOpen}">${foldOpen ? '▴ 접기' : `▾ 더 보기 (${FOLD.length})`}</button>` +
+      TILES.map((t, i) => FOLD.includes(t[3]) ? tile(t, i) : '').join('');
   }
   let prevFocus = null;
   function open(){
@@ -5772,6 +5864,7 @@ const FOODS = [
     haptic('tap');
   }
   grid.addEventListener('click', e => {
+    const mb = e.target.closest('.play-more'); if(mb){ foldOpen = !foldOpen; haptic('tap'); paint(); const f = grid.querySelector('.play-more'); if(f) try{ f.focus({preventScroll:true}); }catch(err){} return; }
     const b = e.target.closest('.play-tile'); if(!b) return; const t = TILES[+b.dataset.i];
     close(true); setTimeout(call(t[3]), 360);
   });
@@ -5782,7 +5875,7 @@ const FOODS = [
   addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.play-tile, #plClose')];
+    const f = [...scrim.querySelectorAll('.play-tile, .play-more, #plClose')].filter(x => x.offsetParent !== null);
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
