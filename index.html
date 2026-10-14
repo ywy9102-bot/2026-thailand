@@ -1595,6 +1595,10 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .play-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .play-more{grid-column:1/-1;appearance:none;min-height:44px;border:1.5px dashed var(--line);border-radius:14px;background:none;color:var(--ink2);font-family:inherit;font-size:.875rem;font-weight:700;cursor:pointer}
 .play-tile[hidden]{display:none}
+.play-tile.play-hero{grid-column:1/-1;min-height:92px;border-color:var(--gold-text);background:var(--gold-s)}
+.play-tile.play-hero .pe{font-size:2rem}
+.play-tile.play-hero .pt{font-size:1.0625rem}
+.play-tile.play-hero .ps{font-size:.8125rem}
 .sy-decks{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -2px 6px;padding:0 2px}
 .sy-decks::-webkit-scrollbar{display:none}
 .sy-chip{flex:none;appearance:none;min-height:44px;padding:4px 14px;border:1.5px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);font-family:inherit;font-size:.9375rem;font-weight:700;white-space:nowrap;cursor:pointer}
@@ -5877,6 +5881,7 @@ const FOODS = [
   const grid = $('plGrid'), closeBtn = $('plClose');
   const call = n => () => { if(typeof window[n] === 'function') window[n](); };
   const TILES = [
+    ['📖','태국 이야기 · 맛집 카드', () => '큰 글씨로 한 장씩 넘겨 보세요 · 이야기 51장 · 맛집·볼거리 슬라이드', '__openStory', true],
     ['🛂','여권 도장첩', () => '도장 모으기 · 공유 카드', '__openPass'],
     ['🎯','태국 빙고', () => { const b = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0}; return `${b.lines}줄 완성`; }, '__openBingo'],
     ['🧠','여행 퀴즈', () => { const q = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,n:5}; return q.best ? `최고 ${q.best}/${q.n}` : '우리 여행 5문제'; }, '__openTquiz'],
@@ -5889,7 +5894,6 @@ const FOODS = [
     ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats'],
     ['💰','바트 감각 테스트', () => { try{ const b = window.__bahtInfo(); return b.best ? `최고 ${b.best}/5` : '이 가격, 한국 돈으로?'; }catch(err){ return '이 가격, 한국 돈으로?'; } }, '__openBaht', true],
     ['🧘','티오프 5분 스트레칭', () => { try{ const t = window.__stretchInfo(); return t.done ? `${t.done}번 했어요` : '라운드 전 몸 풀기 타이머'; }catch(err){ return '라운드 전 몸 풀기 타이머'; } }, '__openStretch', true],
-    ['📖','이야기·맛집 카드', () => '큰 글씨 · 이야기 · 맛집·볼거리 슬라이드', '__openStory', true],
     ['🏆','맛집 월드컵', () => { try{ const w = window.__wcInfo(); return w.plays ? `최다 우승 ${w.top}` : '파타야·방콕 식당 이상형 월드컵'; }catch(err){ return '파타야·방콕 식당 이상형 월드컵'; } }, '__openWorldcup', true],
     ['🌴','태국 힐링 사운드', () => { try{ const c = window.__chillInfo(); return c.playing ? `재생 중 ${c.playing}` : '파도·비·밤 벌레 소리'; }catch(err){ return '파도·비·밤 벌레 소리'; } }, '__openChill', true]
   ];
@@ -5897,7 +5901,7 @@ const FOODS = [
   const FOLD = ['__openPass', '__openBingo'];
   let foldOpen = false;
   function paint(){
-    const tile = (t, i) => `<button class="play-tile${FOLD.includes(t[3]) ? ' play-fold' : ''}" type="button" data-i="${i}"${FOLD.includes(t[3]) && !foldOpen ? ' hidden' : ''}>${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`;
+    const tile = (t, i) => `<button class="play-tile${FOLD.includes(t[3]) ? ' play-fold' : ''}${t[3] === '__openStory' ? ' play-hero' : ''}" type="button" data-i="${i}"${FOLD.includes(t[3]) && !foldOpen ? ' hidden' : ''}>${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`;
     grid.innerHTML = TILES.map((t, i) => FOLD.includes(t[3]) ? '' : tile(t, i)).join('') +
       `<button class="play-more" type="button" aria-expanded="${foldOpen}">${foldOpen ? '▴ 접기' : `▾ 더 보기 (${FOLD.length})`}</button>` +
       TILES.map((t, i) => FOLD.includes(t[3]) ? tile(t, i) : '').join('');
