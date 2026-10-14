@@ -1529,6 +1529,24 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .st-btn.main{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
 .st-btn:disabled{opacity:.45;cursor:default}
 /* ── 바트 감각 · 힐링 사운드 ── */
+.wc-seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+.wc-opt[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--hero-fg)}
+.wc-opt:disabled{opacity:.45}
+.wc-go{margin-top:6px}
+.wc-card{appearance:none;display:flex;flex-direction:column;gap:3px;width:100%;min-height:128px;padding:14px;border:2px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);font-family:inherit;text-align:left;cursor:pointer;transition:border-color .2s,background .2s,opacity .2s}
+.wc-nm{font-family:'Fraunces',serif;font-size:1.1875rem;font-weight:700;line-height:1.3;color:var(--jade-d);word-break:keep-all}
+.wc-en{font-size:.8125rem;color:var(--ink2);line-height:1.35}
+.wc-kind{font-size:.875rem;font-weight:600;color:var(--ink)}
+.wc-price{font-family:'IBM Plex Mono',monospace;font-size:.8125rem;font-weight:700;color:var(--gold-text)}
+.wc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.wc-card.win{border-color:var(--ok);background:var(--ok-s)}
+.wc-card.lose{opacity:.4}
+.wc-vs{text-align:center;margin:6px 0;font-family:'IBM Plex Mono',monospace;font-size:.9375rem;font-weight:700;letter-spacing:.1em;color:var(--gold-text)}
+.wc-win{text-align:center;padding:6px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wc-trophy{font-size:3rem;line-height:1.1}
+.wc-win .wc-nm{font-size:1.375rem}
+.wc-win .wc-tags{justify-content:center}
+.wc-acts{display:grid;gap:8px}
 .bh-body,.ch-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .bh-item{text-align:center;padding:6px 0 2px}
 .bh-e{font-size:2.5rem;line-height:1.2}
@@ -2380,6 +2398,19 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   </div>
 </div>
 
+<!-- 맛집 월드컵 -->
+<div class="wn-scrim" id="wcScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="wcTitle">
+    <div class="wn-head">
+      <span class="wn-badge">🏆 WORLD CUP</span>
+      <h2 class="wn-title" id="wcTitle">맛집 월드컵</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem" id="wcSub"></p>
+    <div class="bh-body" id="wcBody" aria-live="polite"></div>
+    <button class="wn-close" id="wcClose" type="button" style="margin-top:12px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
+
 <!-- 힐링 사운드 -->
 <div class="wn-scrim" id="chillScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="chTitle">
@@ -2631,7 +2662,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v10.05';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v10.06';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4334,6 +4365,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🏆','새 놀이 — 맛집 월드컵','놀이터의 "맛집 월드컵"에서 파타야 34곳 또는 방콕 31곳 중 8강/16강 이상형 월드컵을 해요. 두 식당 중 끌리는 곳을 계속 고르면 우승 식당이 나오고, 바로 "코스에 담기", "지도에서 보기", "결과 복사(가족 단체방용)"를 할 수 있어요. 최다 우승 식당은 놀이터 타일에 보여요(이 기기에만 저장). 메뉴 정하기 싸움이 날 때 써보세요'],
     ['🧳','대동여지도 "내 코스" — 담아서 가까운 순으로, 구글지도 길찾기까지','식당·볼거리 카드의 "🧳 코스에 담기"(지도에서는 선택 카드의 🧳)를 누르면 코스에 담겨요. 칩 줄의 "🧳 내 코스"에서 담은 곳을 순서대로 보고, "가까운 순"으로 정리하고, "구글지도"로 열면 경유지가 있는 길찾기가 한 번에 열려요(최대 10곳). 메신저로 보낼 수 있게 "📋 복사"도 있어요. 방콕에는 일정표 기준 추천 코스 4개(12/28 사원, 카오산 걷기, 12/30 GCP 쇼핑·저녁, 12/29 야경·야시장)가 들어 있어요. 거리는 직선 기준 대략값이고 코스는 이 기기에만 저장돼요'],
     ['🦀','방콕 지도에 쏨분 시푸드·램차런 시푸드 추가','쏨분 시푸드는 12/26 저녁 일정의 반탓통 본점과 수라웡 지점을 새로 넣었고(센트럴월드 지점은 12/30용으로 기존), 램차런 시푸드는 센트럴월드·시암 파라곤·아이콘시암 3곳을 넣었어요. "📌 꼭 가볼 곳" 표시가 붙어 있어요. 램차런은 지점마다 평가가 달라서(센트럴월드 4.2, 시암 파라곤 3.5, 아이콘시암은 후기 6건뿐) 센트럴월드를 먼저 권하고, 생선이 100g 단위 가격이라 주문 전에 총액을 확인하라고 적었어요. 쏨분 수라웡의 미쉐린 표기는 자료 1곳 기준이에요. 방콕 맛집은 31곳이에요'],
     ['🎡','방콕 대동여지도에 볼거리 19곳 + "가봤어요" 표시','방콕 지도 칩 줄 맨 끝의 "🎡 볼거리"를 누르면 왕궁·왓 포·왓 아룬·카오산·아이콘시암·짜뚜짝·마하나콘 스카이워크·에라완 사당·룸피니 공원·꽃시장 등 19곳이 지도에 핀으로 떠요. 입장료·시간은 일정표와 2026년 검색 자료로 적었고 못 찾은 곳은 "미확인"이에요(마하나콘은 자료마다 가격이 달라요). 숙소 핀을 누르면 가까운 볼거리가 거리순으로 나와요. 식당·볼거리 카드의 ☐를 눌러 "가봤어요"를 표시하면 핀에 ✓가 붙고, 도시 버튼에 가본 곳 수가 보여요(이 기기에만 저장돼요)'],
@@ -4990,6 +5022,109 @@ const FOODS = [
   });
 })();
 
+// ── 맛집 월드컵: 파타야·방콕 식당으로 이상형 월드컵 (8강/16강) → 우승 식당을 코스에 담거나 지도에서 보기 ──
+(function(){
+  const scrim = $('wcScrim'); if(!scrim) return;
+  const body = $('wcBody'), sub = $('wcSub'), closeBtn = $('wcClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = (Math.random()*(i+1))|0; [a[i],a[j]] = [a[j],a[i]]; } return a; };
+  const LSW = 'thai2026_wc'; let st; try{ st = JSON.parse(localStorage.getItem(LSW)); }catch(e){} st = st || {plays:0, wins:{}};
+  const save = () => { try{ localStorage.setItem(LSW, JSON.stringify(st)); }catch(e){} };
+  let city = 'bkk', size = 16, pool = [], next = [], idx = 0, round = 0, last = null, busy = false, data = null, prevFocus = null;
+  const roundName = n => n <= 2 ? '결승' : n + '강';
+  const getData = () => { try{ data = window.__foodMapData(); }catch(e){ data = null; } return data; };
+  function topWinner(){
+    let best = null; Object.entries(st.wins || {}).forEach(([k, m]) => Object.entries(m).forEach(([id, n]) => { if(!best || n > best.n) best = {k, id, n}; }));
+    if(!best || !getData() || !data[best.k]) return null;
+    const r = data[best.k].R.find(x => x.id === best.id); return r ? {r, n:best.n} : null;
+  }
+  function setup(){
+    getData(); if(!data){ sub.textContent = ''; body.innerHTML = '<p class="tq-msg">식당 정보를 불러오지 못했어요. 새로고침 후 다시 열어주세요.</p>'; return; }
+    const max = data[city].R.length, top = topWinner();
+    if(size > max) size = 8;
+    sub.textContent = '식당 두 곳 중 끌리는 곳을 골라 우승 식당을 가려요';
+    body.innerHTML = `<p class="bh-q">도시</p><div class="wc-seg" role="group" aria-label="도시 선택">${Object.entries(data).map(([k, v]) => `<button class="tq-opt wc-opt" type="button" data-city="${k}" aria-pressed="${k === city}">${esc(v.name)} ${v.R.length}곳</button>`).join('')}</div>` +
+      `<p class="bh-q">토너먼트 크기</p><div class="wc-seg" role="group" aria-label="강 수 선택">${[8, 16].map(n => `<button class="tq-opt wc-opt" type="button" data-size="${n}" aria-pressed="${n === size}" ${n > max ? 'disabled' : ''}>${n}강</button>`).join('')}</div>` +
+      `<button class="wn-close tq-again wc-go" type="button">🏆 시작하기</button>` +
+      `<p class="tq-rec">${st.plays ? `지금까지 ${st.plays}번 했어요` : '처음이라면 8강부터!'}${top ? ` · 최다 우승 ${esc(top.r.ko)} (${top.n}회)` : ''}</p>`;
+  }
+  function start(){
+    getData(); pool = shuffle(data[city].R).slice(0, size); next = []; idx = 0; round = size; last = null; busy = false; show();
+  }
+  const tags = r => [r.badge ? '🏅 ' + esc(r.badge) : '', r.val ? '💸 가성비' : '', r.must ? '📌 꼭 가볼 곳' : '', r.insta ? '📸 인스타 추천' : ''].filter(Boolean).map(t => `<span class="fm-tag">${t}</span>`).join('');
+  const card = (r, side) => `<button class="wc-card" type="button" data-side="${side}" aria-label="${esc(r.ko)} 선택"><span class="wc-nm">${esc(r.ko)}</span><span class="wc-en">${esc(r.en)}</span><span class="wc-kind">${esc(r.kind)}</span><span class="wc-price">${esc(r.price)}${r.star && r.star !== '—' ? ' · ★ ' + esc(r.star) : ''}</span><span class="wc-tags">${tags(r)}</span></button>`;
+  function show(){
+    if(pool.length === 1 && !next.length){ return finish(pool[0]); }
+    const a = pool[idx], b = pool[idx + 1], total = pool.length / 2;
+    sub.textContent = `${roundName(pool.length)} ${idx / 2 + 1}/${total} · 끌리는 곳을 눌러주세요`;
+    body.innerHTML = card(a, 0) + `<div class="wc-vs" aria-hidden="true">VS</div>` + card(b, 1);
+    const f = body.querySelector('.wc-card'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  function pickSide(side){
+    if(busy) return; busy = true; haptic('tap');
+    const a = pool[idx], b = pool[idx + 1], w = side ? b : a, l = side ? a : b; last = l;
+    body.querySelectorAll('.wc-card').forEach(c => c.classList.add(+c.dataset.side === side ? 'win' : 'lose'));
+    setTimeout(() => {
+      next.push(w); idx += 2;
+      if(idx >= pool.length){ pool = next; next = []; idx = 0; }
+      busy = false;
+      if(pool.length === 1) finish(pool[0]); else show();
+    }, 380);
+  }
+  function finish(w){
+    st.plays++; st.wins = st.wins || {}; st.wins[city] = st.wins[city] || {}; st.wins[city][w.id] = (st.wins[city][w.id] || 0) + 1; save(); haptic('ok');
+    if(typeof window.__celebrate === 'function') try{ window.__celebrate(); }catch(e){}
+    sub.textContent = `${data[city].name} ${size}강 우승!`;
+    body.innerHTML = `<div class="wc-win"><div class="wc-trophy" aria-hidden="true">🏆</div><div class="wc-nm">${esc(w.ko)}</div><div class="wc-en">${esc(w.en)}</div><div class="wc-kind">${esc(w.kind)}</div><div class="wc-price">${esc(w.price)}</div><div class="wc-tags">${tags(w)}</div>${last ? `<p class="tq-rec">결승 상대: ${esc(last.ko)}</p>` : ''}</div>` +
+      `<div class="wc-acts"><button class="tq-opt wc-add" type="button">🧳 코스에 담기</button><button class="tq-opt wc-map" type="button">🗺️ 지도에서 보기</button><button class="tq-opt wc-copy" type="button">📋 결과 복사</button><button class="wn-close tq-again wc-again" type="button">🔄 다시 하기</button></div>`;
+    body.dataset.win = w.id; body.dataset.last = last ? last.ko : '';
+    const f = body.querySelector('.wc-map'); if(f) try{ f.focus({preventScroll:true}); }catch(e){}
+  }
+  body.addEventListener('click', e => {
+    const c = e.target.closest('.wc-card'); if(c){ pickSide(+c.dataset.side); return; }
+    const oc = e.target.closest('[data-city]'); if(oc){ city = oc.dataset.city; haptic('tap'); setup(); return; }
+    const os = e.target.closest('[data-size]'); if(os && !os.disabled){ size = +os.dataset.size; haptic('tap'); setup(); return; }
+    if(e.target.closest('.wc-go')){ haptic('tap'); start(); return; }
+    if(e.target.closest('.wc-again')){ haptic('tap'); setup(); return; }
+    const id = body.dataset.win, w = data && data[city] && data[city].R.find(r => r.id === id);
+    if(e.target.closest('.wc-add') && w){
+      const res = typeof window.__foodMapCourseAdd === 'function' ? window.__foodMapCourseAdd(city, id) : 'err';
+      const btn = e.target.closest('.wc-add'); btn.textContent = res === 'ok' ? '✅ 담았어요' : res === 'dup' ? '이미 코스에 있어요' : res === 'full' ? '코스가 가득 찼어요(10곳)' : '담지 못했어요'; haptic(res === 'ok' ? 'ok' : 'tap'); return;
+    }
+    if(e.target.closest('.wc-map') && w){ close(); setTimeout(() => { if(typeof window.__foodMapFocus === 'function') window.__foodMapFocus(city, id); }, 60); return; }
+    if(e.target.closest('.wc-copy') && w){
+      const txt = `🏆 우리 가족 맛집 월드컵 (${data[city].name} ${size}강)\n우승: ${w.ko} (${w.en})` + (body.dataset.last ? `\n결승 상대: ${body.dataset.last}` : '');
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).catch(() => { const ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e2){} ta.remove(); });
+      const b = e.target.closest('.wc-copy'); b.textContent = '✅ 복사됨'; haptic('ok');
+      if(typeof window.__toast === 'function') window.__toast('🏆', '결과 복사 완료 — 메신저에 붙여넣기', 2400);
+    }
+  });
+  window.__wcInfo = () => ({ plays: st.plays, top: (topWinner() || {}).r ? topWinner().r.ko : '', topN: (topWinner() || {}).n || 0 });
+  function open(){
+    prevFocus = document.activeElement; setup();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(() => { scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openWorldcup = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key === 'Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('.wc-opt:not(:disabled), .wc-go, .wc-card, .wc-add, .wc-map, .wc-copy, .wc-again, #wcClose')].filter(x => x.offsetParent !== null);
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(!n) return;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
 // ── 태국 힐링 사운드: Web Audio로 파도·비·밤 벌레 소리를 직접 합성 (파일·인터넷 없음, 켤 때만 재생, 수면 타이머) ──
 (function(){
   const scrim = $('chillScrim'); if(!scrim) return;
@@ -5576,7 +5711,16 @@ const FOODS = [
     try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
     haptic('tap');
   }
-  window.__openFoodMap = open; window.__foodMapInfo = () => ({ city, course: myCourse().length, pinned: Object.keys(COORD).length, homes: Object.keys(HOME).length, count: R.filter(r => !r.sight).length, sights: R.filter(r => r.sight).length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}), val: R.filter(r => r.val).length, mic: R.filter(r => r.badge).length });
+  window.__openFoodMap = open;
+  // 맛집 월드컵이 쓰는 연결 함수: 식당 목록, 지도에서 보기, 코스에 담기
+  window.__foodMapData = () => Object.fromEntries(Object.entries(CITY).map(([k, v]) => [k, {name:v.name, R:v.R.filter(r => !r.sight).map(r => ({id:r.id, ko:r.ko, en:r.en, kind:r.kind, price:r.price, star:r.star, g:r.g, badge:r.badge, val:r.val, must:r.must, insta:r.insta}))}]));
+  window.__foodMapFocus = (c, id) => {
+    open('map', c); let t = 0;
+    const w = () => { if(map && view === 'map' && !mapWrap.hidden){ const r = R.find(x => x.id === id); if(r){ if(!inGrp(r, cur)){ cur = 'all'; render(); refreshMap(false); } pick(id, true); } return; } if(++t < 60) setTimeout(w, 150); };
+    w();
+  };
+  window.__foodMapCourseAdd = (c, id) => { const a = (COURSE[c] || []).slice(); if(a.includes(id)) return 'dup'; if(a.length >= 10) return 'full'; a.push(id); COURSE[c] = a; saveCourse(); if(c === city) syncCourseUi(); return 'ok'; };
+  window.__foodMapInfo = () => ({ city, course: myCourse().length, pinned: Object.keys(COORD).length, homes: Object.keys(HOME).length, count: R.filter(r => !r.sight).length, sights: R.filter(r => r.sight).length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}), val: R.filter(r => r.val).length, mic: R.filter(r => r.badge).length });
   const fc = $('foodMapCard'); if(fc) fc.addEventListener('click', () => { haptic('tap'); open(); });
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
@@ -5607,6 +5751,7 @@ const FOODS = [
     ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats'],
     ['💰','바트 감각 테스트', () => { try{ const b = window.__bahtInfo(); return b.best ? `최고 ${b.best}/5` : '이 가격, 한국 돈으로?'; }catch(err){ return '이 가격, 한국 돈으로?'; } }, '__openBaht', true],
     ['🧘','티오프 5분 스트레칭', () => { try{ const t = window.__stretchInfo(); return t.done ? `${t.done}번 했어요` : '라운드 전 몸 풀기 타이머'; }catch(err){ return '라운드 전 몸 풀기 타이머'; } }, '__openStretch', true],
+    ['🏆','맛집 월드컵', () => { try{ const w = window.__wcInfo(); return w.plays ? `최다 우승 ${w.top}` : '파타야·방콕 식당 이상형 월드컵'; }catch(err){ return '파타야·방콕 식당 이상형 월드컵'; } }, '__openWorldcup', true],
     ['🌴','태국 힐링 사운드', () => { try{ const c = window.__chillInfo(); return c.playing ? `재생 중 ${c.playing}` : '파도·비·밤 벌레 소리'; }catch(err){ return '파도·비·밤 벌레 소리'; } }, '__openChill', true]
   ];
   function paint(){
