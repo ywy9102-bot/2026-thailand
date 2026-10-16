@@ -956,12 +956,14 @@ table.d tr:nth-child(even) td{background:var(--k-rgba-30-75-65-02)}
   display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink2);
   cursor:pointer;user-select:none;flex:none;
 }
-.th-toggle input{appearance:none;width:34px;height:20px;border-radius:99px;background:var(--jade-s);
-  position:relative;cursor:pointer;transition:background .2s;flex:none}
-.th-toggle input::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;
+.th-toggle input{appearance:none;width:48px;height:44px;background:none;border-radius:0;
+  position:relative;cursor:pointer;flex:none;margin:0}
+.th-toggle input::before{content:"";position:absolute;left:4px;top:10px;width:40px;height:24px;border-radius:99px;
+  background:var(--jade-s);transition:background .2s}
+.th-toggle input::after{content:"";position:absolute;top:13px;left:7px;width:18px;height:18px;
   border-radius:50%;background:var(--card);transition:transform .2s;box-shadow:0 1px 2px var(--k-rgba-0-0-0-2)}
-.th-toggle input:checked{background:var(--jade)}
-.th-toggle input:checked::after{transform:translateX(14px)}
+.th-toggle input:checked::before{background:var(--jade)}
+.th-toggle input:checked::after{transform:translateX(16px)}
 
 .cgrp h3{cursor:pointer}
 .cgrp .chev{font-size:13px;transition:transform .2s ease;order:-1;color:var(--gold-text)}
@@ -1682,9 +1684,6 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .tl-tel,.tl-addr{display:inline-flex;align-items:center;min-height:44px}
 .mt-body a[href*="monkeytravel"]{display:inline-flex;align-items:center;min-height:44px}
 .th-toggle{min-height:44px}
-.th-toggle input{width:40px;height:24px}
-.th-toggle input::after{top:3px;left:3px;width:18px;height:18px}
-.th-toggle input:checked::after{transform:translateX(16px)}
 .to-top{width:44px;height:44px}
 /* ── 티오프 전 스트레칭 ── */
 .st-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;text-align:center}
