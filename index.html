@@ -18,14 +18,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
+  --fg-soft:#BCCDC4;
+  --pin-meat:#A94A2C;
+  --fg-pale:#F0F5F2;
+  --fg-cream:#F4EEDD;
+  --fg-ivory:#F2EEE0;
+  --coral-soft:#EFA895;
+  --fg-mint:#D3E2DB;
+  --fg-linen:#F5F1E6;
+  --fg-mist:#D6E2DC;
   --ink:#12211E; --ink2:#3D544D; --ink3:#5E7167;
   --paper:#F6F2E8; --card:#FFFFFF; --line:#E2D9C6;
   --jade:#1E4B41; --jade-d:#0E2822; --jade-s:#DDE9E3;
   --gold:#B58A28; --gold-s:#F5E7C0; --gold-text:#7A5A17;
-  --coral:#A94A2C; --coral-s:#F7E2D8;
+  --coral:var(--pin-meat); --coral-s:#F7E2D8;
   --ok:#2C6B4C; --ok-s:#DCEFE2;
   --wait:#7E640F; --wait-s:#F7EDCC;
-  --hero-fg:#F4EEDD;   /* 어두운 히어로 위 주요 텍스트 */
+  --hero-fg:var(--fg-cream);   /* 어두운 히어로 위 주요 텍스트 */
   --hero-dim:#B3CABF;  /* 어두운 히어로 위 보조/메타 텍스트 (제이드 틴트, 회색 아님) */
   --sh: 0 1px 2px rgba(14,40,34,.06), 0 4px 12px -6px rgba(14,40,34,.18);
   --nav-h: 62px;
@@ -80,7 +89,7 @@ img,svg{max-width:100%}
 button{font-family:inherit}
 :focus-visible{outline:2.5px solid var(--gold); outline-offset:2px; border-radius:6px;}
 ::selection{background:var(--gold-s); color:#12211E;}
-header.hero ::selection{background:rgba(245,231,192,.30); color:#F4EEDD;}
+header.hero ::selection{background:rgba(245,231,192,.30); color:var(--fg-cream);}
 @media (prefers-reduced-motion:reduce){
   /* 장식용 무한 반복(날씨·풍등·반짝이)은 멈추고, 한 번 재생되는 등장 효과는 끝 상태로 바로 보여줘요 */
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
@@ -92,7 +101,7 @@ header.hero ::selection{background:rgba(245,231,192,.30); color:#F4EEDD;}
 /* ══ HERO ══ */
 header.hero{
   background:linear-gradient(157deg,var(--jade) 0%,var(--jade-d) 100%);
-  color:#F2EEE0; padding:calc(env(safe-area-inset-top) + 30px) 0 0; position:relative; overflow:hidden;
+  color:var(--fg-ivory); padding:calc(env(safe-area-inset-top) + 30px) 0 0; position:relative; overflow:hidden;
 }
 header.hero::before{content:"";position:absolute;inset:0;
   background:radial-gradient(circle at 88% 15%,rgba(181,138,40,.22) 0,transparent 42%),
@@ -124,7 +133,7 @@ header.hero:not([data-occasion]) .hero-occ{display:none}
 header.hero[data-occasion="christmas"] .hero-occ i{
   top:calc(env(safe-area-inset-top) + 6px);width:5px;height:5px;border-radius:50%;opacity:.35}
 header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+1){background:var(--gold-s)}
-header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+2){background:#EFA895}
+header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+2){background:var(--coral-soft)}
 header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+3){background:#8FD0B4}
 header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+4){background:var(--gold)}
 header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+5){background:#F5E7C0}
@@ -132,10 +141,10 @@ header.hero[data-occasion="christmas"] .hero-occ i:nth-child(5n+5){background:#F
 header.hero[data-occasion="newyear"] .hero-occ i{
   width:5px;height:5px;border-radius:50%;background:var(--gold-s);opacity:0}
 @media (prefers-reduced-motion:no-preference){
-  header.hero[data-occasion="christmas"] .hero-occ i{animation:occTwinkle 3.4s ease-in-out infinite}
-  header.hero[data-occasion="newyear"] .hero-occ i{animation:occBurst 6s ease-out infinite}
+  header.hero[data-occasion="christmas"] .hero-occ i{animation:occTwinkle 3.4s ease-in-out 6}
+  header.hero[data-occasion="newyear"] .hero-occ i{animation:occBurst 6s ease-out 4}
 }
-@keyframes occTwinkle{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.9;transform:scale(1.15);box-shadow:0 0 7px currentColor}}
+@keyframes occTwinkle{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.9;transform:scale(1.4)}}
 @keyframes occBurst{
   0%,72%,100%{opacity:0;box-shadow:0 0 0 0 rgba(245,231,192,0)}
   75%{opacity:1;box-shadow:0 0 0 0 rgba(245,231,192,.9)}
@@ -143,14 +152,12 @@ header.hero[data-occasion="newyear"] .hero-occ i{
 }
 .eyebrow .occ-emoji{font-size:14px;margin-left:-2px}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.04em;
-  color:#BCCDC4;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  color:var(--fg-soft);margin:0 0 12px;display:flex;align-items:center;gap:8px}
 .eyebrow-upd{margin-left:auto;letter-spacing:.02em;font-size:13px;color:var(--hero-dim);
   font-weight:400;white-space:nowrap;text-transform:none;
   text-shadow:0 1px 4px rgba(6,18,14,.85),0 0 3px rgba(6,18,14,.7);position:relative;z-index:1}
 .eyebrow-upd #updMini{display:none}
-.eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);
-  box-shadow:0 0 0 0 rgba(181,138,40,.7);animation:pulse 2.4s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(181,138,40,.6)}70%{box-shadow:0 0 0 9px rgba(181,138,40,0)}100%{box-shadow:0 0 0 0 rgba(181,138,40,0)}}
+.eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold)}
 h1.title{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(27px,7vw,46px);
   line-height:1.06;margin:0 0 11px;letter-spacing:-.015em}
 h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
@@ -172,20 +179,20 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 /* 여정 진행 비행기 — 링 위를 계획일→출발일 진행률만큼 이동 */
 .cd-plane{position:absolute;left:50%;top:50%;font-size:13px;line-height:1;color:#FFF3D4;
   opacity:0;transition:opacity .5s ease .3s;pointer-events:none;z-index:2;
-  text-shadow:0 0 5px rgba(245,231,192,.55);filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+  text-shadow:0 1px 2px rgba(0,0,0,.45)}
 .countdown:not(.flipped):not(.precise):not(.trip-over) .cd-plane{opacity:1}
 @media (prefers-reduced-motion:no-preference){
   .cd-plane{animation:cdPlaneBob 3.2s ease-in-out infinite}
 }
 @keyframes cdPlaneBob{0%,100%{margin-top:0}50%{margin-top:-1.6px}}
 .cd-text{min-width:0}
-.cd-head{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#F2EEE0;
+.cd-head{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--fg-ivory);
   line-height:1.25;letter-spacing:-.01em}
 .cd-head .plane{display:inline-block}
 .cd-sub{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--hero-dim);margin-top:5px;letter-spacing:.01em}
 .cd-fl-hint{display:none}
 .countdown.soon .cd-prog{stroke:#E3C169}
-.countdown.imminent .cd-prog{stroke:#EFA895;filter:drop-shadow(0 0 7px rgba(239,168,149,.5))}
+.countdown.imminent .cd-prog{stroke:var(--coral-soft);filter:drop-shadow(0 0 7px rgba(239,168,149,.5))}
 .countdown.imminent .cd-num{color:#F6D2C3}
 .countdown.done .cd-prog{stroke:var(--ok)}
 @media (prefers-reduced-motion:no-preference){
@@ -198,7 +205,7 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 @keyframes wxSpin{to{transform:rotate(360deg)}}
 .hw{display:flex;align-items:flex-start;gap:6px;width:100%;margin:0 0 6px;cursor:pointer;
   padding:8px 6px;border-radius:9px;transition:background .15s;
-  font-family:'IBM Plex Mono',monospace;font-size:13px;color:#D3E2DB}
+  font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--fg-mint)}
 .hw:active{background:rgba(255,255,255,.10)}
 .hw-k{flex:none;align-self:flex-start;background:none;border:none;appearance:none;font:inherit;
   color:var(--gold-s);opacity:.78;cursor:pointer;padding:5px 3px;border-radius:6px;white-space:nowrap;
@@ -213,9 +220,9 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .hw.loading .hw-ago-t{opacity:.45}
 .hw-more{flex:none;align-self:flex-start;color:var(--hero-dim);text-decoration:none;
   padding:5px 7px;margin:-3px -3px 0 0;border-radius:6px;font-size:14px;line-height:1.5}
-.hw-more:active{background:rgba(255,255,255,.16);color:#F0F5F2}
+.hw-more:active{background:rgba(255,255,255,.16);color:var(--fg-pale)}
 .hw.stale .fx-rate,.hw.stale .wx-text,.hw.stale .wx-temp{opacity:.5}
-.hw.err .hw-ago,.hw.err .hw-sub{color:#EFA895}
+.hw.err .hw-ago,.hw.err .hw-sub{color:var(--coral-soft)}
 /* 데이터 없음/실패 시 "↻ 다시 시도"를 탭 가능한 칩처럼 표시 */
 .hw.needs-sync .hw-ago-t,.hw.err .hw-ago-t{
   background:rgba(245,231,192,.14);border:1px solid rgba(245,231,192,.30);border-radius:99px;
@@ -233,22 +240,22 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .wx-loc:active{background:rgba(255,255,255,.16)}
 .wx-c{opacity:.4;transition:opacity .15s,color .15s;padding:3px 3px;border-radius:6px}
 .wx-c:active{background:rgba(255,255,255,.16)}
-.wx-c.on{opacity:1;color:#F0F5F2;font-weight:700}
+.wx-c.on{opacity:1;color:var(--fg-pale);font-weight:700}
 .wx-bar{opacity:.3;margin:0 4px}
 .wx-sep{opacity:.4}
 .wx-ico{font-size:14px}
-.wx-text{color:#D3E2DB}
-.wx-temp{font-weight:700;color:#F0F5F2;font-style:normal}
+.wx-text{color:var(--fg-mint)}
+.wx-temp{font-weight:700;color:var(--fg-pale);font-style:normal}
 .wx-temp:empty{display:none}
 
 /* 환율 위젯 고유 */
-.fx-rate b{color:#F0F5F2;font-weight:700;font-style:normal}
+.fx-rate b{color:var(--fg-pale);font-weight:700;font-style:normal}
 .fx-cur{opacity:.5}
 .fx-dot{opacity:.3}
 
 /* progress — 한 줄 슬림 (라벨 · 막대 · %) */
 .prog-wrap{display:flex;align-items:center;gap:10px;margin:0 0 13px}
-.prog-lbl{font-size:13px;color:#BCCDC4;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;flex:none}
+.prog-lbl{font-size:13px;color:var(--fg-soft);font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;flex:none}
 .prog-pct{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--gold-s);flex:none;min-width:34px;text-align:right}
 .prog-bar{flex:1;height:6px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden}
 .prog-fill{height:100%;width:0;border-radius:99px;
@@ -264,8 +271,8 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
   background:rgba(181,138,40,.18);padding:3px 8px;border-radius:99px;white-space:nowrap;flex:none}
 .nc-body{flex:1;display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden}
 .nc-e{font-size:16px;flex:none}
-.nc-t{font-size:13.5px;font-weight:600;color:#F2EEE0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nc-arrow{font-size:13px;color:#BCCDC4;white-space:nowrap;flex:none;font-family:'IBM Plex Mono',monospace}
+.nc-t{font-size:13.5px;font-weight:600;color:var(--fg-ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nc-arrow{font-size:13px;color:var(--fg-soft);white-space:nowrap;flex:none;font-family:'IBM Plex Mono',monospace}
 .round-live{min-height:44px}
 .round-live .nc-t{font-variant-numeric:tabular-nums}
 .daily-card{flex-wrap:wrap;min-height:44px}
@@ -278,7 +285,7 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
 .pc-go{flex:none;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:var(--gold-text);white-space:nowrap}
 .map-hero{appearance:none;display:flex;align-items:center;gap:12px;width:100%;min-height:68px;margin:0 0 12px;padding:12px 14px;border:1.5px solid var(--parch-line);border-radius:14px;background:var(--parch);color:var(--parch-ink);text-align:left;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 .map-hero:active{transform:scale(.99)}
-.mh-ico{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:#A94A2C;font-size:1.375rem}
+.mh-ico{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:var(--pin-meat);font-size:1.375rem}
 .mh-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .mh-txt b{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;line-height:1.25;color:var(--parch-deep)}
 .mh-txt span{font-size:14px;line-height:1.35;color:var(--parch-ink3);word-break:keep-all}
@@ -293,7 +300,7 @@ h1.title em{font-style:italic;color:var(--gold-s);font-weight:500}
   border-radius:14px 14px 0 0;overflow:hidden}
 .stat{background:rgba(14,40,34,.5);padding:15px 10px 17px;text-align:center}
 .stat .n{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:#fff;line-height:1}
-.stat .n small{font-size:13px;font-weight:500;color:#BCCDC4;margin-left:1px}
+.stat .n small{font-size:13px;font-weight:500;color:var(--fg-soft);margin-left:1px}
 .stat .l{font-size:13px;color:#A5BAB0;margin-top:5px;letter-spacing:.01em}
 header.hero.no-stats .hero-in{padding-bottom:20px}
 
@@ -320,6 +327,9 @@ nav.tabs .wrap::-webkit-scrollbar{display:none}
 
 main.wrap{padding-top:36px;min-height:56vh}
 section.pnl{display:none}
+.skip-link{position:fixed;left:8px;top:-60px;z-index:10001;padding:12px 16px;border-radius:10px;background:var(--jade-d);color:var(--fg-ivory);font-weight:700;text-decoration:none;transition:top .15s}
+.skip-link:focus{top:8px;outline:3px solid var(--gold)}
+main:focus{outline:none}
 .recd-v a{display:inline-block;padding:14px 6px;margin:-14px -2px}
 .jr{margin:4px 0 14px}
 .jr-track{position:relative;display:flex;gap:3px;padding:20px 0 0}
@@ -379,23 +389,23 @@ h2.sec .e{font-size:21px;line-height:1}
 .tidbit.wrong{background:linear-gradient(160deg,#5C3830 0%,#33201C 55%,#1B1411 100%)}
 
 .tb-tag{display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;
-  font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--gold-s);
+  font-size:13px;font-weight:700;letter-spacing:.05em;color:var(--gold-s);
   background:rgba(245,231,192,.12);border:1px solid rgba(245,231,192,.22);
   padding:3px 9px;border-radius:99px;margin-bottom:10px;position:relative}
 .tb-kicker{display:block;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;
-  letter-spacing:.06em;color:rgba(234,241,238,.5);margin-bottom:7px;position:relative}
+  letter-spacing:.05em;color:rgba(234,241,238,.5);margin-bottom:7px;position:relative}
 .tb-kicker .fire{color:var(--gold-s);letter-spacing:0}
-.tb-q{display:block;font-family:'Fraunces',serif;font-size:15.5px;font-weight:600;color:#F5F1E6;
+.tb-q{display:block;font-family:'Fraunces',serif;font-size:15.5px;font-weight:600;color:var(--fg-linen);
   line-height:1.4;letter-spacing:-.01em;position:relative}
 .tb-result{font-size:13.5px;color:rgba(234,241,238,.82);line-height:1.62;margin-top:10px;position:relative}
 .tb-result:empty{display:none}
-.tb-result b{font-weight:700;color:#F5F1E6}
+.tb-result b{font-weight:700;color:var(--fg-linen)}
 .tidbit.correct .tb-result b{color:#93DBB2}
 .tidbit.wrong .tb-result b{color:#F2AB94}
 .tb-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px;position:relative}
 .tb-ox{flex:1;min-width:0;padding:11px 0;border-radius:12px;
   border:1.5px solid rgba(245,231,192,.28);background:rgba(245,231,192,.06);
-  font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#F5F1E6;cursor:pointer;
+  font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--fg-linen);cursor:pointer;
   transition:transform .12s ease,background .15s ease,border-color .15s ease}
 .tb-ox:hover{background:rgba(245,231,192,.12)}
 .tb-ox:active{transform:scale(.95)}
@@ -444,8 +454,8 @@ h2.sec .e{font-size:21px;line-height:1}
 
 /* ── 몽키트래블 여행 지식백과 요약 (접이식 topic) ── */
 .mt-topics{margin:0 0 22px;background:var(--card);border:1px solid var(--line);border-radius:12px;
-  padding:11px 14px 6px;box-shadow:var(--sh)}
-.gg-inner .mt-topics{margin:12px 0 0;padding:11px 0 0;border:none;border-top:1px dashed var(--line);
+  padding:11px 16px 6px;box-shadow:var(--sh)}
+.gg-inner .mt-topics{margin:12px 0 0;padding:11px 4px 0;border:none;border-top:1px dashed var(--line);
   border-radius:0;background:none;box-shadow:none}
 .mt-h{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.05em;
   color:var(--ink3);margin-bottom:4px}
@@ -609,7 +619,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
   border-radius:2px;background:var(--gold)}
 .day.today .dn{color:var(--jade)}
 .day-today-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;
-  letter-spacing:.06em;color:#fff;background:var(--gold);padding:1px 5px;border-radius:99px;margin-top:4px}
+  letter-spacing:.05em;color:#fff;background:var(--gold);padding:1px 5px;border-radius:99px;margin-top:4px}
 .dbox{text-align:center}
 .dn{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--jade-d);line-height:1}
 .dw{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink3);margin-top:3px}
@@ -646,21 +656,21 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 /* ══ COST ══ */
 .cost-hero{background:linear-gradient(135deg,var(--jade) 0%,var(--jade-d) 100%);color:#fff;
   border-radius:14px;padding:20px;margin-bottom:20px}
-.cost-hero .l{font-size:13px;color:#BCCDC4;margin-bottom:4px}
+.cost-hero .l{font-size:13px;color:var(--fg-soft);margin-bottom:4px}
 .cost-hero .a{font-family:'Fraunces',serif;font-size:30px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
-.cost-hero .a small{font-size:14px;font-weight:400;color:#D6E2DC;margin-left:3px}
+.cost-hero .a small{font-size:14px;font-weight:400;color:var(--fg-mist);margin-left:3px}
 .bg-stack{display:flex;gap:2px;height:12px;margin:12px 0 8px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.12)}
 .bg-stack i{display:block;min-width:3px}
-.bg-legend{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:13px;color:#D6E2DC}
+.bg-legend{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:13px;color:var(--fg-mist)}
 .bg-legend li{display:flex;align-items:center;gap:7px}
 .bg-legend li i{flex:none;width:10px;height:10px;border-radius:50%}
 .bg-legend li b{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-weight:600;color:inherit}
 .bg-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .bg-two>div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.1)}
-.bg-two span{display:block;font-size:13px;color:#BCCDC4}
+.bg-two span{display:block;font-size:13px;color:var(--fg-soft)}
 .bg-two b{display:block;font-family:'Fraunces',serif;font-size:20px;font-weight:600;line-height:1.25;color:inherit;font-variant-numeric:tabular-nums}
-.bg-two b small{font-size:13px;font-weight:400;color:#D6E2DC;margin-left:2px}
-.bg-two em{display:block;font-style:normal;font-size:13px;color:#BCCDC4;margin-top:1px}
+.bg-two b small{font-size:13px;font-weight:400;color:var(--fg-mist);margin-left:2px}
+.bg-two em{display:block;font-style:normal;font-size:13px;color:var(--fg-soft);margin-top:1px}
 .bg-cats{display:grid;gap:9px;margin-bottom:14px}
 .bg-cat{display:grid;grid-template-columns:1fr auto auto;gap:2px 10px;align-items:baseline;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 .bg-cat .bc-n{font-weight:700;color:var(--ink)}
@@ -729,7 +739,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
   background:linear-gradient(120deg,var(--jade-s),#EFF5F1);border:1px solid var(--line);cursor:pointer;
   -webkit-tap-highlight-color:transparent}
 .next-round:active{transform:scale(.995)}
-.nr-tag{flex:none;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.06em;
+.nr-tag{flex:none;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.05em;
   color:var(--jade);background:#fff;border:1px solid var(--line);padding:3px 7px;border-radius:99px}
 .nr-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .nr-course{font-size:13.5px;font-weight:700;color:var(--jade-d);line-height:1.3;
@@ -1041,7 +1051,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
 .hero-lantern::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:3px;
   background:rgba(255,220,150,.5);transform:translateX(-50%)}
 @media (prefers-reduced-motion:no-preference){
-  .hero-lantern{animation:lanternRise var(--lr,16s) ease-in var(--ld,0s) infinite}
+  .hero-lantern{animation:lanternRise var(--lr,16s) ease-in var(--ld,0s) 3}
 }
 @keyframes lanternRise{
   0%{opacity:0;transform:translate(0,0) scale(.92)}
@@ -1093,14 +1103,14 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   .countdown.flipped .cd-front{transform:rotateY(180deg)}
   .countdown.flipped .cd-back{transform:rotateY(360deg)}
   .cd-back-in{width:100%;padding:0 2px 0 4px}
-  .cd-back-k{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.06em;
+  .cd-back-k{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.05em;
     color:var(--gold-s);opacity:.85;display:block;margin-bottom:4px}
   .cd-fl{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#DCE7E1;line-height:1.5;
     display:flex;align-items:baseline;gap:7px}
   .cd-fl b{color:var(--hero-fg);font-weight:700;letter-spacing:.02em}
   .cd-fl span{color:var(--hero-dim);font-size:13px}
   .cd-back-in .cd-fl{font-size:13px;line-height:1.55}
-  .cd-ln{font-size:13px;color:#D3E2DB;line-height:1.6;font-family:'IBM Plex Mono',monospace}
+  .cd-ln{font-size:13px;color:var(--fg-mint);line-height:1.6;font-family:'IBM Plex Mono',monospace}
   .cd-ln b{color:var(--hero-fg);font-weight:700}
   .cd-tip{color:var(--gold-s);font-size:13px;line-height:1.55}
   .cd-tip::before{content:"“";opacity:.55}
@@ -1275,7 +1285,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     100%{opacity:0;transform:translate(-88vw,42vh)}}
   .stamp{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) rotate(-14deg) scale(.4);
     z-index:190;pointer-events:none;font-family:'Fraunces',serif;font-weight:700;font-size:19px;
-    letter-spacing:.06em;color:var(--coral);border:2.5px solid var(--coral);border-radius:8px;
+    letter-spacing:.05em;color:var(--coral);border:2.5px solid var(--coral);border-radius:8px;
     padding:5px 12px;opacity:0;background:rgba(246,242,232,.5)}
   @media (prefers-reduced-motion:no-preference){ .stamp{animation:stampThunk 1.2s cubic-bezier(.3,1.4,.5,1) forwards} }
   @keyframes stampThunk{0%{opacity:0;transform:translate(-50%,-50%) rotate(-14deg) scale(.4)}
@@ -1419,7 +1429,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   background-color:var(--parch);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M26 0H0V26' fill='none' stroke='%235a3c14' stroke-opacity='.08'/%3E%3C/svg%3E")}
 .fm-card{background:var(--parch-card);border:1.5px solid var(--parch-line);border-radius:12px;margin:0 0 9px;color:var(--parch-ink)}
 .fm-head{appearance:none;width:100%;display:grid;grid-template-columns:42px 1fr auto;gap:2px 10px;align-items:center;min-height:64px;padding:9px 12px;border:0;background:none;text-align:left;font-family:inherit;color:inherit;cursor:pointer}
-.fm-seal{grid-row:1/3;width:42px;height:42px;border-radius:10px;background:#A94A2C;color:var(--parch-card);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.375rem;font-weight:700;transform:rotate(-4deg)}
+.fm-seal{grid-row:1/3;width:42px;height:42px;border-radius:10px;background:var(--pin-meat);color:var(--parch-card);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.375rem;font-weight:700;transform:rotate(-4deg)}
 .fm-nm{font-size:.9688rem;font-weight:700;line-height:1.25;word-break:keep-all}
 .fm-en{font-size:13px;color:var(--parch-ink2);line-height:1.3}
 .fm-meta{grid-row:1/3;grid-column:3;text-align:right;font-size:13px;line-height:1.5;color:var(--parch-ink2);white-space:nowrap}
@@ -1468,7 +1478,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .fm-pin-in{position:absolute;left:5px;top:5px;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:2.5px solid var(--parch-card);color:var(--parch-card);font-family:'Fraunces',serif;font-size:1.0625rem;font-weight:700;box-shadow:0 2px 6px rgba(40,25,5,.45);transition:transform .15s}
 .fm-zlo .fm-pin-in{left:9px;top:9px;width:26px;height:26px;font-size:.875rem;border-width:2px}
 .fm-zlo .fm-pin.sel .fm-pin-in{transform:scale(1.3)}
-.fm-pin.g-육 .fm-pin-in{background:#A94A2C} .fm-pin.g-해 .fm-pin-in{background:var(--pin-sea)} .fm-pin.g-천 .fm-pin-in{background:var(--pin-sky)}
+.fm-pin.g-육 .fm-pin-in{background:var(--pin-meat)} .fm-pin.g-해 .fm-pin-in{background:var(--pin-sea)} .fm-pin.g-천 .fm-pin-in{background:var(--pin-sky)}
 .fm-pin.g-양 .fm-pin-in{background:var(--pin-west)} .fm-pin.g-아 .fm-pin-in{background:var(--pin-asia)} .fm-pin.g-노 .fm-pin-in{background:var(--pin-old)} .fm-pin.g-고 .fm-pin-in{background:var(--pin-fine)} .fm-pin.g-볼 .fm-pin-in{background:var(--pin-sight)}
 .fm-pin.vis .fm-pin-in::before{content:"✓";position:absolute;right:-7px;bottom:-7px;display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--tx-ok-ink);border:1.5px solid var(--parch-card);color:var(--parch-card);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;line-height:1}
 .fm-pin.home .fm-pin-in{background:var(--jade-deep);font-size:1.125rem}
@@ -1733,7 +1743,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .cp-tabs{grid-template-columns:repeat(3,1fr)}
 .cp-stage{display:flex;justify-content:center;margin:4px 0 2px}
 .cp-svg{width:min(290px,76vw);aspect-ratio:1/1;display:block;filter:drop-shadow(0 8px 14px rgba(14,40,34,.2))}
-.cp-ring{fill:#F4EEDD;stroke:var(--jade);stroke-width:3;transition:stroke .25s,fill .25s}
+.cp-ring{fill:var(--fg-cream);stroke:var(--jade);stroke-width:3;transition:stroke .25s,fill .25s}
 .cp-svg.lock .cp-ring{stroke:var(--gold);fill:var(--gold-s)}
 .cp-tick{stroke:var(--ink3);stroke-width:1}
 .cp-card{font-family:'Fraunces',serif;font-size:14px;font-weight:700;fill:var(--ink2)}
@@ -1840,6 +1850,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
 
 <header class="hero">
   <div class="hero-sky" id="heroSky" aria-hidden="true"><i class="sky-orb" id="skyOrb"></i><span class="sky-stars" id="skyStars"></span></div>
@@ -1950,7 +1961,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   </div>
 </nav>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 
 <!-- ⛳ GOLF -->
 <section class="pnl on" id="golf" role="tabpanel" aria-labelledby="tb-golf">
@@ -2011,16 +2022,16 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
         <li><b>클럽하우스 안 · 티켓 수령</b><p>카운터에 바우처를 제시하고 티오프 시각이 적힌 티켓을 받습니다. 종이 출력 없이 <em>휴대폰 사진</em>이나, 티오프 시각·예약 회사명을 정확히 말하는 것으로도 됩니다. 카트를 쓰면 여기서 카트피를 내요 (예약 때 이미 냈다면 추가 없음).</p></li>
         <li><b>스타팅 지점 · 티오프</b><p>배정표를 들고 스타팅 지점으로 가면 캐디가 골프백을 들고 기다립니다. 캐디 안내를 따라 첫 홀로 이동해 제 시간에 티오프. <em>2인 이하면 다른 팀과 조인</em>될 수 있습니다.</p></li>
       </ol>
-      <p class="gg-tip">💡 현장에서 챙길 현금 — 캐디 팁은 라운드가 끝난 뒤 캐디에게 직접(보통 400~600밧). 그린피·캐디피는 대개 예약 시 선지불이라, 현장에서는 카트피와 팁만 준비하면 됩니다.</p>
+      <p class="gg-tip">💡 현장에서 챙길 현금: 캐디 팁은 라운드가 끝난 뒤 캐디에게 직접(보통 400~600밧). 그린피·캐디피는 대개 예약 시 선지불이라, 현장에서는 카트피와 팁만 준비하면 됩니다.</p>
       <div class="mt-topics">
         <div class="mt-h">📚 태국 골프 지식백과 · 탭하면 요약</div>
         <details class="mt-topic">
           <summary>골프장 복장 규정</summary>
           <div class="mt-body">
-            <b>남성</b> — <span class="ox-o">○</span> 카라 셔츠 · 벨트 착용 긴바지 · 반바지는 무릎선 기장 &nbsp; <span class="ox-x">✕</span> 카라 없는 티 · 라운드티/운동복 · 무릎 위 반바지 · 벨트 없는 바지 · 청바지 계열 · 샌들/슬리퍼<br>
+            <b>남성</b>: <span class="ox-o">○</span> 카라 셔츠 · 벨트 착용 긴바지 · 반바지는 무릎선 기장 &nbsp; <span class="ox-x">✕</span> 카라 없는 티 · 라운드티/운동복 · 무릎 위 반바지 · 벨트 없는 바지 · 청바지 계열 · 샌들/슬리퍼<br>
             한국 골프웨어의 '차이나 카라'는 입장 불가한 곳이 있어 <b>피케(카라)티</b> 권장.<br>
-            <b>여성</b> — <span class="ox-o">○</span> 카라 셔츠 · 긴바지/반바지/스커트 &nbsp; <span class="ox-x">✕</span> 과도한 노출 · 청바지 계열 · 쇠스파이크화. 상의는 <b>카라 또는 소매</b> 중 하나 필수.<br>
-            <b>공통</b> — 쇠(메탈)스파이크는 금지, 소프트스파이크는 OK.
+            <b>여성</b>: <span class="ox-o">○</span> 카라 셔츠 · 긴바지/반바지/스커트 &nbsp; <span class="ox-x">✕</span> 과도한 노출 · 청바지 계열 · 쇠스파이크화. 상의는 <b>카라 또는 소매</b> 중 하나 필수.<br>
+            <b>공통</b>: 쇠(메탈)스파이크는 금지, 소프트스파이크는 OK.
             <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=38" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
           </div>
         </details>
@@ -2028,7 +2039,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
           <summary>라운드 중 비가 오면 (레인체크)</summary>
           <div class="mt-body">
             스콜은 20~30분이면 지나가니 클럽하우스에서 대기. <b>낙뢰 사이렌</b>이 울리면 즉시 대피(플레이 중단).<br>
-            <b>레인체크</b> — 비로 라운드를 중단하면 진행한 홀 수에 따라 그린피 일부를 환불하거나, 다음에 쓸 수 있는 '레인체크'를 줍니다. 기준(보통 9홀 전후)은 골프장마다 다르니 프런트·캐디에게 확인.<br>
+            <b>레인체크</b>: 비로 라운드를 중단하면 진행한 홀 수에 따라 그린피 일부를 환불하거나, 다음에 쓸 수 있는 '레인체크'를 줍니다. 기준(보통 9홀 전후)은 골프장마다 다르니 프런트·캐디에게 확인.<br>
             우비는 미리 챙기고, 우산·타월은 캐디가 준비해 줍니다.
             <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=63" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
           </div>
@@ -2037,16 +2048,16 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
           <summary>그린피에 뭐가 포함되나 · 트와일라잇</summary>
           <div class="mt-body">
             예약 시 <b>그린피 + 캐디피 + 카트비</b>를 미리 결제하는 게 보통. 현장에서 낼 건 <b>캐디 팁</b>(라운드 후 현금 400~600밧)과, 예약에 안 낀 경우의 카트비 정도.<br>
-            <b>비지터 레이트</b> — 외국인은 현지인보다 비싼 요금. 이번 코스들은 한국과 비슷하거나 더 비싼 편이라, 여행사로 픽업까지 묶어 예약하는 게 유리.<br>
-            <b>트와일라잇</b> — 대개 13~15시 이후 티오프면 정규 요금의 40~60%까지 할인. 단 12월 파타야는 18시면 해가 져 18홀 완주하려면 13시 전 시작 권장.<br>
-            <b>니칸티(12/29)는 올인클루시브</b> — 캐디 팁·현지 음료·식사 2회까지 포함이라 라운드 중 낼 현금이 거의 없음.
+            <b>비지터 레이트</b>: 외국인은 현지인보다 비싼 요금. 이번 코스들은 한국과 비슷하거나 더 비싼 편이라, 여행사로 픽업까지 묶어 예약하는 게 유리.<br>
+            <b>트와일라잇</b>: 대개 13~15시 이후 티오프면 정규 요금의 40~60%까지 할인. 단 12월 파타야는 18시면 해가 져 18홀 완주하려면 13시 전 시작 권장.<br>
+            <b>니칸티(12/29)는 올인클루시브</b>: 캐디 팁·현지 음료·식사 2회까지 포함이라 라운드 중 낼 현금이 거의 없음.
           </div>
         </details>
         <details class="mt-topic">
           <summary>캐디와 소통하는 법</summary>
           <div class="mt-body">
             태국은 <b>1인 1캐디</b>. 클럽·라이·거리는 물론 파라솔·얼음물까지 각자 챙겨줍니다.<br>
-            클럽은 숫자로 — "<b>세븐 아이언</b>", "<b>드라이버</b>". 거리는 미터 숫자로 말하면 통함.<br>
+            클럽은 숫자로: "<b>세븐 아이언</b>", "<b>드라이버</b>". 거리는 미터 숫자로 말하면 통함.<br>
             그린에서 "<b>라인?</b>" 하면 경사를 손·발로 읽어줌. "<b>업/다운</b>", "<b>레프트/라이트</b>".<br>
             팁은 라운드 후 <b>개인별로</b> 직접. 잘 봐줬으면 조금 더 얹는 정도.
           </div>
@@ -2091,7 +2102,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <details class="mt-topic">
       <summary>태국식당 주문 팁</summary>
       <div class="mt-body">
-        노점·로컬 식당은 진열대에서 손가락으로 가리키거나 메뉴 번호로 주문. <b>밥은 따로</b> — 공깃밥은 "카오 스어이".<br>
+        노점·로컬 식당은 진열대에서 손가락으로 가리키거나 메뉴 번호로 주문. <b>밥은 따로</b>: 공깃밥은 "카오 스어이".<br>
         맵기 조절 "<b>마이 펫</b>(안 맵게)" · "펫 닛노이(조금)". 고수 빼기 "마이 사이 팍치".<br>
         물은 유료 생수. 계산은 자리에서 "<b>첵빈</b>". 팁은 잔돈 정도. 푸드코트는 <b>선불카드 충전식</b>(남은 금액 환불).
         <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=21" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
@@ -2100,9 +2111,9 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <details class="mt-topic">
       <summary>식당에서 쓰는 태국어</summary>
       <div class="mt-body">
-        주문 — "<b>~ 아오</b> ~ (주세요)" · 카오 팟(볶음밥) · 팟타이 · 똠얌꿍 · 쏨땀.<br>
-        요청 — 마이 펫(안 맵게) · 마이 사이 남 딴(설탕 빼고) · 남 쁠라오(생수) · 첵빈(계산).<br>
-        인사·응대 — 컵쿤 캅/카(감사합니다) · 아로이(맛있어요) · 마이 아오(필요 없어요).
+        주문: "<b>~ 아오</b> ~ (주세요)" · 카오 팟(볶음밥) · 팟타이 · 똠얌꿍 · 쏨땀.<br>
+        요청: 마이 펫(안 맵게) · 마이 사이 남 딴(설탕 빼고) · 남 쁠라오(생수) · 첵빈(계산).<br>
+        인사·응대: 컵쿤 캅/카(감사합니다) · 아로이(맛있어요) · 마이 아오(필요 없어요).
         <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=55" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
       </div>
     </details>
@@ -2123,8 +2134,8 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <details class="mt-topic">
       <summary>마사지 받을 때 태국어</summary>
       <div class="mt-body">
-        종류 — 타이(누왓 파엔 보란) · 오일 · 발(누왓 타오) · 아로마.<br>
-        강도 — "<b>바오바오</b>(약하게)" · "낙낙(세게)" · "뜨롱니(여기)" · "포 래우(그만/충분해요)".<br>
+        종류: 타이(누왓 파엔 보란) · 오일 · 발(누왓 타오) · 아로마.<br>
+        강도: "<b>바오바오</b>(약하게)" · "낙낙(세게)" · "뜨롱니(여기)" · "포 래우(그만/충분해요)".<br>
         아플 때 "젭(아파요)". 팁은 1시간당 <b>50~100밧</b>, 마사지 끝난 뒤 직접.
         <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=57" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
       </div>
@@ -2133,7 +2144,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <summary>방콕 왕궁(왓 프라깨우) 투어</summary>
       <div class="mt-body">
         왕궁 + <b>왓 프라깨우</b>(에메랄드 불상). 개장 <b>08:30~16:30</b>(티켓 판매 ~15:30), 외국인 입장 <b>500밧</b>(왓 프라깨우 + 시리낏 왕비 섬유박물관 포함).<br>
-        복장 규정 엄격 — <b>어깨·무릎 가림 필수</b>. 현장에서 대여/구매 가능(반환 시 보증금 환급).<br>
+        복장 규정 엄격: <b>어깨·무릎 가림 필수</b>. 현장에서 대여/구매 가능(반환 시 보증금 환급).<br>
         오전 일찍 방문(더위·인파 전). 왓 포(와불)·왓 아룬과 묶어 반나절 코스.
         <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=26" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
       </div>
@@ -2141,37 +2152,37 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <details class="mt-topic">
       <summary>태국의 술</summary>
       <div class="mt-body">
-        맥주 — <b>싱하</b>(정통) · <b>창</b>(도수 높음) · <b>레오</b>(가성비).<br>
-        위스키/럼 — <b>쌩쏨</b>(럼, 소다·라임과 세트) · 홍텅.<br>
-        <b>판매 시간 제한</b> — 편의점·마트는 보통 11~14시, 17~24시만 주류 판매. 불교 공휴일·선거일엔 판매 금지. 얼음(남캥) 넣어 마시는 게 일반적.
+        맥주: <b>싱하</b>(정통) · <b>창</b>(도수 높음) · <b>레오</b>(가성비).<br>
+        위스키/럼: <b>쌩쏨</b>(럼, 소다·라임과 세트) · 홍텅.<br>
+        <b>판매 시간 제한</b>: 편의점·마트는 보통 11~14시, 17~24시만 주류 판매. 불교 공휴일·선거일엔 판매 금지. 얼음(남캥) 넣어 마시는 게 일반적.
         <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=58" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
       </div>
     </details>
     <details class="mt-topic">
       <summary>태국여행 짐 싸기</summary>
       <div class="mt-body">
-        필수 — 여권(만료 <b>6개월 이상</b>)·항공권, 신용카드 + 소액 현금(밧), eSIM/유심.<br>
-        의류 — 얇은 겉옷(강한 냉방), 사원용 <b>긴옷·스카프</b>, 수영복, 슬리퍼.<br>
-        생활 — 선크림·모자·선글라스, 우산/우비, 상비약(지사제·모기약·밴드), 보조배터리. 콘센트는 220V 한국 플러그 그대로.
+        필수: 여권(만료 <b>6개월 이상</b>)·항공권, 신용카드 + 소액 현금(밧), eSIM/유심.<br>
+        의류: 얇은 겉옷(강한 냉방), 사원용 <b>긴옷·스카프</b>, 수영복, 슬리퍼.<br>
+        생활: 선크림·모자·선글라스, 우산/우비, 상비약(지사제·모기약·밴드), 보조배터리. 콘센트는 220V 한국 플러그 그대로.
         <a href="https://thai.monkeytravel.com/th/ko/board/infographics_view.php?id=6" target="_blank" rel="noopener">몽키트래블 인포그래픽</a>
       </div>
     </details>
     <details class="mt-topic">
-      <summary>방콕 이동 — BTS·MRT·수상보트·Grab</summary>
+      <summary>방콕 이동: BTS·MRT·수상보트·Grab</summary>
       <div class="mt-body">
-        <b>전철</b> — BTS(지상)·MRT(지하)가 주요 관광지 대부분 커버. 2025년 10월 시작된 <b>20밧 균일요금은 태국 국민 한정</b>, 외국인은 기존 거리요금(1역 약 17밧~). 래빗카드·MRT 카드 충전이 편함.<br>
-        <b>수상보트</b> — 짜오프라야 익스프레스보트(오렌지 깃발 16밧)로 왕궁·왓아룬·아이콘시암. 러시아워엔 택시보다 빠름.<br>
-        <b>Grab / Bolt</b> — Bolt가 15~35% 싸지만 취소 잦음, Grab은 비싸도 안정적. 앱에 요금이 미리 떠 흥정 불필요.<br>
-        <b>공항 택시</b> — 미터 요금 + <b>고속도로 통행료 + 공항 수수료 50밧</b> 별도. 4인 이상·짐 많으면 Grab 밴.
+        <b>전철</b>: BTS(지상)·MRT(지하)가 주요 관광지 대부분 커버. 2025년 10월 시작된 <b>20밧 균일요금은 태국 국민 한정</b>, 외국인은 기존 거리요금(1역 약 17밧~). 래빗카드·MRT 카드 충전이 편함.<br>
+        <b>수상보트</b>: 짜오프라야 익스프레스보트(오렌지 깃발 16밧)로 왕궁·왓아룬·아이콘시암. 러시아워엔 택시보다 빠름.<br>
+        <b>Grab / Bolt</b>: Bolt가 15~35% 싸지만 취소 잦음, Grab은 비싸도 안정적. 앱에 요금이 미리 떠 흥정 불필요.<br>
+        <b>공항 택시</b>: 미터 요금 + <b>고속도로 통행료 + 공항 수수료 50밧</b> 별도. 4인 이상·짐 많으면 Grab 밴.
         <span class="gg-src2">Richard Barrow·Bangkok Post·geosthai (2025–2026)</span>
       </div>
     </details>
     <details class="mt-topic">
       <summary>파타야 이동 · 방콕 왕복</summary>
       <div class="mt-body">
-        <b>파타야 시내</b> — 빨간 <b>썽태우</b>(바트버스) 기본 10~20밧. 손 흔들어 타고, 내릴 때 벨 누르고 기사에게 요금. 대절도 흥정 가능.<br>
-        <b>Grab / Bolt</b> — 파타야에서도 잘 잡힘. 좀티엔↔파타야 시내 60~120밧대.<br>
-        <b>방콕 ↔ 파타야</b> — 에까마이·모칫 터미널에서 버스·미니밴 자주(1인 130~250밧, 1시간 30분~2시간). 일행 많으면 Grab 밴/사설 픽업.<br>
+        <b>파타야 시내</b>: 빨간 <b>썽태우</b>(바트버스) 기본 10~20밧. 손 흔들어 타고, 내릴 때 벨 누르고 기사에게 요금. 대절도 흥정 가능.<br>
+        <b>Grab / Bolt</b>: 파타야에서도 잘 잡힘. 좀티엔↔파타야 시내 60~120밧대.<br>
+        <b>방콕 ↔ 파타야</b>: 에까마이·모칫 터미널에서 버스·미니밴 자주(1인 130~250밧, 1시간 30분~2시간). 일행 많으면 Grab 밴/사설 픽업.<br>
         통부라(나 좀티엔) 기준 좀티엔 야시장·세컨로드는 차로 10분 안팎.
         <span class="gg-src2">현지 이동 정보 (2025–2026)</span>
       </div>
@@ -2179,10 +2190,10 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
     <details class="mt-topic">
       <summary>12월 방콕·파타야 이벤트</summary>
       <div class="mt-body">
-        <b>아이콘시암 카운트다운</b>(12/29~31) — 리버사이드 파크에서 대형 멀티미디어 불꽃놀이·공연. 짜오프라야 강변(아시아티크 등)도 연말 불꽃.<br>
-        <b>Wonderfruit</b> — 12월 중순 파타야 인근 The Fields(시암CC 옆)에서 열리는 음악·예술 페스티벌.<br>
-        <b>크리스마스</b> — 방콕 대형몰·호텔이 12월 내내 초대형 트리·일루미네이션, 레스토랑 크리스마스 세트.<br>
-        12~2월은 건기 성수기라 항공·호텔·골프 모두 붐빔 — 예약은 일찍.
+        <b>아이콘시암 카운트다운</b>(12/29~31): 리버사이드 파크에서 대형 멀티미디어 불꽃놀이·공연. 짜오프라야 강변(아시아티크 등)도 연말 불꽃.<br>
+        <b>Wonderfruit</b>: 12월 중순 파타야 인근 The Fields(시암CC 옆)에서 열리는 음악·예술 페스티벌.<br>
+        <b>크리스마스</b>: 방콕 대형몰·호텔이 12월 내내 초대형 트리·일루미네이션, 레스토랑 크리스마스 세트.<br>
+        12~2월은 건기 성수기라 항공·호텔·골프 모두 붐빔. 예약은 일찍.
         <span class="gg-src2">trip.com·TAT (2025–2026)</span>
       </div>
     </details>
@@ -2443,7 +2454,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <span class="wn-badge">🍜 EATS</span>
       <h2 class="wn-title" id="etTitle">태국 먹킷리스트</h2>
     </div>
-    <p class="wn-sub" style="font-size:.8125rem">먹어본 건 눌러서 체크 — 20가지를 모두 채워보세요</p>
+    <p class="wn-sub" style="font-size:.8125rem">먹어본 건 눌러서 체크하세요. 20가지를 모두 채워보세요</p>
     <div class="et-prog"><div class="et-bar"><div class="et-fill" id="etFill"></div></div><span id="etCnt" aria-live="polite"></span></div>
     <div class="et-body" id="etBody"><button class="wh-tab" id="etPick" type="button" style="width:100%;margin-bottom:8px">🎲 오늘 뭐 먹지? (아직 안 먹은 것 중에서)</button><ul class="et-list" id="etList"></ul></div>
     <button class="wn-close" id="etCopy" type="button" style="margin-top:12px">📋 먹킷리스트 복사해서 단톡에 올리기</button>
@@ -2564,7 +2575,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
       <span class="wn-badge">🎮 PLAY</span>
       <h2 class="wn-title" id="plTitle">여행 놀이터</h2>
     </div>
-    <p class="wn-sub" style="font-size:.8125rem">여행 전에도, 여행 중에도 — 하고 싶은 걸 골라보세요</p>
+    <p class="wn-sub" style="font-size:.8125rem">여행 전에도, 여행 중에도, 하고 싶은 걸 골라보세요</p>
     <div class="pl-body" id="plBody"><div class="play-grid" id="plGrid"></div></div>
     <button class="wn-close" id="plClose" type="button" style="margin-top:12px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
@@ -2745,7 +2756,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER='v10.11';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER='v10.12';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4476,6 +4487,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🧹','디자인 점검 정리','첫 화면 위쪽의 계속 깜빡이던 점을 멈추고, 시즌 장식(크리스마스·새해 반짝이, 풍등)은 일정 횟수만 움직이고 쉬도록 바꿨어요. 장식 빛번짐을 그림자로 정리하고, 본문의 긴 줄표(—)를 읽기 쉬운 문장부호로 바꿨어요. 키보드 사용자를 위한 "본문으로 건너뛰기"도 생겼어요'],
     ['🎁','매일 바뀌는 "오늘의 추천"','홈 화면 놀이터 카드에 "오늘의 이야기" 제목이 나오고, 눌러서 "이야기·맛집 카드"를 열면 맨 앞 "오늘의 추천"에 이야기 1장·방콕 맛집·방콕 볼거리·파타야 맛집이 하루 한 번(한국 시간 자정 기준) 새로 뽑혀 나와요. 매일 열어볼 이유가 생기도록 날짜마다 다른 조합이에요'],
     ['✈️','일정 탭 "여정 스트립" + 제목 인사 놀이','일정 탭 맨 위에 파타야(12/16~26)와 방콕(12/26~1/2) 구간이 한눈에 보이는 여정 띠가 생겼어요. 비행기 ✈️가 오늘 위치를 따라 움직이고, 출발 전에는 "출발까지 D-N", 여행 중에는 "여행 N일차 · 방콕"처럼 알려줘요. 그리고 첫 화면 제목 "태국 겨울 여행"을 누르면 태국어 인사(사와디 캅·컵쿤 캅·아러이 마크·싸눅 마크·마이 뺀 라이)가 뜨고 코끼리·망고가 둥실 떠올라요'],
     ['🔠','글자를 더 크게, 홈 안내 문구 정리, 대동여지도 칩 정리','화면 전체의 작은 글씨(11~13px)를 13~14px 이상으로 키웠어요. 날씨·환율을 못 불러왔을 때는 "날씨 정보 없음 · 눌러서 재시도"처럼 짧고 읽기 쉬운 문구로 바꿨어요. 예산·경비 탭의 정산완료/대기 버튼은 누르기 쉽게 키웠고, 대동여지도의 칩은 자주 쓰는 것(전체·집 근처·가성비·미쉐린·볼거리)만 먼저 보이고 음식 종류별 칩은 "종류별"을 누르면 펼쳐져요'],
