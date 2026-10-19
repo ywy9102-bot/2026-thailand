@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=10.15">
+<link rel="stylesheet" href="style.css?v=10.16">
 </head>
 <body>
 <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -616,6 +616,25 @@
   </div>
 </div>
 
+<!-- 오늘의 건배사 · 덕담 -->
+<div class="wn-scrim" id="cheersScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="crTitle">
+    <div class="wn-head">
+      <h2 class="wn-title" id="crTitle">오늘의 건배사 · 덕담</h2>
+    </div>
+    <p class="wn-sub" style="font-size:.8125rem">저녁 자리에서 큰 소리로 읽어 보세요. 건배사는 눌러서 바꾸고, 덕담은 이름을 누르면 나와요</p>
+    <div class="cr-body" id="crBody">
+      <div class="cr-card" id="crToast" aria-live="polite"></div>
+      <button class="wh-tab cr-next" id="crNext" type="button">🍻 다른 건배사</button>
+      <div class="cr-sep" role="separator"></div>
+      <div class="wh-chips" id="crChips" role="group" aria-label="덕담 받을 사람"></div>
+      <div class="cr-card cr-praise" id="crPraise" aria-live="polite"><p class="cr-hint">이름을 누르면 덕담 한 줄이 나와요</p></div>
+      <button class="wh-tab cr-next" id="crAgain" type="button" hidden>💌 다른 덕담</button>
+    </div>
+    <button class="wn-close" id="crCopy" type="button" style="margin-top:12px">📋 복사해서 단톡에 올리기</button>
+    <button class="wn-close" id="crClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+  </div>
+</div>
 <!-- 태국 먹킷리스트 -->
 <div class="wn-scrim" id="eatsScrim" hidden>
   <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="etTitle">
@@ -909,6 +928,6 @@
 <div class="ptr" id="ptr" aria-hidden="true"><span class="ptr-icon">🌴</span></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js?v=10.15"></script>
+<script src="app.js?v=10.16"></script>
 </body>
 </html>

@@ -13,7 +13,7 @@ store.collapsed = store.collapsed || {}; // { "<그룹 index>": true }
 store.myName = store.myName || null;    // 정산탭 "이 중에 나예요" 선택 — 내 항목 강조·상단 고정용
 store.hideDone = !!store.hideDone;
 function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
-const APP_VER = 'v10.15';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
+const APP_VER = 'v10.16';   // 푸터 + "이번 업데이트" 시트가 이 값을 씀 (배포마다 갱신)
 
 /* ── 햅틱 피드백 (Android 지원 · iOS 미지원 · reduced-motion 시 비활성) ── */
 const HAPTIC_OK = ('vibrate' in navigator) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1744,6 +1744,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🍻','새 놀이 — 오늘의 건배사·덕담','놀이터의 "오늘의 건배사·덕담"에서 저녁 자리에서 큰 소리로 읽을 건배사 12개를 볼 수 있어요. 삼행시처럼 글자를 풀어 읽고, 마지막엔 태국어 "차이요! (건배)"나 "촉디! (행운을)"로 외쳐요. 이름을 누르면 오늘의 덕담 한 줄이 나오고, 단톡에 복사해서 올릴 수 있어요. 읽기만 하면 돼요.'],
     ['🚀','처음 열 때 더 가볍게','맛집 대동여지도와 태국어 듣기처럼 큰 기능은 따로 나눠 두고, 화면이 한가할 때나 눌렀을 때 불러와요. 첫 화면이 더 빨리 뜨고, 한 번 받으면 이후엔 바로 열려요. 기능은 그대로예요.'],
     ['⚡','더 빠르게 열려요','화면 구성(index.html)·디자인(style.css)·동작(app.js)을 세 파일로 나눠 처음 열 때 화면 뼈대가 먼저 보이고, 다시 열 때는 바뀐 파일만 새로 받아요. 할일 탭 "미완료만 보기" 스위치는 누르기 쉽게 키웠어요. 기능은 그대로예요.'],
     ['🧼','화면 바탕 정리','배경색을 옥빛이 도는 밝은 색으로 바꾸고, 글꼴과 색·모서리 값을 한곳에 모아 화면이 더 일관되게 보여요. 스타일은 별도 파일(style.css)로 분리해 첫 로딩 구조를 가볍게 했어요. 기능은 그대로예요.'],
@@ -2841,6 +2842,7 @@ const FOODS = [
   const call = n => () => { if(typeof window[n] === 'function') window[n](); };
   const TILES = [
     ['📖','태국 이야기 · 맛집 카드', () => '매일 바뀌는 오늘의 추천 · 이야기 51장 · 맛집·볼거리 슬라이드', '__openStory', true],
+    ['🍻','오늘의 건배사 · 덕담', () => '저녁 자리에서 읽어 주세요', '__openCheers'],
     ['🛂','여권 도장첩', () => '도장 모으기 · 공유 카드', '__openPass'],
     ['🎯','태국 빙고', () => { const b = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0}; return `${b.lines}줄 완성`; }, '__openBingo'],
     ['🧠','여행 퀴즈', () => { const q = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,n:5}; return q.best ? `최고 ${q.best}/${q.n}` : '우리 여행 5문제'; }, '__openTquiz'],
@@ -2960,6 +2962,104 @@ const FOODS = [
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.wh-chip, #fcCopy:not([hidden]), #fcClose')];
+    const cur = f.indexOf(document.activeElement), n = f.length;
+    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
+  });
+})();
+
+// ── 오늘의 건배사 · 덕담: 저녁 자리에서 읽기만 해도 되는 건배사 12개와 이름별 덕담 (하루 동안 같은 덕담, 버튼으로 바꾸기) ──
+(function(){
+  const scrim = $('cheersScrim'); if(!scrim) return;
+  const toastEl = $('crToast'), praiseEl = $('crPraise'), chipsEl = $('crChips'), nextBtn = $('crNext'), againBtn = $('crAgain'), copyBtn = $('crCopy'), closeBtn = $('crClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const people = FAMS.flatMap(f => f.rows.map(r => r.n));
+  const SHOUT = { cheers:['차이요!','ไชโย','건배'], luck:['촉디!','โชคดี','행운을 빌어요'], fun:['사눅!','สนุก','즐겁게'], tasty:['아로이!','อร่อย','맛있게'] };
+  const TOASTS = [
+    ['당·신·멋·져', [['당','당하게'],['신','나게'],['멋','지게'],['져','도 웃으며']], 'cheers'],
+    ['파·타·야', [['파','이팅 넘치게'],['타','오르는 노을 아래서'],['야','무지게 건강하게']], 'luck'],
+    ['버·디·샷', [['버','리자, 걱정은'],['디','밀자, 웃음을'],['샷','은 한 잔씩만']], 'cheers'],
+    ['방·콕', [['방','방곡곡 못 가도'],['콕','찍은 맛집은 다 간다']], 'tasty'],
+    ['이·맛·에', [['이','순간을'],['맛','있게'],['에','너지 가득 채우며']], 'tasty'],
+    ['스·코·어', [['스','트레스는'],['코','끼리가 물고 가고'],['어','디서나 웃자']], 'fun'],
+    ['가·족', [['가','슴 따뜻하게'],['족','하다, 이만하면']], 'luck'],
+    ['건·행·웃', [['건','강은 지키고'],['행','복은 나누고'],['웃','음은 더 크게']], 'cheers'],
+    ['마이 뻰 라이', [['','오늘 스코어도 마이 뻰 라이 (괜찮아요)'],['','내일 또 치면 되니까']], 'fun'],
+    ['사·와·디', [['사','이좋게'],['와','글와글'],['디','저트까지 맛있게']], 'tasty'],
+    ['한 홀 한 홀', [['','한 홀 한 홀 즐겁게'],['','한 잔 한 잔 가볍게'],['','한 해 마무리까지 건강하게']], 'cheers'],
+    ['그린처럼', [['','그린처럼 잔잔하게'],['','바다처럼 넓게'],['','노을처럼 따뜻하게']], 'luck'],
+  ];
+  const PRAISE = [
+    '{n}님이 웃으면 오늘 일정은 절반쯤 성공이에요',
+    '{n}님, 물 한 잔 챙겨 마시면 오늘의 MVP예요',
+    '{n}님 덕분에 이번 여행이 훨씬 든든해요',
+    '오늘 제일 맛있게 드실 분은 {n}님 차례예요',
+    '{n}님과 함께라서 여행이 더 즐거워요',
+    '{n}님이 계셔서 사진이 훨씬 잘 나와요',
+    '{n}님의 한마디가 오늘 분위기를 살려요',
+    '{n}님의 걸음마다 태국이 반가워해요',
+    '{n}님, 더위엔 천천히, 웃음은 빠르게!',
+    '{n}님의 미소가 오늘 가장 멋진 풍경이에요',
+    ['{n}님의 오늘 티샷, 캐디님도 박수 칠 준비 중이에요', true],
+    ['{n}님의 퍼팅은 오늘 컵이 마중 나올 거예요', true],
+  ];
+  const hash = str => { let h = 2166136261; for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const bkkKey = () => { const t = new Date(Date.now() + 7*36e5); return `${t.getUTCFullYear()}-${t.getUTCMonth()+1}-${t.getUTCDate()}`; };
+  let ti = hash('toast|' + bkkKey()) % TOASTS.length, who = null, bump = 0, lastText = '';
+  const toastText = () => { const [call, lines, k] = TOASTS[ti], s = SHOUT[k]; return `🍻 ${call}\n` + lines.map(l => `${l[0] ? l[0] + ' ' : ''}${l[1]}`.trim()).join('\n') + `\n다 같이 "${s[0]}" (${s[1]})`; };
+  function paintToast(){
+    const [call, lines, k] = TOASTS[ti], s = SHOUT[k];
+    toastEl.style.animation = 'none'; void toastEl.offsetHeight; toastEl.style.animation = '';
+    toastEl.innerHTML = `<p class="cr-call">${esc(call)}</p><ul class="cr-lines">${lines.map(l => `<li>${l[0] ? `<b>${esc(l[0])}</b>` : ''}${esc(l[1])}</li>`).join('')}</ul>` +
+      `<p class="cr-shout">다 같이 “${esc(s[0])}”<small>${esc(s[1])} · ${esc(s[2])}</small></p>`;
+    lastText = toastText();
+  }
+  function praiseFor(n){
+    const golfer = GOLFERS.includes(n);
+    const pool = PRAISE.filter(p => !Array.isArray(p) || golfer).map(p => Array.isArray(p) ? p[0] : p);
+    return pool[(hash(n + '|' + bkkKey()) + bump) % pool.length].replace(/\{n\}/g, n);
+  }
+  function paintPraise(){
+    if(!who) return;
+    const t = praiseFor(who);
+    praiseEl.style.animation = 'none'; void praiseEl.offsetHeight; praiseEl.style.animation = '';
+    praiseEl.innerHTML = `<p class="cr-line">${esc(t).replace(esc(who) + '님', `<em>${esc(who)}님</em>`)}</p>`;
+    againBtn.hidden = false; lastText = `💌 ${t}`;
+  }
+  chipsEl.innerHTML = people.map(n => `<button class="wh-chip" type="button" data-n="${esc(n)}" aria-pressed="false">${dot(n)}${esc(n)}</button>`).join('');
+  chipsEl.addEventListener('click', e => {
+    const b = e.target.closest('.wh-chip'); if(!b) return;
+    who = b.dataset.n; bump = 0; chipsEl.querySelectorAll('.wh-chip').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    haptic('ok'); paintPraise();
+  });
+  againBtn.addEventListener('click', () => { bump++; haptic('tap'); paintPraise(); });
+  nextBtn.addEventListener('click', () => { let n = ti; while(n === ti) n = (Math.random() * TOASTS.length) | 0; ti = n; haptic('tap'); paintToast(); });
+  copyBtn.addEventListener('click', async () => {
+    const o = copyBtn.textContent;
+    try{ await navigator.clipboard.writeText(lastText || toastText()); copyBtn.textContent = '✅ 복사했어요'; }catch(e){ copyBtn.textContent = '⚠️ 복사 실패'; }
+    haptic('ok'); setTimeout(() => { copyBtn.textContent = o; }, 1800);
+  });
+  window.__cheersInfo = () => ({ toasts: TOASTS.length, praises: PRAISE.length });
+  let prevFocus = null;
+  function open(){
+    prevFocus = document.activeElement; paintToast();
+    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on');
+    try{ nextBtn.focus({preventScroll:true}); }catch(e){}
+  }
+  function close(){
+    if(scrim.hidden) return;
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(()=>{ scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openCheers = open;
+  closeBtn.addEventListener('click', close);
+  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
+  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  scrim.addEventListener('keydown', e => {
+    if(e.key !== 'Tab') return;
+    const f = [...scrim.querySelectorAll('#crNext, .wh-chip, #crAgain:not([hidden]), #crCopy, #crClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
