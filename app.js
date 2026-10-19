@@ -1744,7 +1744,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
-    ['🍻','새 놀이 — 오늘의 건배사·덕담','놀이터의 "오늘의 건배사·덕담"에서 저녁 자리에서 큰 소리로 읽을 건배사 12개를 볼 수 있어요. 삼행시처럼 글자를 풀어 읽고, 마지막엔 태국어 "차이요! (건배)"나 "촉디! (행운을)"로 외쳐요. 이름을 누르면 오늘의 덕담 한 줄이 나오고, 단톡에 복사해서 올릴 수 있어요. 읽기만 하면 돼요.'],
+    ['📜','새 읽을거리 — 태국 역사·공부','놀이터의 "태국 역사·공부"에서 중학생도 이해할 수 있게 쉬운 말로 풀어 쓴 태국 이야기를 읽어 보세요. 수코타이에서 방콕 시대까지 역사 연표 14개, 왕궁·왓 포·왓 아룬·아유타야 같은 이번 여행지의 배경 이야기 6개, 불기 달력·한국과의 시차·왕실과 스님에 대한 예절 같은 알아두기 6개가 있어요. 우리나라 역사와 견주어 설명하고, 이번 일정과 이어지는 곳에는 "🧳 이번 여행" 표시가 붙어요.'],
     ['🚀','처음 열 때 더 가볍게','맛집 대동여지도와 태국어 듣기처럼 큰 기능은 따로 나눠 두고, 화면이 한가할 때나 눌렀을 때 불러와요. 첫 화면이 더 빨리 뜨고, 한 번 받으면 이후엔 바로 열려요. 기능은 그대로예요.'],
     ['⚡','더 빠르게 열려요','화면 구성(index.html)·디자인(style.css)·동작(app.js)을 세 파일로 나눠 처음 열 때 화면 뼈대가 먼저 보이고, 다시 열 때는 바뀐 파일만 새로 받아요. 할일 탭 "미완료만 보기" 스위치는 누르기 쉽게 키웠어요. 기능은 그대로예요.'],
     ['🧼','화면 바탕 정리','배경색을 옥빛이 도는 밝은 색으로 바꾸고, 글꼴과 색·모서리 값을 한곳에 모아 화면이 더 일관되게 보여요. 스타일은 별도 파일(style.css)로 분리해 첫 로딩 구조를 가볍게 했어요. 기능은 그대로예요.'],
@@ -2842,7 +2842,7 @@ const FOODS = [
   const call = n => () => { if(typeof window[n] === 'function') window[n](); };
   const TILES = [
     ['📖','태국 이야기 · 맛집 카드', () => '매일 바뀌는 오늘의 추천 · 이야기 51장 · 맛집·볼거리 슬라이드', '__openStory', true],
-    ['🍻','오늘의 건배사 · 덕담', () => '저녁 자리에서 읽어 주세요', '__openCheers'],
+    ['📜','태국 역사 · 공부', () => '연표 · 여행지 이야기 · 알아두기', '__openHistory'],
     ['🛂','여권 도장첩', () => '도장 모으기 · 공유 카드', '__openPass'],
     ['🎯','태국 빙고', () => { const b = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0}; return `${b.lines}줄 완성`; }, '__openBingo'],
     ['🧠','여행 퀴즈', () => { const q = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,n:5}; return q.best ? `최고 ${q.best}/${q.n}` : '우리 여행 5문제'; }, '__openTquiz'],
@@ -2967,84 +2967,66 @@ const FOODS = [
   });
 })();
 
-// ── 오늘의 건배사 · 덕담: 저녁 자리에서 읽기만 해도 되는 건배사 12개와 이름별 덕담 (하루 동안 같은 덕담, 버튼으로 바꾸기) ──
+// ── 태국 역사·공부: 연표 · 여행지 이야기 · 알아두기 (읽기만 하는 큰 글씨 목록) ──
 (function(){
-  const scrim = $('cheersScrim'); if(!scrim) return;
-  const toastEl = $('crToast'), praiseEl = $('crPraise'), chipsEl = $('crChips'), nextBtn = $('crNext'), againBtn = $('crAgain'), copyBtn = $('crCopy'), closeBtn = $('crClose');
+  const scrim = $('historyScrim'); if(!scrim) return;
+  const tabsEl = $('hsTabs'), body = $('hsBody'), closeBtn = $('hsClose');
   const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const people = FAMS.flatMap(f => f.rows.map(r => r.n));
-  const SHOUT = { cheers:['차이요!','ไชโย','건배'], luck:['촉디!','โชคดี','행운을 빌어요'], fun:['사눅!','สนุก','즐겁게'], tasty:['아로이!','อร่อย','맛있게'] };
-  const TOASTS = [
-    ['당·신·멋·져', [['당','당하게'],['신','나게'],['멋','지게'],['져','도 웃으며']], 'cheers'],
-    ['파·타·야', [['파','이팅 넘치게'],['타','오르는 노을 아래서'],['야','무지게 건강하게']], 'luck'],
-    ['버·디·샷', [['버','리자, 걱정은'],['디','밀자, 웃음을'],['샷','은 한 잔씩만']], 'cheers'],
-    ['방·콕', [['방','방곡곡 못 가도'],['콕','찍은 맛집은 다 간다']], 'tasty'],
-    ['이·맛·에', [['이','순간을'],['맛','있게'],['에','너지 가득 채우며']], 'tasty'],
-    ['스·코·어', [['스','트레스는'],['코','끼리가 물고 가고'],['어','디서나 웃자']], 'fun'],
-    ['가·족', [['가','슴 따뜻하게'],['족','하다, 이만하면']], 'luck'],
-    ['건·행·웃', [['건','강은 지키고'],['행','복은 나누고'],['웃','음은 더 크게']], 'cheers'],
-    ['마이 뻰 라이', [['','오늘 스코어도 마이 뻰 라이 (괜찮아요)'],['','내일 또 치면 되니까']], 'fun'],
-    ['사·와·디', [['사','이좋게'],['와','글와글'],['디','저트까지 맛있게']], 'tasty'],
-    ['한 홀 한 홀', [['','한 홀 한 홀 즐겁게'],['','한 잔 한 잔 가볍게'],['','한 해 마무리까지 건강하게']], 'cheers'],
-    ['그린처럼', [['','그린처럼 잔잔하게'],['','바다처럼 넓게'],['','노을처럼 따뜻하게']], 'luck'],
+  // [때, 제목, 설명, 이번 여행과 연결] — 중학생도 읽을 수 있게 쉬운 말로
+  const TIMELINE = [
+    ['1238년경','수코타이 왕국','태국 사람들이 "우리 역사의 첫 나라"로 꼽는 왕국이에요. 이름은 "행복의 새벽"이라는 뜻이래요. 이때 우리나라는 고려 시대였어요.'],
+    ['1283년경','태국 글자가 생겼어요','람캄행 대왕이 옛 크메르 글자를 바탕으로 태국 글자를 만들었다고 전해져요. 세종대왕이 한글을 만든 것과 비슷한 이야기예요. 다만 정확한 때는 학자마다 달라요.'],
+    ['1351년','아유타야 왕국','수코타이 다음으로 크게 일어난 왕국이에요. 약 400년 동안 이어졌고, 강과 바다를 이용한 무역으로 부자 나라가 됐어요. 우리나라로 치면 고려 말에 시작해 조선 시대 대부분 이어진 셈이에요.','12/31 골프 치러 가는 로열 방파인 골프클럽이 아유타야와 같은 지역이에요. 옛 왕들이 쉬러 오던 방파인 궁전도 근처에 있어요.'],
+    ['1767년','아유타야가 무너졌어요','이웃 나라 미얀마(그때 이름은 버마)가 쳐들어와서 수도 아유타야가 무너졌어요. 400년 된 도시가 폐허가 됐어요.'],
+    ['1768년','톤부리 시대','탁신이라는 장군이 버마군을 몰아내고 왕이 됐어요. 새 수도는 톤부리였어요. 나라가 무너질 뻔한 뒤에 다시 일으켜 세운 시기예요. 톤부리는 방콕의 강 서쪽 동네예요.','왓 아룬이 이때 왕궁 옆 절이었어요.'],
+    ['1782년','방콕 시대의 시작','라마 1세가 새 왕조(짜끄리 왕조)를 열고, 수도를 강 동쪽의 방콕으로 옮겼어요. 이 왕조는 지금까지 이어져요. 지금의 왕은 이 왕조의 10번째 왕이에요. 이때 우리나라는 조선의 정조 때였어요.','12/28 "방콕 대표 사원" 일정에서 왕궁과 왓 포를 가요. 둘 다 이 시기에 세워지거나 크게 고쳐졌어요.'],
+    ['1855년','보링 조약','영국과 무역 약속(조약)을 맺고 외국 상인들에게 문을 열었어요. 서양의 물건과 기술이 들어오는 계기가 됐어요. 우리나라가 문을 연 강화도 조약(1876년)보다 20년쯤 앞서요.'],
+    ['1868~1910년','라마 5세 (출라롱꼰 대왕)','학교와 철도, 우체국을 만들며 나라를 새롭게 바꿨어요. 이런 것을 "근대화"라고 해요. 1905년에는 노예 제도도 없앴어요. 그때 주변 나라들은 대부분 영국과 프랑스의 식민지가 됐는데, 태국은 독립을 지켰어요. 그래서 지금도 많은 사랑을 받아요.'],
+    ['1932년','입헌혁명','혁명이 일어나 왕 혼자 모든 걸 정하던 시대가 끝났어요. 지금은 왕이 있어도 헌법(나라의 기본 법)에 따라 나라를 운영해요. 이런 나라를 "입헌군주제"라고 해요. 영국과 일본도 비슷해요.'],
+    ['1939년','나라 이름이 바뀌었어요','나라 이름을 "시암"에서 "타이(Thailand)"로 바꿨어요. "타이"는 "자유"라는 뜻으로 풀이되기도 해요. 우리가 쓰는 "태국"은 "타이"를 한자(泰國)로 옮긴 이름이에요.'],
+    ['1946년','푸미폰 국왕 (라마 9세)','푸미폰 왕은 2016년까지 70년 동안 왕 자리에 있었어요. 세계에서 가장 오래 왕위에 있었던 왕 가운데 한 명으로 꼽혀요. 지금도 태국 곳곳에서 그분 사진을 볼 수 있어요.'],
+    ['1950년대','한국과의 인연','6·25 한국전쟁 때 태국은 군대를 보내 우리나라를 도왔어요. 1958년에는 한국과 정식으로 외교 관계를 맺었어요. 두 나라는 오래된 친구예요.'],
+    ['1960년대','파타야가 커졌어요','파타야는 원래 조용한 바닷가 마을이었어요. 베트남 전쟁 때 미군이 쉬러 오면서 호텔과 가게가 생겼고, 큰 관광 도시가 됐어요.','12/16~26에 머무는 파타야가 바로 이곳이에요.'],
+    ['2019년','지금의 왕','지금의 왕 와치랄롱꼰(라마 10세)은 2016년에 왕이 됐고, 2019년 5월에 공식 즉위식을 열었어요.'],
   ];
-  const PRAISE = [
-    '{n}님이 웃으면 오늘 일정은 절반쯤 성공이에요',
-    '{n}님, 물 한 잔 챙겨 마시면 오늘의 MVP예요',
-    '{n}님 덕분에 이번 여행이 훨씬 든든해요',
-    '오늘 제일 맛있게 드실 분은 {n}님 차례예요',
-    '{n}님과 함께라서 여행이 더 즐거워요',
-    '{n}님이 계셔서 사진이 훨씬 잘 나와요',
-    '{n}님의 한마디가 오늘 분위기를 살려요',
-    '{n}님의 걸음마다 태국이 반가워해요',
-    '{n}님, 더위엔 천천히, 웃음은 빠르게!',
-    '{n}님의 미소가 오늘 가장 멋진 풍경이에요',
-    ['{n}님의 오늘 티샷, 캐디님도 박수 칠 준비 중이에요', true],
-    ['{n}님의 퍼팅은 오늘 컵이 마중 나올 거예요', true],
+  // [장소, 설명, 알아두면 좋은 점]
+  const SIGHTS = [
+    ['왕궁','1782년 방콕을 수도로 정할 때 짓기 시작한 궁전이에요. 옛날에는 왕이 살면서 나랏일을 하던 곳이었고, 지금은 나라의 큰 행사를 하는 곳으로 알려져 있어요. 안에 있는 "에메랄드 불상" 사원(왓 프라깨우)도 유명해요.','어깨와 무릎을 가리는 옷을 입어야 해요.'],
+    ['왓 포','방콕에서 가장 오래된 큰 절 가운데 하나예요. 길이 약 46m나 되는 누워 있는 부처님(와불)이 유명해요. 태국 전통 마사지를 가르치던 곳으로도 알려져서, 지금도 마사지를 받을 수 있어요.','와불은 꼭 보고 오세요. 발바닥 그림도 멋져요.'],
+    ['왓 아룬','"새벽의 절"이라는 뜻이에요. 탁신 왕 때 왕궁 옆 절이었고, 강가에 높이 솟은 탑이 상징이에요. 해 질 무렵 탑 모습이 예뻐서 사진 명소로 유명해요.','왓 포에서 나룻배를 타고 강을 건너 갈 수 있어요.'],
+    ['아유타야와 방파인 궁전','아유타야는 400년 동안 수도였던 옛 도시예요. 지금은 무너진 절터와 불상이 남아 있고, 1991년 유네스코 세계유산이 됐어요. 방파인 궁전은 옛 왕들이 쉬러 오던 별장 같은 궁전이에요.','로열 방파인 골프클럽이 같은 지역에 있어요.'],
+    ['에라완 사당','1956년 이 자리에 호텔을 지을 때 사고가 자꾸 나자, 나쁜 일을 막으려고 사당을 세웠다고 알려져 있어요. 힌두교의 신 브라흐마(태국 말로 "프라 프롬")를 모셔요.','지금도 소원을 빌러 오는 사람이 많아요.'],
+    ['룸피니 공원','1925년에 만든 방콕 최초의 공원으로 알려져 있어요. 이름은 부처님이 태어난 곳인 "룸비니"에서 따왔어요.','아침저녁으로 운동하는 현지 사람이 많아요.'],
   ];
-  const hash = str => { let h = 2166136261; for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
-  const bkkKey = () => { const t = new Date(Date.now() + 7*36e5); return `${t.getUTCFullYear()}-${t.getUTCMonth()+1}-${t.getUTCDate()}`; };
-  let ti = hash('toast|' + bkkKey()) % TOASTS.length, who = null, bump = 0, lastText = '';
-  const toastText = () => { const [call, lines, k] = TOASTS[ti], s = SHOUT[k]; return `🍻 ${call}\n` + lines.map(l => `${l[0] ? l[0] + ' ' : ''}${l[1]}`.trim()).join('\n') + `\n다 같이 "${s[0]}" (${s[1]})`; };
-  function paintToast(){
-    const [call, lines, k] = TOASTS[ti], s = SHOUT[k];
-    toastEl.style.animation = 'none'; void toastEl.offsetHeight; toastEl.style.animation = '';
-    toastEl.innerHTML = `<p class="cr-call">${esc(call)}</p><ul class="cr-lines">${lines.map(l => `<li>${l[0] ? `<b>${esc(l[0])}</b>` : ''}${esc(l[1])}</li>`).join('')}</ul>` +
-      `<p class="cr-shout">다 같이 “${esc(s[0])}”<small>${esc(s[1])} · ${esc(s[2])}</small></p>`;
-    lastText = toastText();
+  const BASICS = [
+    ['불기(佛紀) 달력','태국은 부처님이 돌아가신 해를 기준으로 연도를 세요. 이것을 "불기"라고 해요. 서기 연도에 543을 더하면 돼요. 2026년은 불기 2569년이고, 1월 1일부터 시작되는 2027년은 2570년이에요.','영수증이나 간판에 2569가 보이면 올해예요.'],
+    ['한국과 2시간 차이','태국은 한국보다 2시간 느려요. 한국이 낮 12시면 태국은 오전 10시예요. 서머타임도 없어요.'],
+    ['세 가지 색 국기','태국 국기는 빨강, 흰색, 파랑 세 가지 색이에요. 빨강은 나라, 흰색은 종교(불교), 파랑은 왕실을 뜻한다고 설명해요.'],
+    ['방콕의 진짜 이름','태국 사람들은 방콕을 "끄룽텝"이라고 불러요. "천사의 도시"라는 뜻이에요. 정식 이름은 글자가 160개가 넘는 아주 긴 이름이라서, 세계에서 가장 긴 수도 이름으로 알려져 있어요.'],
+    ['왕실에 대한 예절','태국 사람들은 왕과 왕실을 매우 존경해요. 왕의 사진을 밟거나 찢거나 놀리는 말을 하면 안 돼요. 왕실을 모욕하면 법으로 크게 처벌받아요. 돈에도 왕의 얼굴이 있으니 동전이 굴러가도 발로 밟지 마세요.'],
+    ['스님을 만났을 때','태국은 대부분의 사람이 불교를 믿어요. 여성은 스님의 몸이나 옷에 닿지 않아야 하고, 물건은 직접 건네지 않고 다른 사람이나 천을 통해 드려요. 절에서는 모자를 벗고 조용히 해요.'],
+  ];
+  const TABS = [['time','📜 역사 연표'],['sight','🛕 여행지 이야기'],['basic','📘 알아두기']];
+  let mode = 'time';
+  const item = (top, t, b, extra, label) => `<li class="hs-item">${top ? `<p class="hs-year">${esc(top)}</p>` : ''}<h3 class="hs-t">${esc(t)}</h3><p class="hs-b">${esc(b)}</p>${extra ? `<p class="hs-trip"><b>${label}</b> ${esc(extra)}</p>` : ''}</li>`;
+  function paint(){
+    tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === mode)));
+    let rows = '';
+    if(mode === 'time') rows = TIMELINE.map(r => item(r[0], r[1], r[2], r[3], '🧳 이번 여행')).join('');
+    else if(mode === 'sight') rows = SIGHTS.map(r => item('', r[0], r[1], r[2], '💡')).join('');
+    else rows = BASICS.map(r => item('', r[0], r[1], r[2], '💡')).join('');
+    body.innerHTML = `<ol class="hs-list">${rows}</ol><p class="hs-src">널리 알려진 내용을 쉽게 풀어 쓴 거예요. 연도와 설명은 책마다 조금 다를 수 있어요.</p>`;
+    body.scrollTop = 0;
   }
-  function praiseFor(n){
-    const golfer = GOLFERS.includes(n);
-    const pool = PRAISE.filter(p => !Array.isArray(p) || golfer).map(p => Array.isArray(p) ? p[0] : p);
-    return pool[(hash(n + '|' + bkkKey()) + bump) % pool.length].replace(/\{n\}/g, n);
-  }
-  function paintPraise(){
-    if(!who) return;
-    const t = praiseFor(who);
-    praiseEl.style.animation = 'none'; void praiseEl.offsetHeight; praiseEl.style.animation = '';
-    praiseEl.innerHTML = `<p class="cr-line">${esc(t).replace(esc(who) + '님', `<em>${esc(who)}님</em>`)}</p>`;
-    againBtn.hidden = false; lastText = `💌 ${t}`;
-  }
-  chipsEl.innerHTML = people.map(n => `<button class="wh-chip" type="button" data-n="${esc(n)}" aria-pressed="false">${dot(n)}${esc(n)}</button>`).join('');
-  chipsEl.addEventListener('click', e => {
-    const b = e.target.closest('.wh-chip'); if(!b) return;
-    who = b.dataset.n; bump = 0; chipsEl.querySelectorAll('.wh-chip').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-    haptic('ok'); paintPraise();
-  });
-  againBtn.addEventListener('click', () => { bump++; haptic('tap'); paintPraise(); });
-  nextBtn.addEventListener('click', () => { let n = ti; while(n === ti) n = (Math.random() * TOASTS.length) | 0; ti = n; haptic('tap'); paintToast(); });
-  copyBtn.addEventListener('click', async () => {
-    const o = copyBtn.textContent;
-    try{ await navigator.clipboard.writeText(lastText || toastText()); copyBtn.textContent = '✅ 복사했어요'; }catch(e){ copyBtn.textContent = '⚠️ 복사 실패'; }
-    haptic('ok'); setTimeout(() => { copyBtn.textContent = o; }, 1800);
-  });
-  window.__cheersInfo = () => ({ toasts: TOASTS.length, praises: PRAISE.length });
+  tabsEl.innerHTML = TABS.map(([id, l]) => `<button class="wh-tab" role="tab" type="button" data-id="${id}" aria-selected="${id === mode}">${l}</button>`).join('');
+  tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(!b) return; mode = b.dataset.id; haptic('tap'); paint(); });
+  window.__historyInfo = () => ({ time: TIMELINE.length, sights: SIGHTS.length, basics: BASICS.length });
   let prevFocus = null;
   function open(){
-    prevFocus = document.activeElement; paintToast();
+    prevFocus = document.activeElement; paint();
     scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
     void scrim.offsetHeight; scrim.classList.add('on');
-    try{ nextBtn.focus({preventScroll:true}); }catch(e){}
+    try{ tabsEl.querySelector('[aria-selected="true"]').focus({preventScroll:true}); }catch(e){}
   }
   function close(){
     if(scrim.hidden) return;
@@ -3053,13 +3035,13 @@ const FOODS = [
     try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
     haptic('tap');
   }
-  window.__openCheers = open;
+  window.__openHistory = open;
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
   addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('#crNext, .wh-chip, #crAgain:not([hidden]), #crCopy, #crClose')];
+    const f = [...scrim.querySelectorAll('.wh-tab, #hsBody, #hsClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });

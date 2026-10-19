@@ -616,23 +616,16 @@
   </div>
 </div>
 
-<!-- 오늘의 건배사 · 덕담 -->
-<div class="wn-scrim" id="cheersScrim" hidden>
-  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="crTitle">
+<!-- 태국 역사·공부 -->
+<div class="wn-scrim" id="historyScrim" hidden>
+  <div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="hsTitle">
     <div class="wn-head">
-      <h2 class="wn-title" id="crTitle">오늘의 건배사 · 덕담</h2>
+      <h2 class="wn-title" id="hsTitle">태국 역사 · 공부</h2>
     </div>
-    <p class="wn-sub" style="font-size:.8125rem">저녁 자리에서 큰 소리로 읽어 보세요. 건배사는 눌러서 바꾸고, 덕담은 이름을 누르면 나와요</p>
-    <div class="cr-body" id="crBody">
-      <div class="cr-card" id="crToast" aria-live="polite"></div>
-      <button class="wh-tab cr-next" id="crNext" type="button">🍻 다른 건배사</button>
-      <div class="cr-sep" role="separator"></div>
-      <div class="wh-chips" id="crChips" role="group" aria-label="덕담 받을 사람"></div>
-      <div class="cr-card cr-praise" id="crPraise" aria-live="polite"><p class="cr-hint">이름을 누르면 덕담 한 줄이 나와요</p></div>
-      <button class="wh-tab cr-next" id="crAgain" type="button" hidden>💌 다른 덕담</button>
-    </div>
-    <button class="wn-close" id="crCopy" type="button" style="margin-top:12px">📋 복사해서 단톡에 올리기</button>
-    <button class="wn-close" id="crClose" type="button" style="margin-top:9px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
+    <p class="wn-sub" style="font-size:.8125rem">중학생도 이해할 수 있게 쉽게 썼어요. 가기 전에 읽어 두면 여행지가 달리 보여요. 위아래로 밀어서 읽으세요</p>
+    <div class="wh-tabs hs-tabs" role="tablist" aria-label="읽을거리" id="hsTabs"></div>
+    <div class="hs-body" id="hsBody" tabindex="0" role="region" aria-label="읽을거리 내용"></div>
+    <button class="wn-close" id="hsClose" type="button" style="margin-top:12px;background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none">닫기</button>
   </div>
 </div>
 <!-- 태국 먹킷리스트 -->
