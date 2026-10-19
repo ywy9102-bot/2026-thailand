@@ -2007,3 +2007,5 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .hs-trip{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--jade-s);font-size:1rem;line-height:1.55;color:var(--jade-d);word-break:keep-all}
 .hs-trip b{font-weight:700}
 .hs-src{margin:14px 2px 2px;font-size:13px;line-height:1.55;color:var(--ink3);word-break:keep-all}
+.hs-kr{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--gold-s);font-size:1rem;line-height:1.55;color:var(--ink);word-break:keep-all}
+.hs-kr b{display:block;margin-bottom:2px;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
