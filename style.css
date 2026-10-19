@@ -1994,3 +1994,18 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .ci{cursor:default}
   body{padding-bottom:0}
 }
+
+/* ── 태국 역사 · 공부 ── */
+.hs-tabs{grid-template-columns:repeat(3,1fr)}
+.hs-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 6px}
+.hs-list{list-style:none;margin:0;padding:0}
+.hs-item{padding:16px 2px;border-bottom:1px solid var(--line)}
+.hs-item:last-child{border-bottom:0}
+.hs-year{margin:0 0 4px;font-family:'Source Serif 4',serif;font-size:1.0625rem;font-weight:700;color:var(--gold-text);letter-spacing:.02em}
+.hs-t{margin:0 0 6px;font-size:1.1875rem;font-weight:700;line-height:1.35;color:var(--jade-d);word-break:keep-all}
+.hs-b{margin:0;font-size:1.0625rem;line-height:1.65;color:var(--ink);word-break:keep-all}
+.hs-trip{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--jade-s);font-size:1rem;line-height:1.55;color:var(--jade-d);word-break:keep-all}
+.hs-trip b{font-weight:700}
+.hs-src{margin:14px 2px 2px;font-size:13px;line-height:1.55;color:var(--ink3);word-break:keep-all}
+.hs-kr{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--gold-s);font-size:1rem;line-height:1.55;color:var(--ink);word-break:keep-all}
+.hs-kr b{display:block;margin-bottom:2px;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
