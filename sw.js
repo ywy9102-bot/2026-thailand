@@ -5,7 +5,7 @@
 const V = new URL(self.location.href).searchParams.get('v') || '0';
 const PREFIX = 'thai2026-';
 const CACHE = PREFIX + V;
-const CORE = ['./', 'index.html', 'style.css?v=' + V, 'app.js?v=' + V, 'play.js?v=' + V, 'foodmap.js?v=' + V, 'thai.js?v=' + V, 'manifest.json', 'icon-180.png', 'icon-192.png'];
+const CORE = ['./', 'index.html', 'style.css?v=' + V, 'app.js?v=' + V, 'play.js?v=' + V, 'story.js?v=' + V, 'foodmap.js?v=' + V, 'thai.js?v=' + V, 'manifest.json', 'icon-180.png', 'icon-192.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.all(CORE.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => {})))).then(() => self.skipWaiting()));
