@@ -170,10 +170,11 @@
     pane.innerHTML = `<div class="tq-res"><div class="tq-score">${score}<small>/${qs.length}</small></div><p class="tq-msg">${msg}</p><p class="tq-rec">최고 기록 ${r.best}/${qs.length} · 도전 ${r.plays}회</p><button class="wn-close th-again" type="button">🔁 다시 도전</button></div>`;
   }
   function setMode(m){
-    mode = m; tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === m)));
+    mode = m; tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === m))); syncTabs();
     if(m === 'list') renderList(); else if(m === 'nums') renderNums(); else if(m === 'beer') renderBeer(); else { build('phrase'); renderQ(); }
   }
   tabsEl.innerHTML = '<button class="wh-tab" role="tab" type="button" data-id="list" aria-selected="true">📖 한마디</button><button class="wh-tab" role="tab" type="button" data-id="quiz" aria-selected="false">🎧 퀴즈</button><button class="wh-tab" role="tab" type="button" data-id="nums" aria-selected="false">🔢 숫자</button><button class="wh-tab" role="tab" type="button" data-id="beer" aria-selected="false">🍺 맥주</button>';
+  const syncTabs = wireTabs(tabsEl, pane); pane.setAttribute('role', 'tabpanel'); syncTabs();
   tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(b){ haptic('tap'); setMode(b.dataset.id); } });
   pane.addEventListener('click', e => {
     const pl = e.target.closest('[data-say]');
@@ -213,7 +214,7 @@
   addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.wh-tab, .th-play, .th-num, summary, #thNumQuiz, #thBeerQuiz, #thListen, .tq-opt:not(:disabled), .th-again, #thNext:not([hidden]), #thClose')];
+    const f = [...scrim.querySelectorAll('.wh-tab, .th-play, .th-num, summary, #thNumQuiz, #thBeerQuiz, #thListen, .tq-opt:not(:disabled), .th-again, #thNext:not([hidden]), #thClose')].filter(x => x.tabIndex >= 0);
     const cur2 = f.indexOf(document.activeElement), n = f.length;
     if(cur2 === -1 || (!e.shiftKey && cur2 === n-1) || (e.shiftKey && cur2 === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
