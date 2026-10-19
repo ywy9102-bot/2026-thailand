@@ -5,7 +5,28 @@
 ## 웹 대시보드
 
 **https://ywy9102-bot.github.io/2026-thailand/** — 카운트다운·현지 날씨·골프·숙소·정산·할 일을 한눈에.
-소스는 [`index.html`](index.html) 단일 파일 (HTML+CSS+JS 인라인).
+소스는 빌드 없이 그대로 배포하는 정적 파일이에요.
+
+| 파일 | 역할 |
+|---|---|
+| [`index.html`](index.html) | 화면 뼈대 + 첫 화면용 스타일(`<style id="critical">`, 자동 생성) |
+| [`style.css`](style.css) | 전체 스타일 (색·간격 토큰은 `:root`, 설명은 [`DESIGN.md`](DESIGN.md)) |
+| [`app.js`](app.js) | 앱 본체 (일정·정산·골프·홈 위젯) |
+| `play.js` `story.js` `foodmap.js` `thai.js` | 놀이터·읽어보는 카드·맛집지도·태국어. 눌렀을 때(또는 한가할 때) 불러와요 |
+| [`sw.js`](sw.js) | 서비스 워커 — 한 번 연 뒤에는 인터넷이 없어도 열려요 |
+| [`PRODUCT.md`](PRODUCT.md) · [`DESIGN.md`](DESIGN.md) | 제품 맥락·디자인 규칙 |
+
+### 개발 · 배포 전 점검
+
+```bash
+npm install && npx playwright install chromium   # 처음 한 번
+npm run check      # 버전·조각 파일·서비스 워커 목록·문법·첫 화면 스타일 최신 여부
+npm test           # 접근성(axe)·넘침·모든 시트·오프라인·키보드 탭 (약 1분)
+npm run critical   # style.css를 고쳤다면 첫 화면용 스타일을 다시 만들어요
+```
+
+- 배포할 때마다 `index.html`의 `style.css?v=`·`app.js?v=`(여러 곳)를 **같은 버전**으로 올려요. 앱 버전과 서비스 워커 버전은 여기서 자동으로 따라와요.
+- PR을 올리면 GitHub Actions가 `check`(빠른 점검)와 `test`(화면 시험)를 돌려요.
 
 ## 최신 문서
 
