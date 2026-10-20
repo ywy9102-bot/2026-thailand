@@ -497,11 +497,88 @@
     ['머리와 발 (여행 안내서 기준)','태국에서는 머리를 가장 높고 신성한 부분으로, 발을 가장 낮은 부분으로 여겨요. 아이 머리라도 장난으로 쓰다듬지 마세요. 돈에는 왕의 얼굴이 있으니 발로 밟지 마세요.'],
     ['국가가 나올 때 (여행 안내서 기준)','공원이나 역 같은 공공장소에서 오전 8시와 오후 6시에 국가가 흘러나오면, 걸음을 멈추고 서 있는 것이 예의라고 안내해요.'],
   ];
-  const TABS = [['time','📜 역사 연표'],['sight','🛕 여행지 이야기'],['basic','📘 알아두기']];
+  const TABS = [['time','📜 연표'],['sight','🛕 여행지'],['basic','📘 알아두기'],['quiz','🎮 퀴즈']];
   let mode = 'time';
+
+  // ── 역사 퀴즈: 위 연표·여행지·알아두기에 적힌 내용에서만 문제를 내요 (새 사실을 더하지 않아요) ──
+  // [문제, 정답, [오답 3개], 풀이]
+  const QUIZ = [
+    ['방콕에서 강 건너 서쪽 동네 "톤부리"에서 왕이 된 사람은 누구일까요?','탁신 왕',['라마 1세','나레수안 대왕','람캄행 대왕'],'탁신 장군이 버마군을 몰아내고 1767년 12월 28일 톤부리에서 왕이 됐어요.'],
+    ['방콕이 태국의 수도가 된 해는 언제일까요?','1782년',['1767년','1893년','1932년'],'라마 1세가 1782년 짜끄리 왕조를 열고 수도를 방콕으로 옮겼어요.'],
+    ['아유타야는 약 몇 년 동안 수도였을까요?','약 400년',['약 40년','약 100년','약 1,000년'],'1351년부터 1767년까지 약 400년 이어졌어요.'],
+    ['"왓 아룬"은 무슨 뜻일까요?','새벽의 절',['황금의 절','코끼리의 절','바다의 절'],'"새벽의 절"이라는 뜻이에요. 해 질 무렵에도 예뻐요.'],
+    ['왓 포에 있는 누워 있는 부처님(와불)은 길이가 얼마쯤일까요?','약 46m',['약 4.6m','약 14m','약 146m'],'길이 약 46m, 높이 약 15m예요.'],
+    ['서기 2026년은 태국 달력(불기)으로 몇 년일까요?','2569년',['2026년','2483년','2543년'],'서기 연도에 543을 더하면 돼요. 2026 + 543 = 2569.'],
+    ['한국이 낮 12시일 때 태국은 몇 시일까요?','오전 10시',['오전 9시','오후 1시','오후 2시'],'태국은 한국보다 2시간 느려요. 서머타임도 없어요.'],
+    ['방콕을 태국 사람들은 "끄룽텝"이라고 불러요. 무슨 뜻일까요?','천사의 도시',['황금의 도시','물의 도시','왕의 도시'],'"천사의 도시"라는 뜻이에요. 정식 이름은 영어 알파벳으로 168글자나 돼요.'],
+    ['1932년 태국에서 일어난 일은 무엇일까요?','피를 흘리지 않은 혁명으로 절대 왕정이 끝났어요',['버마가 아유타야를 무너뜨렸어요','프랑스 군함이 방콕에 왔어요','일본군이 들어왔어요'],'입헌혁명이에요. 헌법이 생기고 입헌군주제가 됐어요.'],
+    ['에라완 사당에 모신 신은 누구일까요?','브라흐마(프라 프롬)',['제우스','부처님','가네샤 신의 어머니'],'호텔을 지을 때 어려움이 생기자 나쁜 일을 막으려고 브라흐마를 모셨다고 전해져요.'],
+    ['방콕 룸피니 공원의 이름은 어디에서 따왔을까요?','부처님이 태어난 곳 "룸비니"',['라마 6세의 이름','방콕의 옛 이름','공원 근처 강 이름'],'1925년 라마 6세가 자기 땅을 내놓아 만든 방콕 최초의 공원이에요.'],
+    ['라마 5세(출라롱꼰 대왕)는 몇 살에 왕이 됐을까요?','15살',['5살','25살','40살'],'1853년에 태어나 1868년에 왕이 됐어요. 처음 5년은 섭정이 나랏일을 맡았어요.'],
+    ['푸미폰 국왕(라마 9세)은 왕 자리에 얼마나 있었을까요?','70년 넘게',['7년','약 20년','약 40년'],'1946년부터 2016년까지 70년 126일이에요. 그때 세계에서 가장 오래 왕위에 있던 왕이었어요.'],
+    ['지금의 삼색기가 정해지기 전, 태국 깃발에는 무엇이 그려져 있었을까요?','흰 코끼리',['사자','용','연꽃'],'1917년 라마 6세 때 삼색기로 바뀌었어요. 그전엔 빨간 바탕에 흰 코끼리였어요.'],
+    ['나라 이름을 "시암"에서 "타이"로 바꾼다고 발표한 해는 언제일까요?','1939년',['1782년','1917년','1997년'],'1939년 6월 24일 총리 피분이 발표했어요. 1949년에 다시 "타이"가 됐어요.'],
+    ['지금의 왕은 짜끄리 왕조의 몇 번째 왕일까요?','10번째',['1번째','5번째','9번째'],'2016년 와치랄롱꼰이 라마 10세가 됐어요.'],
+    ['왕궁의 "에메랄드 불상"은 어느 나라에서 가져왔을까요?','라오스',['캄보디아','미얀마','중국'],'1779년 라오스의 비엔티안에서 가져와 톤부리 왓 아룬에 모셨다가, 나중에 왕궁으로 옮겼어요.'],
+    ['한국전쟁 때 싸운 태국 군대의 별명은 무엇일까요?','꼬마 호랑이',['붉은 코끼리','하늘 독수리','검은 사자'],'포크찹 고지 같은 곳에서 싸워 "꼬마 호랑이(Little Tigers)"라는 별명을 얻었어요.'],
+    ['1997년 태국에서 시작해 한국 등 아시아로 번진 일은 무엇일까요?','바트 위기(외환위기)',['대홍수','독립 전쟁','철도 개통'],'1997년 7월 2일 바트 값이 크게 떨어졌고, 한국은 11월에 IMF에 구제금융을 신청했어요.'],
+    ['파타야는 원래 어떤 곳이었을까요?','작은 어촌',['왕이 사는 도시','큰 항구 도시','산속 마을'],'1959년쯤 미군 병사들이 휴가를 오면서 알려지고 점점 커졌어요.'],
+  ];
+  const LSQ = 'thai2026_hsquiz'; let qBest = 0; try{ qBest = +localStorage.getItem(LSQ) || 0; }catch(e){}
+  const QN = 6;
+  const shuffle = a => { a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const yearOf = r => { const m = /^(\d{4})/.exec(r[0]); return m ? +m[1] : 0; };
+  // 연표에서 "둘 중 먼저 일어난 일은?" 문제를 만들어요 (30년 넘게 벌어진 두 항목)
+  function orderQs(n){
+    const d = TIMELINE.filter(yearOf), out = [], used = new Set();
+    for(let t = 0; t < 200 && out.length < n; t++){
+      const a = d[Math.floor(Math.random() * d.length)], b = d[Math.floor(Math.random() * d.length)];
+      if(a === b || used.has(a) || used.has(b) || Math.abs(yearOf(a) - yearOf(b)) < 30) continue;
+      used.add(a); used.add(b);
+      const [e, l] = yearOf(a) < yearOf(b) ? [a, b] : [b, a];
+      out.push({ q: '둘 중 먼저 일어난 일은 무엇일까요?', opts: shuffle([e[1], l[1]]), a: e[1],
+        why: `"${e[1]}"(${e[0]})이 "${l[1]}"(${l[0]})보다 먼저예요.` });
+    }
+    return out;
+  }
+  const makeRound = () => shuffle(shuffle(QUIZ).slice(0, QN - 2).map(([q, a, w, why]) => ({ q, opts: shuffle([a, ...w]), a, why })).concat(orderQs(2)));
+  let qz = null;
+  const qMsg = s => s === QN ? '모두 맞혔어요! 태국 역사 박사예요' : s >= QN - 2 ? '대단해요! 거의 다 맞혔어요' : s >= 3 ? '좋아요! 연표를 읽고 다시 도전해 보세요' : '연표를 한 번 읽고 다시 도전해 봐요';
+  function paintQuiz(){
+    if(!qz){
+      body.innerHTML = `<div class="hq"><h3 class="hq-q">태국 역사 퀴즈</h3><p class="hs-b">연표와 여행지 이야기에서 ${QN}문제를 내요. 풀고 나면 왜 그런지 바로 알려 줘요.</p>${qBest ? `<p class="hq-best">내 최고 기록 ${qBest}/${QN}</p>` : ''}<button class="hq-go" type="button" data-act="start">시작하기</button></div>`;
+    } else if(qz.i >= qz.qs.length){
+      const nb = qz.score > qBest;
+      body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score} / ${QN} 맞혔어요</h3><p class="hs-b">${qMsg(qz.score)}</p><p class="hq-best">${nb ? '새 최고 기록이에요!' : `내 최고 기록 ${qBest}/${QN}`}</p><button class="hq-go" type="button" data-act="start">다시 하기</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
+    } else {
+      const c = qz.qs[qz.i], pk = qz.picked;
+      body.innerHTML = `<div class="hq"><p class="hq-prog">${qz.i + 1} / ${QN} · 맞힌 개수 ${qz.score}</p><h3 class="hq-q">${esc(c.q)}</h3><div class="hq-opts">${c.opts.map((o, k) =>
+        `<button class="hq-opt${pk == null ? '' : o === c.a ? ' ok' : k === pk ? ' no' : ''}" type="button" data-k="${k}"${pk == null ? '' : ' aria-disabled="true"'}>${pk != null && o === c.a ? '<b aria-hidden="true">✓ </b><span class="vh">정답: </span>' : pk === k ? '<b aria-hidden="true">✕ </b><span class="vh">틀림: </span>' : ''}${esc(o)}</button>`).join('')}</div>` +
+        `<div role="status">${pk == null ? '' : `<p class="hq-why"><b>${c.opts[pk] === c.a ? '정답이에요!' : '아쉬워요.'}</b> ${esc(c.why)}</p><button class="hq-go" type="button" data-act="next">${qz.i + 1 === QN ? '결과 보기' : '다음 문제'}</button>`}</div></div>`;
+      if(pk != null){ const g = body.querySelector('[data-act="next"]'); if(g) g.focus({preventScroll:false}); }
+    }
+    body.scrollTop = 0; syncTabs();
+  }
+  body.addEventListener('click', e => {
+    if(mode !== 'quiz') return;
+    const b = e.target.closest('button'); if(!b || !body.contains(b)) return;
+    if(b.dataset.act === 'start'){ qz = { qs: makeRound(), i: 0, score: 0, picked: null }; haptic('tap'); paintQuiz(); const f = body.querySelector('.hq-opt'); if(f) f.focus({preventScroll:true}); return; }
+    if(b.dataset.act === 'read'){ mode = 'time'; haptic('tap'); paint(); return; }
+    if(b.dataset.act === 'next'){
+      qz.i++; qz.picked = null; haptic('tap');
+      if(qz.i >= qz.qs.length && qz.score > qBest){ qBest = qz.score; try{ localStorage.setItem(LSQ, String(qBest)); }catch(err){} haptic('ok'); }
+      paintQuiz(); const f = body.querySelector('.hq-opt, .hq-go'); if(f) f.focus({preventScroll:true}); return;
+    }
+    if(b.dataset.k != null && qz && qz.picked == null){
+      const c = qz.qs[qz.i]; qz.picked = +b.dataset.k;
+      if(c.opts[qz.picked] === c.a){ qz.score++; haptic('ok'); } else haptic('tap');
+      paintQuiz();
+    }
+  });
   const item = (top, t, b, extra, label, kr) => `<li class="hs-item">${top ? `<p class="hs-year">${esc(top)}</p>` : ''}<h3 class="hs-t">${esc(t)}</h3><p class="hs-b">${esc(b)}</p>${kr ? `<p class="hs-kr"><b>🇰🇷 같은 때 우리나라</b> ${esc(kr)}</p>` : ''}${extra ? `<p class="hs-trip"><b>${label}</b> ${esc(extra)}</p>` : ''}</li>`;
   function paint(){
     tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === mode)));
+    if(mode === 'quiz'){ paintQuiz(); return; }
     let rows = '';
     if(mode === 'time') rows = TIMELINE.map(r => item(r[0], r[1], r[2], r[3], '🧳 이번 여행', r[4])).join('');
     else if(mode === 'sight') rows = SIGHTS.map(r => item('', r[0], r[1], r[2], '💡')).join('');
@@ -511,7 +588,7 @@
   }
   tabsEl.innerHTML = TABS.map(([id, l]) => `<button class="wh-tab" role="tab" type="button" data-id="${id}" aria-selected="${id === mode}">${l}</button>`).join('');
   tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(!b) return; mode = b.dataset.id; haptic('tap'); paint(); });
-  window.__historyInfo = () => ({ time: TIMELINE.length, sights: SIGHTS.length, basics: BASICS.length });
+  window.__historyInfo = () => ({ time: TIMELINE.length, sights: SIGHTS.length, basics: BASICS.length, quiz: QUIZ.length });
   let prevFocus = null;
   function open(){
     prevFocus = document.activeElement; paint();
