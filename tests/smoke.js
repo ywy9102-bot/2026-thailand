@@ -34,6 +34,7 @@ async function open(browser, base, w, h, opt = {}) {
   page.on('load', () => atLoad.push(...reqs));
   await page.route(EXTERNAL, r => r.abort());
   if(opt.block) await page.route(opt.block, r => r.abort());
+  if(opt.clock) await page.clock.setFixedTime(new Date(opt.clock));
   await page.goto(base);
   // "이번 업데이트" 안내창은 새 버전을 처음 열 때 뜨므로, 뜰 때까지 잠깐 기다렸다가 닫아요
   try { await page.waitForSelector('#wnScrim.on', { timeout: 3000 }); } catch (e) {}
@@ -106,11 +107,27 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.keyboard.press('End'); ok('탭: End 로 마지막 탭', (await sel()) === 'false-1 false-1 false-1 true0', await sel());
       await page.keyboard.press('Home'); ok('탭: Home 으로 첫 탭', (await sel()) === 'true0 false-1 false-1 false-1', await sel());
       // 퀴즈 탭: 6문제를 끝까지 풀고 결과가 나옴
-      await page.click('#hsTabs [data-id=quiz]'); await page.click('.hq-go');
+      await page.click('#hsTabs [data-id=quiz]'); await page.click('[data-act=start]');
       for (let i = 0; i < 6; i++) { await page.click('.hq-opt'); await page.click('.hq-go'); }
       ok('역사 퀴즈: 6문제를 풀면 결과가 나옴', await page.evaluate(() => /\/ 6 맞혔어요/.test(document.getElementById('hsBody').textContent)));
       await page.click('#hsTabs [data-id=time]');
       ok('탭 패널 연결', await page.evaluate(() => { const b = document.getElementById('hsBody'); return b.getAttribute('role') === 'tabpanel' && !!document.getElementById(b.getAttribute('aria-labelledby')); }));
+      await ctx.close();
+    }
+    // 4-1) 오늘의 한 문제 · 갈 곳 미리 읽기 · 연표↔여행지 연결 (방콕 12/27 낮으로 시계를 맞춤)
+    {
+      const { ctx, page } = await open(browser, base, 390, 844, { clock: '2026-12-27T10:00:00+07:00' });
+      ok('갈 곳 미리 읽기: 12/27엔 내일(12/28) 카드가 보임', await page.evaluate(() => { const c = document.getElementById('eveCard'); return c.style.display !== 'none' && /내일/.test(c.textContent) && /왕궁/.test(c.textContent); }));
+      await page.click('#eveCard'); await page.waitForSelector('#historyScrim.on'); await page.waitForTimeout(400);
+      ok('미리 읽기 카드 → 여행지 탭의 왕궁으로 이동', await page.evaluate(() => document.querySelector('#hsTabs [aria-selected=true]').dataset.id === 'sight' && document.activeElement.dataset.t === '왕궁'));
+      await page.click('.hs-item[data-t="왕궁"] .hs-link');
+      ok('여행지 → 연표 칩: 연표의 방콕 시대 항목으로 이동', await page.evaluate(() => document.querySelector('#hsTabs [aria-selected=true]').dataset.id === 'time' && document.activeElement.dataset.t === '방콕 시대의 시작'));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(450);
+      await page.click('#dqCard'); await page.waitForSelector('#historyScrim.on'); await page.waitForTimeout(400);
+      await page.click('.hq-opt'); await page.click('.hq-go');
+      ok('오늘의 한 문제: 풀면 완료 표시와 연속 1일', await page.evaluate(() => /오늘의 한 문제/.test(document.getElementById('hsBody').textContent) && JSON.parse(localStorage.getItem('thai2026_hsdaily')).streak === 1));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(450);
+      ok('홈 카드가 완료로 바뀜', await page.evaluate(() => /오늘 문제 완료/.test(document.getElementById('dqT').textContent)));
       await ctx.close();
     }
     // 4-2) 읽어보는 카드: 홈 제목은 처음부터 보이고, 열면 오늘의 추천 4장

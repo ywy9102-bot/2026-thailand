@@ -2009,6 +2009,11 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .hs-src{margin:14px 2px 2px;font-size:13px;line-height:1.55;color:var(--ink3);word-break:keep-all}
 .hs-kr{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--gold-s);font-size:1rem;line-height:1.55;color:var(--ink);word-break:keep-all}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.hs-item.hs-hit{background:var(--jade-s);border-radius:12px;padding-left:10px;padding-right:10px}
+.hs-item:focus{outline:none}
+.hs-links{margin:10px 0 0;display:flex;flex-direction:column;gap:6px}
+.hs-link,.hist-link{appearance:none;min-height:44px;padding:8px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--jade-d);font-family:inherit;font-size:1rem;font-weight:600;line-height:1.4;text-align:left;cursor:pointer;word-break:keep-all}
+.hq-day{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:var(--gold-s);font-size:1.0625rem;line-height:1.6;color:var(--ink);word-break:keep-all}
 .hq{padding:6px 2px 10px}
 .hq-prog{margin:0 0 8px;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
 .hq-q{margin:0 0 12px;font-size:1.25rem;font-weight:700;line-height:1.4;color:var(--jade-d);word-break:keep-all}
