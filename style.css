@@ -1996,7 +1996,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 }
 
 /* ── 태국 역사 · 공부 ── */
-.hs-tabs{grid-template-columns:repeat(3,1fr)}
+.hs-tabs{grid-template-columns:repeat(4,1fr)}
 .hs-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 2px 6px}
 .hs-list{list-style:none;margin:0;padding:0}
 .hs-item{padding:16px 2px;border-bottom:1px solid var(--line)}
@@ -2008,4 +2008,22 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .hs-trip b{font-weight:700}
 .hs-src{margin:14px 2px 2px;font-size:13px;line-height:1.55;color:var(--ink3);word-break:keep-all}
 .hs-kr{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--gold-s);font-size:1rem;line-height:1.55;color:var(--ink);word-break:keep-all}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.hs-item.hs-hit{background:var(--jade-s);border-radius:12px;padding-left:10px;padding-right:10px}
+.hs-item:focus{outline:none}
+.hs-links{margin:10px 0 0;display:flex;flex-direction:column;gap:6px}
+.hs-link,.hist-link{appearance:none;min-height:44px;padding:8px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--jade-d);font-family:inherit;font-size:1rem;font-weight:600;line-height:1.4;text-align:left;cursor:pointer;word-break:keep-all}
+.hq-day{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:var(--gold-s);font-size:1.0625rem;line-height:1.6;color:var(--ink);word-break:keep-all}
+.hq{padding:6px 2px 10px}
+.hq-prog{margin:0 0 8px;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
+.hq-q{margin:0 0 12px;font-size:1.25rem;font-weight:700;line-height:1.4;color:var(--jade-d);word-break:keep-all}
+.hq-opts{display:grid;gap:8px}
+.hq-opt,.hq-go,.hq-alt{appearance:none;width:100%;min-height:52px;padding:10px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font-family:inherit;font-size:1.0625rem;font-weight:600;line-height:1.4;text-align:left;cursor:pointer;word-break:keep-all}
+.hq-opt[aria-disabled="true"]{cursor:default}
+.hq-opt.ok{background:var(--jade-s);border-color:var(--jade);color:var(--jade-d)}
+.hq-opt.no{background:var(--gold-s);border-color:var(--gold-text);color:var(--ink)}
+.hq-go{margin-top:12px;background:var(--jade);border-color:var(--jade);color:var(--hero-fg);text-align:center;font-weight:700}
+.hq-alt{margin-top:8px;text-align:center;color:var(--jade-d)}
+.hq-why{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:var(--jade-s);font-size:1.0625rem;line-height:1.6;color:var(--ink);word-break:keep-all}
+.hq-best{margin:8px 0 0;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
 .hs-kr b{display:block;margin-bottom:2px;font-size:.9375rem;font-weight:700;color:var(--gold-text)}

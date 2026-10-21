@@ -267,6 +267,7 @@ $('famsWrap').innerHTML = FAMS.map(f=>`
 
 // 방콕 골프일 숙소: 12/29는 전원 티니디 체류중, 12/31은 티니디→GCP 체크아웃/체크인 전환일이라 둘 다 표시
 const BKK_GOLF_STAY = {'12/29':['oakwood','tinidee'], '12/31':['oakwood','gcp','tinidee']};   // 밴 픽업 순서
+const hl=(n,t)=>`<button class="hist-link" type="button" data-hist="${n}">${t}</button>`; // 역사·공부 시트의 해당 여행지로 이동
 function gday(dk,l,extra){ // dk: GOLF의 d 필드('12/17' 등), l: 지역표시
   const g = GOLF.find(x=>x.d===dk);
   const names = g.p.map(p=>`${dot(p)}${p}`).join(' ');
@@ -381,6 +382,7 @@ const ITIN_B=[
    ['코스',`${gm('grandpalace','왕궁·왓 프라깨우')}(에메랄드 불상, 08:30~15:30) → 도보 5분 왓 포(길이 46m 와불) → 타 띠안서 나룻배(4밧) → ${gm('watarun','왓 아룬')}(새벽사원, 프라 쁘랑 탑) → 일몰`],
    ['복장·팁','어깨·무릎 가림 필수(왕궁 엄격) · 오전 일찍 · 개장 08:30~16:30(티켓 판매 ~15:30) · 외국인 입장 500밧(왓 프라깨우 + 시리낏 왕비 섬유박물관 포함) · 입구 앞 호객·"오늘 휴무" 사기 주의(정문으로 직진)'],
    ['장모님','왕궁+왓 포까지만, 왓 아룬은 강 건너 조망 · 중간중간 카페 휴식'],
+   ['미리 읽기',hl('왕궁','📜 왕궁 · 왓 포 · 왓 아룬 이야기 읽기')],
    ['공식','<a href="https://www.royalgrandpalace.th" target="_blank" rel="noopener">왕궁 ↗</a> · <a href="https://www.watpho.com" target="_blank" rel="noopener">왓 포 ↗</a>'],
    ['저녁 A','야오와랏(차이나타운) 길거리 음식 — 미쉐린 노점 다수, 18시 이후'],
    ['저녁 B','왓 아룬 뷰 리버사이드 — Supanniga Eating Room(타 띠안) 또는 The Deck by Arun Residence'],
@@ -401,6 +403,7 @@ const ITIN_B=[
    ['Plan A','쇼핑+아이 — 에라완 사당 + 센트럴월드·시암파라곤 + 씨라이프 방콕(시암파라곤 지하 아쿠아리움)'],
    ['Plan B',`전망 — <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('King Power Mahanakhon SkyWalk, Bangkok')}" target="_blank" rel="noopener">킹파워 마하나콘 스카이워크 ↗</a>(310m, 유리 바닥, 일몰). <a href="https://kingpowermahanakhon.co.th" target="_blank" rel="noopener">공식 ↗</a>`],
    ['Plan C','문화 — 짐 톰슨 하우스(27일 미방문 시) + BACC(방콕예술문화센터, 무료·냉방)'],
+   ['미리 읽기',hl('에라완 사당','📜 에라완 사당 이야기 읽기')],
    ['저녁','쏨분시푸드 ② @ 센트럴월드 — 가족1+가족2(윤성욱 제외), GCP 도보 5분'],
   ]},
  {...gday('12/31','BKK','골프 밴 05:00 출발 (오크우드→GCP→티니디)'),
@@ -410,6 +413,7 @@ const ITIN_B=[
    ['Plan A','센트럴월드 카운트다운 — 공연·자정 불꽃, GCP 도보/고층뷰. 극혼잡 → 매우 일찍 자리'],
    ['Plan B',`${gm('iconsiam','아이콘시암')} — 12/29~31 리버사이드 파크 카운트다운, 차오프라야강 대형 불꽃(방콕 최대 스케일). <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>`],
    ['Plan C','짜오프라야 NYE 디너크루즈 — 배 위 불꽃, 인파 크러시 없음. 조기 매진 → 지금 예약'],
+   ['미리 읽기',hl('룸피니 공원','📜 룸피니 공원 이야기 읽기')],
    ['추천','오전 골프 + 아이 2명 + 장모님 → Plan C 크루즈 또는 GCP 고층 조망'],
   ]},
 ];
@@ -420,6 +424,7 @@ const ITIN_C=[
    ['Plan A','짜오프라야 런치크루즈 — 다 같이 앉아서 강변 명소 조망, 저강도'],
    ['Plan B','아유타야 당일 투어 — 옛 수도 유적(왓 마하탓 나무뿌리 불상머리, 왓 차이왓타나람). 방콕서 편도 1.5h'],
    ['Plan C','고대도시(Ancient Siam / 므앙보란) — 태국 전역 유적 축소판 대공원, 자전거·카트 + 에라완 박물관. <a href="https://www.ancientsiam.com" target="_blank" rel="noopener">공식 ↗</a>'],
+   ['미리 읽기',hl('아유타야와 방파인 궁전','📜 아유타야 이야기 읽기')],
    ['참고','1/2 호텔 08:00 출발 → 밤 늦지 않게'],
   ]},
  {d:'2',w:'토',l:'BKK',e:'✈️',t:'가족1·가족2 귀국',n:'OZ744 12:25–19:50',x:'08:30 출발 — 윤우열/가족1: 티니디 · 가족2: GCP (별도 차량)',
@@ -1666,7 +1671,7 @@ function buildItinText(){
   const plain = s => (s||'')
     .replace(/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/g,'$2 ($1)')  // 링크는 텍스트(URL)로
     .replace(/<[^>]*>/g,'').replace(/\s↗/g,''); // 나머지 태그·↗ 제거
-  const rec=x=>x.rec?`\n   💡 추천: ${plain(x.rec)}`+(x.recd?x.recd.map(r=>`\n      · ${r[0]} — ${plain(r[1])}`).join(''):''):'';
+  const rec=x=>x.rec?`\n   💡 추천: ${plain(x.rec)}`+(x.recd?x.recd.filter(r=>r[0]!=='미리 읽기').map(r=>`\n      · ${r[0]} — ${plain(r[1])}`).join(''):''):'';
   const line=x=>`12/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${rec(x)}`;
   const lineJan=x=>`1/${x.d}(${x.w}) ${x.l} - ${plain(x.t)}${x.n?' / '+plain(x.n):''}${x.x?' / '+plain(x.x):''}${rec(x)}`;
   return `🇹🇭 태국 여행 일정 (2026.12.16–2027.1.4)\n\n${ITIN_A.map(line).join('\n')}\n${ITIN_B.map(line).join('\n')}\n${ITIN_C.map(lineJan).join('\n')}`;
@@ -1760,6 +1765,8 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🎯','오늘의 한 문제 · 갈 곳 미리 읽기 · 연표↔여행지 연결','첫 화면에 "오늘의 한 문제" 카드가 생겼어요. 하루 한 문제를 풀면 연속 일수가 쌓여요. 일정에 왕궁·왓 포·왓 아룬 같은 곳이 있는 날은 하루 전부터 "갈 곳 미리 읽기" 카드가 떠요. 일정 상세의 "미리 읽기" 버튼과 카드를 누르면 역사·공부의 해당 여행지로 바로 가고, 여행지와 연표 항목은 서로 오갈 수 있어요.'],
+    ['🎮','역사 퀴즈가 생겼어요','"태국 역사·공부"에 퀴즈 탭이 생겼어요. 연표와 여행지 이야기에서 6문제를 내고, 풀 때마다 왜 그런지 바로 알려 줘요. 먼저 일어난 일 맞히기도 있어요. 최고 기록은 이 기기에 저장돼요.'],
     ['⚡','첫 화면이 훨씬 빨리 보여요','앱을 열면 화면의 뼈대와 글씨가 먼저 뜨고, 나머지 모양은 뒤따라 받아요. 느린 인터넷에서 첫 화면이 뜨는 시간을 시험해 보니 0.9초에서 0.4초로 줄었어요. 읽어보는 카드도 필요할 때 불러와서 처음 받는 양이 더 줄었어요. 기능은 그대로예요.'],
     ['📶','인터넷이 약해도 열려요','한 번 열어 본 뒤에는 인터넷이 없어도 앱이 열리도록 핵심 화면을 기기에 저장해 둬요. 놀이터 기능은 따로 나눠 두고 필요할 때 불러와서 처음 열 때도 더 빨라요. 역사 시트의 탭은 키보드 화살표로도 옮길 수 있어요.'],
     ['📜','새 읽을거리 — 태국 역사·공부','놀이터의 "태국 역사·공부"에서 중학생도 이해할 수 있게 쉬운 말로 풀어 쓴 태국 이야기를 읽어 보세요. 드바라바티·수코타이에서 지금의 왕까지 역사 연표 25개마다 "같은 때 우리나라"(삼국·고려·조선·대한제국·일제강점기·대한민국) 이야기를 나란히 붙였어요. 한국민족문화대백과사전·우리역사넷·위키백과·브리태니커로 사실을 맞춰 봤어요. 왕궁·왓 포·왓 아룬·아유타야 같은 이번 여행지의 배경 6개, 불기 달력·시차·국기·왕실과 스님 예절 같은 알아두기 8개도 있어요. 이번 일정과 이어지는 곳에는 \"🧳 이번 여행\" 표시가 붙어요.'],
@@ -2383,6 +2390,40 @@ const FOODS = [
   window.__openStory = stub;
 })();
 
+// ── 홈 카드: 오늘의 한 문제 · 갈 곳 미리 읽기 (역사·공부 시트와 연결) ──
+(function(){
+  const dq = $('dqCard'), ev = $('eveCard');
+  const kday = () => { const k = new Date(Date.now() + 9 * 36e5); return Math.floor(Date.UTC(k.getUTCFullYear(), k.getUTCMonth(), k.getUTCDate()) / 864e5); };
+  // 일정에 나오는 역사 여행지 (opt: 선택 일정 후보)
+  const SPOTS = {
+    '2026-12-28': ['방콕 대표 사원', ['왕궁', '왓 포', '왓 아룬'], false],
+    '2026-12-30': ['에라완 사당', ['에라완 사당'], true],
+    '2026-12-31': ['룸피니 공원', ['룸피니 공원'], true],
+    '2027-01-01': ['아유타야', ['아유타야와 방파인 궁전'], true],
+  };
+  const keyOf = ms => { const b = new Date(ms + 7 * 36e5); return `${b.getUTCFullYear()}-${String(b.getUTCMonth() + 1).padStart(2, '0')}-${String(b.getUTCDate()).padStart(2, '0')}`; };
+  function paintDq(){
+    if(!dq) return; let st = {}; try{ st = JSON.parse(localStorage.getItem('thai2026_hsdaily')) || {}; }catch(e){}
+    const d = kday(), done = st.last === d, run = (st.last === d || st.last === d - 1) ? (st.streak || 0) : 0;
+    $('dqT').textContent = done ? `오늘 문제 완료${run > 1 ? ` · 연속 ${run}일` : ''} · 내일 새 문제` : `태국 역사·여행 퀴즈 1문제${run ? ` · 연속 ${run}일 이어가기` : ''}`;
+    $('dqGo').textContent = done ? '보기 →' : '풀기 →'; dq.dataset.done = done ? '1' : '';
+  }
+  function paintEve(){
+    if(!ev) return; const now = Date.now();
+    const today = SPOTS[keyOf(now)], next = SPOTS[keyOf(now + 864e5)], when = today ? '오늘' : next ? '내일' : '', s = today || next;
+    if(!s){ ev.style.display = 'none'; return; }
+    const date = keyOf(now + (today ? 0 : 864e5)).slice(5).replace('-0', '-').replace(/^0/, '').replace('-', '/');
+    $('evTag').textContent = `📜 ${when} 갈 곳 미리 읽기`;
+    $('evT').textContent = `${date} ${s[0]}${s[2] ? ' (선택 일정)' : ''}: ${s[1].join(' · ')} 이야기`;
+    ev.dataset.spot = s[1][0]; ev.style.display = '';
+  }
+  window.__dqRefresh = paintDq;
+  paintDq(); paintEve(); setInterval(() => { paintDq(); paintEve(); }, 6e4);
+  if(dq) dq.addEventListener('click', () => { haptic('tap'); window.__openHistory('quiz', dq.dataset.done ? '' : 'daily'); });
+  if(ev) ev.addEventListener('click', () => { haptic('tap'); window.__openHistory('sight', ev.dataset.spot); });
+  document.addEventListener('click', e => { const b = e.target.closest('[data-hist]'); if(b){ haptic('tap'); window.__openHistory('sight', b.dataset.hist); } });
+})();
+
 // ── 지연 로딩: 큰 모듈(맛집지도·태국어)은 별도 파일로 두고 필요할 때, 또는 화면이 한가할 때 불러옴 ──
 (function(){
   const P = {};
@@ -2414,7 +2455,7 @@ const FOODS = [
   const call = n => () => { if(typeof window[n] === 'function') window[n](); };
   const TILES = [
     ['📖','태국 이야기 · 맛집 카드', () => '매일 바뀌는 오늘의 추천 · 이야기 51장 · 맛집·볼거리 슬라이드', '__openStory', true],
-    ['📜','태국 역사 · 공부', () => '연표 · 여행지 이야기 · 알아두기', '__openHistory'],
+    ['📜','태국 역사 · 공부', () => '연표 · 여행지 이야기 · 알아두기 · 퀴즈', '__openHistory'],
     ['🛂','여권 도장첩', () => '도장 모으기 · 공유 카드', '__openPass'],
     ['🎯','태국 빙고', () => { const b = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0}; return `${b.lines}줄 완성`; }, '__openBingo'],
     ['🧠','여행 퀴즈', () => { const q = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,n:5}; return q.best ? `최고 ${q.best}/${q.n}` : '우리 여행 5문제'; }, '__openTquiz'],
