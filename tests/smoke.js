@@ -111,6 +111,11 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.click('[data-act=start]');
       for (let i = 0; i < 6; i++) { await page.click('.hq-opt'); await page.click('.hq-go'); }
       ok('역사 퀴즈: 6문제를 풀면 결과가 나옴', await page.evaluate(() => /\/ 6 맞혔어요/.test(document.getElementById('hsBody').textContent)));
+      ok('같은 때 우리나라 짝: 15개 넘게 연결됨', await page.evaluate(() => window.__historyInfo().kr >= 15), await page.evaluate(() => window.__historyInfo().kr));
+      await page.click('[data-act=kr]');
+      ok('같은 때 우리나라 문제: 보기 4개, 태국 사건이 문제에 나옴', await page.evaluate(() => document.querySelectorAll('.hq-opt').length === 4 && /같은 때 우리나라/.test(document.querySelector('.hq-q').textContent)));
+      for (let i = 0; i < 6; i++) { await page.click('.hq-opt'); await page.click('.hq-go'); }
+      ok('같은 때 우리나라 6문제를 풀면 결과가 나옴', await page.evaluate(() => /\/ 6 맞혔어요/.test(document.getElementById('hsBody').textContent)));
       await page.click('#hsTabs [data-id=time]');
       ok('탭 패널 연결', await page.evaluate(() => { const b = document.getElementById('hsBody'); return b.getAttribute('role') === 'tabpanel' && !!document.getElementById(b.getAttribute('aria-labelledby')); }));
       await ctx.close();

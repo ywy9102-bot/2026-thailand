@@ -557,7 +557,25 @@
     }
     return out;
   }
-  const makeRound = () => shuffle(shuffle(QUIZ).slice(0, QN - 2).map(([q, a, w, why]) => ({ q, opts: shuffle([a, ...w]), a, why })).concat(orderQs(2)));
+  // [연표 제목, 같은 때 우리나라 한 줄] — 연표의 "같은 때 우리나라" 글을 줄였어요 (새 내용 없음)
+  const KR_PAIRS = [
+    ['수코타이 왕국','몽골에 맞서 수도를 강화도로 옮긴 고려'], ['치앙마이와 란나 왕국','원나라의 간섭을 받던 충렬왕 때의 고려'], ['아유타야 왕국','공민왕이 고려 왕이 됨'],
+    ['나라의 틀을 세우다','세종대왕이 한글(훈민정음)을 만듦'], ['유럽 사람이 찾아왔어요','조선 중종 때, 삼포왜란'], ['나레수안 대왕과 독립','임진왜란과 이순신 장군'],
+    ['아유타야가 무너졌어요','영조가 탕평책을 펼침'], ['방콕 시대의 시작','정조가 규장각을 세우고 수원 화성을 쌓음'], ['보링 조약','조선 철종 임금 때'],
+    ['라마 5세 (출라롱꼰 대왕)','강화도 조약부터 한일병합까지'], ['프랑스와의 위기','동학농민운동과 갑오개혁'], ['태국의 첫 철도','한국 최초의 철도 경인선 개통'],
+    ['제1차 세계대전에 참전','3·1운동과 대한민국 임시정부'], ['입헌혁명','이봉창·윤봉길 의사의 의거'], ['나라 이름이 바뀌었어요','창씨개명 강요'],
+    ['제2차 세계대전','8월 15일 광복'], ['푸미폰 국왕 (라마 9세)','미군정을 거쳐 대한민국 정부 수립'], ['한국전쟁과 태국','6·25 전쟁과 정전협정'],
+    ['한국과 태국의 수교','이승만 대통령 시절'], ['파타야가 커졌어요','한국군의 베트남 파병'], ['바트 위기','IMF 외환위기'], ['지금의 왕','3·1운동·임시정부 100주년'],
+  ].map(([t, l]) => ({ e: TIMELINE.find(r => r[1] === t), l })).filter(x => x.e && yearOf(x.e));
+  // 같은 때가 아닌(30년 넘게 떨어진) 한국 일을 오답으로 써서 헷갈리지 않게 해요
+  function matchQs(n){
+    return shuffle(KR_PAIRS).slice(0, n).map(x => {
+      const far = KR_PAIRS.filter(y => y !== x && y.l !== x.l && Math.abs(yearOf(y.e) - yearOf(x.e)) >= 30);
+      return { q: `태국의 "${x.e[1]}"(${x.e[0]}). 같은 때 우리나라에서는 무슨 일이 있었을까요?`, opts: shuffle([x.l, ...shuffle(far).slice(0, 3).map(y => y.l)]), a: x.l, why: x.e[4] };
+    });
+  }
+  const makeKrRound = () => matchQs(QN);
+  const makeRound = () => shuffle(shuffle(QUIZ).slice(0, QN - 3).map(([q, a, w, why]) => ({ q, opts: shuffle([a, ...w]), a, why })).concat(orderQs(2), matchQs(1)));
   let qz = null;
   function startDaily(){ qz = { qs: dailyRound(), i: 0, score: 0, picked: null, daily: true }; haptic('tap'); paintQuiz(); const f = body.querySelector('.hq-opt'); if(f) f.focus({preventScroll:true}); }
   const qMsg = s => s === QN ? '모두 맞혔어요! 태국 역사 박사예요' : s >= QN - 2 ? '대단해요! 거의 다 맞혔어요' : s >= 3 ? '좋아요! 연표를 읽고 다시 도전해 보세요' : '연표를 한 번 읽고 다시 도전해 봐요';
@@ -566,13 +584,13 @@
       const done = dDone(), st = dStreak();
       body.innerHTML = `<div class="hq"><h3 class="hq-q">태국 역사 퀴즈</h3><p class="hs-b">연표와 여행지 이야기에서 문제를 내요. 풀고 나면 왜 그런지 바로 알려 줘요.</p>` +
         (done ? `<p class="hq-day">🎯 오늘의 한 문제를 ${dq.ok ? '맞혔어요' : '풀었어요'}${st > 1 ? ` · 연속 ${st}일` : ''}. 내일 새 문제가 나와요.</p>` : `<button class="hq-go" type="button" data-act="daily">🎯 오늘의 한 문제${st ? ` · 연속 ${st}일 이어가기` : ''}</button>`) +
-        `${qBest ? `<p class="hq-best">6문제 최고 기록 ${qBest}/${QN}</p>` : ''}<button class="${done ? 'hq-go' : 'hq-alt'}" type="button" data-act="start">${QN}문제 퀴즈 시작하기</button></div>`;
+        `${qBest ? `<p class="hq-best">6문제 최고 기록 ${qBest}/${QN}</p>` : ''}<button class="${done ? 'hq-go' : 'hq-alt'}" type="button" data-act="start">${QN}문제 퀴즈 시작하기</button><button class="hq-alt" type="button" data-act="kr">🇰🇷 같은 때 우리나라 맞히기</button></div>`;
     } else if(qz.i >= qz.qs.length && qz.daily){
       const st = dStreak();
       body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score ? '오늘의 한 문제, 정답이에요!' : '오늘의 한 문제를 풀었어요'}</h3><p class="hs-b">${st > 1 ? `연속 ${st}일째예요. ` : ''}내일 새 문제가 나와요.</p><button class="hq-go" type="button" data-act="start">${QN}문제 퀴즈 하기</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
     } else if(qz.i >= qz.qs.length){
       const nb = qz.score > qBest;
-      body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score} / ${QN} 맞혔어요</h3><p class="hs-b">${qMsg(qz.score)}</p><p class="hq-best">${nb ? '새 최고 기록이에요!' : `내 최고 기록 ${qBest}/${QN}`}</p><button class="hq-go" type="button" data-act="start">다시 하기</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
+      body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score} / ${QN} 맞혔어요</h3><p class="hs-b">${qMsg(qz.score)}</p><p class="hq-best">${nb ? '새 최고 기록이에요!' : `내 최고 기록 ${qBest}/${QN}`}</p><button class="hq-go" type="button" data-act="${qz.kr ? 'kr' : 'start'}">다시 하기</button><button class="hq-alt" type="button" data-act="${qz.kr ? 'start' : 'kr'}">${qz.kr ? '섞어서 6문제 풀기' : '🇰🇷 같은 때 우리나라 맞히기'}</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
     } else {
       const c = qz.qs[qz.i], pk = qz.picked;
       body.innerHTML = `<div class="hq"><p class="hq-prog">${qz.daily ? '🎯 오늘의 한 문제' : `${qz.i + 1} / ${QN} · 맞힌 개수 ${qz.score}`}</p><h3 class="hq-q">${esc(c.q)}</h3><div class="hq-opts">${c.opts.map((o, k) =>
@@ -602,13 +620,14 @@
     }
     if(mode !== 'quiz') return;
     const b = e.target.closest('button'); if(!b || !body.contains(b)) return;
+    if(b.dataset.act === 'kr'){ qz = { qs: makeKrRound(), i: 0, score: 0, picked: null, kr: true }; haptic('tap'); paintQuiz(); const f = body.querySelector('.hq-opt'); if(f) f.focus({preventScroll:true}); return; }
     if(b.dataset.act === 'start'){ qz = { qs: makeRound(), i: 0, score: 0, picked: null }; haptic('tap'); paintQuiz(); const f = body.querySelector('.hq-opt'); if(f) f.focus({preventScroll:true}); return; }
     if(b.dataset.act === 'daily'){ startDaily(); return; }
     if(b.dataset.act === 'read'){ mode = 'time'; haptic('tap'); paint(); return; }
     if(b.dataset.act === 'next'){
       qz.i++; qz.picked = null; haptic('tap');
       if(qz.i >= qz.qs.length && !qz.daily && qz.score === QN) cel({ kicker: '🎉 만점', msg: '6문제를 모두 맞혔어요!', petals: true, n: 30, spread: 130, ms: 3600 });
-      if(qz.i >= qz.qs.length && !qz.daily && qz.score > qBest){ qBest = qz.score; try{ localStorage.setItem(LSQ, String(qBest)); }catch(err){} haptic('ok'); }
+      if(qz.i >= qz.qs.length && !qz.daily && !qz.kr && qz.score > qBest){ qBest = qz.score; try{ localStorage.setItem(LSQ, String(qBest)); }catch(err){} haptic('ok'); }
       paintQuiz(); const f = body.querySelector('.hq-opt, .hq-go'); if(f) f.focus({preventScroll:true}); return;
     }
     if(b.dataset.k != null && qz && qz.picked == null){
@@ -645,7 +664,7 @@
   }
   tabsEl.innerHTML = TABS.map(([id, l]) => `<button class="wh-tab" role="tab" type="button" data-id="${id}" aria-selected="${id === mode}">${l}</button>`).join('');
   tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(!b) return; mode = b.dataset.id; haptic('tap'); paint(); });
-  window.__historyInfo = () => ({ time: TIMELINE.length, sights: SIGHTS.length, basics: BASICS.length, quiz: QUIZ.length });
+  window.__historyInfo = () => ({ time: TIMELINE.length, sights: SIGHTS.length, basics: BASICS.length, quiz: QUIZ.length, kr: KR_PAIRS.length });
   let prevFocus = null;
   function open(m, t){
     prevFocus = document.activeElement;
