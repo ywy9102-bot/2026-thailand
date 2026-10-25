@@ -2401,7 +2401,8 @@ const FOODS = [
     '2026-12-31': ['룸피니 공원', ['룸피니 공원'], true],
     '2027-01-01': ['아유타야', ['아유타야와 방파인 궁전'], true],
   };
-  const keyOf = ms => { const b = new Date(ms + 7 * 36e5); return `${b.getUTCFullYear()}-${String(b.getUTCMonth() + 1).padStart(2, '0')}-${String(b.getUTCDate()).padStart(2, '0')}`; };
+  // 날짜 기준은 오늘의 이야기·오늘의 한 문제와 같은 한국 시간
+  const keyOf = ms => { const b = new Date(ms + 9 * 36e5); return `${b.getUTCFullYear()}-${String(b.getUTCMonth() + 1).padStart(2, '0')}-${String(b.getUTCDate()).padStart(2, '0')}`; };
   function paintDq(){
     if(!dq) return; let st = {}; try{ st = JSON.parse(localStorage.getItem('thai2026_hsdaily')) || {}; }catch(e){}
     const d = kday(), done = st.last === d, run = (st.last === d || st.last === d - 1) ? (st.streak || 0) : 0;

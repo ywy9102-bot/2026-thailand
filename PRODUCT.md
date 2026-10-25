@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-단일 정적 파일 `index.html` (인라인 CSS/JS, 빌드 없음). GitHub Pages로 배포하며 PWA 매니페스트와 아이콘을 포함한다. 지도는 Leaflet을 필요할 때만 불러온다.
+빌드 없는 정적 사이트(GitHub Pages). `index.html`(구조와 첫 화면용 스타일), `style.css`, `app.js`, 놀이터·읽어보는 카드·맛집지도·태국어를 나눈 지연 로딩 파일(`play.js`, `story.js`, `foodmap.js`, `thai.js`), 오프라인용 `sw.js`, PWA 매니페스트와 아이콘으로 이뤄진다. 지도는 Leaflet을 필요할 때만 불러온다.
 
 ## Users
 
