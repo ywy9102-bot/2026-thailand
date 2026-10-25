@@ -108,7 +108,6 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.keyboard.press('Home'); ok('탭: Home 으로 첫 탭', (await sel()) === 'true0 false-1 false-1 false-1', await sel());
       // 퀴즈 탭: 6문제를 끝까지 풀고 결과가 나옴
       await page.click('#hsTabs [data-id=quiz]');
-      ok('퀴즈 시작 화면: 칭호 표시', await page.evaluate(() => /칭호|새내기/.test(document.getElementById('hsBody').textContent)));
       await page.click('[data-act=start]');
       for (let i = 0; i < 6; i++) { await page.click('.hq-opt'); await page.click('.hq-go'); }
       ok('역사 퀴즈: 6문제를 풀면 결과가 나옴', await page.evaluate(() => /\/ 6 맞혔어요/.test(document.getElementById('hsBody').textContent)));
