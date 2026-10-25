@@ -2027,3 +2027,16 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .hq-why{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:var(--jade-s);font-size:1.0625rem;line-height:1.6;color:var(--ink);word-break:keep-all}
 .hq-best{margin:8px 0 0;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
 .hs-kr b{display:block;margin-bottom:2px;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
+
+/* ── 반복되던 인라인 스타일을 클래스로 (index.html) ── */
+.mt9{margin-top:9px}
+.mt10{margin-top:10px}
+.mt12{margin-top:12px}
+.mt22{margin-top:22px}
+.fs-s{font-size:.8125rem}
+.wn-ghost{background:none;color:var(--jade-d);border:1px solid var(--line);box-shadow:none}
+.wn-ghost-s{color:var(--ink2)}
+.wn-gold{background:var(--gold-s);color:var(--gold-text);box-shadow:none;border:1px solid var(--gold)}
+.row-end{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+/* 마우스로 쓰는 큰 화면에서도 누르는 영역 44px */
+@media (min-width:761px){ .copy-btn,.wx-loc{min-height:44px} }
