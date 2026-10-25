@@ -526,6 +526,17 @@
   ];
   const LSQ = 'thai2026_hsquiz'; let qBest = 0; try{ qBest = +localStorage.getItem(LSQ) || 0; }catch(e){}
   const QN = 6;
+  const cel = o => { if(typeof window.__celebrate === 'function') window.__celebrate(o); };
+  // 맞힌 문제가 쌓이면 칭호가 올라가요 (이름은 이번 여행 장소에서 따온 놀이용 이름이에요)
+  const LSN = 'thai2026_hsquiz_n'; let qTotal = 0; try{ qTotal = +localStorage.getItem(LSN) || 0; }catch(e){}
+  const RANKS = [[0,'여행 새내기'],[5,'카오산 길잡이'],[15,'왓 포 해설사'],[30,'아유타야 탐험가'],[50,'짜끄리 왕조 박사']];
+  const rankOf = n => RANKS.reduce((a, r, k) => n >= r[0] ? k : a, 0);
+  const rankLine = () => { const i = rankOf(qTotal), nx = RANKS[i + 1]; return `🏅 ${RANKS[i][1]} · 맞힌 문제 ${qTotal}개${nx ? ` · 다음 칭호까지 ${nx[0] - qTotal}개` : ' · 가장 높은 칭호예요'}`; };
+  function addCorrect(){ const b = rankOf(qTotal); qTotal++; try{ localStorage.setItem(LSN, String(qTotal)); }catch(e){} return rankOf(qTotal) > b; }
+  // 여행지 "읽었어요" 표시
+  const LSR = 'thai2026_hsread'; let rd; try{ rd = JSON.parse(localStorage.getItem(LSR)); }catch(e){} rd = Array.isArray(rd) ? rd.filter(t => SIGHTS.some(s => s[0] === t)) : [];
+  const readBtn = t => `<button class="hs-read" type="button" data-read="${esc(t)}" aria-pressed="${rd.includes(t)}">${rd.includes(t) ? '✅ 읽었어요' : '📖 읽었어요 표시하기'}</button>`;
+  const readLine = () => `읽은 여행지 ${rd.length} / ${SIGHTS.length}`;
   const LSD = 'thai2026_hsdaily'; let dq; try{ dq = JSON.parse(localStorage.getItem(LSD)); }catch(e){} if(!dq || typeof dq !== 'object') dq = {};
   const dayNo = () => { const k = new Date(Date.now() + 9 * 36e5); return Math.floor(Date.UTC(k.getUTCFullYear(), k.getUTCMonth(), k.getUTCDate()) / 864e5); };
   const dDone = () => dq.last === dayNo();
@@ -559,15 +570,15 @@
   function paintQuiz(){
     if(!qz){
       const done = dDone(), st = dStreak();
-      body.innerHTML = `<div class="hq"><h3 class="hq-q">태국 역사 퀴즈</h3><p class="hs-b">연표와 여행지 이야기에서 문제를 내요. 풀고 나면 왜 그런지 바로 알려 줘요.</p>` +
+      body.innerHTML = `<div class="hq"><h3 class="hq-q">태국 역사 퀴즈</h3><p class="hs-b">연표와 여행지 이야기에서 문제를 내요. 풀고 나면 왜 그런지 바로 알려 줘요.</p><p class="hq-rank">${rankLine()}</p>` +
         (done ? `<p class="hq-day">🎯 오늘의 한 문제를 ${dq.ok ? '맞혔어요' : '풀었어요'}${st > 1 ? ` · 연속 ${st}일` : ''}. 내일 새 문제가 나와요.</p>` : `<button class="hq-go" type="button" data-act="daily">🎯 오늘의 한 문제${st ? ` · 연속 ${st}일 이어가기` : ''}</button>`) +
         `${qBest ? `<p class="hq-best">6문제 최고 기록 ${qBest}/${QN}</p>` : ''}<button class="${done ? 'hq-go' : 'hq-alt'}" type="button" data-act="start">${QN}문제 퀴즈 시작하기</button></div>`;
     } else if(qz.i >= qz.qs.length && qz.daily){
       const st = dStreak();
-      body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score ? '오늘의 한 문제, 정답이에요!' : '오늘의 한 문제를 풀었어요'}</h3><p class="hs-b">${st > 1 ? `연속 ${st}일째예요. ` : ''}내일 새 문제가 나와요.</p><button class="hq-go" type="button" data-act="start">${QN}문제 퀴즈 하기</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
+      body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score ? '오늘의 한 문제, 정답이에요!' : '오늘의 한 문제를 풀었어요'}</h3><p class="hs-b">${st > 1 ? `연속 ${st}일째예요. ` : ''}내일 새 문제가 나와요.</p><p class="hq-rank">${rankLine()}</p><button class="hq-go" type="button" data-act="start">${QN}문제 퀴즈 하기</button><button class="hq-alt" type="button" data-act="share">💬 단톡에 자랑하기</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
     } else if(qz.i >= qz.qs.length){
       const nb = qz.score > qBest;
-      body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score} / ${QN} 맞혔어요</h3><p class="hs-b">${qMsg(qz.score)}</p><p class="hq-best">${nb ? '새 최고 기록이에요!' : `내 최고 기록 ${qBest}/${QN}`}</p><button class="hq-go" type="button" data-act="start">다시 하기</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
+      body.innerHTML = `<div class="hq"><h3 class="hq-q">${qz.score} / ${QN} 맞혔어요</h3><p class="hs-b">${qMsg(qz.score)}</p><p class="hq-best">${nb ? '새 최고 기록이에요!' : `내 최고 기록 ${qBest}/${QN}`}</p><p class="hq-rank">${rankLine()}</p><button class="hq-go" type="button" data-act="start">다시 하기</button><button class="hq-alt" type="button" data-act="share">💬 단톡에 자랑하기</button><button class="hq-alt" type="button" data-act="read">연표 보러 가기</button></div>`;
     } else {
       const c = qz.qs[qz.i], pk = qz.picked;
       body.innerHTML = `<div class="hq"><p class="hq-prog">${qz.daily ? '🎯 오늘의 한 문제' : `${qz.i + 1} / ${QN} · 맞힌 개수 ${qz.score}`}</p><h3 class="hq-q">${esc(c.q)}</h3><div class="hq-opts">${c.opts.map((o, k) =>
@@ -584,19 +595,41 @@
   body.addEventListener('click', e => {
     const lk = e.target.closest('.hs-link');
     if(lk && body.contains(lk)){ mode = lk.dataset.go; haptic('tap'); paint(); jump(lk.dataset.t); return; }
+    const rb = e.target.closest('.hs-read');
+    if(rb && body.contains(rb)){
+      const t = rb.dataset.read, was = rd.length;
+      rd = rd.includes(t) ? rd.filter(x => x !== t) : rd.concat(t);
+      try{ localStorage.setItem(LSR, JSON.stringify(rd)); }catch(err){}
+      rb.setAttribute('aria-pressed', String(rd.includes(t))); rb.textContent = rd.includes(t) ? '✅ 읽었어요' : '📖 읽었어요 표시하기';
+      const pg = body.querySelector('.hs-prog'); if(pg) pg.textContent = readLine();
+      haptic('tap'); if(typeof window.__dqRefresh === 'function') window.__dqRefresh();
+      if(rd.length === SIGHTS.length && was < rd.length) cel({ kicker: '🛕 다 읽었어요', msg: `여행지 ${SIGHTS.length}곳을 모두 읽었어요. 가면 더 재미있어요!`, petals: true, n: 22, spread: 110, ms: 3600 });
+      return;
+    }
     if(mode !== 'quiz') return;
     const b = e.target.closest('button'); if(!b || !body.contains(b)) return;
     if(b.dataset.act === 'start'){ qz = { qs: makeRound(), i: 0, score: 0, picked: null }; haptic('tap'); paintQuiz(); const f = body.querySelector('.hq-opt'); if(f) f.focus({preventScroll:true}); return; }
     if(b.dataset.act === 'daily'){ startDaily(); return; }
+    if(b.dataset.act === 'share'){
+      const st = dStreak(), txt = qz && qz.daily ? `오늘의 태국 역사 한 문제 ${qz.score ? '정답!' : '도전!'}${st > 1 ? ` 연속 ${st}일째` : ''} 🇹🇭\n${RANKS[rankOf(qTotal)][1]} · 맞힌 문제 ${qTotal}개`
+        : `태국 역사 퀴즈 ${qz ? qz.score : 0}/${QN} 🇹🇭\n${RANKS[rankOf(qTotal)][1]} · 맞힌 문제 ${qTotal}개\n2026 태국 가족여행 앱에서 풀었어요`;
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { b.textContent = '✅ 복사했어요. 단톡에 붙여넣으세요'; haptic('ok'); }, () => { b.textContent = '⚠️ 복사하지 못했어요'; });
+      return;
+    }
     if(b.dataset.act === 'read'){ mode = 'time'; haptic('tap'); paint(); return; }
     if(b.dataset.act === 'next'){
       qz.i++; qz.picked = null; haptic('tap');
+      if(qz.i >= qz.qs.length && !qz.daily && qz.score === QN) cel({ kicker: '🎉 만점', msg: '6문제를 모두 맞혔어요!', petals: true, n: 30, spread: 130, ms: 3600 });
       if(qz.i >= qz.qs.length && !qz.daily && qz.score > qBest){ qBest = qz.score; try{ localStorage.setItem(LSQ, String(qBest)); }catch(err){} haptic('ok'); }
       paintQuiz(); const f = body.querySelector('.hq-opt, .hq-go'); if(f) f.focus({preventScroll:true}); return;
     }
     if(b.dataset.k != null && qz && qz.picked == null){
       const c = qz.qs[qz.i]; qz.picked = +b.dataset.k;
-      if(c.opts[qz.picked] === c.a){ qz.score++; haptic('ok'); } else haptic('tap');
+      if(c.opts[qz.picked] === c.a){
+        qz.score++; haptic('ok');
+        if(addCorrect()) cel({ kicker: '🏅 새 칭호', msg: RANKS[rankOf(qTotal)][1], petals: true, n: 26, spread: 110, ms: 3600 });
+        else if(qz.daily && !dDone()) cel({ n: 10, spread: 70, petals: true, at: b, dy: 6 });
+      } else haptic('tap');
       if(qz.daily) dRecord(c.opts[qz.picked] === c.a);
       paintQuiz();
     }
@@ -618,9 +651,9 @@
     if(mode === 'quiz'){ paintQuiz(); return; }
     let rows = '';
     if(mode === 'time') rows = TIMELINE.map(r => item(r[0], r[1], r[2], r[3], '🧳 이번 여행', r[4])).join('');
-    else if(mode === 'sight') rows = SIGHTS.map(r => item('', r[0], r[1], r[2], '💡')).join('');
+    else if(mode === 'sight') rows = SIGHTS.map(r => item('', r[0], r[1], r[2], '💡').replace(/<\/li>$/, readBtn(r[0]) + '</li>')).join('');
     else rows = BASICS.map(r => item('', r[0], r[1], r[2], '💡')).join('');
-    body.innerHTML = `<ol class="hs-list">${rows}</ol><p class="hs-src">한국민족문화대백과사전, 우리역사넷, 위키백과, 브리태니커 같은 자료를 맞춰 보고 쉽게 풀어 쓴 거예요. 자료마다 다른 부분은 "전해져요", "알려져 있어요", "자료마다 달라요"로 적었어요.</p>`;
+    body.innerHTML = `${mode === 'sight' ? `<p class="hs-prog">${readLine()}</p>` : ''}<ol class="hs-list">${rows}</ol><p class="hs-src">한국민족문화대백과사전, 우리역사넷, 위키백과, 브리태니커 같은 자료를 맞춰 보고 쉽게 풀어 쓴 거예요. 자료마다 다른 부분은 "전해져요", "알려져 있어요", "자료마다 달라요"로 적었어요.</p>`;
     body.scrollTop = 0; syncTabs();
   }
   tabsEl.innerHTML = TABS.map(([id, l]) => `<button class="wh-tab" role="tab" type="button" data-id="${id}" aria-selected="${id === mode}">${l}</button>`).join('');

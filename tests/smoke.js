@@ -107,7 +107,9 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.keyboard.press('End'); ok('탭: End 로 마지막 탭', (await sel()) === 'false-1 false-1 false-1 true0', await sel());
       await page.keyboard.press('Home'); ok('탭: Home 으로 첫 탭', (await sel()) === 'true0 false-1 false-1 false-1', await sel());
       // 퀴즈 탭: 6문제를 끝까지 풀고 결과가 나옴
-      await page.click('#hsTabs [data-id=quiz]'); await page.click('[data-act=start]');
+      await page.click('#hsTabs [data-id=quiz]');
+      ok('퀴즈 시작 화면: 칭호 표시', await page.evaluate(() => /칭호|새내기/.test(document.getElementById('hsBody').textContent)));
+      await page.click('[data-act=start]');
       for (let i = 0; i < 6; i++) { await page.click('.hq-opt'); await page.click('.hq-go'); }
       ok('역사 퀴즈: 6문제를 풀면 결과가 나옴', await page.evaluate(() => /\/ 6 맞혔어요/.test(document.getElementById('hsBody').textContent)));
       await page.click('#hsTabs [data-id=time]');
@@ -120,6 +122,9 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('갈 곳 미리 읽기: 12/27엔 내일(12/28) 카드가 보임', await page.evaluate(() => { const c = document.getElementById('eveCard'); return c.style.display !== 'none' && /내일/.test(c.textContent) && /왕궁/.test(c.textContent); }));
       await page.click('#eveCard'); await page.waitForSelector('#historyScrim.on'); await page.waitForTimeout(400);
       ok('미리 읽기 카드 → 여행지 탭의 왕궁으로 이동', await page.evaluate(() => document.querySelector('#hsTabs [aria-selected=true]').dataset.id === 'sight' && document.activeElement.dataset.t === '왕궁'));
+      for (const n of ['왕궁', '왓 포', '왓 아룬']) await page.click(`.hs-item[data-t="${n}"] .hs-read`);
+      ok('여행지 읽음 표시: 개수가 올라가고 눌림 상태가 바뀜', await page.evaluate(() => document.querySelector('.hs-prog').textContent.includes('3 / 6') && document.querySelector('.hs-item[data-t="왕궁"] .hs-read').getAttribute('aria-pressed') === 'true'));
+      ok('미리 읽기 카드: 그날 갈 곳을 다 읽으면 표시', await page.evaluate(() => /다 읽었어요/.test(document.getElementById('evT').textContent)));
       await page.click('.hs-item[data-t="왕궁"] .hs-link');
       ok('여행지 → 연표 칩: 연표의 방콕 시대 항목으로 이동', await page.evaluate(() => document.querySelector('#hsTabs [aria-selected=true]').dataset.id === 'time' && document.activeElement.dataset.t === '방콕 시대의 시작'));
       await page.keyboard.press('Escape'); await page.waitForTimeout(450);

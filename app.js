@@ -1765,6 +1765,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🏅','역사 퀴즈 칭호 · 읽었어요 표시 · 단톡 자랑','퀴즈를 맞힐 때마다 칭호가 올라가요(여행 새내기 → 카오산 길잡이 → 왓 포 해설사 → 아유타야 탐험가 → 짜끄리 왕조 박사). 6문제를 모두 맞히면 꽃잎이 흩날려요. 여행지 이야기에는 "읽었어요" 표시가 생겨서 가기 전날 카드에 "다 읽었어요 ✓"가 떠요. 결과는 버튼 하나로 복사해 가족 단톡에 올릴 수 있어요.'],
     ['🎯','오늘의 한 문제 · 갈 곳 미리 읽기 · 연표↔여행지 연결','첫 화면에 "오늘의 한 문제" 카드가 생겼어요. 하루 한 문제를 풀면 연속 일수가 쌓여요. 일정에 왕궁·왓 포·왓 아룬 같은 곳이 있는 날은 하루 전부터 "갈 곳 미리 읽기" 카드가 떠요. 일정 상세의 "미리 읽기" 버튼과 카드를 누르면 역사·공부의 해당 여행지로 바로 가고, 여행지와 연표 항목은 서로 오갈 수 있어요.'],
     ['🎮','역사 퀴즈가 생겼어요','"태국 역사·공부"에 퀴즈 탭이 생겼어요. 연표와 여행지 이야기에서 6문제를 내고, 풀 때마다 왜 그런지 바로 알려 줘요. 먼저 일어난 일 맞히기도 있어요. 최고 기록은 이 기기에 저장돼요.'],
     ['⚡','첫 화면이 훨씬 빨리 보여요','앱을 열면 화면의 뼈대와 글씨가 먼저 뜨고, 나머지 모양은 뒤따라 받아요. 느린 인터넷에서 첫 화면이 뜨는 시간을 시험해 보니 0.9초에서 0.4초로 줄었어요. 읽어보는 카드도 필요할 때 불러와서 처음 받는 양이 더 줄었어요. 기능은 그대로예요.'],
@@ -2415,10 +2416,12 @@ const FOODS = [
     if(!s){ ev.style.display = 'none'; return; }
     const date = keyOf(now + (today ? 0 : 864e5)).slice(5).replace('-0', '-').replace(/^0/, '').replace('-', '/');
     $('evTag').textContent = `📜 ${when} 갈 곳 미리 읽기`;
-    $('evT').textContent = `${date} ${s[0]}${s[2] ? ' (선택 일정)' : ''}: ${s[1].join(' · ')} 이야기`;
+    let rd = []; try{ rd = JSON.parse(localStorage.getItem('thai2026_hsread')) || []; }catch(e){}
+    const all = s[1].every(t => rd.includes(t));
+    $('evT').textContent = `${date} ${s[0]}${s[2] ? ' (선택 일정)' : ''}: ${s[1].join(' · ')} 이야기${all ? ' · 다 읽었어요 ✓' : ''}`;
     ev.dataset.spot = s[1][0]; ev.style.display = '';
   }
-  window.__dqRefresh = paintDq;
+  window.__dqRefresh = () => { paintDq(); paintEve(); };
   paintDq(); paintEve(); setInterval(() => { paintDq(); paintEve(); }, 6e4);
   if(dq) dq.addEventListener('click', () => { haptic('tap'); window.__openHistory('quiz', dq.dataset.done ? '' : 'daily'); });
   if(ev) ev.addEventListener('click', () => { haptic('tap'); window.__openHistory('sight', ev.dataset.spot); });

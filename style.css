@@ -2040,3 +2040,15 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .row-end{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 /* 마우스로 쓰는 큰 화면에서도 누르는 영역 44px */
 @media (min-width:761px){ .copy-btn,.wx-loc{min-height:44px} }
+
+/* ── 역사 퀴즈 칭호·읽음 표시·정답 연출 ── */
+.hq-rank{margin:10px 0 0;font-size:1rem;font-weight:700;line-height:1.5;color:var(--jade-d);word-break:keep-all}
+.hs-prog{margin:2px 2px 4px;font-size:.9375rem;font-weight:700;color:var(--gold-text)}
+.hs-read{appearance:none;display:block;width:100%;margin-top:12px;min-height:48px;padding:8px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--jade-d);font-family:inherit;font-size:1rem;font-weight:700;text-align:left;cursor:pointer;word-break:keep-all}
+.hs-read[aria-pressed="true"]{background:var(--jade-s);border-color:var(--jade)}
+@keyframes hqPop{from{transform:scale(.97)}to{transform:none}}
+@keyframes hqRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  .hq-opt.ok{animation:hqPop .26s cubic-bezier(.25,1,.5,1)}
+  .hq-why{animation:hqRise .26s cubic-bezier(.25,1,.5,1)}
+}
