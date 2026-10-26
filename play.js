@@ -1307,3 +1307,90 @@
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
 })();
+
+
+// ── 여행 예고편: 18일을 한 장씩 넘겨 보며 기대를 키워요 (일정 데이터를 그대로 써요, 새 내용 없음) ──
+(function(){
+  const scrim = $('trailerScrim'); if(!scrim) return;
+  const bars = $('trBars'), stage = $('trStage'), cnt = $('trCount'), prevB = $('trPrev'), nextB = $('trNext'), playB = $('trPlay'), closeB = $('trClose');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const MS = 5000, RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const LSH = 'thai2026_trhearts'; let hearts; try{ hearts = JSON.parse(localStorage.getItem(LSH)); }catch(e){} hearts = Array.isArray(hearts) ? hearts : [];
+  const saveH = () => { try{ localStorage.setItem(LSH, JSON.stringify(hearts)); }catch(e){} if(typeof window.__dqRefresh === 'function') window.__dqRefresh(); };
+  const days = () => [].concat(ITIN_A.map(x => ({ ...x, k: '12/' + x.d, m: 12 })), ITIN_B.map(x => ({ ...x, k: '12/' + x.d, m: 12 })), ITIN_C.filter(x => x.d !== '4').map(x => ({ ...x, k: '1/' + x.d, m: 1 })));
+  const kToday = () => { const k = new Date(Date.now() + 9 * 36e5); return Date.UTC(k.getUTCFullYear(), k.getUTCMonth(), k.getUTCDate()); };
+  const D = 864e5, START = Date.UTC(2026, 11, 16), END = Date.UTC(2027, 0, 2);
+  function intro(){
+    const t = kToday(), n = Math.round((START - t) / D);
+    const line = n > 0 ? `출발까지 D-${n} · 잠 ${n}번` : t <= END ? (n === 0 ? '오늘 출발해요!' : `여행 ${-n + 1}일차예요`) : '다시 보는 우리 여행';
+    return `<p class="tr-emo" aria-hidden="true">🎬</p><h3 class="tr-h">2026 태국 가족여행 예고편</h3><p class="tr-sub">${line}</p><p class="tr-note">3가족 9명 · 파타야 12/16~26 · 방콕 12/26~1/2<br>밀어서 넘기거나 아래 버튼을 눌러 보세요. 기대되는 날에는 ♥를 눌러 두세요</p>`;
+  }
+  let list = [], idx = 0, playing = !RM, timer = 0, prevFocus = null;
+  const total = () => list.length + 2;
+  function dayHtml(x){
+    const kind = /→/.test(x.l) ? 'mv' : x.l === '파타야' ? 'pat' : 'bkk', place = kind === 'mv' ? '🚐 이동' : kind === 'pat' ? '🏝️ 파타야' : '🏙️ 방콕';
+    const t = new Date(kToday()), isToday = t.getUTCMonth() + 1 === x.m && String(t.getUTCDate()) === x.d && t.getUTCFullYear() === (x.m === 12 ? 2026 : 2027);
+    const on = hearts.includes(x.k);
+    return { kind, html: `<p class="tr-date">${x.m}/${x.d} (${esc(x.w)})${isToday ? ' · 오늘' : ''}</p><p class="tr-emo" aria-hidden="true">${esc(x.e)}</p><h3 class="tr-h">${esc(x.t)}</h3><p class="tr-sub">${place}</p>${x.rec ? `<p class="tr-note">${esc(x.rec)}</p>` : ''}<button class="tr-heart" type="button" data-k="${esc(x.k)}" aria-pressed="${on}">${on ? '♥' : '♡'} 기대돼요</button>` };
+  }
+  function outro(){
+    const picked = list.filter(x => hearts.includes(x.k));
+    return `<p class="tr-emo" aria-hidden="true">🌴</p><h3 class="tr-h">${picked.length ? `기대되는 날 ${picked.length}일` : '기대되는 날을 골라 보세요'}</h3>` +
+      (picked.length ? `<ul class="tr-picks">${picked.map(x => `<li>♥ ${x.m}/${x.d} ${esc(x.t)}</li>`).join('')}</ul>` : '<p class="tr-note">앞 장면에서 ♥를 누르면 여기에 모여요</p>') + '<p class="tr-sub">곧 만나요, 태국!</p>';
+  }
+  function draw(){
+    const n = total(); let kind = 'intro', html;
+    if(idx === 0) html = intro(); else if(idx === n - 1){ html = outro(); kind = 'intro'; } else { const d = dayHtml(list[idx - 1]); html = d.html; kind = d.kind; }
+    stage.className = 'tr-stage tr-' + kind; stage.innerHTML = `<div class="tr-slide">${html}</div>`;
+    cnt.textContent = `${idx + 1} / ${n}`;
+    bars.innerHTML = Array.from({ length: n }, (_, i) => `<i class="tr-bar${i < idx ? ' done' : ''}${i === idx ? ' cur' : ''}"><b></b></i>`).join('');
+    bars.style.setProperty('--tr-ms', MS + 'ms'); bars.classList.toggle('paused', !playing);
+    playB.textContent = playing ? '⏸ 멈춤' : '▶ 자동'; playB.setAttribute('aria-label', playing ? '자동 넘김 멈추기' : '자동으로 넘기기');
+    clearTimeout(timer);
+    if(playing && idx < n - 1) timer = setTimeout(() => go(1, true), MS); else if(playing){ playing = false; draw0(); }
+    if(idx === n - 1 && !RM && typeof window.__celebrate === 'function' && !outro.done){ outro.done = true; window.__celebrate({ n: 16, spread: 110, petals: true, at: stage, dy: 30, haptic: 'ok' }); }
+  }
+  function draw0(){ playB.textContent = '▶ 자동'; playB.setAttribute('aria-label', '처음부터 자동으로 넘기기'); bars.classList.add('paused'); }
+  function go(d, auto){
+    const n = total(), j = idx + d; if(j < 0 || j > n - 1) return;
+    idx = j; if(!auto) haptic('tap'); draw();
+  }
+  function openT(){
+    list = days(); outro.done = false; prevFocus = document.activeElement; playing = !RM;
+    const t = kToday(); idx = 0;
+    if(t >= START && t <= END){ const k = new Date(t), key = `${k.getUTCMonth() + 1}/${k.getUTCDate()}`, i = list.findIndex(x => x.k === key); if(i >= 0) idx = i + 1; }
+    draw(); scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void scrim.offsetHeight; scrim.classList.add('on'); try{ nextB.focus({ preventScroll: true }); }catch(e){}
+  }
+  function closeT(){
+    if(scrim.hidden) return; clearTimeout(timer);
+    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(() => { scrim.hidden = true; }, 340);
+    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
+    haptic('tap');
+  }
+  window.__openTrailer = openT;
+  window.__trailerInfo = () => ({ days: days().length, hearts: hearts.length });
+  prevB.addEventListener('click', () => go(-1)); nextB.addEventListener('click', () => go(1));
+  playB.addEventListener('click', () => { if(!playing && idx >= total() - 1) idx = 0; playing = !playing; haptic('tap'); draw(); });
+  closeB.addEventListener('click', closeT);
+  scrim.addEventListener('click', e => { if(e.target === scrim) closeT(); });
+  stage.addEventListener('click', e => {
+    const b = e.target.closest('.tr-heart'); if(!b) return;
+    const k = b.dataset.k, on = !hearts.includes(k);
+    hearts = on ? hearts.concat(k) : hearts.filter(x => x !== k); saveH();
+    b.setAttribute('aria-pressed', String(on)); b.textContent = (on ? '♥' : '♡') + ' 기대돼요'; b.classList.toggle('pop', on); haptic(on ? 'ok' : 'tap');
+    if(on && !RM && typeof window.__celebrate === 'function') window.__celebrate({ n: 7, spread: 60, petals: true, at: b, dy: 6, haptic: 'tap' });
+  });
+  let sx = 0, sy = 0;
+  stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  stage.addEventListener('touchend', e => { const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1); }, { passive: true });
+  addEventListener('keydown', e => {
+    if(scrim.hidden) return;
+    if(e.key === 'Escape') closeT(); else if(e.key === 'ArrowRight') go(1); else if(e.key === 'ArrowLeft') go(-1);
+    else if(e.key === 'Tab'){
+      const f = [...scrim.querySelectorAll('button')].filter(x => x.tabIndex >= 0 && !x.disabled), n = f.length, cur = f.indexOf(document.activeElement);
+      if(cur === -1 || (!e.shiftKey && cur === n - 1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n - 1 : 0].focus(); }
+    }
+  });
+})();

@@ -22,7 +22,7 @@ function serve() {
   });
 }
 
-const SHEETS = [['__openPlay', 'playScrim'], ['__openFoodMap', 'foodScrim'], ['__openStory', 'storyScrim'], ['__openWorldcup', 'wcScrim'], ['__openPass', 'passScrim'], ['__openBingo', 'bingoScrim'], ['__openTquiz', 'tquizScrim'], ['__openWheel', 'wheelScrim'], ['__openTitles', 'titleScrim'], ['__openCompass', 'compassScrim'], ['__openThai', 'thaiScrim'], ['__openScore', 'scoreScrim'], ['__openFortune', 'fortuneScrim'], ['__openEats', 'eatsScrim'], ['__openBaht', 'bahtScrim'], ['__openStretch', 'stretchScrim'], ['__openChill', 'chillScrim'], ['__openHistory', 'historyScrim']];
+const SHEETS = [['__openPlay', 'playScrim'], ['__openFoodMap', 'foodScrim'], ['__openStory', 'storyScrim'], ['__openWorldcup', 'wcScrim'], ['__openPass', 'passScrim'], ['__openBingo', 'bingoScrim'], ['__openTquiz', 'tquizScrim'], ['__openWheel', 'wheelScrim'], ['__openTitles', 'titleScrim'], ['__openCompass', 'compassScrim'], ['__openThai', 'thaiScrim'], ['__openScore', 'scoreScrim'], ['__openFortune', 'fortuneScrim'], ['__openEats', 'eatsScrim'], ['__openBaht', 'bahtScrim'], ['__openStretch', 'stretchScrim'], ['__openChill', 'chillScrim'], ['__openHistory', 'historyScrim'], ['__openTrailer', 'trailerScrim']];
 const TABS = ['golf', 'itin', 'stay', 'cost', 'todo'];
 
 async function open(browser, base, w, h, opt = {}) {
@@ -151,6 +151,21 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('오늘의 한 문제: 풀면 완료 표시와 연속 1일', await page.evaluate(() => /오늘의 한 문제/.test(document.getElementById('hsBody').textContent) && JSON.parse(localStorage.getItem('thai2026_hsdaily')).streak === 1));
       await page.keyboard.press('Escape'); await page.waitForTimeout(450);
       ok('홈 카드가 완료로 바뀜', await page.evaluate(() => /오늘 문제 완료/.test(document.getElementById('dqT').textContent)));
+      await ctx.close();
+    }
+    // 4-1b) 여행 예고편: 열기 · 넘기기 · 기대돼요 ♥ · 홈 카드 갱신
+    {
+      const { ctx, page } = await open(browser, base, 390, 844, { clock: '2026-10-26T12:00:00+09:00' });
+      ok('예고편 카드: 출발까지 남은 날이 보임', await page.evaluate(() => /D-51/.test(document.getElementById('trT').textContent)));
+      await page.click('#trCard'); await page.waitForSelector('#trailerScrim.on'); await page.waitForTimeout(400);
+      ok('예고편: 첫 장은 D-51 · 잠 51번', await page.evaluate(() => /D-51 · 잠 51번/.test(document.getElementById('trStage').textContent) && document.getElementById('trCount').textContent === '1 / 20'));
+      await page.click('#trNext');
+      ok('예고편: 두 번째 장은 12/16 도착', await page.evaluate(() => /12\/16/.test(document.querySelector('.tr-date').textContent)));
+      await page.click('.tr-heart');
+      ok('기대돼요 ♥: 눌림 상태와 홈 카드 갱신', await page.evaluate(() => document.querySelector('.tr-heart').getAttribute('aria-pressed') === 'true' && /♥ 1일/.test(document.getElementById('trT').textContent)));
+      for (let i = 0; i < 18; i++) await page.click('#trNext');
+      ok('예고편: 마지막 장에 기대되는 날이 모임', await page.evaluate(() => document.getElementById('trCount').textContent === '20 / 20' && /기대되는 날 1일/.test(document.getElementById('trStage').textContent)));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(450);
       await ctx.close();
     }
     // 4-2) 읽어보는 카드: 홈 제목은 처음부터 보이고, 열면 오늘의 추천 4장

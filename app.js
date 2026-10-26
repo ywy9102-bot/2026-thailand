@@ -1765,6 +1765,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🎬','여행 예고편 — 18일을 한 장씩 미리 보기','첫 화면의 "여행 예고편"을 누르면 12/16부터 1/2까지 하루씩 장면이 넘어가요(5초마다 자동, 멈추거나 밀어서 넘길 수 있어요). 기대되는 날에는 ♥를 눌러 두면 마지막 장면에 모이고 첫 화면 카드에도 개수가 떠요. 출발까지 남은 날과 "잠 N번"도 알려줘요.'],
     ['🃏','연표 카드로 보기 · 연도 롤러 · 정답 진동','역사 연표를 "카드로" 보면 한 장씩 좌우로 넘기고, 카드를 누르면 뒤집혀서 같은 때 우리나라가 나와요. "목록으로" 볼 때는 위에 연도가 따라다니며 스크롤하는 대로 숫자가 넘어가요. 퀴즈는 정답·연속 정답·오답의 진동이 서로 달라요(안드로이드 폰).'],
     ['🇰🇷','같은 때 우리나라 맞히기','역사 퀴즈 탭에 새 놀이가 생겼어요. 태국에서 일어난 일을 보여 주면, 같은 때 우리나라에서는 무슨 일이 있었는지 4개 중에서 골라요. 22가지 짝이 있고, 풀고 나면 연표에 적힌 설명이 나와요. 6문제 퀴즈에도 한 문제씩 섞여 나와요.'],
     ['🌸','퀴즈 꽃잎 연출 · 여행지 읽었어요 표시','6문제를 모두 맞히거나 오늘의 한 문제를 맞히면 꽃잎이 흩날려요. 여행지 이야기에는 "읽었어요" 표시와 읽은 개수가 생기고, 가기 전날 카드에 "다 읽었어요 ✓"가 떠요.'],
@@ -2367,7 +2368,7 @@ const FOODS = [
 // ── 놀이터 모듈(맛집 월드컵·힐링 사운드·스트레칭·골프 운세·역사·먹킷리스트·라운드 기록장·나침반·칭호·룰렛·바트 감각): 별도 파일(play.js)을 처음 열 때(또는 한가할 때) 불러옴 ──
 (function(){
   const lf = () => { if(typeof window.__toast === 'function') window.__toast('📡','기능을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요', 2600); };
-  const NAMES = ['__openWorldcup','__openChill','__openStretch','__openFortune','__openHistory','__openEats','__openScore','__openCompass','__openTitles','__openWheel','__openBaht'];
+  const NAMES = ['__openWorldcup','__openChill','__openStretch','__openFortune','__openHistory','__openEats','__openScore','__openCompass','__openTitles','__openWheel','__openBaht','__openTrailer'];
   NAMES.forEach(name => {
     const stub = (...a) => {
       // 월드컵은 맛집 데이터(foodmap.js)도 먼저 받아 둬요
@@ -2423,8 +2424,17 @@ const FOODS = [
     $('evT').textContent = `${date} ${s[0]}${s[2] ? ' (선택 일정)' : ''}: ${s[1].join(' · ')} 이야기${all ? ' · 다 읽었어요 ✓' : ''}`;
     ev.dataset.spot = s[1][0]; ev.style.display = '';
   }
-  window.__dqRefresh = () => { paintDq(); paintEve(); };
-  paintDq(); paintEve(); setInterval(() => { paintDq(); paintEve(); }, 6e4);
+  // 홈 카드: 여행 예고편 (출발까지 남은 날 · 기대되는 날 수)
+  const tr = $('trCard');
+  function paintTr(){
+    if(!tr) return; let h = []; try{ h = JSON.parse(localStorage.getItem('thai2026_trhearts')) || []; }catch(e){}
+    const START = Date.UTC(2026, 11, 16), END = Date.UTC(2027, 0, 2), t = kday() * 864e5, n = Math.round((START - t) / 864e5);
+    const base = n > 0 ? `출발까지 D-${n} · 18일을 미리 보기` : t <= END ? '여행 중 · 하이라이트 다시 보기' : '다시 보는 우리 여행';
+    $('trT').textContent = base + (h.length ? ` · ♥ ${h.length}일 기대 중` : '');
+  }
+  if(tr) tr.addEventListener('click', () => { haptic('tap'); window.__openTrailer(); });
+  window.__dqRefresh = () => { paintDq(); paintEve(); paintTr(); };
+  paintDq(); paintEve(); paintTr(); setInterval(() => { paintDq(); paintEve(); paintTr(); }, 6e4);
   if(dq) dq.addEventListener('click', () => { haptic('tap'); window.__openHistory('quiz', dq.dataset.done ? '' : 'daily'); });
   if(ev) ev.addEventListener('click', () => { haptic('tap'); window.__openHistory('sight', ev.dataset.spot); });
   document.addEventListener('click', e => { const b = e.target.closest('[data-hist]'); if(b){ haptic('tap'); window.__openHistory('sight', b.dataset.hist); } });
