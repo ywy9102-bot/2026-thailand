@@ -9,6 +9,8 @@ const postcss = require('postcss');
 const ROOT = path.resolve(__dirname, '..');
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.png': 'image/png' };
 const EXTERNAL = /googleapis|gstatic|open-meteo|er-api|currency-api|unpkg|jsdelivr|openstreetmap|nominatim/;
+// 시각에 따라 달라지는 화면(낮·밤 하늘, 출발 전·여행 중)을 모두 덮도록 시계를 고정해 여러 번 재요
+const CLOCKS = ['2026-11-20T12:00:00+09:00', '2026-11-20T22:30:00+09:00', '2026-12-20T12:00:00+07:00'];
 const VIEWPORTS = [[320, 640], [390, 844], [768, 1024], [1280, 800]];   // 미디어쿼리 구간을 넓게 덮어요
 
 function serve() {
@@ -28,11 +30,12 @@ const sha = s => crypto.createHash('sha1').update(s).digest('hex').slice(0, 12);
   const { srv, base } = await serve();
   const browser = await chromium.launch();
   const used = [];
-  for (const [w, h] of VIEWPORTS) {
+  for (const [w, h] of VIEWPORTS) for (const clock of CLOCKS) {
     // 서비스 워커·저장본 없이, 처음 방문하는 상태로 측정해요
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, serviceWorkers: 'block', reducedMotion: 'reduce' });
     const page = await ctx.newPage();
     await page.route(EXTERNAL, r => r.abort());
+    await page.clock.setFixedTime(new Date(clock));
     await page.coverage.startCSSCoverage();
     await page.goto(base); await page.waitForTimeout(1800);
     await page.evaluate(() => { const c = document.getElementById('wnClose'); c && c.click(); }); await page.waitForTimeout(600);

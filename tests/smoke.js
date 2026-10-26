@@ -101,15 +101,35 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.evaluate(() => window.__openHistory()); await page.waitForSelector('#historyScrim.on'); await page.waitForTimeout(400);
       const t = await page.evaluate(() => [...document.querySelectorAll('.hs-item')].map(li => ({ kr: !!li.querySelector('.hs-kr'), year: !!li.querySelector('.hs-year') })));
       ok('역사 연표: 모든 항목에 때와 "같은 때 우리나라"가 있음', t.length >= 20 && t.every(x => x.kr && x.year), { n: t.length });
-      const sel = () => page.evaluate(() => [...document.querySelectorAll('#hsTabs [role=tab]')].map(b => b.getAttribute('aria-selected') + b.tabIndex).join(' '));
+      // 연도 롤러와 카드로 보기
+      ok('연도 롤러: 처음엔 첫 항목의 연도', await page.evaluate(() => document.querySelector('.hs-roll-n').textContent === '1 / 25'));
+      await page.evaluate(() => { const b = document.getElementById('hsBody'); b.scrollTop = 1500; }); await page.waitForTimeout(300);
+      ok('연도 롤러: 스크롤하면 숫자가 넘어감', await page.evaluate(() => { const n = document.querySelector('.hs-roll-n').textContent; return n !== '1 / 25' && /년|세기/.test(document.querySelector('.hs-roll-y').textContent); }));
+      await page.click('[data-view=card]');
+      ok('카드로 보기: 1 / 25, 앞면은 태국 이야기', await page.evaluate(() => document.querySelector('.hc-prog').textContent === '1 / 25' && !document.getElementById('hcFace').classList.contains('back')));
+      await page.click('[data-flip]');
+      ok('카드 뒤집기: 같은 때 우리나라 면', await page.evaluate(() => document.getElementById('hcFace').classList.contains('back') && /같은 때 우리나라/.test(document.getElementById('hcFace').textContent)));
+      await page.click('[data-nav="1"]');
+      ok('카드 다음: 2 / 25, 앞면으로', await page.evaluate(() => document.querySelector('.hc-prog').textContent === '2 / 25' && !document.getElementById('hcFace').classList.contains('back')));
+      await page.keyboard.press('ArrowLeft'); await page.keyboard.press('ArrowLeft');
+      ok('카드 이전(키보드): 처음에서 한 번 더 가면 마지막', await page.evaluate(() => document.querySelector('.hc-prog').textContent === '25 / 25'));
+      await page.click('[data-view=list]');
+      await page.focus('#hsTabs [aria-selected=true]');
+            const sel = () => page.evaluate(() => [...document.querySelectorAll('#hsTabs [role=tab]')].map(b => b.getAttribute('aria-selected') + b.tabIndex).join(' '));
       ok('탭: 처음엔 첫 탭만 Tab 진입', (await sel()) === 'true0 false-1 false-1 false-1', await sel());
       await page.keyboard.press('ArrowRight'); ok('탭: → 로 다음 탭', (await sel()) === 'false-1 true0 false-1 false-1', await sel());
       await page.keyboard.press('End'); ok('탭: End 로 마지막 탭', (await sel()) === 'false-1 false-1 false-1 true0', await sel());
       await page.keyboard.press('Home'); ok('탭: Home 으로 첫 탭', (await sel()) === 'true0 false-1 false-1 false-1', await sel());
       // 퀴즈 탭: 6문제를 끝까지 풀고 결과가 나옴
-      await page.click('#hsTabs [data-id=quiz]'); await page.click('[data-act=start]');
+      await page.click('#hsTabs [data-id=quiz]');
+      await page.click('[data-act=start]');
       for (let i = 0; i < 6; i++) { await page.click('.hq-opt'); await page.click('.hq-go'); }
       ok('역사 퀴즈: 6문제를 풀면 결과가 나옴', await page.evaluate(() => /\/ 6 맞혔어요/.test(document.getElementById('hsBody').textContent)));
+      ok('같은 때 우리나라 짝: 15개 넘게 연결됨', await page.evaluate(() => window.__historyInfo().kr >= 15), await page.evaluate(() => window.__historyInfo().kr));
+      await page.click('[data-act=kr]');
+      ok('같은 때 우리나라 문제: 보기 4개, 태국 사건이 문제에 나옴', await page.evaluate(() => document.querySelectorAll('.hq-opt').length === 4 && /같은 때 우리나라/.test(document.querySelector('.hq-q').textContent)));
+      for (let i = 0; i < 6; i++) { await page.click('.hq-opt'); await page.click('.hq-go'); }
+      ok('같은 때 우리나라 6문제를 풀면 결과가 나옴', await page.evaluate(() => /\/ 6 맞혔어요/.test(document.getElementById('hsBody').textContent)));
       await page.click('#hsTabs [data-id=time]');
       ok('탭 패널 연결', await page.evaluate(() => { const b = document.getElementById('hsBody'); return b.getAttribute('role') === 'tabpanel' && !!document.getElementById(b.getAttribute('aria-labelledby')); }));
       await ctx.close();
@@ -120,6 +140,9 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('갈 곳 미리 읽기: 12/27엔 내일(12/28) 카드가 보임', await page.evaluate(() => { const c = document.getElementById('eveCard'); return c.style.display !== 'none' && /내일/.test(c.textContent) && /왕궁/.test(c.textContent); }));
       await page.click('#eveCard'); await page.waitForSelector('#historyScrim.on'); await page.waitForTimeout(400);
       ok('미리 읽기 카드 → 여행지 탭의 왕궁으로 이동', await page.evaluate(() => document.querySelector('#hsTabs [aria-selected=true]').dataset.id === 'sight' && document.activeElement.dataset.t === '왕궁'));
+      for (const n of ['왕궁', '왓 포', '왓 아룬']) await page.click(`.hs-item[data-t="${n}"] .hs-read`);
+      ok('여행지 읽음 표시: 개수가 올라가고 눌림 상태가 바뀜', await page.evaluate(() => document.querySelector('.hs-prog').textContent.includes('3 / 6') && document.querySelector('.hs-item[data-t="왕궁"] .hs-read').getAttribute('aria-pressed') === 'true'));
+      ok('미리 읽기 카드: 그날 갈 곳을 다 읽으면 표시', await page.evaluate(() => /다 읽었어요/.test(document.getElementById('evT').textContent)));
       await page.click('.hs-item[data-t="왕궁"] .hs-link');
       ok('여행지 → 연표 칩: 연표의 방콕 시대 항목으로 이동', await page.evaluate(() => document.querySelector('#hsTabs [aria-selected=true]').dataset.id === 'time' && document.activeElement.dataset.t === '방콕 시대의 시작'));
       await page.keyboard.press('Escape'); await page.waitForTimeout(450);
