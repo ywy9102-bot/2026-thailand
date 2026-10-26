@@ -2110,3 +2110,12 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .tr-slide>*:not(.tr-emo){animation:trRise .32s cubic-bezier(.25,1,.5,1) both}
   .tr-heart.pop{animation:trPop .3s cubic-bezier(.25,1,.5,1)}
 }
+
+/* 예고편 사진 */
+.tr-photo{position:relative;margin:0;width:100%;aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--hero-fg) 14%,transparent)}
+.tr-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.tr-badge{position:absolute;top:8px;left:8px;padding:2px 8px;border-radius:99px;background:var(--jade-d);font-size:1.25rem;line-height:1.4}
+.tr-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 6px;background:linear-gradient(transparent,var(--jade-d));font-size:.8125rem;line-height:1.4;color:var(--hero-fg);text-align:left}
+.tr-photo.fail{aspect-ratio:auto;background:none;overflow:visible}
+.tr-photo.fail img,.tr-photo.fail .tr-cap{display:none}
+.tr-photo.fail .tr-badge{position:static;padding:0;background:none;font-size:4.5rem;line-height:1.1}

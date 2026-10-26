@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
 const AXE = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const ROOT = path.resolve(__dirname, '..');
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.png': 'image/png', '.md': 'text/markdown' };
-const EXTERNAL = /googleapis|gstatic|open-meteo|er-api|currency-api|unpkg|jsdelivr|openstreetmap|nominatim/;
+const EXTERNAL = /wikimedia|googleapis|gstatic|open-meteo|er-api|currency-api|unpkg|jsdelivr|openstreetmap|nominatim/;
 
 const results = [];
 const ok = (name, pass, detail) => { results.push({ name, pass: !!pass, detail }); if(!pass) console.log('  ✗', name, detail !== undefined ? '→ ' + JSON.stringify(detail).slice(0, 300) : ''); };
@@ -160,6 +160,8 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.click('#trCard'); await page.waitForSelector('#trailerScrim.on'); await page.waitForTimeout(400);
       ok('예고편: 첫 장은 D-51 · 잠 51번', await page.evaluate(() => /D-51 · 잠 51번/.test(document.getElementById('trStage').textContent) && document.getElementById('trCount').textContent === '1 / 20'));
       await page.click('#trNext');
+      await page.waitForSelector('.tr-photo.fail', { timeout: 5000 });
+      ok('예고편: 사진을 못 불러오면 이모지 화면으로 바뀜', await page.evaluate(() => getComputedStyle(document.querySelector('.tr-photo.fail .tr-badge')).fontSize === '72px'));
       ok('예고편: 두 번째 장은 12/16 도착', await page.evaluate(() => /12\/16/.test(document.querySelector('.tr-date').textContent)));
       await page.click('.tr-heart');
       ok('기대돼요 ♥: 눌림 상태와 홈 카드 갱신', await page.evaluate(() => document.querySelector('.tr-heart').getAttribute('aria-pressed') === 'true' && /♥ 1일/.test(document.getElementById('trT').textContent)));
