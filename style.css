@@ -2075,3 +2075,47 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
   .hc-face.hc-turn{animation:hcTurn .26s cubic-bezier(.25,1,.5,1)}
   .hc-face.hc-in{animation:hcSlide .24s cubic-bezier(.25,1,.5,1)}
 }
+
+/* ── 여행 예고편 ── */
+.tr-sheet{background:var(--jade-d);color:var(--hero-fg);max-height:94vh}
+.tr-bars{display:flex;gap:3px;margin:0 0 8px}
+.tr-bar{flex:1 1 0;height:4px;border-radius:99px;overflow:hidden;background:color-mix(in srgb,var(--hero-fg) 26%,transparent)}
+.tr-bar b{display:block;height:100%;background:var(--hero-fg);transform:scaleX(0);transform-origin:left}
+.tr-bar.done b{transform:scaleX(1)}
+.tr-bar.cur b{transform:scaleX(1)}
+.tr-count{margin:0 0 10px;font-size:.9375rem;font-weight:700;color:var(--hero-fg);text-align:right}
+.tr-stage{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;border-radius:20px;padding:24px 18px;text-align:center;background:var(--jade)}
+.tr-stage.tr-bkk{background:var(--gold-text)}
+.tr-stage.tr-mv{background:var(--ink2)}
+.tr-slide{display:flex;flex-direction:column;align-items:center;gap:8px}
+.tr-emo{margin:0;font-size:4.5rem;line-height:1.1}
+.tr-date{margin:0;font-family:'Source Serif 4',serif;font-size:1.375rem;font-weight:700;color:var(--hero-fg)}
+.tr-h{margin:0;font-size:1.5rem;font-weight:700;line-height:1.35;color:var(--hero-fg);word-break:keep-all}
+.tr-sub{margin:0;font-size:1.0625rem;font-weight:700;color:var(--hero-fg)}
+.tr-note{margin:0;font-size:1.0625rem;line-height:1.6;color:var(--hero-fg);word-break:keep-all}
+.tr-picks{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px;text-align:left;font-size:1.0625rem;line-height:1.5;color:var(--hero-fg)}
+.tr-heart{appearance:none;margin-top:10px;min-height:52px;padding:8px 22px;border:2px solid var(--hero-fg);border-radius:99px;background:transparent;color:var(--hero-fg);font-family:inherit;font-size:1.125rem;font-weight:700;cursor:pointer}
+.tr-heart[aria-pressed="true"]{background:var(--hero-fg);color:var(--jade-d)}
+.tr-ctrl{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.tr-ctrl button,.tr-close{appearance:none;min-height:48px;border:1.5px solid var(--hero-dim);border-radius:12px;background:transparent;color:var(--hero-fg);font-family:inherit;font-size:1.125rem;font-weight:700;cursor:pointer}
+.tr-close{margin-top:10px;font-size:1rem}
+@keyframes trFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes trDrop{from{opacity:0;transform:translateY(-16px) scale(.92)}to{opacity:1;transform:none}}
+@keyframes trRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes trPop{50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:no-preference){
+  .tr-bar.cur b{animation:trFill var(--tr-ms,5000ms) linear forwards}
+  .tr-bars.paused .tr-bar.cur b{animation-play-state:paused}
+  .tr-slide .tr-emo{animation:trDrop .5s cubic-bezier(.25,1,.5,1)}
+  .tr-slide>*:not(.tr-emo){animation:trRise .32s cubic-bezier(.25,1,.5,1) both}
+  .tr-heart.pop{animation:trPop .3s cubic-bezier(.25,1,.5,1)}
+}
+
+/* 예고편 사진 */
+.tr-photo{position:relative;margin:0;width:100%;aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--hero-fg) 14%,transparent)}
+.tr-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.tr-badge{position:absolute;top:8px;left:8px;padding:2px 8px;border-radius:99px;background:var(--jade-d);font-size:1.25rem;line-height:1.4}
+.tr-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 6px;background:linear-gradient(transparent,var(--jade-d));font-size:.8125rem;line-height:1.4;color:var(--hero-fg);text-align:left}
+.tr-photo.fail{aspect-ratio:auto;background:none;overflow:visible}
+.tr-photo.fail img,.tr-photo.fail .tr-cap{display:none}
+.tr-photo.fail .tr-badge{position:static;padding:0;background:none;font-size:4.5rem;line-height:1.1}

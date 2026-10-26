@@ -49,3 +49,7 @@ npm run critical   # style.css를 고쳤다면 첫 화면용 스타일을 다시
 - 각 문서에 참가자, 숙소(취소기한), 일정표, 비용정산, TBD 체크리스트 포함
 
 버전 변경 이력은 각 일정표 문서 하단 "별첨: 변경이력" 참고.
+
+## 여행 예고편 사진
+
+`play.js`의 `PHOTOS`가 Wikimedia Commons 파일 이름을 가리켜요(`https://commons.wikimedia.org/wiki/File:<파일 이름>`에서 저자와 라이선스를 볼 수 있어요). 가족 내부용이라 외부에 공개하지 않아요. 파일을 바꾸려면 `PHOTOS`의 이름만 고치면 돼요.
