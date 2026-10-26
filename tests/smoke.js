@@ -101,7 +101,21 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.evaluate(() => window.__openHistory()); await page.waitForSelector('#historyScrim.on'); await page.waitForTimeout(400);
       const t = await page.evaluate(() => [...document.querySelectorAll('.hs-item')].map(li => ({ kr: !!li.querySelector('.hs-kr'), year: !!li.querySelector('.hs-year') })));
       ok('역사 연표: 모든 항목에 때와 "같은 때 우리나라"가 있음', t.length >= 20 && t.every(x => x.kr && x.year), { n: t.length });
-      const sel = () => page.evaluate(() => [...document.querySelectorAll('#hsTabs [role=tab]')].map(b => b.getAttribute('aria-selected') + b.tabIndex).join(' '));
+      // 연도 롤러와 카드로 보기
+      ok('연도 롤러: 처음엔 첫 항목의 연도', await page.evaluate(() => document.querySelector('.hs-roll-n').textContent === '1 / 25'));
+      await page.evaluate(() => { const b = document.getElementById('hsBody'); b.scrollTop = 1500; }); await page.waitForTimeout(300);
+      ok('연도 롤러: 스크롤하면 숫자가 넘어감', await page.evaluate(() => { const n = document.querySelector('.hs-roll-n').textContent; return n !== '1 / 25' && /년|세기/.test(document.querySelector('.hs-roll-y').textContent); }));
+      await page.click('[data-view=card]');
+      ok('카드로 보기: 1 / 25, 앞면은 태국 이야기', await page.evaluate(() => document.querySelector('.hc-prog').textContent === '1 / 25' && !document.getElementById('hcFace').classList.contains('back')));
+      await page.click('[data-flip]');
+      ok('카드 뒤집기: 같은 때 우리나라 면', await page.evaluate(() => document.getElementById('hcFace').classList.contains('back') && /같은 때 우리나라/.test(document.getElementById('hcFace').textContent)));
+      await page.click('[data-nav="1"]');
+      ok('카드 다음: 2 / 25, 앞면으로', await page.evaluate(() => document.querySelector('.hc-prog').textContent === '2 / 25' && !document.getElementById('hcFace').classList.contains('back')));
+      await page.keyboard.press('ArrowLeft'); await page.keyboard.press('ArrowLeft');
+      ok('카드 이전(키보드): 처음에서 한 번 더 가면 마지막', await page.evaluate(() => document.querySelector('.hc-prog').textContent === '25 / 25'));
+      await page.click('[data-view=list]');
+      await page.focus('#hsTabs [aria-selected=true]');
+            const sel = () => page.evaluate(() => [...document.querySelectorAll('#hsTabs [role=tab]')].map(b => b.getAttribute('aria-selected') + b.tabIndex).join(' '));
       ok('탭: 처음엔 첫 탭만 Tab 진입', (await sel()) === 'true0 false-1 false-1 false-1', await sel());
       await page.keyboard.press('ArrowRight'); ok('탭: → 로 다음 탭', (await sel()) === 'false-1 true0 false-1 false-1', await sel());
       await page.keyboard.press('End'); ok('탭: End 로 마지막 탭', (await sel()) === 'false-1 false-1 false-1 true0', await sel());

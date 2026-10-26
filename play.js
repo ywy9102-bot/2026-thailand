@@ -499,6 +499,7 @@
   ];
   const TABS = [['time','📜 연표'],['sight','🛕 여행지'],['basic','📘 알아두기'],['quiz','🎮 퀴즈']];
   let mode = 'time';
+  let view = 'list', ci = 0, flip = false;   // 연표 보기 방식(목록·카드)
 
   // ── 역사 퀴즈: 위 연표·여행지·알아두기에 적힌 내용에서만 문제를 내요 (새 사실을 더하지 않아요) ──
   // [문제, 정답, [오답 3개], 풀이]
@@ -605,8 +606,13 @@
     li.classList.add('hs-hit'); li.scrollIntoView({ block: 'start' }); li.focus({ preventScroll: true });
   }
   body.addEventListener('click', e => {
+    const vb = e.target.closest('[data-view]');
+    if(vb && body.contains(vb)){ view = vb.dataset.view; haptic('tap'); paint(); const f = body.querySelector(`[data-view="${view}"]`); if(f) f.focus({ preventScroll: true }); return; }
+    const nv = e.target.closest('[data-nav]');
+    if(nv && body.contains(nv)){ cardGo(+nv.dataset.nav, `[data-nav="${nv.dataset.nav}"]`); return; }
+    if(body.contains(e.target) && (e.target.closest('[data-flip]') || e.target.closest('#hcFace'))){ cardFlip(e.target.closest('[data-flip]') ? '[data-flip]' : null); return; }
     const lk = e.target.closest('.hs-link');
-    if(lk && body.contains(lk)){ mode = lk.dataset.go; haptic('tap'); paint(); jump(lk.dataset.t); return; }
+    if(lk && body.contains(lk)){ mode = lk.dataset.go; if(mode === 'time') view = 'list'; haptic('tap'); paint(); jump(lk.dataset.t); return; }
     const rb = e.target.closest('.hs-read');
     if(rb && body.contains(rb)){
       const t = rb.dataset.read, was = rd.length;
@@ -633,9 +639,9 @@
     if(b.dataset.k != null && qz && qz.picked == null){
       const c = qz.qs[qz.i]; qz.picked = +b.dataset.k;
       if(c.opts[qz.picked] === c.a){
-        qz.score++; haptic('ok');
+        qz.score++; qz.run = (qz.run || 0) + 1; haptic(qz.run >= 2 ? 'combo' : 'ok');
         if(qz.daily && !dDone()) cel({ n: 10, spread: 70, petals: true, at: b, dy: 6 });
-      } else haptic('tap');
+      } else { qz.run = 0; haptic('wrong'); }
       if(qz.daily) dRecord(c.opts[qz.picked] === c.a);
       paintQuiz();
     }
@@ -652,15 +658,61 @@
     return (tl ? tl.map(n => c('time', n, `📜 연표에서 보기: ${esc(n)} (${esc(tlYear(n))})`)) : sp.map(n => c('sight', n, `🛕 여행지에서 보기: ${esc(n)}`))).join('');
   };
   const item = (top, t, b, extra, label, kr) => `<li class="hs-item" data-t="${esc(t)}" tabindex="-1">${top ? `<p class="hs-year">${esc(top)}</p>` : ''}<h3 class="hs-t">${esc(t)}</h3><p class="hs-b">${esc(b)}</p>${kr ? `<p class="hs-kr"><b>🇰🇷 같은 때 우리나라</b> ${esc(kr)}</p>` : ''}${extra ? `<p class="hs-trip"><b>${label}</b> ${esc(extra)}</p>` : ''}${links(t) ? `<p class="hs-links">${links(t)}</p>` : ''}</li>`;
+  const viewBar = () => `<div class="hs-view" role="group" aria-label="연표 보기 방식"><button type="button" data-view="list" aria-pressed="${view === 'list'}">📃 목록으로</button><button type="button" data-view="card" aria-pressed="${view === 'card'}">🃏 카드로</button></div>`;
+  // 목록 맨 위에 붙어 다니는 연도 롤러: 스크롤하면 지금 보는 항목의 연도로 숫자가 넘어가요
+  let rollIdx = -1, rollTick = 0;
+  function roll(force){
+    if(mode !== 'time' || view !== 'list') return;
+    const bar = body.querySelector('.hs-roll'); if(!bar) return;
+    const items = body.querySelectorAll('.hs-item'); if(!items.length) return;
+    const top = body.getBoundingClientRect().top + bar.offsetHeight + 16;
+    let idx = 0; if(body.scrollTop > 4) items.forEach((it, k) => { if(it.getBoundingClientRect().top <= top) idx = k; });
+    if(!force && idx === rollIdx) return;
+    const y = bar.querySelector('.hs-roll-y'), r = TIMELINE[idx], dir = idx >= rollIdx ? 1 : -1;
+    rollIdx = idx;
+    y.textContent = yearOf(r) ? yearOf(r) + '년' : r[0];
+    bar.querySelector('.hs-roll-n').textContent = `${idx + 1} / ${TIMELINE.length}`;
+    y.style.setProperty('--dy', (dir * 10) + 'px'); y.classList.remove('hs-roll-go'); void y.offsetWidth; y.classList.add('hs-roll-go');
+  }
+  body.addEventListener('scroll', () => { if(rollTick) return; rollTick = requestAnimationFrame(() => { rollTick = 0; roll(); }); }, { passive: true });
+  // 카드로 보기: 앞면은 태국 이야기, 뒷면은 같은 때 우리나라
+  function paintCard(){
+    const r = TIMELINE[ci], N = TIMELINE.length;
+    const front = `<p class="hs-year">${esc(r[0])}</p><h3 class="hs-t">${esc(r[1])}</h3><p class="hs-b">${esc(r[2])}</p>${r[3] ? `<p class="hs-trip"><b>🧳 이번 여행</b> ${esc(r[3])}</p>` : ''}`;
+    const back = `<p class="hs-year">${esc(r[0])}</p><h3 class="hs-t">🇰🇷 같은 때 우리나라</h3><p class="hs-b">${esc(r[4])}</p><p class="hs-src">태국: ${esc(r[1])}</p>`;
+    body.innerHTML = `${viewBar()}<div class="hc"><p class="hc-prog">${ci + 1} / ${N}</p><div class="hc-face${flip ? ' back' : ''}" id="hcFace" role="group" aria-label="${flip ? '같은 때 우리나라 면' : '태국 이야기 면'}" aria-live="polite">${flip ? back : front}</div>` +
+      `<div class="hc-nav"><button type="button" data-nav="-1">◀ 이전</button><button type="button" data-flip="1">↻ 뒤집기</button><button type="button" data-nav="1">다음 ▶</button></div><p class="hc-hint">카드를 눌러도 뒤집혀요 · 좌우로 밀어서 넘겨요</p></div>`;
+    body.scrollTop = 0; syncTabs();
+  }
+  function cardGo(d, sel){
+    ci = (ci + d + TIMELINE.length) % TIMELINE.length; flip = false; haptic('tap'); paintCard();
+    const f = body.querySelector('#hcFace'); f.style.setProperty('--dx', (d > 0 ? 28 : -28) + 'px'); f.classList.add('hc-in');
+    const b = sel && body.querySelector(sel); if(b) b.focus({ preventScroll: true });
+  }
+  function cardFlip(sel){
+    flip = !flip; haptic('tap'); paintCard(); body.querySelector('#hcFace').classList.add('hc-turn');
+    const b = sel && body.querySelector(sel); if(b) b.focus({ preventScroll: true });
+  }
+  let sx = 0, sy = 0, sw = false;
+  body.addEventListener('touchstart', e => { sw = !!e.target.closest('.hc'); if(sw){ sx = e.touches[0].clientX; sy = e.touches[0].clientY; } }, { passive: true });
+  body.addEventListener('touchend', e => {
+    if(!sw) return; sw = false; const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) cardGo(dx < 0 ? 1 : -1, null);
+  }, { passive: true });
+  body.addEventListener('keydown', e => {
+    if(mode !== 'time' || view !== 'card' || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+    e.preventDefault(); cardGo(e.key === 'ArrowRight' ? 1 : -1, e.target.dataset && e.target.dataset.nav ? `[data-nav="${e.target.dataset.nav}"]` : null);
+  });
   function paint(){
     tabsEl.querySelectorAll('.wh-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === mode)));
     if(mode === 'quiz'){ paintQuiz(); return; }
+    if(mode === 'time' && view === 'card'){ paintCard(); return; }
     let rows = '';
     if(mode === 'time') rows = TIMELINE.map(r => item(r[0], r[1], r[2], r[3], '🧳 이번 여행', r[4])).join('');
     else if(mode === 'sight') rows = SIGHTS.map(r => item('', r[0], r[1], r[2], '💡').replace(/<\/li>$/, readBtn(r[0]) + '</li>')).join('');
     else rows = BASICS.map(r => item('', r[0], r[1], r[2], '💡')).join('');
-    body.innerHTML = `${mode === 'sight' ? `<p class="hs-prog">${readLine()}</p>` : ''}<ol class="hs-list">${rows}</ol><p class="hs-src">한국민족문화대백과사전, 우리역사넷, 위키백과, 브리태니커 같은 자료를 맞춰 보고 쉽게 풀어 쓴 거예요. 자료마다 다른 부분은 "전해져요", "알려져 있어요", "자료마다 달라요"로 적었어요.</p>`;
-    body.scrollTop = 0; syncTabs();
+    body.innerHTML = `${mode === 'time' ? `${viewBar()}<div class="hs-roll" aria-hidden="true"><span class="hs-roll-y"></span><span class="hs-roll-n"></span></div>` : ''}${mode === 'sight' ? `<p class="hs-prog">${readLine()}</p>` : ''}<ol class="hs-list">${rows}</ol><p class="hs-src">한국민족문화대백과사전, 우리역사넷, 위키백과, 브리태니커 같은 자료를 맞춰 보고 쉽게 풀어 쓴 거예요. 자료마다 다른 부분은 "전해져요", "알려져 있어요", "자료마다 달라요"로 적었어요.</p>`;
+    body.scrollTop = 0; syncTabs(); if(mode === 'time') roll(true);
   }
   tabsEl.innerHTML = TABS.map(([id, l]) => `<button class="wh-tab" role="tab" type="button" data-id="${id}" aria-selected="${id === mode}">${l}</button>`).join('');
   tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(!b) return; mode = b.dataset.id; haptic('tap'); paint(); });
@@ -669,11 +721,13 @@
   function open(m, t){
     prevFocus = document.activeElement;
     if(typeof m === 'string' && TABS.some(x => x[0] === m)) mode = m;
+    if(t && mode === 'time') view = 'list';
     if(mode === 'quiz' && t === 'daily' && !dDone()) qz = { qs: dailyRound(), i: 0, score: 0, picked: null, daily: true };
     paint();
     scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
     void scrim.offsetHeight; scrim.classList.add('on');
     try{ tabsEl.querySelector('[aria-selected="true"]').focus({preventScroll:true}); }catch(e){}
+    roll(true);
     if(t && mode !== 'quiz') jump(t);
   }
   function close(){
