@@ -822,7 +822,18 @@
   let data; try{ data = JSON.parse(localStorage.getItem(LSS)); }catch(e){} if(!data || typeof data !== 'object') data = {};
   const save = () => { try{ localStorage.setItem(LSS, JSON.stringify(data)); }catch(e){} };
   const short = c => c.replace(/^Siam CC /,'').replace(/ Golf( Resort| Club| & CC)?$/,'');
-  const rec = (d, n) => { data[d] = data[d] || {}; data[d][n] = data[d][n] || {s:null,b:0,e:0,h:0}; return data[d][n]; };
+  const rec = (d, n) => { data[d] = data[d] || {}; data[d][n] = data[d][n] || {s:null,b:0,e:0,h:0,bh:[]}; if(!Array.isArray(data[d][n].bh)) data[d][n].bh = []; return data[d][n]; };
+  // 버디 기록(누가·언제·몇 번째·어느 홀): 첫 화면의 버디 카드가 읽어요
+  const LSL = 'thai2026_birdlog';
+  const getLog = () => { let l; try{ l = JSON.parse(localStorage.getItem(LSL)); }catch(e){} return Array.isArray(l) ? l : []; };
+  const setLog = l => { try{ localStorage.setItem(LSL, JSON.stringify(l.slice(-300))); }catch(e){} };
+  const logBird = (n, d, k, c) => { const l = getLog(); l.push({ id: Date.now() + l.length, t: Date.now(), n, d, k, c }); setLog(l); };
+  const unlogBird = (n, d) => { const l = getLog(); for(let i = l.length - 1; i >= 0; i--) if(l[i].n === n && l[i].d === d){ l.splice(i, 1); break; } setLog(l); };
+  const tagHole = (n, d, h, on) => { const l = getLog(); for(let i = l.length - 1; i >= 0; i--){ const e = l[i]; if(e.n !== n || e.d !== d) continue; if(on && !e.h){ e.h = h; break; } if(!on && e.h === h){ delete e.h; break; } } setLog(l); };
+  const holesTxt = bh => bh && bh.length ? bh.join('·') + '번 홀' : '';
+  const birdRow = n => '🐦'.repeat(Math.min(n, 9)) + (n > 9 ? `+${n - 9}` : '');
+  const BIRD_MSG = c => c === 1 ? '버디!' : c === 2 ? '버디 2개! 불이 붙었어요 🔥' : c === 3 ? '버디 3개! 오늘 컨디션 최고예요' : `버디 ${c}개! 전설의 라운드예요`;
+  let openHoles = null;   // 버디 홀 고르기를 펼친 사람
   const bkkDay = () => { const t = new Date(Date.now() + 7*36e5); return `${t.getUTCMonth()+1}/${t.getUTCDate()}`; };
   let sel = null, mode = 'rec', prevFocus = null;
   const pickDefault = () => { const today = GOLF.find(g => g.d === bkkDay()); if(today) return today.d; const withData = GOLF.filter(g => data[g.d] && Object.keys(data[g.d]).length).pop(); return (withData || GOLF[0]).d; };
@@ -833,10 +844,16 @@
     const g = GOLF.find(x => x.d === sel);
     pane.innerHTML = `<div class="sc-rounds" role="group" aria-label="라운드 선택">` + GOLF.map(x => `<button class="sc-round${hasData(x.d) ? ' has' : ''}" type="button" data-d="${x.d}" aria-pressed="${x.d === sel}"><b>${x.d}</b>${esc(short(x.c))}</button>`).join('') + `</div>` +
       `<p class="sc-course">⛳ ${esc(g.c)} · ${g.p.length}인 · 티오프 ${esc((g.tee||'').replace(' 확정',''))}</p>` +
-      g.p.map(n => { const r = rec(g.d, n); return `<div class="sc-card" data-n="${esc(n)}"><div class="sc-name"><span>${dot(n)}${esc(n)}</span>` +
-        `<label class="sc-score">총 타수 <input type="number" inputmode="numeric" min="40" max="200" step="1" placeholder="–" value="${r.s ?? ''}" data-act="score" aria-label="${esc(n)} 총 타수"></label></div>` +
-        `<div class="sc-row"><div class="sc-ctr">🐦 버디<button type="button" data-act="bm" aria-label="${esc(n)} 버디 빼기">−</button><output aria-live="polite">${r.b}</output><button class="plus" type="button" data-act="bp" aria-label="${esc(n)} 버디 더하기">+</button></div>` +
-        `<div class="sc-ctr">🦅 이글<button type="button" data-act="em" aria-label="${esc(n)} 이글 빼기">−</button><output aria-live="polite">${r.e}</output><button class="plus" type="button" data-act="ep" aria-label="${esc(n)} 이글 더하기">+</button></div>` +
+      g.p.map(n => { const r = rec(g.d, n), nm = esc(n), open = openHoles === n && r.b > 0;
+        return `<div class="sc-card${r.b ? ' bird' : ''}" data-n="${nm}"><div class="sc-name"><span>${dot(n)}${nm}</span>` +
+        `<label class="sc-score">총 타수 <input type="number" inputmode="numeric" min="40" max="200" step="1" placeholder="–" value="${r.s ?? ''}" data-act="score" aria-label="${nm} 총 타수"></label></div>` +
+        `<div class="sc-bird"><button class="sc-bbtn" type="button" data-act="bp" aria-label="${nm} 버디 1개 더하기"><span aria-hidden="true">🐦</span> 버디!</button>` +
+        `<div class="sc-bnum" role="status" aria-live="polite" aria-label="${nm} 버디 ${r.b}개"><b>${r.b}</b><span>버디</span></div>` +
+        `<button class="sc-bm" type="button" data-act="bm" aria-label="${nm} 버디 1개 빼기">−</button></div>` +
+        (r.b ? `<p class="sc-birds" aria-hidden="true">${birdRow(r.b)}</p><p class="sc-bh">${r.bh.length ? `⛳ 버디 친 홀: <b>${esc(holesTxt(r.bh))}</b>` : '어느 홀이었는지 남겨 보세요 (선택)'}</p>` +
+          `<button class="sc-hbtn" type="button" data-act="hl" aria-expanded="${open}">${open ? '▴ 홀 고르기 닫기' : '⛳ 몇 번 홀? 고르기'}</button>` +
+          (open ? `<div class="sc-holes" role="group" aria-label="${nm} 버디 친 홀">${Array.from({length: 18}, (_, i) => `<button type="button" data-act="hole" data-h="${i + 1}" aria-pressed="${r.bh.includes(i + 1)}">${i + 1}</button>`).join('')}</div>` : '') : '') +
+        `<div class="sc-row"><div class="sc-ctr">🦅 이글<button type="button" data-act="em" aria-label="${nm} 이글 빼기">−</button><output aria-live="polite">${r.e}</output><button class="plus" type="button" data-act="ep" aria-label="${nm} 이글 더하기">+</button></div>` +
         `<button class="sc-ho" type="button" data-act="ho" aria-pressed="${!!r.h}">🕳️ 홀인원${r.h ? ' ✓' : ''}</button></div></div>`; }).join('') +
       `<p class="sc-note">이 기기(브라우저)에만 저장돼요 · 단톡에는 아래 복사 버튼으로 공유</p>`;
   }
@@ -850,8 +867,10 @@
     if(!st.length){ pane.innerHTML = '<p class="sc-empty">아직 기록이 없어요 ⛳<br>"✍️ 기록" 탭에서 라운드 후 스코어와 버디를 입력하면 여기에 순위가 생겨요</p>'; return; }
     st.sort((a,b) => (a.best ?? 999) - (b.best ?? 999) || b.b - a.b);
     const bestS = st.filter(x => x.best != null)[0], birdie = [...st].sort((a,b) => b.b - a.b)[0], eagle = st.filter(x => x.e)[0], hio = st.filter(x => x.h);
-    pane.innerHTML = `<table class="sc-lb"><thead><tr><th>이름</th><th>라운드</th><th>최저</th><th>평균</th><th>🐦</th><th>🦅</th><th>🕳️</th></tr></thead><tbody>` +
-      st.map(o => `<tr><td>${dot(o.n)}${esc(o.n)}</td><td>${o.rounds}</td><td>${o.best ?? '–'}</td><td>${o.avg != null ? o.avg.toFixed(1) : '–'}</td><td>${o.b}</td><td>${o.e}</td><td>${o.h}</td></tr>`).join('') + `</tbody></table>` +
+    const king = birdie && birdie.b ? `<div class="sc-king"><span class="sc-king-ico" aria-hidden="true">🐦</span><div><p class="sc-king-k">버디왕</p><p class="sc-king-n">${dot(birdie.n)}${esc(birdie.n)}</p></div><p class="sc-king-c"><b>${birdie.b}</b>개</p></div>` +
+      `<ul class="sc-bl">${[...st].filter(x => x.b).sort((a, b) => b.b - a.b).map(x => `<li><span>${dot(x.n)}${esc(x.n)}</span><span class="sc-bl-r" aria-hidden="true">${birdRow(x.b)}</span><b>${x.b}개</b></li>`).join('')}</ul>` : '';
+    pane.innerHTML = king + `<table class="sc-lb"><thead><tr><th>이름</th><th>라운드</th><th>최저</th><th>평균</th><th class="bcol">🐦</th><th>🦅</th><th>🕳️</th></tr></thead><tbody>` +
+      st.map(o => `<tr><td>${dot(o.n)}${esc(o.n)}</td><td>${o.rounds}</td><td>${o.best ?? '–'}</td><td>${o.avg != null ? o.avg.toFixed(1) : '–'}</td><td class="bcol">${o.b}</td><td>${o.e}</td><td>${o.h}</td></tr>`).join('') + `</tbody></table>` +
       `<div class="sc-badges">` + [bestS ? `🥇 <b>최저타</b> ${esc(bestS.n)} ${bestS.best}타` : '', birdie && birdie.b ? `🐦 <b>버디왕</b> ${esc(birdie.n)} ${birdie.b}개` : '', eagle ? `🦅 <b>이글</b> ${esc(eagle.n)} ${eagle.e}개` : '', hio.length ? `🕳️ <b>홀인원</b> ${hio.map(x => esc(x.n)).join('·')} 🎉` : ''].filter(Boolean).join('<br>') + `</div>` +
       '<p class="sc-note">최저·평균은 총 타수를 입력한 라운드만 계산해요</p>';
   }
@@ -862,24 +881,32 @@
     const rb = e.target.closest('.sc-round'); if(rb){ sel = rb.dataset.d; haptic('tap'); renderRec(); return; }
     const btn = e.target.closest('[data-act]'); if(!btn || btn.tagName === 'INPUT') return;
     const card = btn.closest('.sc-card'); if(!card) return; const n = card.dataset.n, r = rec(sel, n), act = btn.dataset.act;
-    if(act === 'bp'){ r.b++; haptic('ok'); toast('🐦 버디!', `${n} · 이번 라운드 ${r.b}개째`); }
-    else if(act === 'bm') r.b = Math.max(0, r.b-1);
+    if(act === 'bp'){
+      r.b++; openHoles = n; haptic(r.b >= 2 ? 'combo' : 'ok'); logBird(n, sel, r.b, short(GOLF.find(x => x.d === sel).c));
+      if(typeof window.__celebrate === 'function') window.__celebrate({ kicker: '🐦 버디!', msg: `${n} · ${BIRD_MSG(r.b)}`, ms: 3000, at: card, dy: 0, n: 12 + r.b * 6, spread: 80 + r.b * 10, petals: r.b >= 2 });
+      else toast('🐦 버디!', `${n} · 이번 라운드 ${r.b}개째`);
+    }
+    else if(act === 'bm'){ if(r.b > 0) unlogBird(n, sel); r.b = Math.max(0, r.b-1); if(r.bh.length > r.b) r.bh.pop(); if(!r.b && openHoles === n) openHoles = null; }
+    else if(act === 'hl') openHoles = openHoles === n ? null : n;
+    else if(act === 'hole'){ const h = +btn.dataset.h; const had = r.bh.includes(h); r.bh = had ? r.bh.filter(x => x !== h) : r.bh.concat(h).sort((a, b) => a - b); if(r.bh.length > r.b){ r.b = r.bh.length; logBird(n, sel, r.b, short(GOLF.find(x => x.d === sel).c)); } tagHole(n, sel, h, !had); haptic('tap'); }
     else if(act === 'ep'){ r.e++; haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🦅 이글!', msg:`${n} 이글!`, ms:2600, at:card, dy:0, n:20, spread:90, petals:true }); else toast('🦅 이글!', n, 2400); }
     else if(act === 'em') r.e = Math.max(0, r.e-1);
     else if(act === 'ho'){ r.h = r.h ? 0 : 1; if(r.h){ haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🕳️ 홀인원!!', msg:`${n} 홀인원! 오늘 저녁은 ${n}님이 쏘는 날?`, ms:4200, at:card, dy:0, n:34, spread:120, petals:true }); else toast('🕳️ 홀인원!!', n, 3000); } }
-    save(); renderRec();
-    const again = pane.querySelector(`.sc-card[data-n="${n}"] [data-act="${act}"]`); if(again) try{ again.focus({preventScroll:true}); }catch(err){}
+    save(); renderRec(); if(typeof window.__birdieRefresh === 'function') window.__birdieRefresh();
+    if(act === 'bp'){ const cd = pane.querySelector(`.sc-card[data-n="${n}"]`); if(cd){ cd.classList.add('fresh'); const f = document.createElement('span'); f.className = 'sc-fly'; f.setAttribute('aria-hidden', 'true'); f.textContent = '🐦'; cd.appendChild(f); setTimeout(() => f.remove(), 1200); } }
+    const again = pane.querySelector(`.sc-card[data-n="${n}"] [data-act="${act}"]${act === 'hole' ? `[data-h="${btn.dataset.h}"]` : ''}`); if(again) try{ again.focus({preventScroll:true}); }catch(err){}
   });
   pane.addEventListener('change', e => {
     const inp = e.target.closest('input[data-act="score"]'); if(!inp) return;
     const n = inp.closest('.sc-card').dataset.n, r = rec(sel, n), v = parseInt(inp.value, 10);
     r.s = (v >= 40 && v <= 200) ? v : null; if(inp.value && r.s == null) inp.value = '';
-    save(); haptic('tap');
+    save(); haptic('tap'); if(typeof window.__birdieRefresh === 'function') window.__birdieRefresh();
   });
   function copyText(){
     const lines = ['⛳ 태국 겨울 골프 기록'];
-    GOLF.forEach(g => { const rs = data[g.d]; if(!rs) return; const parts = g.p.filter(n => rs[n] && (rs[n].s || rs[n].b || rs[n].e || rs[n].h)).map(n => { const r = rs[n]; return `${n} ${r.s || '–'}${r.b ? ` 🐦${r.b}` : ''}${r.e ? ` 🦅${r.e}` : ''}${r.h ? ' 🕳️' : ''}`; }); if(parts.length) lines.push(`${g.d} ${short(g.c)}: ${parts.join(' · ')}`); });
-    const st = stats(), bs = st.filter(x => x.best != null).sort((a,b) => a.best - b.best)[0]; if(bs) lines.push(`🥇 최저타 ${bs.n} ${bs.best}타`);
+    GOLF.forEach(g => { const rs = data[g.d]; if(!rs) return; const parts = g.p.filter(n => rs[n] && (rs[n].s || rs[n].b || rs[n].e || rs[n].h)).map(n => { const r = rs[n]; return `${n} ${r.s || '–'}${r.b ? ` ${birdRow(r.b)} 버디${r.b}${r.bh && r.bh.length ? `(${holesTxt(r.bh)})` : ''}` : ''}${r.e ? ` 🦅${r.e}` : ''}${r.h ? ' 🕳️' : ''}`; }); if(parts.length) lines.push(`${g.d} ${short(g.c)}: ${parts.join(' · ')}`); });
+    const st0 = stats(), bk = [...st0].sort((a, b) => b.b - a.b)[0]; if(bk && bk.b) lines.push(`🐦🐦 버디왕 ${bk.n} ${bk.b}개! 🐦🐦`);
+    const st = st0, bs = st.filter(x => x.best != null).sort((a,b) => a.best - b.best)[0]; if(bs) lines.push(`🥇 최저타 ${bs.n} ${bs.best}타`);
     return lines.length > 1 ? lines.join('\n') : '';
   }
   copyBtn.addEventListener('click', async () => {
@@ -898,13 +925,31 @@
     c.fillStyle = '#F4EEDD'; c.font = '700 84px "Source Serif 4", Georgia, serif'; c.fillText(`${g.d} (${g.w})`, 80, 250);
     c.font = '600 52px system-ui, sans-serif'; c.fillText(g.c.length > 26 ? g.c.slice(0, 25) + '…' : g.c, 80, 330);
     c.fillStyle = '#B3CABF'; c.font = '500 36px system-ui, sans-serif'; c.fillText(`${g.p.length}인 라운드 · 티오프 ${(g.tee || '').replace(' 확정', '')}`, 80, 390);
-    const best = Math.min(...rows.map(n => rs[n].s || 999));
-    rows.slice(0, 5).forEach((n, i) => {
-      const r = rs[n], y = 470 + i*150; c.fillStyle = 'rgba(255,255,255,.08)'; c.beginPath(); c.roundRect(60, y, W-120, 126, 28); c.fill();
-      c.fillStyle = pc(n); c.beginPath(); c.arc(110, y+63, 16, 0, 7); c.fill();
-      c.fillStyle = '#F4EEDD'; c.font = '700 48px system-ui, sans-serif'; c.fillText(n, 148, y+78); const nw = c.measureText(n).width;
-      const badge = `${r.b ? ' 🐦' + r.b : ''}${r.e ? ' 🦅' + r.e : ''}${r.h ? ' 🕳️' : ''}`.trim(); c.fillStyle = '#F5E7C0'; c.font = '600 40px system-ui, sans-serif'; c.fillText(badge, 148 + nw + 28, y+78);
-      c.textAlign = 'right'; c.fillStyle = r.s && r.s === best ? '#F5E7C0' : '#F4EEDD'; c.font = '700 64px "Source Serif 4", Georgia, serif'; c.fillText(r.s ? (r.s === best && rows.length > 1 ? '🥇 ' : '') + r.s : '–', W-100, y+82); c.textAlign = 'left';
+    const best = Math.min(...rows.map(n => rs[n].s || 999)), tb = rows.reduce((a, n) => a + (rs[n].b || 0), 0), bn = rows.filter(n => rs[n].b);
+    let y0 = 450;
+    if(tb){
+      // 버디 영웅 띠: 오늘 라운드의 버디를 가장 크게
+      const hg = c.createLinearGradient(60, y0, W-60, y0+210); hg.addColorStop(0, '#F5E7C0'); hg.addColorStop(1, '#E2B84F');
+      c.fillStyle = hg; c.beginPath(); c.roundRect(60, y0, W-120, 210, 36); c.fill();
+      c.textAlign = 'left'; c.fillStyle = '#0E2822'; c.font = '700 40px system-ui, sans-serif'; c.fillText('BIRDIE', 100, y0+62);
+      c.font = '800 150px "Source Serif 4", Georgia, serif'; c.fillText(String(tb), 96, y0+185);
+      const nw0 = c.measureText(String(tb)).width; c.font = '700 56px system-ui, sans-serif'; c.fillText('개', 96 + nw0 + 12, y0+185);
+      c.font = '90px system-ui, sans-serif'; c.textAlign = 'right'; c.fillText('🐦'.repeat(Math.min(tb, 5)), W-96, y0+110);
+      c.font = '600 38px system-ui, sans-serif'; c.fillText(bn.map(n => `${n} ${rs[n].b}`).join(' · ').slice(0, 30), W-96, y0+172);
+      y0 += 240;
+    }
+    const RH = tb ? 138 : 150, maxRows = tb ? 4 : 5;
+    rows.slice(0, maxRows).forEach((n, i) => {
+      const r = rs[n], y = y0 + i*RH, hot = !!r.b; c.textAlign = 'left';
+      c.fillStyle = hot ? 'rgba(245,231,192,.20)' : 'rgba(255,255,255,.08)'; c.beginPath(); c.roundRect(60, y, W-120, RH-18, 28); c.fill();
+      if(hot){ c.strokeStyle = '#F5E7C0'; c.lineWidth = 5; c.beginPath(); c.roundRect(60, y, W-120, RH-18, 28); c.stroke(); }
+      const hh = hot && r.bh && r.bh.length, ny = hh ? y+56 : y+(RH-18)/2+14;
+      c.fillStyle = pc(n); c.beginPath(); c.arc(110, ny-14, 16, 0, 7); c.fill();
+      c.fillStyle = '#F4EEDD'; c.font = '700 46px system-ui, sans-serif'; c.fillText(n, 148, ny); const nw = c.measureText(n).width;
+      if(hot){ const t = `🐦 ×${r.b}`; c.font = '800 42px system-ui, sans-serif'; const tw = c.measureText(t).width + 36; c.fillStyle = '#F5E7C0'; c.beginPath(); c.roundRect(148 + nw + 22, ny-46, tw, 58, 29); c.fill(); c.fillStyle = '#0E2822'; c.fillText(t, 148 + nw + 40, ny-3); }
+      const extra = `${r.e ? ' 🦅' + r.e : ''}${r.h ? ' 🕳️' : ''}`.trim(); if(extra){ c.fillStyle = '#F5E7C0'; c.font = '600 38px system-ui, sans-serif'; c.fillText(extra, 148 + nw + (hot ? 190 : 28), ny); }
+      if(hh){ c.fillStyle = '#F5E7C0'; c.font = '500 32px system-ui, sans-serif'; c.fillText('버디 홀 ' + holesTxt(r.bh), 148, y+102); }
+      c.textAlign = 'right'; c.fillStyle = r.s && r.s === best ? '#F5E7C0' : '#F4EEDD'; c.font = '700 60px "Source Serif 4", Georgia, serif'; c.fillText(r.s ? (r.s === best && rows.length > 1 ? '🥇 ' : '') + r.s : '–', W-100, y+(RH-18)/2+22); c.textAlign = 'left';
     });
     c.fillStyle = '#B3CABF'; c.font = '500 34px system-ui, sans-serif'; c.fillText('태국 겨울 여행 2026 · 3가족 9명', 80, H-90);
     const blob = await new Promise(res => cv.toBlob(res, 'image/png')); if(!blob) return 'fail';
@@ -938,7 +983,7 @@
   addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.wh-tab, .sc-round, .sc-card input, .sc-ctr button, .sc-ho, #scImg, #scCopy, #scClose')];
+    const f = [...scrim.querySelectorAll('.wh-tab, .sc-round, .sc-card input, .sc-card button, #scImg, #scCopy, #scClose')];
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
