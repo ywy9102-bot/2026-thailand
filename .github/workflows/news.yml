@@ -1,0 +1,33 @@
+name: news
+# 매일 방콕·파타야 소식 5개를 골라 news-data 브랜치의 news.json으로 올려요(앱이 열 때 읽어요).
+# main에는 아무것도 올리지 않으므로 "변경은 PR로만" 규칙과 부딪히지 않아요.
+on:
+  schedule:
+    - cron: '30 22 * * *'   # 방콕 05:30 · 한국 07:30
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/build-news.py --out /tmp/news.json
+      - name: news-data 브랜치에 올리기
+        run: |
+          set -e
+          [ -s /tmp/news.json ] || { echo "고른 기사가 없어 올리지 않아요"; exit 0; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin news-data >/dev/null 2>&1; then
+            git fetch origin news-data
+            git checkout -B news-data origin/news-data
+          else
+            git checkout --orphan news-data
+            git rm -rf . >/dev/null 2>&1 || true
+          fi
+          cp /tmp/news.json news.json
+          git add news.json
+          git diff --cached --quiet && { echo "바뀐 내용이 없어요"; exit 0; }
+          git commit -m "news: $(date -u +%F)"
+          git push origin news-data

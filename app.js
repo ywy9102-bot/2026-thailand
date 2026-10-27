@@ -1766,6 +1766,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['📰','오늘의 태국 소식 — 매일 아침 5개','방콕·파타야 중심으로 속보·날씨·환율·골프·교통 소식 5개를 매일 아침 자동으로 골라 와요. 첫 화면의 "오늘의 소식" 카드에서 볼 수 있고, 하루 첫 실행 때는 공지 창으로도 떠요. 제목을 누르면 원문 기사가 열려요. 자동으로 고른 소식이라 중요도가 다를 수 있으니 안전 소식은 외교부 해외안전여행 앱도 함께 확인하세요.'],
     ['🐦','첫 화면 버디 카드·버디 소식 공지','라운드 기록장에서 버디를 누르면 첫 화면 맨 위에 "우리 버디 N개" 카드가 생겨요. 카드를 누르면 누가, 언제(현지 시각), 어느 코스에서 그 라운드 몇 번째 버디였는지(홀을 골랐다면 몇 번 홀인지)가 쌓여서 보여요. 새 버디는 첫 화면을 열 때 "버디 소식" 공지로 최대 3번 알려줘요. 기록은 입력한 폰에만 저장되니 다른 가족에게는 "이미지로 저장·공유"나 "텍스트로 복사"로 전해 주세요.'],
     ['🐦','버디를 크게 — 라운드 카드·리더보드·골프 카드','라운드 기록장에서 "🐦 버디!" 큰 버튼을 누르면 카드가 금빛으로 바뀌고 새가 날아가요. 버디 수가 큰 숫자로 보이고, 몇 번 홀이었는지도 남길 수 있어요. 리더보드에는 "버디왕"이 크게 나오고, 골프 탭의 그 라운드 카드에도 "버디 N개" 띠가 떠요. 이미지로 저장하는 라운드 카드와 단톡 복사 글에도 버디가 가장 크게 들어가요.'],
     ['🎬','여행 예고편 — 사진으로 18일 미리 보기','첫 화면의 "여행 예고편"을 누르면 12/16부터 1/2까지 하루씩 사진과 함께 장면이 넘어가요(5초마다 자동, 멈추거나 밀어서 넘길 수 있어요). 사진은 인터넷의 Wikimedia Commons에서 불러오고, 실제 그 장소가 아닌 분위기 사진에는 설명에 "(분위기 사진)"이라고 적었어요. 사진을 못 불러오면 이모지 화면으로 바뀌어요. 기대되는 날에는 ♥를 눌러 두세요.'],
@@ -2471,6 +2472,63 @@ const FOODS = [
     setTimeout(tick, 1400);
   }
   window.__birdieRefresh = () => { paint(); paintBird(); }; paint(); paintBird(); noticeBird();
+})();
+
+// ── 오늘의 태국 소식: 매일 GitHub가 골라 둔 5개(방콕·파타야 중심, 날씨·환율·골프·속보)를 읽어요 ──
+(function(){
+  const URL_NEWS = 'https://raw.githubusercontent.com/ywy9102-bot/2026-thailand/news-data/news.json';
+  const LSN = 'thai2026_news', LSS = 'thai2026_newsseen';
+  const CATS = { breaking: ['🚨', '속보'], weather: ['🌦️', '날씨'], fx: ['💱', '환율'], golf: ['⛳', '골프'], travel: ['✈️', '교통'], news: ['📰', '소식'] };
+  const card = $('newsCard'), sc = $('newsScrim'); if(!card || !sc) return;
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let data = null, prev = null;
+  const ago = ts => { const m = Math.round((Date.now() - Date.parse(ts)) / 6e4); if(m < 60) return `${Math.max(m, 1)}분 전`; const h = Math.round(m / 60); return h < 48 ? `${h}시간 전` : `${Math.round(h / 24)}일 전`; };
+  const kdate = () => new Date(Date.now() + 9 * 36e5).toISOString().slice(0, 10);
+  const fresh = () => data && Date.now() - Date.parse(data.updated) < 36 * 36e5;
+  const valid = d => d && Array.isArray(d.items) && d.items.length && d.items.every(i => i && i.title && /^https?:\/\//.test(i.url || ''));
+  function paint(){
+    if(!valid(data)){ card.hidden = true; return; }
+    const top = data.items[0], c = CATS[top.cat] || CATS.news;
+    $('nwE').textContent = c[0]; $('nwT').textContent = top.title; $('nwTag').textContent = fresh() ? '📰 오늘의 소식' : '📰 지난 소식'; $('nwGo').textContent = `${data.items.length}개 보기 →`;
+    card.hidden = false;
+  }
+  function render(){
+    const body = $('nwBody');
+    if(!valid(data)){ body.innerHTML = '<p class="nw-empty">아직 소식을 받지 못했어요. 인터넷이 연결되면 매일 아침 새 소식이 도착해요.</p>'; $('nwSub').textContent = '방콕·파타야 중심 · 날씨 · 환율 · 골프 · 속보'; return; }
+    const up = new Date(Date.parse(data.updated) + 9 * 36e5);
+    $('nwSub').textContent = `${up.getUTCMonth() + 1}/${up.getUTCDate()} ${up.getUTCHours() < 12 ? '오전' : '오후'} ${up.getUTCHours() % 12 || 12}:${String(up.getUTCMinutes()).padStart(2, '0')} 기준${fresh() ? '' : ' (오래된 소식이에요)'} · 방콕·파타야 중심`;
+    body.innerHTML = `<ol class="nw-list">${data.items.map(i => { const c = CATS[i.cat] || CATS.news; return `<li><a class="nw-a" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer"><span class="nw-c">${c[0]} ${c[1]}</span><span class="nw-t">${esc(i.title)}</span><span class="nw-s">${esc(i.src || '')}${i.src ? ' · ' : ''}${ago(i.ts)}</span></a></li>`; }).join('')}</ol>` +
+      '<p class="nw-note">구글 뉴스에서 자동으로 고른 소식이라 중요도가 다를 수 있어요. 안전 소식은 외교부 해외안전여행 앱(0404.go.kr)도 함께 확인하세요.</p>';
+  }
+  function open(){
+    render(); prev = document.activeElement; sc.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void sc.offsetHeight; sc.classList.add('on'); try{ $('nwOk').focus({ preventScroll: true }); }catch(e){}
+  }
+  function close(){
+    if(sc.hidden) return; sc.classList.remove('on'); document.documentElement.style.overflow = '';
+    setTimeout(() => { sc.hidden = true; }, 340); try{ prev && prev.focus && prev.focus(); }catch(e){} haptic('tap');
+  }
+  window.__openNews = open;
+  card.addEventListener('click', () => { haptic('tap'); open(); });
+  $('nwOk').addEventListener('click', close);
+  sc.addEventListener('click', e => { if(e.target === sc) close(); });
+  addEventListener('keydown', e => {
+    if(sc.hidden) return;
+    if(e.key === 'Escape') close();
+    else if(e.key === 'Tab'){ const f = [...sc.querySelectorAll('button, a[href], [tabindex="0"]')], n = f.length, cur = f.indexOf(document.activeElement); if(cur === -1 || (!e.shiftKey && cur === n - 1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n - 1 : 0].focus(); } }
+  });
+  // 하루 첫 실행에 한 번 공지처럼 띄워요 (다른 안내가 열려 있으면 닫힌 뒤에)
+  function autoOpen(){
+    if(!valid(data) || !fresh()) return; let seen = ''; try{ seen = localStorage.getItem(LSS) || ''; }catch(e){}
+    if(seen === kdate()) return;
+    let tries = 0; const tick = () => { if(document.querySelector('.wn-scrim.on') && tries++ < 40) return setTimeout(tick, 900); try{ localStorage.setItem(LSS, kdate()); }catch(e){} open(); };
+    setTimeout(tick, 3200);
+  }
+  try{ const c = JSON.parse(localStorage.getItem(LSN)); if(valid(c)){ data = c; paint(); } }catch(e){}
+  const ac = typeof AbortController === 'function' ? new AbortController() : null, to = setTimeout(() => ac && ac.abort(), 8000);
+  fetch(URL_NEWS, { cache: 'no-store', signal: ac ? ac.signal : undefined }).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+    clearTimeout(to); if(!valid(d)) return; data = d; try{ localStorage.setItem(LSN, JSON.stringify(d)); }catch(e){} paint(); autoOpen();
+  }).catch(() => { clearTimeout(to); autoOpen(); });
 })();
 
 // ── 홈 카드: 오늘의 한 문제 · 갈 곳 미리 읽기 (역사·공부 시트와 연결) ──

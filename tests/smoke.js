@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
 const AXE = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const ROOT = path.resolve(__dirname, '..');
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.png': 'image/png', '.md': 'text/markdown' };
-const EXTERNAL = /wikimedia|googleapis|gstatic|open-meteo|er-api|currency-api|unpkg|jsdelivr|openstreetmap|nominatim/;
+const EXTERNAL = /raw\.githubusercontent|wikimedia|googleapis|gstatic|open-meteo|er-api|currency-api|unpkg|jsdelivr|openstreetmap|nominatim/;
 
 const results = [];
 const ok = (name, pass, detail) => { results.push({ name, pass: !!pass, detail }); if(!pass) console.log('  ✗', name, detail !== undefined ? '→ ' + JSON.stringify(detail).slice(0, 300) : ''); };
@@ -22,7 +22,7 @@ function serve() {
   });
 }
 
-const SHEETS = [['__openPlay', 'playScrim'], ['__openFoodMap', 'foodScrim'], ['__openStory', 'storyScrim'], ['__openWorldcup', 'wcScrim'], ['__openPass', 'passScrim'], ['__openBingo', 'bingoScrim'], ['__openTquiz', 'tquizScrim'], ['__openWheel', 'wheelScrim'], ['__openTitles', 'titleScrim'], ['__openCompass', 'compassScrim'], ['__openThai', 'thaiScrim'], ['__openScore', 'scoreScrim'], ['__openFortune', 'fortuneScrim'], ['__openEats', 'eatsScrim'], ['__openBaht', 'bahtScrim'], ['__openStretch', 'stretchScrim'], ['__openChill', 'chillScrim'], ['__openHistory', 'historyScrim'], ['__openTrailer', 'trailerScrim']];
+const SHEETS = [['__openPlay', 'playScrim'], ['__openFoodMap', 'foodScrim'], ['__openStory', 'storyScrim'], ['__openWorldcup', 'wcScrim'], ['__openPass', 'passScrim'], ['__openBingo', 'bingoScrim'], ['__openTquiz', 'tquizScrim'], ['__openWheel', 'wheelScrim'], ['__openTitles', 'titleScrim'], ['__openCompass', 'compassScrim'], ['__openThai', 'thaiScrim'], ['__openScore', 'scoreScrim'], ['__openFortune', 'fortuneScrim'], ['__openEats', 'eatsScrim'], ['__openBaht', 'bahtScrim'], ['__openStretch', 'stretchScrim'], ['__openChill', 'chillScrim'], ['__openHistory', 'historyScrim'], ['__openTrailer', 'trailerScrim'], ['__openNews', 'newsScrim']];
 const TABS = ['golf', 'itin', 'stay', 'cost', 'todo'];
 
 async function open(browser, base, w, h, opt = {}) {
@@ -34,6 +34,7 @@ async function open(browser, base, w, h, opt = {}) {
   page.on('load', () => atLoad.push(...reqs));
   await page.route(EXTERNAL, r => r.abort());
   if(opt.block) await page.route(opt.block, r => r.abort());
+  if(opt.news) await page.route(/raw\.githubusercontent\.com/, r => r.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(opt.news) }));
   if(opt.clock) await page.clock.setFixedTime(new Date(opt.clock));
   await page.goto(base);
   // "이번 업데이트" 안내창은 새 버전을 처음 열 때 뜨므로, 뜰 때까지 잠깐 기다렸다가 닫아요
@@ -203,6 +204,25 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('버디 소식 공지: 확인하면 닫힘', await page.evaluate(() => document.getElementById('birdNotice').hidden));
       for (let i = 0; i < 3; i++) { await page.reload(); await page.waitForTimeout(700); }
       ok('새 버디 안내는 첫 화면을 열 때 최대 3번까지', await page.evaluate(() => JSON.parse(localStorage.getItem('thai2026_birdseen')).c === 3));
+      await ctx.close();
+    }
+    // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
+    {
+      const now = new Date().toISOString();
+      const news = { updated: now, date: now.slice(0, 10), items: [
+        { cat: 'breaking', title: '방콕 도심 시위 속보', src: '연합뉴스', url: 'https://example.com/1', ts: now }, { cat: 'weather', title: '파타야 폭우 주의', src: '뉴시스', url: 'https://example.com/2', ts: now },
+        { cat: 'fx', title: '태국 바트 환율 하락', src: '한국경제', url: 'https://example.com/3', ts: now }, { cat: 'golf', title: '파타야 골프장 소식', src: '골프저널', url: 'https://example.com/4', ts: now }, { cat: 'travel', title: '수완나품 공항 지연', src: 'YTN', url: 'https://example.com/5', ts: now } ] };
+      const { ctx, page } = await open(browser, base, 390, 844, { news });
+      await page.waitForSelector('#newsScrim.on', { timeout: 10000 });
+      ok('소식 공지: 하루 첫 실행에 5개가 뜸', await page.evaluate(() => document.querySelectorAll('#nwBody a.nw-a').length === 5 && [...document.querySelectorAll('#nwBody a')].every(a => /noopener/.test(a.rel) && a.target === '_blank')));
+      await page.click('#nwOk'); await page.waitForTimeout(450);
+      ok('소식 카드: 맨 위 소식 제목이 보임', await page.evaluate(() => !document.getElementById('newsCard').hidden && /방콕 도심 시위 속보/.test(document.getElementById('nwT').textContent)));
+      await page.reload();
+      try { await page.waitForSelector('#wnScrim.on', { timeout: 3000 }); } catch (e) {}
+      await page.evaluate(() => { const c = document.getElementById('wnClose'); c && c.click(); }); await page.waitForTimeout(6000);
+      ok('소식 공지: 같은 날 다시 열면 또 뜨지 않음', await page.evaluate(() => document.getElementById('newsScrim').hidden));
+      await page.click('#newsCard'); await page.waitForSelector('#newsScrim.on');
+      ok('소식 카드를 누르면 다시 볼 수 있음', await page.evaluate(() => document.querySelectorAll('#nwBody a.nw-a').length === 5));
       await ctx.close();
     }
     // 4-2) 읽어보는 카드: 홈 제목은 처음부터 보이고, 열면 오늘의 추천 4장
