@@ -2182,3 +2182,7 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .bird-log li.bl-note{font-size:.875rem;color:var(--ink2);background:none}
 .bl-ico{flex:none;font-size:1.25rem}
 @media (prefers-reduced-motion:no-preference){ .bird-card.fresh .bird-head{animation:scFresh .5s cubic-bezier(.25,1,.5,1)} }
+
+/* ── 버디 소식 공지 ── */
+.bn-total{margin:6px 0 10px;font-family:'Source Serif 4',serif;font-size:2rem;font-weight:800;line-height:1.2;color:var(--gold-text)}
+.bn-list{padding:0 0 4px;max-height:42vh}
