@@ -106,7 +106,7 @@ def select(items, now, n=5):
         if not PLACE.search(it['title']) or (NOISE.search(it['title']) and '골프' not in it['title']): continue
         if (now - it['ts']).total_seconds() > 72 * 3600: continue
         cid, s = score(it, now, it['hits'])
-        if cid == 'news' and not TARGET.search(it['title']): continue          # 일반 소식은 방콕·파타야만
+        if cid == 'news' and (not TARGET.search(it['title']) or s < 4): continue   # 일반 소식은 방콕·파타야 기사 중 점수가 충분한 것만(억지로 5개를 채우지 않아요)
         pool.append({**it, 'cat': cid, 'score': s})
     pool.sort(key=lambda x: (-x['score'], -x['ts'].timestamp()))
     picked, per_src, per_cat = [], {}, {}
