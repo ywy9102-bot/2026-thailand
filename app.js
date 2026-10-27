@@ -1001,6 +1001,7 @@ function golfCard(g){
         <div class="g-price">${g.amt?won(g.amt)+'원':'<span class="chip todo">견적대기</span>'}
           ${g.per?`<small>인당 ${won(g.per)}</small>`:''}</div>
       </div>
+      <div class="g-bird" hidden></div>
       <div class="g-meta">
         <div class="ppl">${g.p.map(p=>`<span class="av" style="background:${pcBg(p)}">${dot(p)}${p}</span>`).join('')}${g.note?`<span class="av" style="background:var(--coral-s);color:var(--coral)">${g.note}</span>`:''}</div>
         <span class="tee">${g.van?`🚐 ${g.van.time} 출발 · `:''}⏱ ${g.tee}</span>
@@ -1765,6 +1766,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🐦','버디를 크게 — 라운드 카드·리더보드·골프 카드','라운드 기록장에서 "🐦 버디!" 큰 버튼을 누르면 카드가 금빛으로 바뀌고 새가 날아가요. 버디 수가 큰 숫자로 보이고, 몇 번 홀이었는지도 남길 수 있어요. 리더보드에는 "버디왕"이 크게 나오고, 골프 탭의 그 라운드 카드에도 "버디 N개" 띠가 떠요. 이미지로 저장하는 라운드 카드와 단톡 복사 글에도 버디가 가장 크게 들어가요.'],
     ['🎬','여행 예고편 — 사진으로 18일 미리 보기','첫 화면의 "여행 예고편"을 누르면 12/16부터 1/2까지 하루씩 사진과 함께 장면이 넘어가요(5초마다 자동, 멈추거나 밀어서 넘길 수 있어요). 사진은 인터넷의 Wikimedia Commons에서 불러오고, 실제 그 장소가 아닌 분위기 사진에는 설명에 "(분위기 사진)"이라고 적었어요. 사진을 못 불러오면 이모지 화면으로 바뀌어요. 기대되는 날에는 ♥를 눌러 두세요.'],
     ['🃏','연표 카드로 보기 · 연도 롤러 · 정답 진동','역사 연표를 "카드로" 보면 한 장씩 좌우로 넘기고, 카드를 누르면 뒤집혀서 같은 때 우리나라가 나와요. "목록으로" 볼 때는 위에 연도가 따라다니며 스크롤하는 대로 숫자가 넘어가요. 퀴즈는 정답·연속 정답·오답의 진동이 서로 달라요(안드로이드 폰).'],
     ['🇰🇷','같은 때 우리나라 맞히기','역사 퀴즈 탭에 새 놀이가 생겼어요. 태국에서 일어난 일을 보여 주면, 같은 때 우리나라에서는 무슨 일이 있었는지 4개 중에서 골라요. 22가지 짝이 있고, 풀고 나면 연표에 적힌 설명이 나와요. 6문제 퀴즈에도 한 문제씩 섞여 나와요.'],
@@ -2392,6 +2394,23 @@ const FOODS = [
   const lf = () => { if(typeof window.__toast === 'function') window.__toast('📡','기능을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요', 2600); };
   const stub = (...a) => window.__loadChunk('foodmap').catch(() => {}).then(() => window.__loadChunk('story')).then(() => { if(window.__openStory === stub) throw new Error('chunk story'); window.__openStory(...a); }).catch(lf);
   window.__openStory = stub;
+})();
+
+// ── 골프 카드의 버디 띠: 라운드 기록장에 버디가 있으면 그 라운드 카드에 크게 보여줘요 ──
+(function(){
+  function paint(){
+    let d = {}; try{ d = JSON.parse(localStorage.getItem('thai2026_scores')) || {}; }catch(e){}
+    document.querySelectorAll('.gcard[data-d]').forEach(card => {
+      const el = card.querySelector('.g-bird'); if(!el) return;
+      const rs = d[card.dataset.d] || {}, who = Object.keys(rs).filter(n => rs[n] && rs[n].b > 0), tot = who.reduce((a, n) => a + rs[n].b, 0);
+      card.classList.toggle('has-bird', tot > 0);
+      if(!tot){ el.hidden = true; el.textContent = ''; return; }
+      const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+      el.innerHTML = `<span class="g-bird-ico" aria-hidden="true">🐦</span><b class="g-bird-n">버디 ${tot}개</b><span class="g-bird-who">${who.map(n => `${esc(n)} ${rs[n].b}`).join(' · ')}</span>`;
+      el.hidden = false;
+    });
+  }
+  window.__birdieRefresh = paint; paint();
 })();
 
 // ── 홈 카드: 오늘의 한 문제 · 갈 곳 미리 읽기 (역사·공부 시트와 연결) ──

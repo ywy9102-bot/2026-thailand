@@ -170,6 +170,20 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await page.keyboard.press('Escape'); await page.waitForTimeout(450);
       await ctx.close();
     }
+    // 4-1c) 라운드 카드: 버디 부각(카드·홀 고르기·리더보드 버디왕·골프 카드 띠)
+    {
+      const { ctx, page } = await open(browser, base, 390, 844);
+      await page.evaluate(() => window.__openScore()); await page.waitForSelector('#scoreScrim.on'); await page.waitForTimeout(400);
+      await page.click('.sc-card >> nth=0 >> [data-act=bp]'); await page.click('.sc-card >> nth=0 >> [data-act=bp]');
+      ok('버디 카드: 버디 2개가 크게 표시되고 카드가 강조됨', await page.evaluate(() => { const c = document.querySelector('.sc-card'); return c.classList.contains('bird') && c.querySelector('.sc-bnum b').textContent === '2' && c.querySelector('.sc-birds').textContent === '🐦🐦'; }));
+      await page.click('[data-act=hole][data-h="5"]');
+      ok('버디 홀 고르기: 5번 홀이 표시됨', await page.evaluate(() => /5번 홀/.test(document.querySelector('.sc-bh').textContent)));
+      await page.click('#scoreScrim .wh-tab[data-id=lb]');
+      ok('리더보드: 버디왕이 크게 나옴', await page.evaluate(() => { const k = document.querySelector('.sc-king'); return !!k && /버디왕/.test(k.textContent) && k.querySelector('b').textContent === '2'; }));
+      await page.click('#scClose'); await page.waitForTimeout(450);
+      ok('골프 카드: 버디 띠가 그 라운드 카드에 나옴', await page.evaluate(() => { const b = [...document.querySelectorAll('.g-bird:not([hidden])')]; return b.length === 1 && /버디 2개/.test(b[0].textContent); }));
+      await ctx.close();
+    }
     // 4-2) 읽어보는 카드: 홈 제목은 처음부터 보이고, 열면 오늘의 추천 4장
     {
       const { ctx, page } = await open(browser, base, 390, 844);
