@@ -194,7 +194,14 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('첫 화면 버디 카드: 합계와 사람별 개수', await page.evaluate(() => { const c = document.getElementById('birdCard'); return !c.hidden && document.getElementById('birdTotal').textContent === '우리 버디 2개' && /윤우열 2/.test(document.getElementById('birdWho').textContent); }));
       await page.click('#birdHead');
       ok('버디 기록: 누가·언제·몇 번째·홀', await page.evaluate(() => { const li = [...document.querySelectorAll('#birdLog li')]; return li.length === 2 && /윤우열/.test(li[0].textContent) && /2번째 버디/.test(li[0].textContent) && /\d+\/\d+ (오전|오후)/.test(li[0].textContent) && /9번 홀/.test(li[0].textContent) && /1번째 버디/.test(li[1].textContent); }));
-      for (let i = 0; i < 4; i++) { await page.reload(); await page.waitForTimeout(700); }
+      await page.reload();
+      try { await page.waitForSelector('#wnScrim.on', { timeout: 3000 }); } catch (e) {}
+      await page.evaluate(() => { const c = document.getElementById('wnClose'); c && c.click(); });
+      await page.waitForSelector('#birdNotice.on', { timeout: 10000 });
+      ok('버디 소식 공지: 첫 화면을 열면 합계와 최근 버디가 뜸', await page.evaluate(() => /우리 버디 2개/.test(document.getElementById('bnTotal').textContent) && document.querySelectorAll('#bnList li').length === 2 && /윤우열/.test(document.getElementById('bnList').textContent)));
+      await page.click('#bnOk'); await page.waitForTimeout(450);
+      ok('버디 소식 공지: 확인하면 닫힘', await page.evaluate(() => document.getElementById('birdNotice').hidden));
+      for (let i = 0; i < 3; i++) { await page.reload(); await page.waitForTimeout(700); }
       ok('새 버디 안내는 첫 화면을 열 때 최대 3번까지', await page.evaluate(() => JSON.parse(localStorage.getItem('thai2026_birdseen')).c === 3));
       await ctx.close();
     }
