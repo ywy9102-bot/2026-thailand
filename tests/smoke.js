@@ -184,6 +184,20 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('골프 카드: 버디 띠가 그 라운드 카드에 나옴', await page.evaluate(() => { const b = [...document.querySelectorAll('.g-bird:not([hidden])')]; return b.length === 1 && /버디 2개/.test(b[0].textContent); }));
       await ctx.close();
     }
+    // 4-1d) 첫 화면 버디 카드: 합계·누가·언제·몇 번째, 새 버디 안내는 최대 3번
+    {
+      const { ctx, page } = await open(browser, base, 390, 844);
+      await page.evaluate(() => window.__openScore()); await page.waitForSelector('#scoreScrim.on'); await page.waitForTimeout(400);
+      await page.click('.sc-card >> nth=0 >> [data-act=bp]'); await page.click('.sc-card >> nth=0 >> [data-act=bp]');
+      await page.click('[data-act=hole][data-h="9"]');
+      await page.click('#scClose'); await page.waitForTimeout(450);
+      ok('첫 화면 버디 카드: 합계와 사람별 개수', await page.evaluate(() => { const c = document.getElementById('birdCard'); return !c.hidden && document.getElementById('birdTotal').textContent === '우리 버디 2개' && /윤우열 2/.test(document.getElementById('birdWho').textContent); }));
+      await page.click('#birdHead');
+      ok('버디 기록: 누가·언제·몇 번째·홀', await page.evaluate(() => { const li = [...document.querySelectorAll('#birdLog li')]; return li.length === 2 && /윤우열/.test(li[0].textContent) && /2번째 버디/.test(li[0].textContent) && /\d+\/\d+ (오전|오후)/.test(li[0].textContent) && /9번 홀/.test(li[0].textContent) && /1번째 버디/.test(li[1].textContent); }));
+      for (let i = 0; i < 4; i++) { await page.reload(); await page.waitForTimeout(700); }
+      ok('새 버디 안내는 첫 화면을 열 때 최대 3번까지', await page.evaluate(() => JSON.parse(localStorage.getItem('thai2026_birdseen')).c === 3));
+      await ctx.close();
+    }
     // 4-2) 읽어보는 카드: 홈 제목은 처음부터 보이고, 열면 오늘의 추천 4장
     {
       const { ctx, page } = await open(browser, base, 390, 844);

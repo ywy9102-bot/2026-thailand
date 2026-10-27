@@ -823,6 +823,13 @@
   const save = () => { try{ localStorage.setItem(LSS, JSON.stringify(data)); }catch(e){} };
   const short = c => c.replace(/^Siam CC /,'').replace(/ Golf( Resort| Club| & CC)?$/,'');
   const rec = (d, n) => { data[d] = data[d] || {}; data[d][n] = data[d][n] || {s:null,b:0,e:0,h:0,bh:[]}; if(!Array.isArray(data[d][n].bh)) data[d][n].bh = []; return data[d][n]; };
+  // 버디 기록(누가·언제·몇 번째·어느 홀): 첫 화면의 버디 카드가 읽어요
+  const LSL = 'thai2026_birdlog';
+  const getLog = () => { let l; try{ l = JSON.parse(localStorage.getItem(LSL)); }catch(e){} return Array.isArray(l) ? l : []; };
+  const setLog = l => { try{ localStorage.setItem(LSL, JSON.stringify(l.slice(-300))); }catch(e){} };
+  const logBird = (n, d, k, c) => { const l = getLog(); l.push({ id: Date.now() + l.length, t: Date.now(), n, d, k, c }); setLog(l); };
+  const unlogBird = (n, d) => { const l = getLog(); for(let i = l.length - 1; i >= 0; i--) if(l[i].n === n && l[i].d === d){ l.splice(i, 1); break; } setLog(l); };
+  const tagHole = (n, d, h, on) => { const l = getLog(); for(let i = l.length - 1; i >= 0; i--){ const e = l[i]; if(e.n !== n || e.d !== d) continue; if(on && !e.h){ e.h = h; break; } if(!on && e.h === h){ delete e.h; break; } } setLog(l); };
   const holesTxt = bh => bh && bh.length ? bh.join('·') + '번 홀' : '';
   const birdRow = n => '🐦'.repeat(Math.min(n, 9)) + (n > 9 ? `+${n - 9}` : '');
   const BIRD_MSG = c => c === 1 ? '버디!' : c === 2 ? '버디 2개! 불이 붙었어요 🔥' : c === 3 ? '버디 3개! 오늘 컨디션 최고예요' : `버디 ${c}개! 전설의 라운드예요`;
@@ -875,13 +882,13 @@
     const btn = e.target.closest('[data-act]'); if(!btn || btn.tagName === 'INPUT') return;
     const card = btn.closest('.sc-card'); if(!card) return; const n = card.dataset.n, r = rec(sel, n), act = btn.dataset.act;
     if(act === 'bp'){
-      r.b++; openHoles = n; haptic(r.b >= 2 ? 'combo' : 'ok');
+      r.b++; openHoles = n; haptic(r.b >= 2 ? 'combo' : 'ok'); logBird(n, sel, r.b, short(GOLF.find(x => x.d === sel).c));
       if(typeof window.__celebrate === 'function') window.__celebrate({ kicker: '🐦 버디!', msg: `${n} · ${BIRD_MSG(r.b)}`, ms: 3000, at: card, dy: 0, n: 12 + r.b * 6, spread: 80 + r.b * 10, petals: r.b >= 2 });
       else toast('🐦 버디!', `${n} · 이번 라운드 ${r.b}개째`);
     }
-    else if(act === 'bm'){ r.b = Math.max(0, r.b-1); if(r.bh.length > r.b) r.bh.pop(); if(!r.b && openHoles === n) openHoles = null; }
+    else if(act === 'bm'){ if(r.b > 0) unlogBird(n, sel); r.b = Math.max(0, r.b-1); if(r.bh.length > r.b) r.bh.pop(); if(!r.b && openHoles === n) openHoles = null; }
     else if(act === 'hl') openHoles = openHoles === n ? null : n;
-    else if(act === 'hole'){ const h = +btn.dataset.h; r.bh = r.bh.includes(h) ? r.bh.filter(x => x !== h) : r.bh.concat(h).sort((a, b) => a - b); if(r.bh.length > r.b) r.b = r.bh.length; haptic('tap'); }
+    else if(act === 'hole'){ const h = +btn.dataset.h; const had = r.bh.includes(h); r.bh = had ? r.bh.filter(x => x !== h) : r.bh.concat(h).sort((a, b) => a - b); if(r.bh.length > r.b){ r.b = r.bh.length; logBird(n, sel, r.b, short(GOLF.find(x => x.d === sel).c)); } tagHole(n, sel, h, !had); haptic('tap'); }
     else if(act === 'ep'){ r.e++; haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🦅 이글!', msg:`${n} 이글!`, ms:2600, at:card, dy:0, n:20, spread:90, petals:true }); else toast('🦅 이글!', n, 2400); }
     else if(act === 'em') r.e = Math.max(0, r.e-1);
     else if(act === 'ho'){ r.h = r.h ? 0 : 1; if(r.h){ haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🕳️ 홀인원!!', msg:`${n} 홀인원! 오늘 저녁은 ${n}님이 쏘는 날?`, ms:4200, at:card, dy:0, n:34, spread:120, petals:true }); else toast('🕳️ 홀인원!!', n, 3000); } }

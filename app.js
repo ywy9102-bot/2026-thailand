@@ -1766,6 +1766,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🐦','첫 화면 버디 카드 — 누가·언제·몇 번째','라운드 기록장에서 버디를 누르면 첫 화면 맨 위에 "우리 버디 N개" 카드가 생겨요. 카드를 누르면 누가, 언제(현지 시각), 어느 코스에서 그 라운드 몇 번째 버디였는지(홀을 골랐다면 몇 번 홀인지)가 쌓여서 보여요. 새 버디는 첫 화면을 열 때 최대 3번 알려줘요. 기록은 입력한 폰에만 저장되니 다른 가족에게는 "이미지로 저장·공유"나 "텍스트로 복사"로 전해 주세요.'],
     ['🐦','버디를 크게 — 라운드 카드·리더보드·골프 카드','라운드 기록장에서 "🐦 버디!" 큰 버튼을 누르면 카드가 금빛으로 바뀌고 새가 날아가요. 버디 수가 큰 숫자로 보이고, 몇 번 홀이었는지도 남길 수 있어요. 리더보드에는 "버디왕"이 크게 나오고, 골프 탭의 그 라운드 카드에도 "버디 N개" 띠가 떠요. 이미지로 저장하는 라운드 카드와 단톡 복사 글에도 버디가 가장 크게 들어가요.'],
     ['🎬','여행 예고편 — 사진으로 18일 미리 보기','첫 화면의 "여행 예고편"을 누르면 12/16부터 1/2까지 하루씩 사진과 함께 장면이 넘어가요(5초마다 자동, 멈추거나 밀어서 넘길 수 있어요). 사진은 인터넷의 Wikimedia Commons에서 불러오고, 실제 그 장소가 아닌 분위기 사진에는 설명에 "(분위기 사진)"이라고 적었어요. 사진을 못 불러오면 이모지 화면으로 바뀌어요. 기대되는 날에는 ♥를 눌러 두세요.'],
     ['🃏','연표 카드로 보기 · 연도 롤러 · 정답 진동','역사 연표를 "카드로" 보면 한 장씩 좌우로 넘기고, 카드를 누르면 뒤집혀서 같은 때 우리나라가 나와요. "목록으로" 볼 때는 위에 연도가 따라다니며 스크롤하는 대로 숫자가 넘어가요. 퀴즈는 정답·연속 정답·오답의 진동이 서로 달라요(안드로이드 폰).'],
@@ -2410,7 +2411,37 @@ const FOODS = [
       el.hidden = false;
     });
   }
-  window.__birdieRefresh = paint; paint();
+  // 첫 화면 버디 카드: 우리 버디 합계 + 누가·언제·몇 번째 (이 기기에 기록된 것)
+  const esc2 = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const fmtT = ms => { const ps = new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Bangkok', month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }).formatToParts(new Date(ms)), g = k => (ps.find(p => p.type === k) || {}).value || ''; return `${g('month')}/${g('day')} ${g('dayPeriod')} ${g('hour')}:${g('minute')}`; };
+  let birdTotal = 0, birdLast = null;
+  function paintBird(){
+    const card = $('birdCard'); if(!card) return;
+    let d = {}, log = []; try{ d = JSON.parse(localStorage.getItem('thai2026_scores')) || {}; }catch(e){} try{ log = JSON.parse(localStorage.getItem('thai2026_birdlog')) || []; }catch(e){}
+    if(!Array.isArray(log)) log = [];
+    const per = {}; let total = 0;
+    Object.values(d).forEach(rs => Object.entries(rs || {}).forEach(([n, r]) => { if(r && r.b > 0){ per[n] = (per[n] || 0) + r.b; total += r.b; } }));
+    birdTotal = total; birdLast = log[log.length - 1] || null;
+    if(!total){ card.hidden = true; return; }
+    $('birdTotal').textContent = `우리 버디 ${total}개`;
+    $('birdWho').textContent = Object.entries(per).sort((a, b) => b[1] - a[1]).map(([n, c]) => `${n} ${c}`).join(' · ');
+    $('birdLog').innerHTML = [...log].reverse().map(e => `<li><span class="bl-ico" aria-hidden="true">🐦</span><div><b>${esc2(e.n)}</b> · ${esc2(e.c || e.d)}<br><span>${fmtT(e.t)} · 그 라운드 ${e.k}번째 버디${e.h ? ` · ${e.h}번 홀` : ''}</span></div></li>`).join('') +
+      (log.length < total ? `<li class="bl-note">시각 기록이 없는 버디 ${total - log.length}개도 합계에 들어 있어요</li>` : '');
+    card.hidden = false;
+  }
+  const bh = $('birdHead');
+  if(bh) bh.addEventListener('click', () => { const open = bh.getAttribute('aria-expanded') !== 'true'; bh.setAttribute('aria-expanded', String(open)); $('birdLog').hidden = !open; $('birdGo').textContent = open ? '접기 ▴' : '누가·언제 ▾'; haptic('tap'); });
+  // 새 버디가 있으면 첫 화면을 열 때 최대 3번까지 알려줘요
+  function noticeBird(){
+    const e = birdLast, card = $('birdCard'); if(!e || !card || card.hidden) return;
+    let s = null; try{ s = JSON.parse(localStorage.getItem('thai2026_birdseen')); }catch(err){}
+    if(!s || s.id !== e.id) s = { id: e.id, c: 0 };
+    if(s.c >= 3) return;
+    s.c++; try{ localStorage.setItem('thai2026_birdseen', JSON.stringify(s)); }catch(err){}
+    card.classList.add('fresh');
+    setTimeout(() => { if(typeof window.__celebrate === 'function') window.__celebrate({ kicker: '🐦 버디 소식', msg: `${e.n}님 ${e.c || e.d} ${e.k}번째 버디! 우리 버디 총 ${birdTotal}개`, ms: 5200, at: card, dy: 20, n: 18, spread: 90, petals: true }); }, 1400);
+  }
+  window.__birdieRefresh = () => { paint(); paintBird(); }; paint(); paintBird(); noticeBird();
 })();
 
 // ── 홈 카드: 오늘의 한 문제 · 갈 곳 미리 읽기 (역사·공부 시트와 연결) ──
