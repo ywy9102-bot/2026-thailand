@@ -28,6 +28,7 @@ TARGET = re.compile(r'방콕|파타야|사타힙|촌부리|수완나품|돈므�
 FAR = re.compile(r'푸껫|푸켓|치앙마이|치앙라이|사무이|끄라비|핫야이|후아힌|코팡안|남부|북부|이산')   # 여행 지역이 아닌 곳
 BLOCK_SRC = {'Vietnam.vn', 'IndexBox'}                                          # 번역·자동 생성 느낌이 강한 곳
 FEATURE = re.compile(r'\[글로벌 pick\]|기적|인생|화제|스토리|이야기|맛집|후기|추천|꿀팁')   # 소식이 아니라 읽을거리
+NOT_CITY = re.compile(r'방콕\s*(문서|선언|합의|회의|포럼|프로세스|협약|성명|원칙|결의|공동선언)')   # 도시가 아니라 문서·회의 이름으로 쓰인 "방콕"
 GOV = re.compile(r'해병대|사령관|국방|군사|정상회담|외교장관|대사 ')
 NOISE = re.compile(r'축구|야구|농구|배구|연예|아이돌|팬미팅|드라마|걸그룹|가수|영화|K-?팝|BTS|주가|증시|코스피|부동산|분양|채용|모집')
 CATS = [  # (id, 정규식, 기본 점수) — 위에서부터 먼저 맞는 것으로 분류
@@ -102,7 +103,7 @@ def select(items, now, n=5):
         else: seen[k] = {**it, 'hits': 1}
     pool = []
     for it in seen.values():
-        if it['src'] in BLOCK_SRC or it['title'].endswith(' - 뉴스 및 통계'): continue
+        if it['src'] in BLOCK_SRC or it['title'].endswith(' - 뉴스 및 통계') or NOT_CITY.search(it['title']): continue
         if not PLACE.search(it['title']) or (NOISE.search(it['title']) and '골프' not in it['title']): continue
         if (now - it['ts']).total_seconds() > 72 * 3600: continue
         cid, s = score(it, now, it['hits'])
@@ -143,6 +144,7 @@ def selftest():
         mk('태국 바트 환율 5년 만에 최저', '한국경제', 5), mk('파타야 골프장 그린피 올랐다', '골프저널', 8), mk('방콕 시위 속보 도로 통제 중', 'YTN', 1.5),
         mk('방콕 사고 사망 소식', '연합뉴스', 2), mk('방콕 맛집 추천', '블로그', 4), mk('태국 대표팀 축구 승리', '스포츠', 1), mk('방콕 폭발 사고 부상', '연합뉴스', 4),
         mk('300㎏ 환자 긴급 이송 작전 방콕의 기적 [글로벌 pick]', '한국경제TV', 6), mk('태국 푸껫 갑작스러운 홍수 발생', '연합뉴스', 2), mk('방콕 직항 소식', 'Vietnam.vn', 1), mk('해병대사령관 방콕 방문', '연합뉴스', 3),
+        mk('‘방콕 문서’와 DMZ가 묻는 생태 평화의 길', '가톨릭뉴스', 2), mk('아세안 방콕 선언 채택', '연합뉴스', 3),
         mk('오래된 방콕 소식', '연합뉴스', 100), mk('서울 부동산 소식', '연합뉴스', 1), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'),
     ]
     out = build(items, now); titles = [i['title'] for i in out['items']]
@@ -152,7 +154,7 @@ def selftest():
     assert sum(i['cat'] == 'breaking' for i in out['items']) <= 3, out
     assert out['items'][0]['cat'] == 'breaking', out                                                   # 속보가 맨 위
     assert {'breaking', 'weather', 'fx', 'golf'} <= {i['cat'] for i in out['items']}, out                # 속보·날씨·환율·골프가 하나씩 들어감
-    assert not any('기적' in t or '푸껫' in t or '해병대' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
+    assert not any('기적' in t or '푸껫' in t or '해병대' in t or '방콕 문서' in t or '방콕 선언' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
