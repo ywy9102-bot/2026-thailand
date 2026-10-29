@@ -61,8 +61,8 @@
     const li = e.target.closest('.sy-li'); if(li){ pos[deck] = +li.dataset.i; save(); mode = 'card'; haptic('tap'); render(); try{ nextBtn.focus({preventScroll:true}); }catch(err){} return; }
     const g = e.target.closest('[data-go]'); if(g){ const it = items.find(x => x.id === g.dataset.go); close(); if(it && typeof window.__foodMapFocus === 'function') setTimeout(() => window.__foodMapFocus(it.city, it.id), 60); }
   });
-  prevBtn.addEventListener('click', () => { setAuto(false); go(-1); });
-  nextBtn.addEventListener('click', () => { setAuto(false); go(1); });
+  prevBtn.addEventListener('click', () => { haptic('tap'); setAuto(false); go(-1); });
+  nextBtn.addEventListener('click', () => { haptic('tap'); setAuto(false); go(1); });
   autoBtn.addEventListener('click', () => { haptic('tap'); setAuto(autoBtn.getAttribute('aria-pressed') !== 'true'); });
   card.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
   card.addEventListener('touchend', e => { if(tx == null || mode === 'list') return; const dx = e.changedTouches[0].clientX - tx; tx = null; if(Math.abs(dx) > 50){ setAuto(false); go(dx < 0 ? 1 : -1); } }, {passive:true});

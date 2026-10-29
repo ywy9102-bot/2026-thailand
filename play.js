@@ -179,11 +179,11 @@
       if(typeof window.__celebrate === 'function') window.__celebrate({ kicker: '🐦 버디!', msg: `${n} · ${BIRD_MSG(r.b)}`, ms: 3000, at: card, dy: 0, n: 12 + r.b * 6, spread: 80 + r.b * 10, petals: r.b >= 2 });
       else toast('🐦 버디!', `${n} · 이번 라운드 ${r.b}개째`);
     }
-    else if(act === 'bm'){ if(r.b > 0) unlogBird(n, sel); r.b = Math.max(0, r.b-1); if(r.bh.length > r.b) r.bh.pop(); if(!r.b && openHoles === n) openHoles = null; }
-    else if(act === 'hl') openHoles = openHoles === n ? null : n;
+    else if(act === 'bm'){ haptic('tap'); if(r.b > 0) unlogBird(n, sel); r.b = Math.max(0, r.b-1); if(r.bh.length > r.b) r.bh.pop(); if(!r.b && openHoles === n) openHoles = null; }
+    else if(act === 'hl') haptic('tap'), openHoles = openHoles === n ? null : n;
     else if(act === 'hole'){ const h = +btn.dataset.h; const had = r.bh.includes(h); r.bh = had ? r.bh.filter(x => x !== h) : r.bh.concat(h).sort((a, b) => a - b); if(r.bh.length > r.b){ r.b = r.bh.length; logBird(n, sel, r.b, short(GOLF.find(x => x.d === sel).c)); } tagHole(n, sel, h, !had); haptic('tap'); }
     else if(act === 'ep'){ r.e++; haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🦅 이글!', msg:`${n} 이글!`, ms:2600, at:card, dy:0, n:20, spread:90, petals:true }); else toast('🦅 이글!', n, 2400); }
-    else if(act === 'em') r.e = Math.max(0, r.e-1);
+    else if(act === 'em') haptic('tap'), r.e = Math.max(0, r.e-1);
     else if(act === 'ho'){ r.h = r.h ? 0 : 1; if(r.h){ haptic('ok'); if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:'🕳️ 홀인원!!', msg:`${n} 홀인원! 오늘 저녁은 ${n}님이 쏘는 날?`, ms:4200, at:card, dy:0, n:34, spread:120, petals:true }); else toast('🕳️ 홀인원!!', n, 3000); } }
     save(); renderRec(); if(typeof window.__birdieRefresh === 'function') window.__birdieRefresh();
     if(act === 'bp'){ const cd = pane.querySelector(`.sc-card[data-n="${n}"]`); if(cd){ cd.classList.add('fresh'); const f = document.createElement('span'); f.className = 'sc-fly'; f.setAttribute('aria-hidden', 'true'); f.textContent = '🐦'; cd.appendChild(f); setTimeout(() => f.remove(), 1200); } }
@@ -203,6 +203,7 @@
     return lines.length > 1 ? lines.join('\n') : '';
   }
   copyBtn.addEventListener('click', async () => {
+    haptic('tap');
     const t = copyText(), o = copyBtn.textContent;
     if(!t){ copyBtn.textContent = '기록이 아직 없어요'; setTimeout(() => { copyBtn.textContent = o; }, 1600); return; }
     try{ await navigator.clipboard.writeText(t); copyBtn.textContent = '✅ 복사했어요'; }catch(err){ copyBtn.textContent = '⚠️ 복사 실패'; }
@@ -252,6 +253,7 @@
   }
   const imgBtn = $('scImg');
   imgBtn.addEventListener('click', async () => {
+    haptic('tap');
     const o = imgBtn.textContent; imgBtn.textContent = '⏳ 이미지 만드는 중…';
     const how = await roundImage();
     imgBtn.textContent = how === 'empty' ? '기록이 아직 없어요' : how === 'saved' ? '✅ 이미지로 저장했어요' : how === 'shared' ? '✅ 공유했어요' : how === 'fail' ? '⚠️ 이미지를 만들지 못했어요' : o;
@@ -399,7 +401,7 @@
   tabsEl.innerHTML = TARGETS.map(t => `<button class="wh-tab" role="tab" type="button" data-id="${t.id}" aria-selected="false">${t.tab}</button>`).join('');
   tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(b){ haptic('tap'); setTarget(TARGETS.find(t => t.id === b.dataset.id)); } });
   startBtn.addEventListener('click', toggleSensor); startBtn.setAttribute('aria-pressed', 'false'); locBtn.setAttribute('aria-pressed', 'false');
-  locBtn.addEventListener('click', locate);
+  locBtn.addEventListener('click', () => { haptic('tap'); locate(); });
 
   function open(){
     prevFocus = document.activeElement; if(!rose()) buildSvg();
