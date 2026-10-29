@@ -2082,6 +2082,6 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .drv-addr{font-size:clamp(16px,4.6vw,20px);line-height:1.45;color:var(--ink);margin:10px 0 0;overflow-wrap:anywhere}
 .drv-say{list-style:none;margin:20px 0 0;padding:0}
 .drv-say li{display:flex;flex-direction:column;gap:3px;padding:13px 0;border-top:1px solid var(--line)}
-.drv-th{font-family:'Noto Sans Thai','Sarabun',system-ui,sans-serif;font-size:clamp(21px,6.2vw,27px);font-weight:600;line-height:1.35;color:var(--ink)}
+.drv-th{font-family:system-ui,-apple-system,sans-serif;font-size:clamp(21px,6.2vw,27px);font-weight:600;line-height:1.35;color:var(--ink)}
 .drv-rm{font-size:14px;color:var(--ink2);line-height:1.45}
 .drv-wake{min-height:1.4em;margin:8px 0 0;font-size:13px;color:var(--ink3)}
