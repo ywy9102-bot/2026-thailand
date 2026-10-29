@@ -207,6 +207,19 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('새 버디 안내는 첫 화면을 열 때 최대 3번까지', await page.evaluate(() => JSON.parse(localStorage.getItem('thai2026_birdseen')).c === 3));
       await ctx.close();
     }
+    // 4-1d2) 기사님께 보여주기 · 홈 화면 바로가기
+    {
+      const { ctx, page } = await open(browser, base, 390, 844);
+      ok('기사님께 보여주기 버튼이 있음', await page.evaluate(() => document.querySelectorAll('[data-driver]').length > 0));
+      await page.evaluate(() => document.querySelector('[data-driver]').click()); await page.waitForTimeout(450);
+      ok('기사님께 보여주기: 영어 이름·주소·태국어 3줄', await page.evaluate(() => { const n = document.getElementById('drvName'), a = document.getElementById('drvAddr'); return !!n && /[A-Za-z]/.test(n.textContent) && a.textContent.length > 5 && document.querySelectorAll('.drv-th').length === 3 && !n.closest('.wn-scrim').hidden; }));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(450);
+      ok('기사님께 보여주기: Esc로 닫힘', await page.evaluate(() => document.getElementById('drvName').closest('.wn-scrim').hidden));
+      await page.goto(base + '#open-food'); await page.reload();
+      await page.waitForSelector('#foodScrim.on', { timeout: 8000 }).catch(() => {});
+      ok('홈 화면 바로가기(#open-food)로 맛집 지도가 열림', await page.evaluate(() => document.getElementById('foodScrim').classList.contains('on') && location.hash === ''));
+      await ctx.close();
+    }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {
       const now = new Date().toISOString();
