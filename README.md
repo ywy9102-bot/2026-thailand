@@ -56,7 +56,7 @@ npm run critical   # style.css를 고쳤다면 첫 화면용 스타일을 다시
 
 ## 오늘의 태국 소식 (자동)
 
-`.github/workflows/news.yml`이 매일 방콕 05:30(한국 07:30)에 `scripts/build-news.py`를 돌려요. 구글 뉴스 한국어 RSS에서 방콕·파타야 중심으로 속보·날씨·환율·골프·교통 소식을 점수로 골라 5개를 `news-data` 브랜치의 `news.json`에 올리고, 앱(`app.js`)이 열 때 그 파일을 읽어서 첫 화면 카드와 하루 첫 실행 공지로 보여줘요.
+`.github/workflows/news.yml`이 매일 방콕 05:30(한국 07:30)에 `scripts/build-news.py`를 돌려요. 구글 뉴스 한국어 RSS에서 방콕·파타야 중심으로 속보·날씨·안전(여행경보)·환율·경제·골프·교통 소식(범죄·가상화폐 기사는 뺌)을 점수로 골라 5개를 `news-data` 브랜치의 `news.json`에 올리고, 앱(`app.js`)이 열 때 그 파일을 읽어서 첫 화면 카드와 하루 첫 실행 공지로 보여줘요.
 
 - `main`에는 올리지 않아서 PR 규칙과 부딪히지 않고, 앱을 다시 배포하지 않아도 매일 바뀌어요.
 - 고르는 규칙(검색어·키워드·점수)은 `scripts/build-news.py` 위쪽에 있어요. `python3 scripts/build-news.py --selftest`로 규칙을 확인해요(CI에서도 돌아요).
