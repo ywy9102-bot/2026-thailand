@@ -5,7 +5,11 @@
 const V = new URL(self.location.href).searchParams.get('v') || '0';
 const PREFIX = 'thai2026-';
 const CACHE = PREFIX + V;
-const CORE = ['./', 'index.html', 'style.css?v=' + V, 'app.js?v=' + V, 'play.js?v=' + V, 'story.js?v=' + V, 'foodmap.js?v=' + V, 'thai.js?v=' + V, 'manifest.json', 'icon-180.png', 'icon-192.png'];
+// 꼭 필요한 파일 / 나중에 써도 되는 조각. 데이터 절약 모드나 2G 망이면 조각은 처음 쓸 때 받아 저장해요
+const ESSENTIAL = ['./', 'index.html', 'style.css?v=' + V, 'app.js?v=' + V, 'play.js?v=' + V, 'manifest.json', 'icon-180.png', 'icon-192.png'];
+const OPTIONAL = ['story.js?v=' + V, 'foodmap.js?v=' + V, 'thai.js?v=' + V, 'learn.js?v=' + V];
+const lean = () => { const c = self.navigator && self.navigator.connection; return !!(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))); };
+const CORE = lean() ? ESSENTIAL : ESSENTIAL.concat(OPTIONAL);
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.all(CORE.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => {})))).then(() => self.skipWaiting()));

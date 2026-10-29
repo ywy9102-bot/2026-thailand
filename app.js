@@ -22,6 +22,10 @@ function haptic(kind){
   if(navigator.userActivation && !navigator.userActivation.isActive) return; // 사용자 제스처 없을 땐 무시
   try{ navigator.vibrate(kind==='ok' ? [11,26,15] : kind==='combo' ? [10,24,10,24,10,24,28] : kind==='wrong' ? 38 : kind==='strong' ? 20 : 9); }catch(e){}   // 정답 · 연속 정답 · 오답은 느낌이 달라요
 }
+/* ── 키 입력: 창 전체 keydown 듣기는 한 곳에서만 하고, 각 시트는 onKey로 등록해요 ── */
+const KEY_HANDLERS = [];
+function onKey(fn){ KEY_HANDLERS.push(fn); }
+addEventListener('keydown', e => { for(const h of KEY_HANDLERS){ try{ h(e); }catch(err){ console.error(err); } } });
 /* ═══ 여행 기준일 (여기만 고치면 카운트다운·현지 위치 자동 반영) ═══ */
 const TRIP = {
   planStart: '2026-08-06', // 최초 일정 구성일 = 카운트다운 링 시작점
@@ -1769,7 +1773,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     ['📰','오늘의 태국 소식 — 매일 아침 5개','방콕·파타야 중심으로 속보·날씨·환율·골프·교통 소식 5개를 매일 아침 자동으로 골라 와요. 첫 화면의 "오늘의 소식" 카드에서 볼 수 있고, 하루 첫 실행 때는 공지 창으로도 떠요. 제목을 누르면 원문 기사가 열려요. 자동으로 고른 소식이라 중요도가 다를 수 있으니 안전 소식은 외교부 해외안전여행 앱도 함께 확인하세요.'],
     ['🐦','첫 화면 버디 카드·버디 소식 공지','라운드 기록장에서 버디를 누르면 첫 화면 맨 위에 "우리 버디 N개" 카드가 생겨요. 카드를 누르면 누가, 언제(현지 시각), 어느 코스에서 그 라운드 몇 번째 버디였는지(홀을 골랐다면 몇 번 홀인지)가 쌓여서 보여요. 새 버디는 첫 화면을 열 때 "버디 소식" 공지로 최대 3번 알려줘요. 기록은 입력한 폰에만 저장되니 다른 가족에게는 "이미지로 저장·공유"나 "텍스트로 복사"로 전해 주세요.'],
     ['🐦','버디를 크게 — 라운드 카드·리더보드·골프 카드','라운드 기록장에서 "🐦 버디!" 큰 버튼을 누르면 카드가 금빛으로 바뀌고 새가 날아가요. 버디 수가 큰 숫자로 보이고, 몇 번 홀이었는지도 남길 수 있어요. 리더보드에는 "버디왕"이 크게 나오고, 골프 탭의 그 라운드 카드에도 "버디 N개" 띠가 떠요. 이미지로 저장하는 라운드 카드와 단톡 복사 글에도 버디가 가장 크게 들어가요.'],
-    ['🎬','여행 예고편 — 사진으로 18일 미리 보기','첫 화면의 "여행 예고편"을 누르면 12/16부터 1/2까지 하루씩 사진과 함께 장면이 넘어가요(5초마다 자동, 멈추거나 밀어서 넘길 수 있어요). 사진은 인터넷의 Wikimedia Commons에서 불러오고, 실제 그 장소가 아닌 분위기 사진에는 설명에 "(분위기 사진)"이라고 적었어요. 사진을 못 불러오면 이모지 화면으로 바뀌어요. 기대되는 날에는 ♥를 눌러 두세요.'],
+    ['🎬','여행 예고편 — 사진으로 18일 미리 보기','첫 화면의 "여행 예고편"을 누르면 12/16부터 1/2까지 하루씩 사진과 함께 장면이 넘어가요(7~8초마다 자동, 누르고 있으면 멈추고 밀어서 넘길 수도 있어요). 사진은 인터넷의 Wikimedia Commons에서 불러오고, 실제 그 장소가 아닌 분위기 사진에는 설명에 "(분위기 사진)"이라고 적었어요. 사진을 못 불러오면 이모지 화면으로 바뀌어요. 기대되는 날에는 ♥를 눌러 두세요.'],
     ['🃏','연표 카드로 보기 · 연도 롤러 · 정답 진동','역사 연표를 "카드로" 보면 한 장씩 좌우로 넘기고, 카드를 누르면 뒤집혀서 같은 때 우리나라가 나와요. "목록으로" 볼 때는 위에 연도가 따라다니며 스크롤하는 대로 숫자가 넘어가요. 퀴즈는 정답·연속 정답·오답의 진동이 서로 달라요(안드로이드 폰).'],
     ['🇰🇷','같은 때 우리나라 맞히기','역사 퀴즈 탭에 새 놀이가 생겼어요. 태국에서 일어난 일을 보여 주면, 같은 때 우리나라에서는 무슨 일이 있었는지 4개 중에서 골라요. 22가지 짝이 있고, 풀고 나면 연표에 적힌 설명이 나와요. 6문제 퀴즈에도 한 문제씩 섞여 나와요.'],
     ['🌸','퀴즈 꽃잎 연출 · 여행지 읽었어요 표시','6문제를 모두 맞히거나 오늘의 한 문제를 맞히면 꽃잎이 흩날려요. 여행지 이야기에는 "읽었어요" 표시와 읽은 개수가 생기고, 가기 전날 카드에 "다 읽었어요 ✓"가 떠요.'],
@@ -1853,7 +1857,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   }
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e=>{ if(e.target===scrim) close(); });
-  addEventListener('keydown', e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
+  onKey(e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
   const focusables=[listEl, closeBtn];   // 포커스 가능한 요소 2개(목록·버튼) 사이를 순환 — 키보드로도 목록 스크롤 가능
   sheet.addEventListener('keydown', e=>{
     if(e.key!=='Tab') return;
@@ -2015,7 +2019,7 @@ const FOODS = [
   if(scrim){
     closeBtn.addEventListener('click', closePass);
     scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
-    addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
+    onKey(e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
     const playBtn = $('passPlay'), focusables = [body, playBtn, shareBtn, closeBtn];
     scrim.addEventListener('keydown', e => {
       if(e.key !== 'Tab') return;
@@ -2204,7 +2208,7 @@ const FOODS = [
   window.__openBingo = open;
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  onKey(e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   resetBtn.addEventListener('click', () => {
     if(!armed){ armed = 1; resetBtn.textContent = '한 번 더 누르면 초기화돼요'; setTimeout(()=>{ armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; }, 2600); return; }
     on = new Set([FREE]); save(); armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; msg.textContent = ''; paint(); haptic('strong');
@@ -2360,7 +2364,7 @@ const FOODS = [
   window.__openTquiz = open;
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  onKey(e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .tq-again, #tqNext:not([hidden]), #tqClose')];
@@ -2372,7 +2376,7 @@ const FOODS = [
 // ── 놀이터 모듈(맛집 월드컵·힐링 사운드·스트레칭·골프 운세·역사·먹킷리스트·라운드 기록장·나침반·칭호·룰렛·바트 감각): 별도 파일(play.js)을 처음 열 때(또는 한가할 때) 불러옴 ──
 (function(){
   const lf = () => { if(typeof window.__toast === 'function') window.__toast('📡','기능을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요', 2600); };
-  const NAMES = ['__openWorldcup','__openChill','__openStretch','__openFortune','__openHistory','__openEats','__openScore','__openCompass','__openTitles','__openWheel','__openBaht','__openTrailer'];
+  const NAMES = ['__openWorldcup','__openChill','__openStretch','__openFortune','__openEats','__openScore','__openCompass','__openTitles','__openWheel','__openBaht'];
   NAMES.forEach(name => {
     const stub = (...a) => {
       // 월드컵은 맛집 데이터(foodmap.js)도 먼저 받아 둬요
@@ -2382,6 +2386,11 @@ const FOODS = [
     window[name] = stub;
   });
   const sb = $('openScore'); if(sb) sb.addEventListener('click', () => { haptic('tap'); window.__openScore(); });
+  // 학습·기대 모듈(역사·공부, 여행 예고편)은 learn.js에 따로 있어요
+  ['__openHistory', '__openTrailer'].forEach(name => {
+    const stub = (...a) => window.__loadChunk('learn').then(() => { if(window[name] === stub) throw new Error('chunk learn'); window[name](...a); }).catch(lf);
+    window[name] = stub;
+  });
 })();
 
 
@@ -2454,7 +2463,7 @@ const FOODS = [
     $('bnOk').addEventListener('click', () => { haptic('tap'); closeNotice(); });
     $('bnAll').addEventListener('click', () => { haptic('tap'); closeNotice(); const h = $('birdHead'); if(h && h.getAttribute('aria-expanded') !== 'true') h.click(); const c = $('birdCard'); if(c) c.scrollIntoView({ block: 'start' }); });
     bn.addEventListener('click', e => { if(e.target === bn) closeNotice(); });
-    addEventListener('keydown', e => {
+    onKey(e => {
       if(bn.hidden) return;
       if(e.key === 'Escape') closeNotice();
       else if(e.key === 'Tab'){ const f = [...bn.querySelectorAll('button, [tabindex="0"]')], n = f.length, cur = f.indexOf(document.activeElement); if(cur === -1 || (!e.shiftKey && cur === n - 1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n - 1 : 0].focus(); } }
@@ -2512,7 +2521,7 @@ const FOODS = [
   card.addEventListener('click', () => { haptic('tap'); open(); });
   $('nwOk').addEventListener('click', close);
   sc.addEventListener('click', e => { if(e.target === sc) close(); });
-  addEventListener('keydown', e => {
+  onKey(e => {
     if(sc.hidden) return;
     if(e.key === 'Escape') close();
     else if(e.key === 'Tab'){ const f = [...sc.querySelectorAll('button, a[href], [tabindex="0"]')], n = f.length, cur = f.indexOf(document.activeElement); if(cur === -1 || (!e.shiftKey && cur === n - 1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n - 1 : 0].focus(); } }
@@ -2589,7 +2598,9 @@ const FOODS = [
   // 오프라인 대비: 서비스 워커로 핵심 파일을 기기에 저장 (https 또는 localhost에서만 동작)
   if('serviceWorker' in navigator) addEventListener('load', () => { try{ navigator.serviceWorker.register('sw.js?v=' + APP_VER.slice(1)).catch(() => {}); }catch(e){} });
   const idle = f => ('requestIdleCallback' in window) ? requestIdleCallback(f, {timeout:4000}) : setTimeout(f, 2500);
-  addEventListener('load', () => idle(() => { window.__loadChunk('play').catch(()=>{}); idle(() => { window.__loadChunk('story').catch(()=>{}); idle(() => { window.__loadChunk('foodmap').catch(()=>{}); idle(() => window.__loadChunk('thai').catch(()=>{})); }); }); }));
+  // 데이터 절약 모드이거나 느린 망(2G)이면 미리 받지 않고, 눌렀을 때 받아요
+  const lean = () => { const c = navigator.connection; return !!(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))); };
+  addEventListener('load', () => idle(() => { window.__loadChunk('play').catch(()=>{}); if(lean()) return; idle(() => { window.__loadChunk('story').catch(()=>{}); idle(() => { window.__loadChunk('foodmap').catch(()=>{}); idle(() => { window.__loadChunk('thai').catch(()=>{}); idle(() => window.__loadChunk('learn').catch(()=>{})); }); }); }); }));
 })();
 
 // ── 파타야 맛집 대동여지도: 후기 사이트 여러 곳에서 평가가 일관된 12곳 — 지도(구글)·메뉴·후기·가격 ──
@@ -2663,7 +2674,7 @@ const FOODS = [
   const pc = $('playCard'); if(pc) pc.addEventListener('click', () => { haptic('tap'); open(); });
   closeBtn.addEventListener('click', () => close());
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  onKey(e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.play-tile, .play-more, #plClose')].filter(x => x.offsetParent !== null);
@@ -2902,7 +2913,7 @@ function __initFunElements(){
       }
       closeBtn.addEventListener('click', close);
       scrim.addEventListener('click', e=>{ if(e.target===scrim) close(); });
-      addEventListener('keydown', e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
+      onKey(e=>{ if(e.key==='Escape' && !scrim.hidden) close(); });
       copyBtn.addEventListener('click', async ()=>{
         try{ await navigator.clipboard.writeText(copyBtn.dataset.txt); }
         catch(_){ const ta=document.createElement('textarea'); ta.value=copyBtn.dataset.txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
