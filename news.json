@@ -1,6 +1,6 @@
 {
- "updated": "2026-10-28T08:43:09+00:00",
- "date": "2026-10-28",
+ "updated": "2026-10-29T01:55:29+00:00",
+ "date": "2026-10-29",
  "items": [
   {
    "cat": "golf",
@@ -17,6 +17,13 @@
    "ts": "2026-10-27T04:27:20+00:00"
   },
   {
+   "cat": "news",
+   "title": "아고다, 유로비전 송 콘테스트 아시아 공식 여행 파트너 참여…방콕 여행 최대 25% 할인",
+   "src": "뷰티트래블뉴스",
+   "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPZzVQZnBydzVnSlpYYXRpLUZQTlI0NGJJenE4VW1iYkcza2N0c2Q2dE1XYzlJRG5ldEJHX3Z6R2lQSzZyT0xhWTRlS0I3ZU44bWdmQldRUnh4VkFySVVOeGVDbXZ2TEJMOFp2SlB1X2FwMy1EbTBLNlBEbVhUTGRrOXFRcTNsdw?oc=5",
+   "ts": "2026-10-29T01:43:16+00:00"
+  },
+  {
    "cat": "travel",
    "title": "태국 무비자 체류 비교…한국 90일, 60개국은 30일",
    "src": "팸타임스 FAM Times",
@@ -24,18 +31,11 @@
    "ts": "2026-10-28T03:56:50+00:00"
   },
   {
-   "cat": "weather",
-   "title": "태국, 방콕 일기예보 | MSN 날씨",
-   "src": "MSN",
-   "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZDd1dzhDVUhHNG9QUmlqbGFYV3BPcDBleS1zVkpiTG9CZ00taTEyVTFHdFEwVzZhbzlGcG5FaDRGakw4QWF4U1lMb2d0MGxLdkd4ZXc4ZncwdDFySnNMV1RuUjdocFoxdDBNZ0tPVWFXbkZVdFZSOUFfWTJ6Z2hUTDhVUmVCSG5VNlV3?oc=5",
-   "ts": "2026-10-25T13:48:43+00:00"
-  },
-  {
-   "cat": "fx",
-   "title": "태국 바트, 국채 자금 유입에 강세 전망",
-   "src": "데일리바이트(DAILY BYTE)",
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOYVpNT3ZhaVdQX1pQdlRIclF3RHJEdGtjWmdLYjNseU1xYXItdVpkVkQ0WE1HWVFKYlZkbEJSaDM2YnhXUFBQb3dCZXFncTZFRU8wSEwwb1JQTGR4MHF6TXJhZFVuUlBmaXNaOUktUk1tYkFHc2tFNGJYSmt3VERSQWduckFmYkhiVWZoY1Z6VGp3UHE5MV9hcw?oc=5",
-   "ts": "2026-10-25T23:00:00+00:00"
+   "cat": "news",
+   "title": "Binance, CZ의 방콕 블록체인 위크 2026 참석 확정",
+   "src": "Traders Union",
+   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPZTFSbjh2Q3ZJcng1N2ROTUFTaTMydzM3TzhabEQzZkhUaWdtQ2NPamZKRmthVDFJRDc4WWNIa2lDdF9mTGxQYTdKelEwOWFXTTBDWnVJX2pfMTR0THd3TnRVSXFnUTRUcDRTUDlTd1JNdmYxNW1UelBfbG9MWWw0SjdUVmZRWWtJY2t5eHZYaTBfWVdSNEFiOU93?oc=5",
+   "ts": "2026-10-28T08:04:27+00:00"
   }
  ]
 }
