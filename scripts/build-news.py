@@ -17,6 +17,8 @@ QUERIES = [
     '방콕 OR 파타야 사고 OR 시위 OR 폭발 OR 사망 OR 경보 OR 테러 OR 화재 when:3d',
     '방콕 OR 파타야 날씨 OR 폭우 OR 폭염 OR 태풍 OR 홍수 OR 호우 OR 우기 when:3d',
     '태국 바트 환율 when:3d',
+    '태국 여행경보 OR 특별여행주의보 OR 외교부 OR 안전공지 OR 입국 when:7d',
+    '태국 경제 OR 물가 OR 관광세 OR 입국료 OR 항공권 OR 관광객 when:7d',
     '방콕 OR 파타야 골프 when:7d',
     '태국 골프 when:7d',
     '방콕 OR 수완나품 OR 돈므앙 공항 OR 항공 OR 결항 OR 지연 when:3d',
@@ -30,11 +32,14 @@ BLOCK_SRC = {'Vietnam.vn', 'IndexBox'}                                          
 FEATURE = re.compile(r'\[글로벌 pick\]|기적|인생|화제|스토리|이야기|맛집|후기|추천|꿀팁')   # 소식이 아니라 읽을거리
 NOT_CITY = re.compile(r'방콕\s*(문서|선언|합의|회의|포럼|프로세스|협약|성명|원칙|결의|공동선언)')   # 도시가 아니라 문서·회의 이름으로 쓰인 "방콕"
 GOV = re.compile(r'해병대|사령관|국방|군사|정상회담|외교장관|대사 ')
-NOISE = re.compile(r'축구|야구|농구|배구|연예|아이돌|팬미팅|드라마|걸그룹|가수|영화|K-?팝|BTS|주가|증시|코스피|부동산|분양|채용|모집')
+CRIME = re.compile(r'살인|살해|피살|강도|절도|소매치기|사기|마약|성폭행|성범죄|성추행|체포|구속|검거|납치|흉기|총격|범죄|밀수|도박|폭행|실종')   # 범죄 기사는 빼요
+NOISE = re.compile(r'블록체인|암호화폐|가상화폐|비트코인|코인|Binance|축구|야구|농구|배구|연예|아이돌|팬미팅|드라마|걸그룹|가수|영화|K-?팝|BTS|주가|증시|코스피|부동산|분양|채용|모집')
 CATS = [  # (id, 정규식, 기본 점수) — 위에서부터 먼저 맞는 것으로 분류
-    ('breaking', re.compile(r'속보|사망|숨져|폭발|테러|총격|시위|쿠데타|계엄|화재|붕괴|추락|대피|지진|납치|피살|공항\s*폐쇄'), 6),
+    ('breaking', re.compile(r'속보|사망|숨져|폭발|테러|시위|쿠데타|계엄|화재|붕괴|추락|대피|지진|공항\s*폐쇄'), 6),
+    ('safety',   re.compile(r'여행경보|여행금지|특별여행주의보|여행주의보|외교부|영사|안전공지|안전\s*유의|입국\s*(금지|제한|규제)'), 5),
     ('weather',  re.compile(r'날씨|폭우|호우|폭염|태풍|홍수|침수|기온|우기|건기|미세먼지|스콜|열대성|기상|경보'), 4),
     ('fx',       re.compile(r'환율|바트|물가|환전'), 3),
+    ('econ',     re.compile(r'경제|관광세|입국료|관광객|항공권|유가|금리|무역|수출|투자|성장률'), 2),
     ('golf',     re.compile(r'골프|라운드|티오프|코스'), 4),
     ('travel',   re.compile(r'공항|항공|결항|지연|운항|수완나품|돈므앙|입국|비자|면세|교통|도로|열차|지하철'), 3),
 ]
@@ -104,6 +109,7 @@ def select(items, now, n=5):
     pool = []
     for it in seen.values():
         if it['src'] in BLOCK_SRC or it['title'].endswith(' - 뉴스 및 통계') or NOT_CITY.search(it['title']): continue
+        if CRIME.search(it['title']): continue
         if not PLACE.search(it['title']) or (NOISE.search(it['title']) and '골프' not in it['title']): continue
         if (now - it['ts']).total_seconds() > 72 * 3600: continue
         cid, s = score(it, now, it['hits'])
@@ -115,10 +121,11 @@ def select(items, now, n=5):
         if any(similar(x['title'], p['title']) for p in picked): return False
         if per_src.get(x['src'], 0) >= 2: return False
         return not strict or per_cat.get(x['cat'], 0) < CAP.get(x['cat'], 2)
-    # 먼저 속보·날씨·환율·골프에서 하나씩(있으면) 골라 주제가 고르게 들어가게 해요
-    for cid in ('breaking', 'weather', 'fx', 'golf'):
+    # 먼저 속보·날씨·안전·환율·골프·경제에서 하나씩(있으면) 골라 주제가 고르게 들어가게 해요
+    for cid in ('breaking', 'weather', 'safety', 'fx', 'golf', 'econ'):
         for x in pool:
-            if x['cat'] == cid and (cid == 'fx' or TARGET.search(x['title'])) and ok(x, False):
+            if len(picked) >= n: break
+            if x['cat'] == cid and (cid in ('fx', 'safety', 'econ') or TARGET.search(x['title'])) and ok(x, False):
                 picked.append(x); per_src[x['src']] = per_src.get(x['src'], 0) + 1; per_cat[cid] = per_cat.get(cid, 0) + 1; break
     for strict in (True, False):
         for x in pool:
@@ -145,6 +152,7 @@ def selftest():
         mk('방콕 사고 사망 소식', '연합뉴스', 2), mk('방콕 맛집 추천', '블로그', 4), mk('태국 대표팀 축구 승리', '스포츠', 1), mk('방콕 폭발 사고 부상', '연합뉴스', 4),
         mk('300㎏ 환자 긴급 이송 작전 방콕의 기적 [글로벌 pick]', '한국경제TV', 6), mk('태국 푸껫 갑작스러운 홍수 발생', '연합뉴스', 2), mk('방콕 직항 소식', 'Vietnam.vn', 1), mk('해병대사령관 방콕 방문', '연합뉴스', 3),
         mk('‘방콕 문서’와 DMZ가 묻는 생태 평화의 길', '가톨릭뉴스', 2), mk('아세안 방콕 선언 채택', '연합뉴스', 3),
+        mk('외교부 태국 여행경보 상향 안내', '뉴시스', 4), mk('태국 경제 성장률 전망 하향', '한국경제', 7), mk('방콕서 한국인 관광객 소매치기 피해', '연합뉴스', 2), mk('파타야 한국인 마약 체포', '뉴스1', 2), mk('Binance CZ 방콕 블록체인 위크 참석', 'TU', 3),
         mk('오래된 방콕 소식', '연합뉴스', 100), mk('서울 부동산 소식', '연합뉴스', 1), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'),
     ]
     out = build(items, now); titles = [i['title'] for i in out['items']]
@@ -156,6 +164,8 @@ def selftest():
     assert {'breaking', 'weather', 'fx', 'golf'} <= {i['cat'] for i in out['items']}, out                # 속보·날씨·환율·골프가 하나씩 들어감
     assert not any('기적' in t or '푸껫' in t or '해병대' in t or '방콕 문서' in t or '방콕 선언' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
+    assert not any('소매치기' in t or '마약' in t or '블록체인' in t for t in titles), titles                    # 범죄·가상화폐 제외
+    assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
     p = parse(sample); assert p and p[0]['title'] == '방콕 날씨' and p[0]['src'] == '연합뉴스', p
