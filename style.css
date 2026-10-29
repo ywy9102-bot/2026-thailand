@@ -2197,3 +2197,18 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .nw-note{margin:12px 2px 0;font-size:.875rem;line-height:1.55;color:var(--ink2);word-break:keep-all}
 .nw-empty{margin:14px 2px;font-size:1rem;line-height:1.6;color:var(--ink2);text-align:center;word-break:keep-all}
 .next-card[hidden]{display:none}
+
+/* ── 첫 화면 정리: 작은 카드는 "오늘의 카드" 덱 하나로 (옆으로 밀어 넘기기) ── */
+.eyebrow-upd{display:none}
+.deck{position:relative;display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 0 6px;padding:2px 0}
+.deck::-webkit-scrollbar{display:none}
+.deck>.next-card{flex:0 0 86%;min-width:0;margin:0;scroll-snap-align:start}
+.deck.solo>.next-card{flex-basis:100%}
+.deck-dots{display:flex;justify-content:center;align-items:center;gap:6px;margin:0 0 12px}
+.deck-dots[hidden]{display:none}
+.deck-dots i{display:block;width:6px;height:6px;border-radius:99px;background:color-mix(in srgb,var(--hero-fg) 38%,transparent)}
+.deck-dots i.on{width:18px;background:var(--hero-fg)}
+@media (prefers-reduced-motion:no-preference){
+  .deck>.next-card{transition:opacity .2s ease-out}
+  .deck>.next-card:not(.on){opacity:.72}
+}

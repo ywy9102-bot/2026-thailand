@@ -226,6 +226,25 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('소식 카드를 누르면 다시 볼 수 있음', await page.evaluate(() => document.querySelectorAll('#nwBody a.nw-a').length === 5));
       await ctx.close();
     }
+    // 4-1f) 첫 화면 정리: 작은 카드는 덱 하나로, 3칸 요약 없음, 인사말
+    {
+      const { ctx, page } = await open(browser, base, 390, 844);
+      await page.waitForTimeout(800);
+      const r = await page.evaluate(() => {
+        const vis = [...document.querySelectorAll('#deck>.next-card')].filter(e => getComputedStyle(e).display !== 'none' && !e.hidden);
+        return { hero: Math.round(document.querySelector('header.hero').getBoundingClientRect().height), slides: vis.length, dots: document.getElementById('deckDots').children.length,
+          stats: !!document.querySelector('.stats'), golfSum: !!document.getElementById('gSum'), daily: getComputedStyle(document.getElementById('dailyCard')).display, greet: document.getElementById('heroGreet').textContent.trim().length,
+          loose: [...document.querySelectorAll('.hero-in>.next-card')].filter(e => getComputedStyle(e).display !== 'none' && e.id !== 'roundLive' && !e.classList.contains('play-card')).length };
+      });
+      ok('첫 화면: 히어로 높이 700px 이하(작은 카드는 덱 하나)', r.hero <= 700, r);
+      ok('첫 화면: 덱의 점 개수 = 보이는 카드 수 (2개 이상)', r.slides >= 2 && r.dots === r.slides, r);
+      ok('첫 화면: 3칸 요약·골프 요약 3칸·오늘의 태국 카드 없음, 덱 밖의 작은 카드 없음', !r.stats && !r.golfSum && r.daily === 'none' && r.loose === 0, r);
+      ok('첫 화면: 인사말이 나옴', r.greet > 3, r);
+      await page.evaluate(() => { const d = document.getElementById('deck'); const s = [...d.children].filter(e => e.classList.contains('next-card') && getComputedStyle(e).display !== 'none'); d.scrollTo({ left: s[1].offsetLeft, behavior: 'instant' }); });
+      await page.waitForTimeout(400);
+      ok('덱: 옆으로 넘기면 점과 카드가 바뀜', await page.evaluate(() => [...document.getElementById('deckDots').children].findIndex(i => i.classList.contains('on')) === 1));
+      await ctx.close();
+    }
     // 4-2) 읽어보는 카드: 홈 제목은 처음부터 보이고, 열면 오늘의 추천 4장
     {
       const { ctx, page } = await open(browser, base, 390, 844);

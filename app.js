@@ -1022,7 +1022,7 @@ function golfCard(g){
 }
 $('golfPat').innerHTML = GOLF.filter(g=>g.loc==='pat').map(golfCard).join('');
 $('golfBkk').innerHTML = GOLF.filter(g=>g.loc==='bkk').map(golfCard).join('');
-$('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'만';
+{ const gs = $('gSum'); if(gs) gs.textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'만'; }
 
 // 골프 다음 라운드 포인터
 (function(){
@@ -1770,6 +1770,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🧹','첫 화면을 단순하게 · 오늘의 카드 덱','첫 화면에 길게 늘어서 있던 작은 카드들(다음 일정·출발 준비·오늘의 소식·여행 예고편·오늘의 한 문제 등)을 "오늘의 카드" 한 줄로 모았어요. 옆으로 밀면 다음 카드가 나오고, 아래 점으로 위치를 알 수 있어요. 가족·골프·숙소 숫자 3칸과 "오늘의 태국" 카드, 골프 탭의 숫자 3칸은 뺐어요. 맨 위에는 시간대와 날짜에 따라 바뀌는 인사말이 나와요. 여권 도장첩은 놀이터에 그대로 있어요.'],
     ['📰','오늘의 태국 소식 — 매일 아침 5개','방콕·파타야 중심으로 속보·날씨·환율·골프·교통 소식 5개를 매일 아침 자동으로 골라 와요. 첫 화면의 "오늘의 소식" 카드에서 볼 수 있고, 하루 첫 실행 때는 공지 창으로도 떠요. 제목을 누르면 원문 기사가 열려요. 자동으로 고른 소식이라 중요도가 다를 수 있으니 안전 소식은 외교부 해외안전여행 앱도 함께 확인하세요.'],
     ['🐦','첫 화면 버디 카드·버디 소식 공지','라운드 기록장에서 버디를 누르면 첫 화면 맨 위에 "우리 버디 N개" 카드가 생겨요. 카드를 누르면 누가, 언제(현지 시각), 어느 코스에서 그 라운드 몇 번째 버디였는지(홀을 골랐다면 몇 번 홀인지)가 쌓여서 보여요. 새 버디는 첫 화면을 열 때 "버디 소식" 공지로 최대 3번 알려줘요. 기록은 입력한 폰에만 저장되니 다른 가족에게는 "이미지로 저장·공유"나 "텍스트로 복사"로 전해 주세요.'],
     ['🐦','버디를 크게 — 라운드 카드·리더보드·골프 카드','라운드 기록장에서 "🐦 버디!" 큰 버튼을 누르면 카드가 금빛으로 바뀌고 새가 날아가요. 버디 수가 큰 숫자로 보이고, 몇 번 홀이었는지도 남길 수 있어요. 리더보드에는 "버디왕"이 크게 나오고, 골프 탭의 그 라운드 카드에도 "버디 N개" 띠가 떠요. 이미지로 저장하는 라운드 카드와 단톡 복사 글에도 버디가 가장 크게 들어가요.'],
@@ -2117,7 +2118,8 @@ const FOODS = [
       $('dcArrow').textContent = fresh ? `새 도장 ${fresh} →` : '열기 →';
     }
   }
-  card.style.display = 'flex';
+  // 첫 화면이 복잡하다는 의견에 따라 "오늘의 태국" 카드는 첫 화면에서 뺐어요(여권 도장첩은 놀이터에서 그대로)
+  card.style.display = 'none';
   if(preTrip){
     const d = dailyFor(now), daysLeft = Math.ceil((dep - now)/864e5), today = keyOf(now);
     $('dcE').textContent = d.e; $('dcT').textContent = d.title; $('dcTag').textContent = `🌴 D-${daysLeft}`;
@@ -2538,6 +2540,38 @@ const FOODS = [
   fetch(URL_NEWS, { cache: 'no-store', signal: ac ? ac.signal : undefined }).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
     clearTimeout(to); if(!valid(d)) return; data = d; try{ localStorage.setItem(LSN, JSON.stringify(d)); }catch(e){} paint(); autoOpen();
   }).catch(() => { clearTimeout(to); autoOpen(); });
+})();
+
+// ── 첫 화면: 인사말(시간대·날마다 바뀜)과 "오늘의 카드" 덱(옆으로 밀어서 넘기기) ──
+(function(){
+  const g = $('heroGreet');
+  const TEASE = ['파타야 바다가 기다려요', '첫 끼는 팟타이로 정해 볼까요', '골프화는 챙기셨죠?', '망고 스티키 라이스가 기다려요', '방콕 야경을 곧 만나요', '선크림 넉넉히 챙겨요', '마사지 받을 날을 골라 볼까요', '"사와디 캅" 연습 중이세요?', '캐리어에 빈자리를 남겨 두세요', '가기 전날은 푹 자기!', '오늘은 여행 생각만 해도 좋아요', '야자수 그늘이 기다려요', '라운드 전 스트레칭 잊지 마요', '코끼리 바지 사러 가요'];
+  function greet(){
+    if(!g) return; const k = new Date(Date.now() + 9 * 36e5), h = k.getUTCHours(), day = Math.floor(Date.UTC(k.getUTCFullYear(), k.getUTCMonth(), k.getUTCDate()) / 864e5);
+    const ico = h < 6 ? '🌙' : h < 11 ? '☀️' : h < 17 ? '🌤️' : h < 20 ? '🌇' : '🌙';
+    const left = Math.round((Date.UTC(2026, 11, 16) / 864e5) - day);
+    const t = left > 0 ? TEASE[day % TEASE.length] : day <= Math.floor(Date.UTC(2027, 0, 2) / 864e5) ? `여행 ${1 - left}일차예요` : '우리 여행, 고마웠어요 💛';
+    g.textContent = ` ${ico} ${t}`;
+  }
+  greet(); setInterval(greet, 18e5);
+  // 카드 덱: 보이는 카드만 점(•)으로 세고, 지금 카드를 또렷하게 보여줘요
+  const deck = $('deck'), dots = $('deckDots'); if(!deck || !dots) return;
+  const slides = () => [...deck.children].filter(e => e.classList.contains('next-card') && !e.hidden && getComputedStyle(e).display !== 'none');
+  let idx = -1, raf = 0;
+  function mark(user){
+    const s = slides(); if(!s.length) return;
+    const sl = deck.scrollLeft, max = deck.scrollWidth - deck.clientWidth; let k = 0, best = 1e9;
+    if(max > 2 && sl >= max - 2) k = s.length - 1; else s.forEach((el, i) => { const d = Math.abs(el.offsetLeft - sl); if(d < best){ best = d; k = i; } });
+    if(k === idx) return;
+    if(user && idx !== -1) haptic('tap');
+    idx = k; s.forEach((el, i) => el.classList.toggle('on', i === k)); [...dots.children].forEach((d, i) => d.classList.toggle('on', i === k));
+  }
+  let touched = false; ['touchstart', 'pointerdown', 'wheel', 'keydown'].forEach(ev => deck.addEventListener(ev, () => { touched = true; }, { passive: true }));
+  function build(){ if(!touched) deck.scrollLeft = 0;   // 카드가 나중에 생겨도 처음엔 맨 앞 카드부터 보여줘요
+    const s = slides(); dots.innerHTML = s.map(() => '<i></i>').join(''); dots.hidden = s.length < 2; deck.classList.toggle('solo', s.length < 2); idx = -1; mark(false); }
+  deck.addEventListener('scroll', () => { if(raf) return; raf = requestAnimationFrame(() => { raf = 0; mark(true); }); }, { passive: true });
+  let t = 0; new MutationObserver(() => { clearTimeout(t); t = setTimeout(build, 120); }).observe(deck, { subtree: true, attributes: true, attributeFilter: ['style', 'hidden'], childList: true });
+  build(); addEventListener('load', build);
 })();
 
 // ── 홈 카드: 오늘의 한 문제 · 갈 곳 미리 읽기 (역사·공부 시트와 연결) ──
