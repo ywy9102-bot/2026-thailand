@@ -169,7 +169,8 @@ function triplocHTML(o){
       h += `<div class="tl-name">📍 ${p.ko}</div>`
         +  `<a class="tl-addr" href="${gmap(p)}" target="_blank" rel="noopener">${p.addr} <span class="mico">지도 ↗</span></a>`
         +  (p.tel ? `<a class="tl-tel" href="tel:${telClean(p.tel)}">📞 ${p.tel}</a>` : '')
-        +  `<button class="tl-copy" type="button" data-copy="${qesc(grabAddr(p))}">📋 영문 주소 복사 · Grab·Bolt용</button>`;
+        +  `<button class="tl-copy" type="button" data-copy="${qesc(grabAddr(p))}">📋 영문 주소 복사 · Grab·Bolt용</button>`
+        +  `<button class="tl-copy tl-drv" type="button" data-driver data-name="${qesc(p.en)}" data-addr="${qesc(grabAddr(p))}">🚕 기사님께 보여주기</button>`;
     });
   } else if(o.addr){
     // 안전망: pid 없이 addr만 있는 경우(PLACES 항목 누락 등) — 현재 모든 GOLF는 pid 보유
@@ -1770,6 +1771,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🚕','기사님께 보여주기 + 홈 화면 바로가기','맛집·골프장·관광지 카드의 "🚕 기사님께 보여주기"를 누르면 영어 이름과 주소가 크게 뜨고, "여기로 가 주세요"·"미터기를 켜 주세요" 태국어가 함께 나와요. 열려 있는 동안 화면이 꺼지지 않아요. 안드로이드는 홈 화면 앱 아이콘을 길게 누르면 오늘 일정·맛집 지도·라운드 기록장으로 바로 들어가요.'],
     ['🗑️','놀이터 정리 — 쓰임이 적은 놀이 10가지를 뺐어요','여권 도장첩·태국 빙고·여행 퀴즈·운명의 룰렛·여행 칭호·오늘의 골프 운세·태국 먹킷리스트·바트 감각 테스트·티오프 스트레칭·맛집 월드컵을 정리했어요. 놀이터에는 태국 이야기·맛집 카드, 역사·공부, 나침반, 태국어, 라운드 기록장, 힐링 사운드가 남아 있어요.'],
     ['🧹','첫 화면을 단순하게 · 오늘의 카드 덱','첫 화면에 길게 늘어서 있던 작은 카드들(다음 일정·출발 준비·오늘의 소식·여행 예고편·오늘의 한 문제 등)을 "오늘의 카드" 한 줄로 모았어요. 옆으로 밀면 다음 카드가 나오고, 아래 점으로 위치를 알 수 있어요. 가족·골프·숙소 숫자 3칸과 "오늘의 태국" 카드, 골프 탭의 숫자 3칸은 뺐어요. 맨 위에는 시간대와 날짜에 따라 바뀌는 인사말이 나와요. '],
     ['📰','오늘의 태국 소식 — 매일 아침 5개','방콕·파타야 중심으로 속보·날씨·여행경보·환율·경제·골프·교통 소식 5개(범죄 기사는 뺐어요)를 매일 아침 자동으로 골라 와요. 첫 화면의 "오늘의 소식" 카드에서 볼 수 있고, 하루 첫 실행 때는 공지 창으로도 떠요. 제목을 누르면 원문 기사가 열려요. 자동으로 고른 소식이라 중요도가 다를 수 있으니 안전 소식은 외교부 해외안전여행 앱도 함께 확인하세요.'],
@@ -3228,4 +3230,59 @@ function __initFunElements(){
         : '브라우저 메뉴에서 <b>설치</b> / <b>홈 화면에 추가</b> 항목을 선택하세요';
     }, 1800);
   }
+})();
+
+/* ── 기사님께 보여주기: 영어 이름·주소를 크게, 태국어 한마디와 함께. 열려 있는 동안 화면이 꺼지지 않아요 ── */
+(function(){
+  let sc = null, prev = null, wl = null;
+  const SAY = [
+    ['ไปที่นี่ครับ/ค่ะ', '빠이 티니 크랍/카', '여기로 가 주세요'],
+    ['เปิดมิเตอร์ด้วยครับ/ค่ะ', '쁘읻 미떠 두어이 크랍/카', '미터기를 켜 주세요'],
+    ['ขอบคุณครับ/ค่ะ', '컵쿤 크랍/카', '고맙습니다']
+  ];
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  async function lock(){ try{ wl = await navigator.wakeLock.request('screen'); return true; }catch(e){ return false; } }
+  function unlock(){ try{ wl && wl.release(); }catch(e){} wl = null; }
+  function build(){
+    sc = document.createElement('div'); sc.className = 'wn-scrim'; sc.hidden = true;
+    sc.innerHTML = '<div class="wn-sheet drv" role="dialog" aria-modal="true" aria-labelledby="drvName">' +
+      '<div class="drv-body"><h2 class="drv-name" id="drvName"></h2><p class="drv-addr" id="drvAddr"></p>' +
+      '<ul class="drv-say">' + SAY.map(s => `<li><span class="drv-th" lang="th">${s[0]}</span><span class="drv-rm">${s[1]} · ${s[2]}</span></li>`).join('') + '</ul>' +
+      '<p class="drv-wake" id="drvWake" role="status"></p></div>' +
+      '<button class="wn-close" type="button" id="drvOk">닫기</button></div>';
+    document.body.appendChild(sc);
+    $('drvOk').addEventListener('click', close);
+    sc.addEventListener('click', e => { if(e.target === sc) close(); });
+    onKey(e => {
+      if(sc.hidden) return;
+      if(e.key === 'Escape') close();
+      else if(e.key === 'Tab'){ e.preventDefault(); $('drvOk').focus(); }
+    });
+    document.addEventListener('visibilitychange', () => { if(!sc.hidden && document.visibilityState === 'visible') lock(); });
+  }
+  async function open(name, addr){
+    if(!sc) build();
+    if(addr.indexOf(name) === 0) addr = addr.slice(name.length).replace(/^[,\s]+/, '');
+    $('drvName').textContent = name; $('drvAddr').textContent = addr;
+    prev = document.activeElement; sc.hidden = false; document.documentElement.style.overflow = 'hidden';
+    void sc.offsetHeight; sc.classList.add('on'); try{ $('drvOk').focus({ preventScroll: true }); }catch(e){}
+    haptic('ok');
+    $('drvWake').textContent = (await lock()) ? '화면이 꺼지지 않게 켜 두었어요' : '';
+  }
+  function close(){
+    if(!sc || sc.hidden) return;
+    sc.classList.remove('on'); document.documentElement.style.overflow = ''; unlock();
+    setTimeout(() => { sc.hidden = true; }, 340);
+    try{ prev && prev.focus && prev.focus(); }catch(e){}
+    haptic('tap');
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('[data-driver]'); if(b) open(b.dataset.name || '', b.dataset.addr || ''); });
+})();
+
+/* ── 홈 화면 아이콘을 길게 눌러 바로 열기: #open-food / #open-score ── */
+(function(){
+  const GO = { 'open-food': '__openFoodMap', 'open-score': '__openScore' };
+  const h = (location.hash || '').slice(1), fn = GO[h]; if(!fn) return;
+  try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+  setTimeout(() => { if(typeof window[fn] === 'function') window[fn](); }, 900);
 })();

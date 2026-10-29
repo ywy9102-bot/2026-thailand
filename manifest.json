@@ -10,8 +10,38 @@
   "background_color": "#F6F2E8",
   "theme_color": "#0E2822",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "오늘 일정",
+      "short_name": "일정",
+      "url": "./#itin"
+    },
+    {
+      "name": "맛집 대동여지도",
+      "short_name": "맛집",
+      "url": "./#open-food"
+    },
+    {
+      "name": "라운드 기록장",
+      "short_name": "기록장",
+      "url": "./#open-score"
+    }
   ]
 }
