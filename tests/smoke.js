@@ -22,7 +22,7 @@ function serve() {
   });
 }
 
-const SHEETS = [['__openPlay', 'playScrim'], ['__openFoodMap', 'foodScrim'], ['__openStory', 'storyScrim'], ['__openWorldcup', 'wcScrim'], ['__openPass', 'passScrim'], ['__openBingo', 'bingoScrim'], ['__openTquiz', 'tquizScrim'], ['__openWheel', 'wheelScrim'], ['__openTitles', 'titleScrim'], ['__openCompass', 'compassScrim'], ['__openThai', 'thaiScrim'], ['__openScore', 'scoreScrim'], ['__openFortune', 'fortuneScrim'], ['__openEats', 'eatsScrim'], ['__openBaht', 'bahtScrim'], ['__openStretch', 'stretchScrim'], ['__openChill', 'chillScrim'], ['__openHistory', 'historyScrim'], ['__openTrailer', 'trailerScrim'], ['__openNews', 'newsScrim']];
+const SHEETS = [['__openPlay', 'playScrim'], ['__openFoodMap', 'foodScrim'], ['__openStory', 'storyScrim'], ['__openCompass', 'compassScrim'], ['__openThai', 'thaiScrim'], ['__openScore', 'scoreScrim'], ['__openChill', 'chillScrim'], ['__openHistory', 'historyScrim'], ['__openTrailer', 'trailerScrim'], ['__openNews', 'newsScrim']];
 const TABS = ['golf', 'itin', 'stay', 'cost', 'todo'];
 
 async function open(browser, base, w, h, opt = {}) {
@@ -224,6 +224,34 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('소식 공지: 같은 날 다시 열면 또 뜨지 않음', await page.evaluate(() => document.getElementById('newsScrim').hidden));
       await page.click('#newsCard'); await page.waitForSelector('#newsScrim.on');
       ok('소식 카드를 누르면 다시 볼 수 있음', await page.evaluate(() => document.querySelectorAll('#nwBody a.nw-a').length === 5));
+      await ctx.close();
+    }
+    // 4-1f) 첫 화면 정리: 작은 카드는 덱 하나로, 3칸 요약 없음, 인사말
+    {
+      const { ctx, page } = await open(browser, base, 390, 844);
+      await page.waitForTimeout(800);
+      const r = await page.evaluate(() => {
+        const vis = [...document.querySelectorAll('#deck>.next-card')].filter(e => getComputedStyle(e).display !== 'none' && !e.hidden);
+        return { hero: Math.round(document.querySelector('header.hero').getBoundingClientRect().height), slides: vis.length, dots: document.getElementById('deckDots').children.length,
+          stats: !!document.querySelector('.stats'), golfSum: !!document.getElementById('gSum'), daily: !!document.getElementById('dailyCard'), greet: document.getElementById('heroGreet').textContent.trim().length,
+          loose: [...document.querySelectorAll('.hero-in>.next-card')].filter(e => getComputedStyle(e).display !== 'none' && e.id !== 'roundLive' && !e.classList.contains('play-card')).length };
+      });
+      ok('첫 화면: 히어로 높이 700px 이하(작은 카드는 덱 하나)', r.hero <= 700, r);
+      ok('첫 화면: 덱의 점 개수 = 보이는 카드 수 (2개 이상)', r.slides >= 2 && r.dots === r.slides, r);
+      ok('첫 화면: 3칸 요약·골프 요약 3칸·오늘의 태국 카드 없음, 덱 밖의 작은 카드 없음', !r.stats && !r.golfSum && !r.daily && r.loose === 0, r);
+      ok('첫 화면: 인사말이 나옴', r.greet > 3, r);
+      await page.evaluate(() => { const d = document.getElementById('deck'); const s = [...d.children].filter(e => e.classList.contains('next-card') && getComputedStyle(e).display !== 'none'); d.scrollTo({ left: s[1].offsetLeft, behavior: 'instant' }); });
+      await page.waitForTimeout(400);
+      ok('덱: 옆으로 넘기면 점과 카드가 바뀜', await page.evaluate(() => [...document.getElementById('deckDots').children].findIndex(i => i.classList.contains('on')) === 1));
+      await ctx.close();
+    }
+    // 4-1g) 놀이터 메뉴: 남은 6개만, 접기 버튼 없음
+    {
+      const { ctx, page } = await open(browser, base, 390, 844);
+      await page.evaluate(() => window.__openPlay()); await page.waitForSelector('#playScrim.on'); await page.waitForTimeout(500);
+      const r = await page.evaluate(() => ({ tiles: [...document.querySelectorAll('#plGrid .play-tile')].map(b => b.querySelector('.pt').textContent), more: !!document.querySelector('#plGrid .play-more') }));
+      ok('놀이터 메뉴: 남은 타일 6개와 접기 버튼 없음', r.tiles.length === 6 && !r.more && ['태국 이야기 · 맛집 카드', '태국 역사 · 공부', '태국 나침반', '태국어 · 숫자 · 맥주', '라운드 기록장', '태국 힐링 사운드'].every(x => r.tiles.includes(x)), r);
+      ok('뺀 놀이는 더 이상 없음', await page.evaluate(() => ['__openWorldcup', '__openPass', '__openBingo', '__openTquiz', '__openWheel', '__openTitles', '__openFortune', '__openEats', '__openBaht', '__openStretch'].every(n => typeof window[n] === 'undefined')));
       await ctx.close();
     }
     // 4-2) 읽어보는 카드: 홈 제목은 처음부터 보이고, 열면 오늘의 추천 4장

@@ -1022,7 +1022,7 @@ function golfCard(g){
 }
 $('golfPat').innerHTML = GOLF.filter(g=>g.loc==='pat').map(golfCard).join('');
 $('golfBkk').innerHTML = GOLF.filter(g=>g.loc==='bkk').map(golfCard).join('');
-$('gSum').textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'만';
+{ const gs = $('gSum'); if(gs) gs.textContent = (GOLF.reduce((a,g)=>a+(g.amt||0),0)/10000).toFixed(0)+'만'; }
 
 // 골프 다음 라운드 포인터
 (function(){
@@ -1770,6 +1770,8 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🗑️','놀이터 정리 — 쓰임이 적은 놀이 10가지를 뺐어요','여권 도장첩·태국 빙고·여행 퀴즈·운명의 룰렛·여행 칭호·오늘의 골프 운세·태국 먹킷리스트·바트 감각 테스트·티오프 스트레칭·맛집 월드컵을 정리했어요. 놀이터에는 태국 이야기·맛집 카드, 역사·공부, 나침반, 태국어, 라운드 기록장, 힐링 사운드가 남아 있어요.'],
+    ['🧹','첫 화면을 단순하게 · 오늘의 카드 덱','첫 화면에 길게 늘어서 있던 작은 카드들(다음 일정·출발 준비·오늘의 소식·여행 예고편·오늘의 한 문제 등)을 "오늘의 카드" 한 줄로 모았어요. 옆으로 밀면 다음 카드가 나오고, 아래 점으로 위치를 알 수 있어요. 가족·골프·숙소 숫자 3칸과 "오늘의 태국" 카드, 골프 탭의 숫자 3칸은 뺐어요. 맨 위에는 시간대와 날짜에 따라 바뀌는 인사말이 나와요. '],
     ['📰','오늘의 태국 소식 — 매일 아침 5개','방콕·파타야 중심으로 속보·날씨·환율·골프·교통 소식 5개를 매일 아침 자동으로 골라 와요. 첫 화면의 "오늘의 소식" 카드에서 볼 수 있고, 하루 첫 실행 때는 공지 창으로도 떠요. 제목을 누르면 원문 기사가 열려요. 자동으로 고른 소식이라 중요도가 다를 수 있으니 안전 소식은 외교부 해외안전여행 앱도 함께 확인하세요.'],
     ['🐦','첫 화면 버디 카드·버디 소식 공지','라운드 기록장에서 버디를 누르면 첫 화면 맨 위에 "우리 버디 N개" 카드가 생겨요. 카드를 누르면 누가, 언제(현지 시각), 어느 코스에서 그 라운드 몇 번째 버디였는지(홀을 골랐다면 몇 번 홀인지)가 쌓여서 보여요. 새 버디는 첫 화면을 열 때 "버디 소식" 공지로 최대 3번 알려줘요. 기록은 입력한 폰에만 저장되니 다른 가족에게는 "이미지로 저장·공유"나 "텍스트로 복사"로 전해 주세요.'],
     ['🐦','버디를 크게 — 라운드 카드·리더보드·골프 카드','라운드 기록장에서 "🐦 버디!" 큰 버튼을 누르면 카드가 금빛으로 바뀌고 새가 날아가요. 버디 수가 큰 숫자로 보이고, 몇 번 홀이었는지도 남길 수 있어요. 리더보드에는 "버디왕"이 크게 나오고, 골프 탭의 그 라운드 카드에도 "버디 N개" 띠가 떠요. 이미지로 저장하는 라운드 카드와 단톡 복사 글에도 버디가 가장 크게 들어가요.'],
@@ -1790,7 +1792,6 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     ['✈️','일정 탭 "여정 스트립" + 제목 인사 놀이','일정 탭 맨 위에 파타야(12/16~26)와 방콕(12/26~1/2) 구간이 한눈에 보이는 여정 띠가 생겼어요. 비행기 ✈️가 오늘 위치를 따라 움직이고, 출발 전에는 "출발까지 D-N", 여행 중에는 "여행 N일차 · 방콕"처럼 알려줘요. 그리고 첫 화면 제목 "태국 겨울 여행"을 누르면 태국어 인사(사와디 캅·컵쿤 캅·아러이 마크·싸눅 마크·마이 뺀 라이)가 뜨고 코끼리·망고가 둥실 떠올라요'],
     ['🔠','글자를 더 크게, 홈 안내 문구 정리, 대동여지도 칩 정리','화면 전체의 작은 글씨(11~13px)를 13~14px 이상으로 키웠어요. 날씨·환율을 못 불러왔을 때는 "날씨 정보 없음 · 눌러서 재시도"처럼 짧고 읽기 쉬운 문구로 바꿨어요. 예산·경비 탭의 정산완료/대기 버튼은 누르기 쉽게 키웠고, 대동여지도의 칩은 자주 쓰는 것(전체·집 근처·가성비·미쉐린·볼거리)만 먼저 보이고 음식 종류별 칩은 "종류별"을 누르면 펼쳐져요'],
     ['📖','읽어보는 카드 — 이야기 50장 + 대동여지도 슬라이드쇼 + 한 줄 소개 모음','놀이터의 "이야기·맛집 카드"에서 큰 글씨로 한 장씩 넘겨 보세요. "태국 이야기" 50장(사원·음식·예절·일상·골프·날씨), "방콕 맛집"·"방콕 볼거리"·"파타야 맛집" 슬라이드쇼가 있어요. 맛집·볼거리 카드에는 좋은 점, 가격, 이번 여행 팁이 들어 있고 "지도에서 보기"로 바로 이동해요. "📃 한 줄 모음"을 누르면 한 줄 소개만 쭉 읽을 수 있고, 누르면 그 카드로 열려요. 밀어서 넘기거나 "자동 넘김"(9초)을 켜 두셔도 돼요. 놀이터는 "여권 도장첩"과 "태국 빙고"를 "더 보기"로 접었어요(기록은 그대로)'],
-    ['🏆','새 놀이 — 맛집 월드컵','놀이터의 "맛집 월드컵"에서 파타야 34곳 또는 방콕 31곳 중 8강/16강 이상형 월드컵을 해요. 두 식당 중 끌리는 곳을 계속 고르면 우승 식당이 나오고, 바로 "코스에 담기", "지도에서 보기", "결과 복사(가족 단체방용)"를 할 수 있어요. 최다 우승 식당은 놀이터 타일에 보여요(이 기기에만 저장). 메뉴 정하기 싸움이 날 때 써보세요'],
     ['🧳','대동여지도 "내 코스" — 담아서 가까운 순으로, 구글지도 길찾기까지','식당·볼거리 카드의 "🧳 코스에 담기"(지도에서는 선택 카드의 🧳)를 누르면 코스에 담겨요. 칩 줄의 "🧳 내 코스"에서 담은 곳을 순서대로 보고, "가까운 순"으로 정리하고, "구글지도"로 열면 경유지가 있는 길찾기가 한 번에 열려요(최대 10곳). 메신저로 보낼 수 있게 "📋 복사"도 있어요. 방콕에는 일정표 기준 추천 코스 4개(12/28 사원, 카오산 걷기, 12/30 GCP 쇼핑·저녁, 12/29 야경·야시장)가 들어 있어요. 거리는 직선 기준 대략값이고 코스는 이 기기에만 저장돼요'],
     ['🦀','방콕 지도에 쏨분 시푸드·램차런 시푸드 추가','쏨분 시푸드는 12/26 저녁 일정의 반탓통 본점과 수라웡 지점을 새로 넣었고(센트럴월드 지점은 12/30용으로 기존), 램차런 시푸드는 센트럴월드·시암 파라곤·아이콘시암 3곳을 넣었어요. "📌 꼭 가볼 곳" 표시가 붙어 있어요. 램차런은 지점마다 평가가 달라서(센트럴월드 4.2, 시암 파라곤 3.5, 아이콘시암은 후기 6건뿐) 센트럴월드를 먼저 권하고, 생선이 100g 단위 가격이라 주문 전에 총액을 확인하라고 적었어요. 쏨분 수라웡의 미쉐린 표기는 자료 1곳 기준이에요. 방콕 맛집은 31곳이에요'],
     ['🎡','방콕 대동여지도에 볼거리 19곳 + "가봤어요" 표시','방콕 지도 칩 줄 맨 끝의 "🎡 볼거리"를 누르면 왕궁·왓 포·왓 아룬·카오산·아이콘시암·짜뚜짝·마하나콘 스카이워크·에라완 사당·룸피니 공원·꽃시장 등 19곳이 지도에 핀으로 떠요. 입장료·시간은 일정표와 2026년 검색 자료로 적었고 못 찾은 곳은 "미확인"이에요(마하나콘은 자료마다 가격이 달라요). 숙소 핀을 누르면 가까운 볼거리가 거리순으로 나와요. 식당·볼거리 카드의 ☐를 눌러 "가봤어요"를 표시하면 핀에 ✓가 붙고, 도시 버튼에 가본 곳 수가 보여요(이 기기에만 저장돼요)'],
@@ -1799,7 +1800,6 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     ['🏙️','방콕 맛집 대동여지도 — 엄선 12곳 + 가족 숙소 핀','맛집 대동여지도 맨 위 "파타야 / 방콕" 버튼으로 방콕 지도를 열어요(12/26부터는 방콕이 먼저 열려요). 미쉐린 등재 노포, 푸팟퐁커리 쏨분시푸드(센트럴월드), 왓 아룬 뷰 레스토랑, 오크우드·GCP 근처 가성비 식당 등 까다롭게 고른 12곳이에요. 🏠 티니디 트렌디 카오산·오크우드 스위트·그랜드 센터 포인트 랏차담리 3곳이 핀으로 찍혀 있고, 핀을 누르면 누가 언제 묵는지와 가까운 맛집이 떠요. 구글 평점·가격·세금 표기는 확인한 것만 적었고 못 찾은 것은 "미확인"으로 표시했어요. 핀 위치는 대략값이라 길찾기는 구글지도 버튼을 써주세요'],
     ['♿','접근성·터치 점검 반영','정산 막대의 펼침 버튼과 "정산완료" 버튼을 따로 눌러도 되게 분리하고(키보드·음성 안내 지원), 숙소·멤버 목록과 가로 스크롤 표를 키보드로 쓸 수 있게 했어요. 완료한 할일 글씨 대비를 높이고, 작은 버튼은 누르기 쉽게 키웠으며, 11px 이하 글씨는 12px로 올렸어요. "동작 줄이기" 설정에서는 장식 움직임만 멈추고 눌림·색 변화 피드백은 짧게 남겨요'],
     ['🗣️','태국어 표기 전수 점검 — 5곳 바로잡음','태국어 듣기·오늘의 한마디·식당 태국어를 태국어 글자와 하나씩 대조했어요. "뻰 라이"는 글자(ไม่เป็นไร)에 맞게 "마이 뻰 라이 = 괜찮아요"로, "타올라이"는 "타오라이", "니 타올라이"는 "안니 타오라이", "넝·썽·쌈"은 "능·썽·쌈"으로 고쳤어요. "마이 아오 컵쿤"의 뜻은 "안 살게요, 괜찮아요"에서 "필요 없어요, 감사합니다"로 바꿔 "괜찮아요(마이 뻰 라이)"와 헷갈리지 않게 했어요'],
-    ['🧘','새 놀이 2가지 — 티오프 5분 스트레칭 · 맛집 뽑기','놀이터의 "티오프 5분 스트레칭"은 목·어깨부터 빈 스윙까지 여섯 동작을 45초씩 타이머로 안내해요(소리·진동, 화면 꺼짐 방지). 맛집 대동여지도 칩 맨 앞의 "🎲 오늘 어디 가지?"는 지금 보이는 맛집 중 하나를 슬롯처럼 돌려 뽑고 지도에 핀을 보여줘요. 집 근처·가성비 칩을 먼저 골라 두면 그 안에서 뽑아요'],
     ['💰','정산 탭 → 예산·경비 탭으로 개편','탭 이름을 "예산·경비"로 바꾸고, 맨 위의 "윤우열이 받아야 할 금액"은 없앴어요. 대신 여행 전체 비용, 정산 완료 금액과 남은 금액, 숙박·골프·차량 항목별 비용이 한눈에 보여요.'],
     ['✅','정산 입금 확인 — 김태기·윤성욱·이준영 님 완료','김태기 님 1,309,101원, 윤성욱 님 1,921,615원, 이준영 님 556,272원이 윤우열 님께 입금된 것으로 정산완료 처리했어요. 이제 남은 입금은 정유현 님과 장모님이에요'],
     ['📱','첫 화면 날씨·환율을 한 줄로 압축','폰 첫 화면에서 날씨와 환율이 차지하던 자리를 줄여 맛집 대동여지도 카드가 더 위에 보여요. 날씨·환율 모두 "이름 · 값 · N분 전 · ↗"를 한 줄에 보여주고, 출처 줄은 데이터가 오래됐거나 오류일 때만 나타나요'],
@@ -1809,9 +1809,6 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     ['🍜','맛집지도 12곳 → 30곳','가성비 식당(피어21 푸드코트, 야시장, 한우리, 타르카 하우스 등), 평점 높은 곳(마하 타이, 더 뷰, 프레고, 마하라니 등), 미쉐린 빕구르망 4곳(라 보이, 룽 샬, 크루아 래우 태 아롬, 플라디즈), 한식 2곳을 더했어요. 위 칩에서 💸 가성비 / 🏅 미쉐린 / 韓 한식으로 걸러 볼 수 있고, 모든 식당에 부가세·봉사료 표기가 있어요. 평점·가격은 검색으로 확인한 대략값이라 출처가 없는 항목은 "—"로 표시했어요'],
     ['🧾','맛집지도에 부가세·봉사료 표기','식당마다 부가세(7%)·봉사료가 별도인지 목록과 상세에 표시했어요. 확인된 곳(스카이바·메이즈 10%+7%, 테리킴 5%, 문웨일·나라 10% 등)과 확인 못 한 곳을 구분했고, 미확인은 방문 시 직접 물어보시라고 적었어요. 별도면 표시가 × 약 1.177이에요'],
     ['🗺️','파타야 맛집 대동여지도 — 검증된 12곳','첫 화면 "놀이터" 바로 아래 "맛집지도" 카드에서 열어요. 인스타그램 맛집 30선(AI 콘텐츠) 중 후기 사이트 여러 곳에서 평가가 일관된 12곳만 골라, 肉(스테이크)·海(뷔페)·天(루프탑)·洋(파인다이닝)·亞(아시아)로 나눴어요. 식당마다 실제 구글 지도, 대표 메뉴, 1인 가격, 후기 요약(좋은 점·아쉬운 점), 이 여행에서의 활용 팁, 영문 주소 복사(Grab·Bolt용)가 들어 있어요. 별점·가격은 2026-10 검색으로 확인한 대략값이니 방문 전 지도에서 영업시간을 확인하세요'],
-    ['🌴','새 놀이 3가지 — 힐링 사운드 · 바트 감각 테스트 · 라운드 이미지','🌴 태국 힐링 사운드: 파도·열대 빗소리·밤 벌레 소리를 폰이 직접 만들어 들려줘요(파일·인터넷 없음). 각각 켜고 끄고 볼륨을 조절하며, 15/30/60분 수면 타이머가 지나면 부드럽게 꺼져요. 창을 닫아도 소리는 계속되고 놀이터 메뉴에서 다시 끌 수 있어요. 💰 바트 감각 테스트: 팟타이·마사지·택시 기본요금 같은 현지 가격을 보고 한국 돈으로 얼마인지 맞히는 5문제(화면의 환율 사용). 🖼️ 라운드 이미지: 라운드 기록장에서 그날 스코어·버디를 카드 이미지로 저장·공유해요. 모두 놀이터 메뉴에서 열려요'],
-    ['🔮','새 놀이 2가지 — 오늘의 골프 운세 · 태국 먹킷리스트','🔮 오늘의 골프 운세: 이름을 누르면 오늘(방콕 날짜 기준) 라운드 운세가 나와요 — 총운, 티샷·아이언·숏게임·퍼팅·멘탈 별점, 행운의 클럽·홀, 오늘의 목표, 라운드 뒤 먹을 음식·맥주까지. 하루 동안 같은 결과이고 매일 바뀌어요. 🍜 태국 먹킷리스트: 팟타이·똠얌꿍·망고 찰밥부터 태국 밀크티·싱하 맥주까지 20가지를 먹을 때마다 체크하고, "오늘 뭐 먹지?"로 아직 안 먹은 것 중에서 골라줘요. 첫 화면 "놀이터" 버튼에서 열려요'],
-    ['🎮','놀이터 메뉴 개편 + 나침반 켜기/끄기','첫 화면 "놀이터" 버튼이 이제 전체 놀이 메뉴(10가지 타일)를 바로 열어줘요. 여권 도장첩도 그 안의 타일 하나예요. 태국 나침반은 이제 버튼으로 켜고 끌 수 있고(창을 닫으면 자동으로 꺼짐), "내 위치"도 다시 눌러 끌 수 있어요'],
     ['📝','라운드 기록장 — 스코어·버디·홀인원 기록','골프 탭의 "라운드 기록장" 버튼(또는 여권 도장첩)에서 열어요. 라운드마다 참가자별 총 타수와 버디·이글 횟수, 홀인원을 기록하면 버디를 누를 때마다 응원 토스트가 뜨고, 이글·홀인원은 폭죽이 터져요. "리더보드" 탭에서는 최저타·평균·버디왕·이글·홀인원이 자동으로 정리되고, 단톡에 올릴 텍스트로 복사할 수 있어요. 기록은 각자 폰(브라우저)에만 저장돼요'],
     ['🚐','1/2 가족2 공항 샌딩 확정 · 일정 점검','1/2(토) 가족2(이준영·박지해·이동현 3인)는 08:30 그랜드 센터 포인트 랏차담리 1층 로비에서 출발해 수완나품 공항(OZ744 12:25)으로 가요. 예약번호 #200789323은 이준영 님이 직접 예약·결제해서 정산에는 포함하지 않고 일정·숙소·차량표에만 표시했어요. 일정을 점검하다가 12/21 비골퍼 인원이 "3인"으로 남아 있어 2인(정유현·장모님)으로 고쳤어요'],
     ['✅','정유경 님 정산 완료','정유경 님의 정산(2,254,856원)이 완료돼 정산탭에 "정산완료"로 표시돼요. 남은 정산은 5명(정유현·윤성욱·김태기·장모님·이준영)이에요'],
@@ -1822,18 +1819,11 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     ['🗣️','태국어 한마디 듣기 — 현지 발음을 들어보세요','"안녕하세요", "얼마예요?", "화장실 어디예요?" 같은 여행 필수 14문장을 폰이 태국어로 읽어줘요. 문장마다 🔊 버튼을 누르면 태국어 발음이 나오고(남성 "캅"·여성 "카" 구분), 퀴즈 탭에서는 소리만 듣고 뜻을 맞히는 5문제를 풀 수 있어요. 소리는 폰에 내장된 음성(인터넷 전송 없음)을 쓰고, 태국어 음성이 없는 폰에서는 태국어 글자만 보여줘요'],
     ['🚐','12/21·22·23 윤성욱 별도 이동 — 밴 비용 다시 나눔','12/21·22·23 파타야 골프 밴(건당 89,544원)에 윤성욱 님은 타지 않고 따로 이동해요. 밴 총액은 그대로 두고 탑승하는 분들이 나눠 내도록 다시 계산했어요 — 12/21(3인) 인당 29,848원, 12/22·12/23(4인) 인당 22,386원. 개인별 최신 금액은 정산탭에서 확인해주세요. 정산탭의 정산완료 표시는 금액이 바뀐 분들은 새로 확인해주세요'],
     ['📢','김윤후 님 불참 — 명단 제외·정산 다시 계산','김윤후 님이 이번 여행에 함께하지 못하게 되어 가족1 명단(4명)과 전체 인원(9명)에서 뺐어요. 숙박 3건과 가족1 이동 밴 3건은 총액은 그대로 두고 남은 4명이 나눠 내도록 다시 계산했어요 — 통부라 인당 423,000원 · 티니디 5박 418,062원 · 티니디 2박 156,863원, 12/18 공항픽업 32,531원 · 12/26 방콕 이동 22,344원 · 1/2 공항샌딩 11,704원. 개인별 최신 금액은 정산탭에서 확인해주세요. 정산탭의 정산완료 표시는 금액이 바뀐 분들은 새로 확인해주세요'],
-    ['🎮','첫 화면에 "놀이터" 버튼이 생겼어요','여권 도장첩·태국 빙고·여행 퀴즈·운명의 룰렛·여행 칭호·태국 나침반이 한곳에 모여 있어요. 첫 화면 "오늘의 태국" 카드 바로 아래의 금색 "놀이터" 버튼을 누르면 열려요. 이전에는 찾기 어려웠던 여권 도장첩을 바로 열 수 있어요'],
     ['✅','골프 부킹·왕복밴 예약 전부 완료','12/17~12/31 골프 8라운드의 부킹과 티오프 시각이 모두 확정됐고, 라운드마다 가는 왕복밴 8건도 예약·결제(윤우열 선결제)까지 끝났어요. 가족2 차량(12/27 픽업·12/30 호텔이동·1/2 공항 샌딩)은 이준영 님이 개별 진행해서 예약·정산 대상에서 제외했어요. 이용 1~2일 전 기사가 배정되어 확정서가 다시 오면 기사님 연락처를 받아두세요'],
     ['🧭','태국 나침반 — 폰을 돌려 태국을 찾아요','폰의 방향 센서와 위치로 "태국은 저쪽!"을 실제로 가리켜요. 나침반을 켜고 폰을 수평으로 들어 천천히 돌리면, 파타야(또는 방콕·집)가 있는 방향에서 진동과 함께 금색으로 바뀌고 남은 거리·비행 시간도 알려줘요. "내 위치로"를 누르면 지금 서 있는 곳 기준으로 계산하고, 위치는 기기 안에서만 쓰고 어디에도 저장·전송하지 않아요. 센서가 없는 PC에서는 북쪽이 위인 지도 기준으로 보여요. 여권 도장첩의 "태국 나침반" 버튼에서 열어보세요'],
-    ['🏷️','나의 여행 칭호 — 이름을 누르면 칭호가 붙어요','골프 라운드 수·코스 종류·같은 조 인원 같은 이번 여행의 실제 일정으로 사람마다 칭호가 계산돼요. 예: 8라운드 전부 출전하면 "개근 라운더", 라운드마다 다른 코스면 "코스 탐험가". 칭호는 복사해서 가족 단톡에 올릴 수 있어요. 여권 도장첩의 "여행 칭호" 버튼에서 열어보세요'],
-    ['🎡','운명의 룰렛 — 누가 쏘지? 뭐 먹지?','돌림판 하나로 "오늘 커피 쏠 사람", "저녁 메뉴", "내기·벌칙"을 정하고, "조 편성"으로 골프 멤버를 두 팀으로 랜덤하게 나눠요. 빠질 사람은 이름을 눌러 제외할 수 있고, 최근 결과도 기록돼요. 여권 도장첩의 "운명의 룰렛" 버튼에서 열어보세요'],
-    ['🧠','우리 여행 퀴즈 — 5문제 도전','티오프 시각·밴 출발 시각·라운드 인원·픽업 순서처럼 이번 여행의 실제 일정으로 매번 새로 출제되는 5문제 퀴즈예요. 놀면서 일정도 익히고, 만점이면 여권에 "여행 박사" 보너스 도장이 찍혀요. 여권 도장첩의 "여행 퀴즈" 버튼에서 열어보세요'],
     ['⛳','라운드 데이 라이브 카운트다운','골프가 있는 날 히어로에 실시간 카드가 떠요 — 밴 출발까지 → 티오프까지 → 라운드 중 경과 시간 → 라운드 끝 순서로 초 단위로 바뀌고, 탭하면 오늘 라운드 카드(밴 시각·픽업 순서·바우처)가 바로 열려요. 방콕 현지 시각 기준이에요'],
-    ['🎯','태국 빙고 — 가족이 함께 채우는 5×5','뚝뚝 타기·망고 찰밥·일몰 사진·골프 버디… 여행 중 해볼 만한 24칸을 해본 대로 눌러 표시해요. 가로·세로·대각선 한 줄이 맞으면 빙고! 여권 도장첩 아래 "태국 빙고" 버튼에서 열려요. 12줄을 다 채우면 보너스 도장이 찍혀요'],
     ['🔒','정산완료 표시는 윤우열만','정산탭의 "정산완료" 표시와 할일탭 "정산 회수" 체크는 이제 수금 담당인 윤우열만 할 수 있어요. 다른 분들은 상태만 볼 수 있고, 정산 요청 메시지 복사는 그대로 쓸 수 있어요'],
-    ['🛂','여권 도장첩 — 여행 도장 모으기','"오늘의 태국" 도장이 여권 페이지로 모여요. 여행이 시작되면 도착·골프 라운드·성탄·방콕 입성·신정·귀국 도장이 그날 저절로 찍혀요. 카드를 탭해서 열어보세요'],
     ['🌌','태국 하늘 라이브','히어로 배경이 방콕 현지 시각에 맞춰 새벽·낮·노을·별밤로 바뀌고, 해와 달이 하늘을 가로질러 움직여요 (12월 일출·일몰 기준 근사값)'],
-    ['🌴','오늘의 태국 — 하루에 한 장씩','출발 전까지 매일 자정에 바뀌는 카드가 히어로에 떠요. 태국어 한마디·음식·여행 팁이 돌아가며 나오고, 탭하면 오늘의 미션과 함께 도장이 찍혀요. 며칠 연속으로 모았는지도 알려줘요'],
   ];
   const sheet=scrim.querySelector('.wn-sheet'), closeBtn=$('wnClose'), listEl=$('wnList');
   $('wnVer').textContent=APP_VER;
@@ -1928,299 +1918,6 @@ const FOODS = [
   ['로띠 + 연유','길거리 팬케이크 디저트'],
 ];
 
-// ── 오늘의 태국 · 여권 도장첩 · 공유 카드 ──
-//    출발 전: 하루에 한 장 바뀌는 카드 + 도장 모으기 / 여행 중·후: 여권 요약 카드 (탭하면 도장첩)
-(function(){
-  const card = $('dailyCard'); if(!card) return;
-  const now = new Date(), dep = tripDate('depart');
-  const pad = n => String(n).padStart(2,'0');
-  const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  const ml = s => `${+s.slice(5,7)}/${+s.slice(8,10)}`;
-  const mdDate = md => { const [m,d] = md.split('/').map(Number); return new Date(`${m<6?2027:2026}-${pad(m)}-${pad(d)}T00:00:00+07:00`); };
-  const LSK = 'thai2026_daily', LSP = 'thai2026_passport';
-  const loadArr = k => { try{ const a = JSON.parse(localStorage.getItem(k)); return Array.isArray(a) ? a : []; }catch(e){ return []; } };
-  const saveArr = (k,a) => { try{ localStorage.setItem(k, JSON.stringify(a)); }catch(e){} };
-  let stamps = loadArr(LSK);   // 출발 전 도장(날짜)
-  let seen = loadArr(LSP);     // 이미 확인한 여행 도장 id
-  const preTrip = now < dep;
-
-  // 날짜별 오늘의 태국 (로컬 자정 기준으로 바뀜 · planStart=8/6)
-  const dayIdxOf = d => Math.max(0, Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(2026,7,6))/864e5));
-  const at = (arr,i) => arr[i % arr.length];
-  function dailyFor(d){
-    const idx = dayIdxOf(d), sub = Math.floor(idx/3), kind = ['phrase','food','tip'][idx % 3];
-    if(kind==='phrase'){ const [th,ko] = at(PHRASES,sub); return {kind, e:'💬', label:'태국어 한마디', title:th, more:ko, mission:'오늘 가족 단톡에 이 말로 한 번 말 걸어보기'}; }
-    if(kind==='food'){ const [nm,ds] = at(FOODS,sub); return {kind, e:'🍜', label:'오늘의 음식', title:nm, more:ds, mission:'메뉴판에서 이 이름을 찾아보는 게 오늘의 미션'}; }
-    return {kind, e:'💡', label:'여행 팁', title:at(TIPS,sub), more:'출발 전에 한 번만 더 떠올려두면 현지에서 편해요', mission:'가족 단톡에 공유해서 같이 챙기기'};
-  }
-
-  // 여행 도장: 출발·골프 라운드·성탄·이동·신정·귀국 — 그날이 되면 저절로 찍힘
-  const TRIP_STAMPS = [
-    {id:'arrive', at:tripDate('depart'), e:'🛬', t:'방콕 도착', tone:'coral', dl:ml(TRIP.depart)},
-    ...GOLF.map(g => ({id:'golf-'+g.d, at:mdDate(g.d), e:'⛳', t:g.c, tone:'gold', dl:g.d})),
-    {id:'xmas', at:mdDate('12/25'), e:'🎄', t:'메리 크리스마스', tone:'jade', dl:'12/25'},
-    {id:'bkk', at:tripDate('bkkFrom'), e:'🌆', t:'방콕 입성', tone:'jade', dl:ml(TRIP.bkkFrom)},
-    {id:'ny', at:mdDate('1/1'), e:'🎆', t:'해피 뉴이어', tone:'jade', dl:'1/1'},
-    {id:'home', at:tripDate('mainReturn'), e:'🏠', t:'귀국', tone:'coral', dl:ml(TRIP.mainReturn)},
-  ].sort((a,b) => a.at - b.at);
-  const earned = () => TRIP_STAMPS.filter(x => new Date() >= x.at);
-
-  // ── 도장첩 시트 ──
-  const scrim = $('passScrim'), body = $('passBody'), shareBtn = $('passShare'), closeBtn = $('passClose');
-  let prevFocus = null;
-  function stampHTML(x, i, isNew, ok){
-    const rot = [-6,4,-3,7,-5,3,-7,5][i % 8];
-    return ok
-      ? `<div class="pstamp ${x.tone} ${isNew?'new':''}" style="--rot:${rot}deg;--i:${i}"><i class="ps-e">${x.e}</i><b>${x.t}</b><span class="ps-d">${x.dl}</span></div>`
-      : `<div class="pstamp empty"><i class="ps-e">${x.e}</i><b>${x.t}</b><span class="ps-d">${x.dl}</span></div>`;
-  }
-  function renderPass(){
-    const got = earned(), gotIds = got.map(x => x.id);
-    const fresh = got.filter(x => !seen.includes(x.id)).map(x => x.id);
-    let k = 0;
-    let html = `<h3 class="ps-h">여행 도장 <b>${got.length}/${TRIP_STAMPS.length}</b></h3><div class="ps-grid">` +
-      TRIP_STAMPS.map(x => { const ok = gotIds.includes(x.id); return stampHTML(x, k++, ok && fresh.includes(x.id), ok); }).join('') + '</div>';
-    if(stamps.length){
-      html += `<h3 class="ps-h">출발 전 도장 <b>${stamps.length}개</b></h3><div class="ps-grid ps-mini">` +
-        [...stamps].sort().map((ds,i) => {
-          const d = new Date(ds+'T00:00:00'), dd = dailyFor(d);
-          return `<div class="pstamp mini jade" style="--rot:${[-4,3,-2,5][i%4]}deg"><i class="ps-e">${dd.e}</i><span class="ps-d">${d.getMonth()+1}/${d.getDate()}</span></div>`;
-        }).join('') + '</div>';
-    }
-    const bi = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0,checked:0};
-    const qi = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,plays:0,n:5};
-    html += `<h3 class="ps-h">보너스 도장 <b>${(bi.lines>=1?1:0)+(bi.lines>=12?1:0)+(qi.best>=qi.n?1:0)}/3</b></h3><div class="ps-grid">` +
-      stampHTML({tone:'gold', e:'🎯', t:'빙고 한 줄', dl:`${bi.lines}줄`}, k++, false, bi.lines >= 1) +
-      stampHTML({tone:'coral', e:'🏆', t:'빙고 마스터', dl:'12줄'}, k++, false, bi.lines >= 12) +
-      stampHTML({tone:'jade', e:'🧠', t:'여행 박사', dl:'퀴즈 만점'}, k++, false, qi.best >= qi.n) + '</div>';
-    body.innerHTML = html;
-    const next = TRIP_STAMPS.find(x => new Date() < x.at);
-    $('passSub').textContent = preTrip
-      ? '여행이 시작되면 도착·골프·귀국 도장이 저절로 찍혀요'
-      : (next ? `다음 도장: ${next.e} ${next.t} (${next.dl})` : '모든 도장을 다 모았어요! 🎉');
-    shareBtn.textContent = preTrip ? '📤 오늘의 카드 공유하기' : '📤 여권 카드 공유하기';
-    if(fresh.length){ seen = [...new Set([...seen, ...gotIds])]; saveArr(LSP, seen); haptic('ok'); paintCard(); }
-  }
-  function openPass(){
-    if(!scrim) return;
-    prevFocus = document.activeElement;
-    renderPass();
-    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
-    void scrim.offsetHeight; scrim.classList.add('on');
-    try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
-  }
-  function closePass(){
-    if(scrim.hidden) return;
-    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
-    setTimeout(()=>{ scrim.hidden = true; }, 340);
-    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
-    haptic('tap');
-  }
-  if(scrim){
-    closeBtn.addEventListener('click', closePass);
-    scrim.addEventListener('click', e => { if(e.target === scrim) closePass(); });
-    onKey(e => { if(e.key==='Escape' && !scrim.hidden) closePass(); });
-    const playBtn = $('passPlay'), focusables = [body, playBtn, shareBtn, closeBtn];
-    scrim.addEventListener('keydown', e => {
-      if(e.key !== 'Tab') return;
-      e.preventDefault();
-      const cur = focusables.indexOf(document.activeElement), n = focusables.length;
-      focusables[e.shiftKey ? (cur <= 0 ? n-1 : cur-1) : (cur < 0 || cur === n-1 ? 0 : cur+1)].focus();
-    });
-    playBtn.addEventListener('click', () => {
-      closePass(); setTimeout(() => { if(typeof window.__openPlay === 'function') window.__openPlay(); }, 360);
-    });
-    window.__openPass = openPass;
-    shareBtn.addEventListener('click', async () => {
-      const o = shareBtn.textContent; shareBtn.textContent = '⏳ 카드 만드는 중…';
-      const how = await shareCard();
-      shareBtn.textContent = how === 'saved' ? '✅ 이미지로 저장했어요' : how === 'shared' ? '✅ 공유했어요' : o;
-      haptic('ok'); setTimeout(() => { shareBtn.textContent = o; }, 1800);
-    });
-  }
-
-  // ── 공유 카드 (캔버스 → 이미지) ──
-  function wrapText(g, text, x, y, maxW, lh, maxLines){
-    const words = String(text).split(' '); let line = '', n = 0;
-    const flush = () => { g.fillText(line, x, y); y += lh; n++; line = ''; };
-    for(const w of words){
-      const t = line ? line + ' ' + w : w;
-      if(g.measureText(t).width > maxW && line){ flush(); if(n >= maxLines) return y; line = w; } else line = t;
-    }
-    if(line && n < maxLines) flush();
-    return y;
-  }
-  async function shareCard(){
-    const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
-    const g = cv.getContext('2d'), cs = getComputedStyle(document.documentElement);
-    const col = (v, f) => (cs.getPropertyValue(v).trim() || f);
-    const jade = col('--jade','#1E4B41'), jadeD = col('--jade-d','#0E2822'), gold = col('--gold','#B58A28'), goldS = col('--gold-s','#F5E7C0'), fg = col('--hero-fg','#F4EEDD');
-    const sans = getComputedStyle(document.body).fontFamily || 'sans-serif';
-    const serif = "'Source Serif 4', 'Noto Serif KR', serif";
-    try{ await document.fonts.ready; }catch(e){}
-    const bg = g.createLinearGradient(0,0,W*.6,H); bg.addColorStop(0,jade); bg.addColorStop(1,jadeD);
-    g.fillStyle = bg; g.fillRect(0,0,W,H);
-    g.fillStyle = 'rgba(181,138,40,.16)'; g.beginPath(); g.arc(W*.92, H*.08, 340, 0, 7); g.fill();
-    g.textBaseline = 'alphabetic'; g.fillStyle = fg;
-    g.font = `600 44px ${sans}`; g.fillText('🇹🇭 태국 겨울 가족여행', 80, 120);
-    const dl = new Date(), left = Math.ceil((dep - dl)/864e5);
-    if(preTrip){
-      const d = dailyFor(dl);
-      g.fillStyle = goldS; g.font = `700 340px ${serif}`; g.fillText(`D-${left}`, 64, 500);
-      g.fillStyle = fg; g.font = `500 40px ${sans}`; g.fillText(`${TRIP.depart.replace(/-/g,'.')} 출발`, 84, 580);
-      g.fillStyle = 'rgba(245,231,192,.16)'; g.fillRect(80, 650, W-160, 3);
-      g.fillStyle = goldS; g.font = `700 38px ${sans}`; g.fillText(`${d.e} 오늘의 태국 · ${d.label}`, 80, 740);
-      g.fillStyle = fg; g.font = `700 76px ${sans}`;
-      let y = wrapText(g, d.title, 80, 850, W-160, 100, 3);
-      g.fillStyle = 'rgba(244,238,221,.86)'; g.font = `500 44px ${sans}`;
-      wrapText(g, d.more, 80, y + 20, W-160, 66, 3);
-      g.fillStyle = goldS; g.font = `600 40px ${sans}`;
-      g.fillText(`🌴 도장 ${stamps.length}개 모으는 중`, 80, H-150);
-    } else {
-      const got = earned(), latest = got[got.length-1];
-      g.fillStyle = goldS; g.font = `700 300px ${serif}`; g.fillText(`${got.length}/${TRIP_STAMPS.length}`, 64, 470);
-      g.fillStyle = fg; g.font = `500 44px ${sans}`; g.fillText('🛂 여권 도장', 84, 560);
-      g.font = `600 64px ${sans}`;
-      TRIP_STAMPS.forEach((x, i) => {
-        const cx = 146 + (i % 7) * 131, cy = 700 + Math.floor(i / 7) * 150, ok = got.includes(x);
-        g.beginPath(); g.arc(cx, cy, 56, 0, 7);
-        if(ok){ g.fillStyle = 'rgba(245,231,192,.16)'; g.fill(); g.lineWidth = 4; g.strokeStyle = goldS; g.stroke(); }
-        else { g.setLineDash([10,10]); g.lineWidth = 3; g.strokeStyle = 'rgba(244,238,221,.35)'; g.stroke(); g.setLineDash([]); }
-        g.globalAlpha = ok ? 1 : .35; g.font = '56px sans-serif'; g.textAlign = 'center'; g.fillStyle = fg; g.fillText(x.e, cx, cy + 19); g.textAlign = 'left'; g.globalAlpha = 1;
-      });
-      if(latest){ g.fillStyle = goldS; g.font = `700 52px ${sans}`; wrapText(g, `최근 도장 · ${latest.e} ${latest.t}`, 80, 1060, W-160, 70, 2); }
-      g.fillStyle = fg; g.font = `600 40px ${sans}`; g.fillText(got.length === TRIP_STAMPS.length ? '모든 도장을 다 모았어요 🎉' : '함께한 시간이 도장으로 쌓이는 중', 80, H-150);
-    }
-    g.fillStyle = 'rgba(244,238,221,.7)'; g.font = `500 34px ${sans}`;
-    g.fillText(`${TRIP.depart.replace(/-/g,'.')} – ${TRIP.end.replace(/-/g,'.')} · 3가족 9명`, 80, H-90);
-    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
-    if(!blob) return 'fail';
-    const file = new File([blob], 'thailand-2026.png', {type:'image/png'});
-    if(navigator.canShare && navigator.canShare({files:[file]})){
-      try{ await navigator.share({files:[file], title:'태국 겨울 가족여행'}); return 'shared'; }
-      catch(e){ if(e && e.name === 'AbortError') return 'cancel'; }
-    }
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'thailand-2026.png';
-    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-    return 'saved';
-  }
-  window.__shareCard = shareCard;
-
-  // ── 히어로 카드 ──
-  function paintCard(){
-    if(preTrip){
-      const got = stamps.includes(keyOf(new Date()));
-      card.classList.toggle('stamped', got);
-      $('dcArrow').textContent = got ? `✓ 도장 ${stamps.length}개 · 여권 →` : '열어보기 →';
-    } else {
-      const got = earned(), fresh = got.filter(x => !seen.includes(x.id)).length;
-      $('dcArrow').textContent = fresh ? `새 도장 ${fresh} →` : '열기 →';
-    }
-  }
-  card.style.display = 'flex';
-  if(preTrip){
-    const d = dailyFor(now), daysLeft = Math.ceil((dep - now)/864e5), today = keyOf(now);
-    $('dcE').textContent = d.e; $('dcT').textContent = d.title; $('dcTag').textContent = `🌴 D-${daysLeft}`;
-    const more$ = $('dcMore'); more$.innerHTML = `${d.more}<br><b>오늘의 미션</b> · ${d.mission}`;
-    const streakOf = () => { let n = 0; const x = new Date(now); while(stamps.includes(keyOf(x))){ n++; x.setDate(x.getDate()-1); } return n; };
-    paintCard();
-    card.addEventListener('click', e => {
-      if(stamps.includes(today) && e.target.closest('.nc-arrow')){ haptic('tap'); openPass(); return; }
-      const open = card.classList.toggle('open');
-      card.setAttribute('aria-expanded', open); more$.hidden = !open; haptic('tap');
-      if(!open || stamps.includes(today)) return;
-      stamps.push(today); saveArr(LSK, stamps); paintCard(); haptic('ok');
-      const n = stamps.length, st = streakOf();
-      const msg = st >= 2 ? `${st}일 연속 도장! 총 ${n}개 모았어요` : `오늘의 도장 완료 · 총 ${n}개`;
-      if(typeof window.__celebrate === 'function') window.__celebrate({ kicker:`🌴 D-${daysLeft}`, msg, ms:3200, at:card, dy:20, n: n%7===0 ? 26 : 10, spread:80, petals:true });
-      else if(typeof window.__toast === 'function') window.__toast(`🌴 D-${daysLeft}`, msg);
-    });
-  } else {
-    const got = earned(), last = got[got.length-1];
-    card.classList.add('passport-mode'); card.removeAttribute('aria-expanded');
-    $('dcTag').textContent = '🛂 여권'; $('dcE').textContent = last ? last.e : '🛂';
-    $('dcT').textContent = `도장 ${got.length}/${TRIP_STAMPS.length}${last ? ' · 최근 ' + last.t : ''}`;
-    paintCard();
-    card.addEventListener('click', () => { haptic('tap'); openPass(); });
-    const fresh = got.filter(x => !seen.includes(x.id));
-    if(fresh.length) setTimeout(() => { if(scrim && !scrim.hidden) return; if(typeof window.__toast === 'function') window.__toast('🛂 새 도장', `${fresh[fresh.length-1].e} ${fresh[fresh.length-1].t}${fresh.length>1?` 외 ${fresh.length-1}개`:''} 도장이 찍혔어요`); }, 2200);
-  }
-})();
-
-// ── 태국 빙고: 여행 중 해볼 만한 미션 24칸 — 가족 모두 같은 판, 줄이 맞으면 빙고 ──
-(function(){
-  const scrim = $('bingoScrim'); if(!scrim) return;
-  const M = [
-    ['🛺','뚝뚝 타보기'],['🥭','망고 찰밥 먹기'],['🍜','팟타이 먹기'],['🥥','코코넛 마시기'],['🌅','일몰 사진 찍기'],
-    ['💆','태국 마사지'],['🏪','세븐일레븐 털기'],['🙏','컵쿤캅 인사하기'],['🌶️','마이 펫 말해보기'],['🧋','차옌 마시기'],
-    ['🐦','골프 버디 성공'],['🚗','그랩·볼트 타기'],null,['🦀','뿌팟퐁커리 먹기'],['🏊','수영장 물놀이'],
-    ['🏮','야시장 구경'],['🎄','성탄 저녁 함께'],['📸','3가족 단체사진'],['🥞','로띠 먹기'],['🍲','똠얌꿍 먹기'],
-    ['🍺','라운드 후 한 잔'],['🐘','코끼리 굿즈 사기'],['🎆','새해 맞이하기'],['🛍️','흥정 성공하기'],['⛳','18홀 완주 인증샷'],
-  ];
-  const FREE = 12, LSB = 'thai2026_bingo';
-  const LINES = [];
-  for(let r=0;r<5;r++){ LINES.push([0,1,2,3,4].map(c=>r*5+c)); LINES.push([0,1,2,3,4].map(c=>c*5+r)); }
-  LINES.push([0,6,12,18,24], [4,8,12,16,20]);
-  let on = new Set((()=>{ try{ const a = JSON.parse(localStorage.getItem(LSB)); return Array.isArray(a) ? a : []; }catch(e){ return []; } })());
-  on.add(FREE);
-  const save = () => { try{ localStorage.setItem(LSB, JSON.stringify([...on])); }catch(e){} };
-  const doneLines = () => LINES.filter(l => l.every(i => on.has(i)));
-  window.__bingoInfo = () => ({ lines: doneLines().length, checked: on.size - 1, total: 24 });
-
-  const grid = $('bingoGrid'), msg = $('bingoMsg'), sub = $('bingoSub'), resetBtn = $('bingoReset'), closeBtn = $('bingoClose');
-  let prevFocus = null, armed = 0;
-  function paint(popIdx){
-    const dl = doneLines(), inLine = new Set(dl.flat());
-    grid.innerHTML = M.map((m,i) => m
-      ? `<button class="bcell${inLine.has(i)?' line':''}${i===popIdx?' pop':''}" type="button" data-i="${i}" aria-pressed="${on.has(i)}"><span class="b-e" aria-hidden="true">${m[0]}</span><span class="b-t">${m[1]}</span></button>`
-      : `<button class="bcell free${inLine.has(i)?' line':''}" type="button" tabindex="-1" aria-pressed="true" aria-label="가운데 칸: 태국에 왔다! (기본 완료)"><span class="b-e" aria-hidden="true">🇹🇭</span><span class="b-t">태국에 왔다!</span></button>`
-    ).join('');
-    sub.textContent = `${on.size - 1}/24칸 · ${dl.length}줄 완성 — 해본 걸 눌러 표시하세요`;
-    if(popIdx != null){ const b = grid.querySelector(`[data-i="${popIdx}"]`); if(b) b.focus({preventScroll:true}); }
-  }
-  grid.addEventListener('click', e => {
-    const b = e.target.closest('.bcell[data-i]'); if(!b) return;
-    const i = +b.dataset.i, before = doneLines().length;
-    if(on.has(i)) on.delete(i); else on.add(i);
-    save();
-    const after = doneLines().length;
-    paint(i);
-    if(on.has(i)) haptic('ok'); else haptic('tap');
-    if(after === 12) msg.textContent = '🏆 태국 빙고 마스터! 12줄을 전부 채웠어요';
-    else if(after > before) { msg.textContent = `🎯 빙고! ${after}줄 완성`; haptic('ok'); }
-    else msg.textContent = '';
-  });
-
-  function open(){
-    prevFocus = document.activeElement; armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; msg.textContent = '';
-    paint();
-    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
-    void scrim.offsetHeight; scrim.classList.add('on');
-    try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
-  }
-  function close(){
-    if(scrim.hidden) return;
-    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
-    setTimeout(()=>{ scrim.hidden = true; }, 340);
-    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
-    haptic('tap');
-  }
-  window.__openBingo = open;
-  closeBtn.addEventListener('click', close);
-  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  onKey(e => { if(e.key==='Escape' && !scrim.hidden) close(); });
-  resetBtn.addEventListener('click', () => {
-    if(!armed){ armed = 1; resetBtn.textContent = '한 번 더 누르면 초기화돼요'; setTimeout(()=>{ armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; }, 2600); return; }
-    on = new Set([FREE]); save(); armed = 0; resetBtn.textContent = '↺ 처음부터 다시'; msg.textContent = ''; paint(); haptic('strong');
-  });
-  scrim.addEventListener('keydown', e => {
-    if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.bcell[data-i], #bingoReset, #bingoClose')];
-    const cur = f.indexOf(document.activeElement), n = f.length;
-    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
-  });
-})();
-
 // ── 라운드 데이 라이브: 골프가 있는 날(방콕 현지 날짜) 히어로에 밴 출발 → 티오프 → 라운드 중 → 종료를 실시간으로 ──
 (function(){
   const card = $('roundLive'); if(!card) return;
@@ -2266,122 +1963,13 @@ const FOODS = [
   });
 })();
 
-// ── 우리 여행 퀴즈: 이 여행의 실제 일정 데이터로 매번 새로 출제되는 5문제 ──
-(function(){
-  const scrim = $('tquizScrim'); if(!scrim) return;
-  const LSQ = 'thai2026_tquiz', N = 5;
-  let st; try{ st = JSON.parse(localStorage.getItem(LSQ)) || {}; }catch(e){ st = {}; }
-  st.best = st.best || 0; st.plays = st.plays || 0;
-  const save = () => { try{ localStorage.setItem(LSQ, JSON.stringify(st)); }catch(e){} };
-  window.__tquizInfo = () => ({ best: st.best, plays: st.plays, n: N });
-
-  const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = (Math.random()*(i+1))|0; [a[i],a[j]] = [a[j],a[i]]; } return a; };
-  const rnd = a => a[(Math.random()*a.length)|0];
-  const uniq = a => [...new Set(a)];
-  const tm = s => ((s||'').match(/\d{1,2}:\d{2}/)||[''])[0];
-  const short = c => c.replace(/ (Golf|Country|GC|CC).*$/i,'');
-  const nm = k => PLACES[k].ko.replace(/ \(.*\)/,'');
-
-  // 출제기: {q, a(정답), d(오답 후보), e(해설)} 또는 null
-  const gens = [
-    () => { const g = rnd(GOLF), a = tm(g.tee); return {q:`${g.d} ${short(g.c)} 라운드 티오프 시각은?`, a, d:uniq(GOLF.map(x=>tm(x.tee))).filter(x=>x!==a), e:`${g.d} ${g.c}는 ${g.tee}이에요.`}; },
-    () => { const list = GOLF.filter(x=>x.van&&x.van.time), g = rnd(list), a = g.van.time; return {q:`${g.d} 골프 왕복밴은 몇 시에 출발할까요?`, a, d:uniq(list.map(x=>x.van.time)).filter(x=>x!==a), e:`${g.d} 밴은 ${a}에 출발해요.`}; },
-    () => { const g = rnd(GOLF), a = g.c; return {q:`${g.d}에 라운드하는 골프장은?`, a, d:uniq(GOLF.map(x=>x.c)).filter(x=>x!==a), e:`${g.d}은 ${a}예요.`}; },
-    () => { const g = rnd(GOLF), n = g.p.length; return {q:`${g.d} ${short(g.c)} 라운드에 함께하는 인원은?`, a:`${n}명`, d:[3,4,5,6].filter(x=>x!==n).map(x=>x+'명'), e:`${g.p.join('·')} ${n}명이에요.`}; },
-    () => { const n = GOLF.filter(g=>g.loc==='pat').length, m = GOLF.length - n; return {q:'파타야에서 라운드하는 날은 모두 며칠일까요?', a:`${n}번`, d:[n-2,n-1,n+1,n+2].filter(x=>x>0).map(x=>x+'번'), e:`파타야 ${n}번, 방콕 ${m}번 — 총 ${GOLF.length}라운드예요.`}; },
-    () => { const list = GOLF.filter(g=>GOLFERS.some(n=>!g.p.includes(n))); if(!list.length) return null; const g = rnd(list), a = rnd(GOLFERS.filter(n=>!g.p.includes(n))); if(g.p.length<3) return null;
-            return {q:`${g.d} ${short(g.c)} 라운드에 함께하지 않는 사람은?`, a, d:shuffle(g.p).slice(0,3), e:`${g.d}은 ${g.p.join('·')}이 함께해요.`}; },
-    () => { const g = GOLF.find(x=>x.van&&x.van.riders&&x.van.riders.length===3&&x.van.riders.length<x.p.length); if(!g) return null; const a = g.p.find(n=>!g.van.riders.includes(n));
-            return {q:`${g.d} 골프 밴에 타지 않고 직접 골프장으로 오는 사람은?`, a, d:g.van.riders.slice(), e:`${a}은 밴 없이 직접 와요. 밴은 ${g.van.riders.join('·')} 3명이 타요.`}; },
-    () => { const list = GOLF.filter(g=>g.amt).sort((x,y)=>y.amt-x.amt); if(list.length<4 || list[0].amt===list[1].amt) return null; const lab = g => `${g.d} ${short(g.c)}`;
-            return {q:'골프 라운드 총액이 가장 큰 날은?', a:lab(list[0]), d:list.slice(1).map(lab), e:`${lab(list[0])}이 ${won(list[0].amt)}원으로 가장 커요.`}; },
-    () => { const keys = BKK_GOLF_STAY['12/31']; if(!keys||keys.length<3) return null; const a = nm(keys[0]);
-            return {q:'12/31 방콕 골프 밴이 가장 먼저 픽업하는 호텔은?', a, d:[...keys.slice(1).map(nm), nm('holidayinn')], e:`픽업 순서는 ${keys.map(nm).join(' → ')} 이에요.`}; },
-    () => { const n = Math.ceil((tripDate('depart') - new Date())/864e5); if(n<10) return null; return {q:'오늘 기준 12/16 출발까지 며칠 남았을까요?', a:`D-${n}`, d:[`D-${n+1}`,`D-${n-1}`,`D-${n+7}`,`D-${n-7}`], e:`히어로 카운트다운이 오늘 D-${n}이에요.`}; },
-  ];
-  function build(){
-    const out = [];
-    for(const g of shuffle(gens)){
-      if(out.length >= N) break;
-      let q; try{ q = g(); }catch(e){ q = null; }
-      if(!q) continue;
-      const d = uniq(q.d).filter(x => x !== q.a);
-      if(d.length < 3) continue;
-      out.push({ q:q.q, a:q.a, e:q.e, opts: shuffle([q.a, ...shuffle(d).slice(0,3)]) });
-    }
-    return out;
-  }
-
-  const body = $('tqBody'), sub = $('tqSub'), nextBtn = $('tqNext'), closeBtn = $('tqClose');
-  let qs = [], idx = 0, score = 0, answered = false, prevFocus = null;
-  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  function renderQ(){
-    const q = qs[idx]; answered = false; nextBtn.hidden = true;
-    sub.textContent = `문제 ${idx+1}/${qs.length} · 현재 ${score}점`;
-    body.innerHTML = `<p class="tq-q">${esc(q.q)}</p><div class="tq-opts">` +
-      q.opts.map((o,i) => `<button class="tq-opt" type="button" data-i="${i}">${esc(o)}</button>`).join('') + '</div><p class="tq-fb" id="tqFb"></p>';
-    const first = body.querySelector('.tq-opt'); if(first) first.focus({preventScroll:true});
-  }
-  function renderRes(){
-    st.plays++; if(score > st.best) st.best = score; save();
-    sub.textContent = '결과';
-    nextBtn.hidden = true;
-    const msg = score===qs.length ? '만점! 여행 박사 🏆 — 여권에 보너스 도장이 찍혔어요' : score>=qs.length-1 ? '거의 다 알아요 👏' : score>=3 ? '절반 넘게 알아요 🙂' : '일정 카드를 한 번 더 훑어봐요 🗓️';
-    body.innerHTML = `<div class="tq-res"><div class="tq-score">${score}<small>/${qs.length}</small></div><p class="tq-msg">${msg}</p><p class="tq-rec">최고 기록 ${st.best}/${qs.length} · 도전 ${st.plays}회</p>` +
-      `<button class="wn-close tq-again" type="button">🔁 다시 도전 (새 문제)</button></div>`;
-    haptic(score===qs.length ? 'ok' : 'tap');
-    const again = body.querySelector('.tq-again'); if(again) again.focus({preventScroll:true});
-  }
-  function start(){ qs = build(); idx = 0; score = 0; if(!qs.length) return; renderQ(); }
-
-  body.addEventListener('click', e => {
-    const again = e.target.closest('.tq-again'); if(again){ haptic('tap'); start(); return; }
-    const b = e.target.closest('.tq-opt'); if(!b || answered) return;
-    answered = true;
-    const q = qs[idx], picked = q.opts[+b.dataset.i], right = picked === q.a;
-    if(right) score++;
-    body.querySelectorAll('.tq-opt').forEach(x => { x.disabled = true; const o = q.opts[+x.dataset.i]; if(o === q.a) x.classList.add('ok'); else if(x === b) x.classList.add('no'); });
-    $('tqFb').innerHTML = right ? `<b>정답! ✅</b> ${esc(q.e)}` : `<b>땡! ❌</b> 정답은 “${esc(q.a)}” — ${esc(q.e)}`;
-    sub.textContent = `문제 ${idx+1}/${qs.length} · 현재 ${score}점`;
-    haptic(right ? 'ok' : 'strong');
-    nextBtn.textContent = idx+1 < qs.length ? '다음 →' : '결과 보기'; nextBtn.hidden = false;
-    nextBtn.focus({preventScroll:true});
-  });
-  nextBtn.addEventListener('click', () => { haptic('tap'); idx++; if(idx < qs.length) renderQ(); else renderRes(); });
-
-  function open(){
-    prevFocus = document.activeElement; start();
-    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
-    void scrim.offsetHeight; scrim.classList.add('on');
-  }
-  function close(){
-    if(scrim.hidden) return;
-    scrim.classList.remove('on'); document.documentElement.style.overflow = '';
-    setTimeout(()=>{ scrim.hidden = true; }, 340);
-    try{ prevFocus && prevFocus.focus && prevFocus.focus(); }catch(e){}
-    haptic('tap');
-  }
-  window.__openTquiz = open;
-  closeBtn.addEventListener('click', close);
-  scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  onKey(e => { if(e.key==='Escape' && !scrim.hidden) close(); });
-  scrim.addEventListener('keydown', e => {
-    if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.tq-opt:not(:disabled), .tq-again, #tqNext:not([hidden]), #tqClose')];
-    const cur = f.indexOf(document.activeElement), n = f.length;
-    if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
-  });
-})();
-
-// ── 놀이터 모듈(맛집 월드컵·힐링 사운드·스트레칭·골프 운세·역사·먹킷리스트·라운드 기록장·나침반·칭호·룰렛·바트 감각): 별도 파일(play.js)을 처음 열 때(또는 한가할 때) 불러옴 ──
+// ── 놀이터 모듈(힐링 사운드·라운드 기록장·나침반): 별도 파일(play.js)을 처음 열 때(또는 한가할 때) 불러옴 ──
 (function(){
   const lf = () => { if(typeof window.__toast === 'function') window.__toast('📡','기능을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요', 2600); };
-  const NAMES = ['__openWorldcup','__openChill','__openStretch','__openFortune','__openEats','__openScore','__openCompass','__openTitles','__openWheel','__openBaht'];
+  const NAMES = ['__openChill','__openScore','__openCompass'];
   NAMES.forEach(name => {
     const stub = (...a) => {
-      // 월드컵은 맛집 데이터(foodmap.js)도 먼저 받아 둬요
-      const pre = name === '__openWorldcup' ? window.__loadChunk('foodmap').catch(() => {}) : Promise.resolve();
-      return pre.then(() => window.__loadChunk('play')).then(() => { if(window[name] === stub) throw new Error('chunk play'); window[name](...a); }).catch(lf);
+      return window.__loadChunk('play').then(() => { if(window[name] === stub) throw new Error('chunk play'); window[name](...a); }).catch(lf);
     };
     window[name] = stub;
   });
@@ -2540,6 +2128,38 @@ const FOODS = [
   }).catch(() => { clearTimeout(to); autoOpen(); });
 })();
 
+// ── 첫 화면: 인사말(시간대·날마다 바뀜)과 "오늘의 카드" 덱(옆으로 밀어서 넘기기) ──
+(function(){
+  const g = $('heroGreet');
+  const TEASE = ['파타야 바다가 기다려요', '첫 끼는 팟타이로 정해 볼까요', '골프화는 챙기셨죠?', '망고 스티키 라이스가 기다려요', '방콕 야경을 곧 만나요', '선크림 넉넉히 챙겨요', '마사지 받을 날을 골라 볼까요', '"사와디 캅" 연습 중이세요?', '캐리어에 빈자리를 남겨 두세요', '가기 전날은 푹 자기!', '오늘은 여행 생각만 해도 좋아요', '야자수 그늘이 기다려요', '라운드 전 스트레칭 잊지 마요', '코끼리 바지 사러 가요'];
+  function greet(){
+    if(!g) return; const k = new Date(Date.now() + 9 * 36e5), h = k.getUTCHours(), day = Math.floor(Date.UTC(k.getUTCFullYear(), k.getUTCMonth(), k.getUTCDate()) / 864e5);
+    const ico = h < 6 ? '🌙' : h < 11 ? '☀️' : h < 17 ? '🌤️' : h < 20 ? '🌇' : '🌙';
+    const left = Math.round((Date.UTC(2026, 11, 16) / 864e5) - day);
+    const t = left > 0 ? TEASE[day % TEASE.length] : day <= Math.floor(Date.UTC(2027, 0, 2) / 864e5) ? `여행 ${1 - left}일차예요` : '우리 여행, 고마웠어요 💛';
+    g.textContent = ` ${ico} ${t}`;
+  }
+  greet(); setInterval(greet, 18e5);
+  // 카드 덱: 보이는 카드만 점(•)으로 세고, 지금 카드를 또렷하게 보여줘요
+  const deck = $('deck'), dots = $('deckDots'); if(!deck || !dots) return;
+  const slides = () => [...deck.children].filter(e => e.classList.contains('next-card') && !e.hidden && getComputedStyle(e).display !== 'none');
+  let idx = -1, raf = 0;
+  function mark(user){
+    const s = slides(); if(!s.length) return;
+    const sl = deck.scrollLeft, max = deck.scrollWidth - deck.clientWidth; let k = 0, best = 1e9;
+    if(max > 2 && sl >= max - 2) k = s.length - 1; else s.forEach((el, i) => { const d = Math.abs(el.offsetLeft - sl); if(d < best){ best = d; k = i; } });
+    if(k === idx) return;
+    if(user && idx !== -1) haptic('tap');
+    idx = k; s.forEach((el, i) => el.classList.toggle('on', i === k)); [...dots.children].forEach((d, i) => d.classList.toggle('on', i === k));
+  }
+  let touched = false; ['touchstart', 'pointerdown', 'wheel', 'keydown'].forEach(ev => deck.addEventListener(ev, () => { touched = true; }, { passive: true }));
+  function build(){ if(!touched) deck.scrollLeft = 0;   // 카드가 나중에 생겨도 처음엔 맨 앞 카드부터 보여줘요
+    const s = slides(); dots.innerHTML = s.map(() => '<i></i>').join(''); dots.hidden = s.length < 2; deck.classList.toggle('solo', s.length < 2); idx = -1; mark(false); }
+  deck.addEventListener('scroll', () => { if(raf) return; raf = requestAnimationFrame(() => { raf = 0; mark(true); }); }, { passive: true });
+  let t = 0; new MutationObserver(() => { clearTimeout(t); t = setTimeout(build, 120); }).observe(deck, { subtree: true, attributes: true, attributeFilter: ['style', 'hidden'], childList: true });
+  build(); addEventListener('load', build);
+})();
+
 // ── 홈 카드: 오늘의 한 문제 · 갈 곳 미리 읽기 (역사·공부 시트와 연결) ──
 (function(){
   const dq = $('dqCard'), ev = $('eveCard');
@@ -2612,37 +2232,21 @@ const FOODS = [
   const fc = $('foodMapCard'); if(fc) fc.addEventListener('click', () => { haptic('tap'); open(); });
 })();
 
-// ── 놀이터 메뉴: 모든 놀이 기능을 한곳에서 (여권·빙고·퀴즈·룰렛·칭호·나침반·태국어·기록장·운세·먹킷리스트) ──
+// ── 놀이터 메뉴: 이야기 카드 · 역사·공부 · 나침반 · 태국어 · 라운드 기록장 · 힐링 사운드 ──
 (function(){
   const scrim = $('playScrim'); if(!scrim) return;
   const grid = $('plGrid'), closeBtn = $('plClose');
   const call = n => () => { if(typeof window[n] === 'function') window[n](); };
   const TILES = [
-    ['📖','태국 이야기 · 맛집 카드', () => '매일 바뀌는 오늘의 추천 · 이야기 51장 · 맛집·볼거리 슬라이드', '__openStory', true],
+    ['📖','태국 이야기 · 맛집 카드', () => '매일 바뀌는 오늘의 추천 · 이야기 51장 · 맛집·볼거리 슬라이드', '__openStory'],
     ['📜','태국 역사 · 공부', () => '연표 · 여행지 이야기 · 알아두기 · 퀴즈', '__openHistory'],
-    ['🛂','여권 도장첩', () => '도장 모으기 · 공유 카드', '__openPass'],
-    ['🎯','태국 빙고', () => { const b = typeof window.__bingoInfo === 'function' ? window.__bingoInfo() : {lines:0}; return `${b.lines}줄 완성`; }, '__openBingo'],
-    ['🧠','여행 퀴즈', () => { const q = typeof window.__tquizInfo === 'function' ? window.__tquizInfo() : {best:0,n:5}; return q.best ? `최고 ${q.best}/${q.n}` : '우리 여행 5문제'; }, '__openTquiz'],
-    ['🎡','운명의 룰렛', () => '쏠 사람 · 메뉴 · 조 편성', '__openWheel'],
-    ['🏷️','여행 칭호', () => '이름 누르면 칭호가 붙어요', '__openTitles'],
     ['🧭','태국 나침반', () => '폰을 돌려 태국 찾기', '__openCompass'],
     ['🗣️','태국어 · 숫자 · 맥주', () => '발음 듣기 · 숫자 · 맥주 이야기', '__openThai'],
     ['📝','라운드 기록장', () => { try{ const d = (window.__scoreInfo && window.__scoreInfo().data) || {}; const n = Object.keys(d).filter(k => Object.values(d[k]).some(r => r.s || r.b || r.e || r.h)).length; return n ? `${n}라운드 기록` : '스코어 · 버디 기록'; }catch(e){ return '스코어 · 버디 기록'; } }, '__openScore'],
-    ['🔮','오늘의 골프 운세', () => '매일 바뀌는 라운드 운세', '__openFortune'],
-    ['🍜','태국 먹킷리스트', () => { try{ const e = window.__eatsInfo(); return `${e.done}/${e.total} 먹어봤어요`; }catch(err){ return '20가지 도전'; } }, '__openEats'],
-    ['💰','바트 감각 테스트', () => { try{ const b = window.__bahtInfo(); return b.best ? `최고 ${b.best}/5` : '이 가격, 한국 돈으로?'; }catch(err){ return '이 가격, 한국 돈으로?'; } }, '__openBaht', true],
-    ['🧘','티오프 5분 스트레칭', () => { try{ const t = window.__stretchInfo(); return t.done ? `${t.done}번 했어요` : '라운드 전 몸 풀기 타이머'; }catch(err){ return '라운드 전 몸 풀기 타이머'; } }, '__openStretch', true],
-    ['🏆','맛집 월드컵', () => { try{ const w = window.__wcInfo(); return w.plays ? `최다 우승 ${w.top}` : '파타야·방콕 식당 이상형 월드컵'; }catch(err){ return '파타야·방콕 식당 이상형 월드컵'; } }, '__openWorldcup', true],
-    ['🌴','태국 힐링 사운드', () => { try{ const c = window.__chillInfo(); return c.playing ? `재생 중 ${c.playing}` : '파도·비·밤 벌레 소리'; }catch(err){ return '파도·비·밤 벌레 소리'; } }, '__openChill', true]
+    ['🌴','태국 힐링 사운드', () => { try{ const c = window.__chillInfo(); return c.playing ? `재생 중 ${c.playing}` : '파도·비·밤 벌레 소리'; }catch(err){ return '파도·비·밤 벌레 소리'; } }, '__openChill']
   ];
-  // 잘 안 쓰는 놀이는 "더 보기"로 접어 둬요
-  const FOLD = ['__openPass', '__openBingo'];
-  let foldOpen = false;
   function paint(){
-    const tile = (t, i) => `<button class="play-tile${FOLD.includes(t[3]) ? ' play-fold' : ''}${t[3] === '__openStory' ? ' play-hero' : ''}" type="button" data-i="${i}"${FOLD.includes(t[3]) && !foldOpen ? ' hidden' : ''}>${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`;
-    grid.innerHTML = TILES.map((t, i) => FOLD.includes(t[3]) ? '' : tile(t, i)).join('') +
-      `<button class="play-more" type="button" aria-expanded="${foldOpen}">${foldOpen ? '▴ 접기' : `▾ 더 보기 (${FOLD.length})`}</button>` +
-      TILES.map((t, i) => FOLD.includes(t[3]) ? tile(t, i) : '').join('');
+    grid.innerHTML = TILES.map((t, i) => `<button class="play-tile${t[3] === '__openStory' ? ' play-hero' : ''}" type="button" data-i="${i}">${t[4] ? '<span class="pn">NEW</span>' : ''}<span class="pe" aria-hidden="true">${t[0]}</span><span class="pt">${t[1]}</span><span class="ps">${t[2]()}</span></button>`).join('');
   }
   let prevFocus = null;
   function open(){
@@ -2666,7 +2270,6 @@ const FOODS = [
     haptic('tap');
   }
   grid.addEventListener('click', e => {
-    const mb = e.target.closest('.play-more'); if(mb){ foldOpen = !foldOpen; haptic('tap'); paint(); const f = grid.querySelector('.play-more'); if(f) try{ f.focus({preventScroll:true}); }catch(err){} return; }
     const b = e.target.closest('.play-tile'); if(!b) return; const t = TILES[+b.dataset.i];
     close(true); setTimeout(call(t[3]), 360);
   });
@@ -2677,7 +2280,7 @@ const FOODS = [
   onKey(e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
-    const f = [...scrim.querySelectorAll('.play-tile, .play-more, #plClose')].filter(x => x.offsetParent !== null);
+    const f = [...scrim.querySelectorAll('.play-tile, #plClose')].filter(x => x.offsetParent !== null);
     const cur = f.indexOf(document.activeElement), n = f.length;
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
