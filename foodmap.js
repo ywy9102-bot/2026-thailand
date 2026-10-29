@@ -406,7 +406,7 @@
   window.__foodMapInfo = () => ({ city, course: myCourse().length, pinned: Object.keys(COORD).length, homes: Object.keys(HOME).length, count: R.filter(r => !r.sight).length, sights: R.filter(r => r.sight).length, groups: R.reduce((a, r) => (a[r.g] = (a[r.g]||0)+1, a), {}), val: R.filter(r => r.val).length, mic: R.filter(r => r.badge).length });
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden){ if(view === 'map' && closePick()) return; close(); } });
+  onKey(e => { if(e.key==='Escape' && !scrim.hidden){ if(view === 'map' && closePick()) return; close(); } });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.fm-vbtn, .fm-city, .fm-chips .wh-chip, .fm-homebar .fm-tool, .fm-maptools .fm-tool, .fm-pick:not([hidden]) .fm-vis, .fm-pick:not([hidden]) .fm-x, .fm-pick:not([hidden]) .fm-btn, .fm-mapfoot:not([hidden]) .fm-btn, .fm-body:not([hidden]) .fm-head, .fm-det:not([hidden]) .fm-btn, #fmClose')].filter(x => x.offsetParent !== null);

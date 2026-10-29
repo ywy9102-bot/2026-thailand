@@ -211,7 +211,7 @@
   window.__openThai = open;
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  addEventListener('keydown', e => { if(e.key==='Escape' && !scrim.hidden) close(); });
+  onKey(e => { if(e.key==='Escape' && !scrim.hidden) close(); });
   scrim.addEventListener('keydown', e => {
     if(e.key !== 'Tab') return;
     const f = [...scrim.querySelectorAll('.wh-tab, .th-play, .th-num, summary, #thNumQuiz, #thBeerQuiz, #thListen, .tq-opt:not(:disabled), .th-again, #thNext:not([hidden]), #thClose')].filter(x => x.tabIndex >= 0);

@@ -84,7 +84,7 @@
   window.__openStory = open;
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', e => { if(e.target === scrim) close(); });
-  addEventListener('keydown', e => {
+  onKey(e => {
     if(scrim.hidden) return;
     if(e.key === 'Escape') close();
     else if(mode === 'card' && e.key === 'ArrowRight'){ setAuto(false); go(1); } else if(mode === 'card' && e.key === 'ArrowLeft'){ setAuto(false); go(-1); }

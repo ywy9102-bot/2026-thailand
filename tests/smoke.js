@@ -89,7 +89,7 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await ctx.close();
     }
     // 3) 조각 파일이 막혀도 앱은 살아 있음
-    for (const name of ['play', 'story', 'foodmap', 'thai']) {
+    for (const name of ['play', 'story', 'foodmap', 'thai', 'learn']) {
       const { ctx, page, errs } = await open(browser, base, 390, 844, { block: new RegExp(name + '\\.js') });
       await page.evaluate(() => { (window.__openHistory || window.__openThai || window.__openFoodMap)(); });
       await page.waitForTimeout(1500);
@@ -159,6 +159,7 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       const { ctx, page } = await open(browser, base, 390, 844, { clock: '2026-10-26T12:00:00+09:00' });
       ok('예고편 카드: 출발까지 남은 날이 보임', await page.evaluate(() => /D-51/.test(document.getElementById('trT').textContent)));
       await page.click('#trCard'); await page.waitForSelector('#trailerScrim.on'); await page.waitForTimeout(400);
+      ok('예고편: 자동 넘김 중에는 낭독기 알림을 꺼 둠', await page.evaluate(() => document.getElementById('trStage').getAttribute('aria-live') === 'off'));
       ok('예고편: 첫 장은 D-51 · 잠 51번', await page.evaluate(() => /D-51 · 잠 51번/.test(document.getElementById('trStage').textContent) && document.getElementById('trCount').textContent === '1 / 20'));
       await page.click('#trNext');
       await page.waitForSelector('.tr-photo.fail', { timeout: 5000 });
