@@ -2445,10 +2445,12 @@ function __initFunElements(){
       {d:1,k:'D-1',m:'내일 출발이에요! 🎉'},
     ];
     let seen; try{ seen = JSON.parse(localStorage.getItem('thai2026_ms')) || []; }catch(e){ seen = []; }
-    const hit = MS.find(x => days <= x.d && !seen.includes(x.d));
+    // 지금 날짜에 가장 가까운 지난 마일스톤만 보고, 2일 넘게 지났으면 안내 없이 본 것으로 표시해요(처음 여는 사람에게 "딱 100일"이 뜨지 않게)
+    const hit = MS.filter(x => days <= x.d && !seen.includes(x.d)).pop();
     if(!hit) return;
     const mark = [...new Set([...seen, ...MS.filter(x => x.d >= hit.d).map(x=>x.d)])];
     try{ localStorage.setItem('thai2026_ms', JSON.stringify(mark)); }catch(e){}
+    if(hit.d - days > 2) return;
     setTimeout(()=>{
       const cd = pulseMilestoneRing();
       celebrate({ kicker:hit.k, msg:hit.m, ms:4400, at:cd||$('cd'), dy:28, n:26, spread:90, petals:true, plane:true });
