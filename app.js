@@ -737,7 +737,7 @@ window.__ensureRain = (function(){
       document.querySelector('header.hero').dataset.wx = grp;  // 날씨 반응형 히어로
       if((grp==='rain'||grp==='storm') && window.__ensureRain) window.__ensureRain();
     } else {
-      icoEl.textContent='·'; textEl.textContent='날씨 정보 없음'; tempEl.textContent='';
+      icoEl.textContent=''; textEl.textContent='날씨 정보 없음'; tempEl.textContent='';
       wx.classList.remove('stale'); wx.classList.add('needs-sync');   // 데이터 없음 → 탭 재시도 유도
       subEl.textContent='눌러서 재시도';
     }
@@ -2325,7 +2325,7 @@ function __initFunElements(){
 
   // ── 토스트 ──
   const toastEl = $('toast'); let toastT;
-  function toast(kicker, msg, ms=3600){
+  function toast(kicker, msg, ms=3000){
     toastEl.innerHTML = (kicker ? `<span class="k">${kicker}</span>` : '') + msg;
     toastEl.classList.add('show');
     clearTimeout(toastT); toastT = setTimeout(()=> toastEl.classList.remove('show'), ms);

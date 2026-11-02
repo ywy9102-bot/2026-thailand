@@ -224,6 +224,7 @@
     const items = body.querySelectorAll('.hs-item'); if(!items.length) return;
     const top = body.getBoundingClientRect().top + bar.offsetHeight + 16;
     let idx = 0; if(body.scrollTop > 4) items.forEach((it, k) => { if(it.getBoundingClientRect().top <= top) idx = k; });
+    bar.classList.toggle('top', body.scrollTop <= 4);
     if(!force && idx === rollIdx) return;
     const y = bar.querySelector('.hs-roll-y'), r = TIMELINE[idx], dir = idx >= rollIdx ? 1 : -1;
     rollIdx = idx;
@@ -349,6 +350,12 @@
     return `${photoHtml('outro', '🌴')}<h3 class="tr-h">${picked.length ? `기대되는 날 ${picked.length}일` : '기대되는 날을 골라 보세요'}</h3>` +
       (picked.length ? `<ul class="tr-picks">${picked.map(x => `<li>♥ ${x.m}/${x.d} ${esc(x.t)}</li>`).join('')}</ul>` : '<p class="tr-note">앞 장면에서 ♥를 누르면 여기에 모여요</p>') + '<p class="tr-sub">곧 만나요, 태국!</p>';
   }
+  // 작은 화면에서 장면이 스크롤될 만큼 길면 키보드로도 닿게 해요(시트가 열린 뒤에 크기가 정해지므로 크기가 바뀔 때마다 다시 봐요)
+  function fitStage(){
+    if(stage.scrollHeight > stage.clientHeight + 1){ stage.tabIndex = 0; stage.setAttribute('role', 'group'); stage.setAttribute('aria-label', '예고편 장면'); }
+    else stage.removeAttribute('tabindex');
+  }
+  if(window.ResizeObserver) new ResizeObserver(fitStage).observe(stage);
   function draw(){
     const n = total(); let kind = 'intro', html;
     if(idx === 0) html = intro(); else if(idx === n - 1){ html = outro(); kind = 'intro'; } else { const d = dayHtml(list[idx - 1]); html = d.html; kind = d.kind; }
@@ -361,6 +368,7 @@
     cnt.textContent = `${idx + 1} / ${n}`;
     bars.innerHTML = Array.from({ length: n }, (_, i) => `<i class="tr-bar${i < idx ? ' done' : ''}${i === idx ? ' cur' : ''}"><b></b></i>`).join('');
     bars.style.setProperty('--tr-ms', MS + 'ms'); bars.classList.toggle('paused', !playing);
+    fitStage();
     stage.setAttribute('aria-live', playing ? 'off' : 'polite');   // 자동으로 넘어가는 동안은 화면 낭독기가 계속 읽지 않게
     playB.textContent = playing ? '⏸ 멈춤' : '▶ 자동'; playB.setAttribute('aria-label', playing ? '자동 넘김 멈추기' : '자동으로 넘기기');
     clearTimeout(timer);

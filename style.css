@@ -231,6 +231,7 @@ body{
   -webkit-font-smoothing:antialiased; line-height:1.5;
   padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 20px);
   overscroll-behavior-y:contain;
+  word-break:keep-all; overflow-wrap:anywhere;   /* 한글은 단어 중간에서 줄바꿈하지 않고, 아주 긴 글자열만 억지로 끊어요 */
 }
 button,.tb,.copy-btn,.ci,.gcard-head,.next-card,a,.lg-head,.day-head,.bar-head,.cgrp h3{touch-action:manipulation;}
 img,svg{max-width:100%}
@@ -945,8 +946,8 @@ table.d tr:nth-child(even) td{background:var(--k-rgba-30-75-65-02)}
 .th-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-family:'Source Serif 4',serif;font-weight:600;font-size:14px;color:var(--jade-d)}
 .th-info{flex:1;min-width:120px}
-.th-nums{font-weight:700;font-size:15px;color:var(--ink)}
-.th-nums span{font-family:'IBM Plex Mono',monospace}
+.td-nums{font-weight:700;font-size:15px;color:var(--ink)}
+.td-nums span{font-family:'IBM Plex Mono',monospace}
 .th-left{font-size:13px;color:var(--ink2);margin-top:2px}
 .th-toggle{
   display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink2);
@@ -1016,7 +1017,7 @@ footer.ft{margin-top:44px;padding:20px 0;border-top:1px solid var(--line);
   .todo-hero{padding:13px;gap:12px;margin-bottom:18px}
   .th-ring{width:48px;height:48px}
   .th-pct{font-size:13px}
-  .th-nums{font-size:14px}
+  .td-nums{font-size:14px}
   .th-left{font-size:13px}
   .th-toggle{font-size:13px;gap:5px}
 
@@ -1205,7 +1206,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
   72%{opacity:.62}
   100%{opacity:0;transform:translate(var(--lx,16px),-340px) scale(1.04)}}
 .toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 96px));z-index:200;
-  max-width:88vw;padding:11px 18px;border-radius:16px;pointer-events:none;
+  max-width:88vw;padding:9px 16px;border-radius:14px;pointer-events:none;
   background:linear-gradient(180deg,var(--jade) 0%,var(--jade-d) 100%);color:var(--hero-fg);
   font-family:'Source Serif 4',serif;font-weight:600;font-size:14px;letter-spacing:-.01em;text-align:center;
   box-shadow:0 8px 14px -6px var(--k-rgba-14-40-34-5);border:1px solid var(--k-rgba-245-231-192-25);
@@ -2088,3 +2089,10 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 .drv-wake{min-height:1.4em;margin:8px 0 0;font-size:13px;color:var(--ink3)}
 
 @media (max-width:360px){ .tb.tb-sm{letter-spacing:-.03em} }
+
+/* ── 첫 화면 검수 반영 ── */
+.play-grid .play-tile:last-child:nth-child(even){grid-column:1/-1}   /* 타일이 홀수로 남으면 마지막 줄을 꽉 채워요 */
+.sc-share{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.sc-share .wn-close{margin-top:0;min-height:52px;padding:8px 6px;font-size:.875rem;line-height:1.25}
+.hs-roll.top .hs-roll-y{visibility:hidden}   /* 맨 위에서는 첫 항목이 같은 연도를 이미 보여줘요 */
+.sc-name .pdot{margin-right:5px}
