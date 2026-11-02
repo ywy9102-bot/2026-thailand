@@ -35,13 +35,13 @@ FEATURE2 = re.compile(r'투어|팁|가성비|매력|로컬|진짜|세계테마�
 OFFTOPIC = re.compile(r'파크골프|코스메틱|화장품|인-코스|인종차별|김치맨|관중|감독|우승|준우승|\d+위|마스터스|아마골프|대표팀')   # "골프"·"코스"가 들어 있어도 골프장 소식이 아님
 GOV = re.compile(r'해병대|사령관|국방|군사|정상회담|외교장관|대사 ')
 CRIME = re.compile(r'살인|살해|피살|강도|절도|소매치기|사기|마약|성폭행|성범죄|성추행|체포|구속|검거|납치|흉기|총격|범죄|밀수|도박|폭행|실종')   # 범죄 기사는 빼요
-NOISE = re.compile(r'USDT|USDC|스테이블|토큰|블록체인|암호화폐|가상화폐|비트코인|코인|Binance|게임쇼|게임스컴|전시회|박람회|화보|드레스룩|공항패션|민니|축구|야구|농구|배구|연예|아이돌|팬미팅|드라마|걸그룹|가수|영화|K-?팝|BTS|주가|증시|코스피|부동산|분양|채용|모집')
+NOISE = re.compile(r'NCT|콘서트|관객|팬미팅|월드투어|영상 확산|조회\s*\d|USDT|USDC|스테이블|토큰|블록체인|암호화폐|가상화폐|비트코인|코인|Binance|게임쇼|게임스컴|전시회|박람회|화보|드레스룩|공항패션|민니|축구|야구|농구|배구|연예|아이돌|팬미팅|드라마|걸그룹|가수|영화|K-?팝|BTS|주가|증시|코스피|부동산|분양|채용|모집')
 CATS = [  # (id, 정규식, 기본 점수) — 위에서부터 먼저 맞는 것으로 분류
     ('breaking', re.compile(r'속보|사망|숨져|폭발|테러|시위|쿠데타|계엄|화재|붕괴|추락|대피|지진|공항\s*폐쇄'), 6),
     ('safety',   re.compile(r'여행경보|여행금지|특별여행주의보|여행주의보|외교부|영사|안전공지|안전\s*유의|입국\s*(금지|제한|규제)'), 5),
     ('weather',  re.compile(r'날씨|폭우|호우|폭염|태풍|홍수|침수|기온|우기|건기|미세먼지|스콜|열대성|기상|경보'), 4),
     ('fx',       re.compile(r'환율|바트|물가|환전'), 3),
-    ('econ',     re.compile(r'경제|관광세|입국료|관광객|항공권|유가|금리|성장률'), 2),
+    ('econ',     re.compile(r'경제|관광세|입국료|항공권|유가|금리|성장률|물가'), 2),
     ('golf',     re.compile(r'골프|라운드|티오프|그린피|캐디'), 4),
     ('travel',   re.compile(r'공항|항공|결항|지연|운항|수완나품|돈므앙|입국|비자|면세|교통|도로|열차|지하철'), 3),
 ]
@@ -161,6 +161,7 @@ def selftest():
         mk('외교부 태국 여행경보 상향 안내', '뉴시스', 4), mk('태국 경제 성장률 전망 하향', '한국경제', 7), mk('방콕서 한국인 관광객 소매치기 피해', '연합뉴스', 2), mk('파타야 한국인 마약 체포', '뉴스1', 2), mk('Binance CZ 방콕 블록체인 위크 참석', 'TU', 3), mk('태국 관광객, USDT를 바트로 바꿔 QR 결제', '토큰포스트', 3), mk('아이들 민니, 방콕이 발칵 드레스룩', 'Daum', 2), mk('게임스컴 아시아 태국게임쇼 개막', 'NSP통신', 2),
         mk('바스프, 인-코스메틱스 아시아 2026 방콕 참가', '주간신문', 2), mk('파크T 태국 파크골프빌리지 수출', '뷰어스', 2), mk('환율 내려 더 매력적인 태국 가성비 투어', '복지저널', 1), mk('진짜 방콕이 궁금해? 구석구석 가성비 투어 팁', '뉴스버즈', 1), mk('세계테마기행 태국 로컬 여행 관광객', '뉴스컬처', 2),
         mk('“김치맨” 조롱에 폭발한 박항서 감독, 태국 관중과 충돌', '데일리안', 1), mk('손제이 아태 아마골프 20위 태국 라오팍디 마스터스행', '톱스타뉴스', 2),
+        mk('NCT 127, 일본에서 방콕 10만 관객 동원 콘서트', '비즈엔터', 2), mk('태국 노점상 칼로 발톱 손질 영상 확산 관광객 조회 82만회', '스페셜타임스', 2), mk('관광객은 줄고 객실은 늘고 태국 호텔 폐업 급증', '이데일리', 3),
         mk('오래된 방콕 소식', '연합뉴스', 100), mk('서울 부동산 소식', '연합뉴스', 1), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'),
     ]
     out = build(items, now); titles = [i['title'] for i in out['items']]
@@ -172,7 +173,7 @@ def selftest():
     assert {'breaking', 'weather', 'fx', 'golf'} <= {i['cat'] for i in out['items']}, out                # 속보·날씨·환율·골프가 하나씩 들어감
     assert not any('기적' in t or '푸껫' in t or '해병대' in t or '방콕 문서' in t or '방콕 선언' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
-    assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t for t in titles), titles                    # 범죄·가상화폐 제외
+    assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t for t in titles), titles                    # 범죄·가상화폐 제외
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
