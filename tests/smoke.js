@@ -220,6 +220,29 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('홈 화면 바로가기(#open-food)로 맛집 지도가 열림', await page.evaluate(() => document.getElementById('foodScrim').classList.contains('on') && location.hash === ''));
       await ctx.close();
     }
+    // 4-1d3) 여행 중 카드(숙소로 가기·오늘의 한 장·날씨 맞춤) · 오프라인 띠
+    {
+      const pre = await open(browser, base, 390, 844, { clock: '2026-10-26T12:00:00+09:00' });
+      ok('여행 전에는 숙소·오늘의 한 장 카드가 숨김', await pre.page.evaluate(() => document.getElementById('homeCard').hidden && document.getElementById('dayCard').hidden && document.getElementById('wxCard').hidden));
+      await pre.ctx.close();
+      const { ctx, page } = await open(browser, base, 390, 844, { clock: '2026-12-27T10:00:00+07:00' });
+      ok('여행 중에는 숙소·오늘의 한 장 카드가 보임', await page.evaluate(() => !document.getElementById('homeCard').hidden && !document.getElementById('dayCard').hidden));
+      await page.evaluate(() => { document.querySelector('header.hero').dataset.wx = 'rain'; document.dispatchEvent(new CustomEvent('wx:updated')); });
+      ok('비 예보면 날씨 맞춤 카드가 실내 맛집을 권함', await page.evaluate(() => { const c = document.getElementById('wxCard'); return !c.hidden && /실내/.test(c.textContent); }));
+      await page.evaluate(() => document.getElementById('homeCard').click()); await page.waitForTimeout(500);
+      ok('숙소 고르기: 방콕(12/26 이후)이면 방콕 숙소 3곳', await page.evaluate(() => [...document.querySelectorAll('#spList [data-stay]')].map(b => b.dataset.stay).join() === 'tinidee,gcp,oakwood'));
+      await page.evaluate(() => document.querySelector('#spList [data-stay="gcp"]').click()); await page.waitForTimeout(700);
+      ok('숙소를 고르면 영어 이름·주소가 크게 뜸', await page.evaluate(() => /Grande Centre Point/.test(document.getElementById('drvName').textContent) && /Ratchadamri/.test(document.getElementById('drvAddr').textContent)));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(450);
+      const dl = page.waitForEvent('download', { timeout: 8000 }).catch(() => null);
+      await page.evaluate(() => document.getElementById('dayCard').click());
+      const d = await dl; ok('오늘의 한 장: 이미지(PNG)로 저장됨', !!d && /^today-2026-12-27\.png$/.test(d.suggestedFilename()));
+      await page.context().setOffline(true); await page.evaluate(() => window.dispatchEvent(new Event('offline'))); await page.waitForTimeout(200);
+      ok('오프라인이면 위에 띠가 뜸', await page.evaluate(() => !document.getElementById('offBar').hidden && /끊겼/.test(document.getElementById('offBar').textContent)));
+      await page.context().setOffline(false); await page.evaluate(() => window.dispatchEvent(new Event('online'))); await page.waitForTimeout(200);
+      ok('다시 연결되면 띠가 사라짐', await page.evaluate(() => document.getElementById('offBar').hidden));
+      await ctx.close();
+    }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {
       const now = new Date().toISOString();
