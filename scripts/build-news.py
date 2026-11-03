@@ -33,6 +33,9 @@ FEATURE = re.compile(r'\[글로벌 pick\]|기적|인생|화제|스토리|이야�
 NOT_CITY = re.compile(r'방콕\s*(문서|선언|합의|회의|포럼|프로세스|협약|성명|원칙|결의|공동선언)')   # 도시가 아니라 문서·회의 이름으로 쓰인 "방콕"
 FEATURE2 = re.compile(r'투어|팁|가성비|매력|로컬|진짜|세계테마기행|구석구석')   # 골프 밖 분야에서는 홍보성 여행 읽을거리로 봄
 OFFTOPIC = re.compile(r'파크골프|코스메틱|화장품|인-코스|인종차별|김치맨|관중|감독|우승|준우승|\d+위|마스터스|아마골프|대표팀')   # "골프"·"코스"가 들어 있어도 골프장 소식이 아님
+RELEVANT = re.compile(r'여행|관광|항공|공항|입국|출국|비자|여권|한국인|교민|호텔|리조트|날씨|안전|교통|환전|택시|지하철|철도|렌터카')   # 일반 소식은 여행과 닿는 말이 있을 때만
+EVENT = re.compile(r'개관|발대식|성료|협약|출범|탐방단|개최|오픈식|론칭')   # 기업·단체 행사 홍보
+SLANG = re.compile(r'방콕\s*(하면|하다|하고|족|생활)|집콕|이정후|MLB|락아웃')   # "방콕"이 도시가 아니라 "집에 틀어박힘" 속어로 쓰인 기사
 GOV = re.compile(r'해병대|사령관|국방|군사|정상회담|외교장관|대사 ')
 CRIME = re.compile(r'살인|살해|피살|강도|절도|소매치기|사기|마약|성폭행|성범죄|성추행|체포|구속|검거|납치|흉기|총격|범죄|밀수|도박|폭행|실종')   # 범죄 기사는 빼요
 NOISE = re.compile(r'NCT|콘서트|관객|팬미팅|월드투어|영상 확산|조회\s*\d|USDT|USDC|스테이블|토큰|블록체인|암호화폐|가상화폐|비트코인|코인|Binance|게임쇼|게임스컴|전시회|박람회|화보|드레스룩|공항패션|민니|축구|야구|농구|배구|연예|아이돌|팬미팅|드라마|걸그룹|가수|영화|K-?팝|BTS|주가|증시|코스피|부동산|분양|채용|모집')
@@ -82,7 +85,9 @@ def norm(t): return re.sub(r'[^0-9A-Za-z가-힣 ]', ' ', t).lower().split()
 
 def similar(a, b):
     x, y = set(norm(a)), set(norm(b))
-    return bool(x and y) and len(x & y) / len(x | y) >= 0.5
+    if not (x and y): return False
+    if len({t for t in x & y if len(t) >= 4}) >= 2: return True   # 같은 회사·행사 이름이 둘 이상 겹치면 같은 기사로 봐요
+    return len(x & y) / len(x | y) >= 0.5
 
 
 def classify(title):
@@ -112,14 +117,14 @@ def select(items, now, n=5):
     pool = []
     for it in seen.values():
         if it['src'] in BLOCK_SRC or it['title'].endswith(' - 뉴스 및 통계') or NOT_CITY.search(it['title']): continue
-        if CRIME.search(it['title']) or OFFTOPIC.search(it['title']): continue
+        if CRIME.search(it['title']) or OFFTOPIC.search(it['title']) or SLANG.search(it['title']): continue
         if not PLACE.search(it['title']) or (NOISE.search(it['title']) and '골프' not in it['title']): continue
         if (now - it['ts']).total_seconds() > 72 * 3600: continue
         cid, s = score(it, now, it['hits'])
         if cid == 'breaking' and not TARGET.search(it['title']): continue   # 속보도 방콕·파타야 기사만 ("폭발한" 같은 비유 표현 방지)
         if cid in ('news', 'econ') and s < 6: continue
         if cid == 'fx' and s < 5: continue
-        if cid == 'news' and not TARGET.search(it['title']): continue   # 일반 소식은 방콕·파타야 기사 중 점수가 충분한 것만(억지로 5개를 채우지 않아요)
+        if cid == 'news' and (not TARGET.search(it['title']) or not RELEVANT.search(it['title']) or EVENT.search(it['title'])): continue   # 일반 소식은 방콕·파타야 기사 중 점수가 충분한 것만(억지로 5개를 채우지 않아요)
         pool.append({**it, 'cat': cid, 'score': s})
     pool.sort(key=lambda x: (-x['score'], -x['ts'].timestamp()))
     picked, per_src, per_cat = [], {}, {}
@@ -162,6 +167,7 @@ def selftest():
         mk('바스프, 인-코스메틱스 아시아 2026 방콕 참가', '주간신문', 2), mk('파크T 태국 파크골프빌리지 수출', '뷰어스', 2), mk('환율 내려 더 매력적인 태국 가성비 투어', '복지저널', 1), mk('진짜 방콕이 궁금해? 구석구석 가성비 투어 팁', '뉴스버즈', 1), mk('세계테마기행 태국 로컬 여행 관광객', '뉴스컬처', 2),
         mk('“김치맨” 조롱에 폭발한 박항서 감독, 태국 관중과 충돌', '데일리안', 1), mk('손제이 아태 아마골프 20위 태국 라오팍디 마스터스행', '톱스타뉴스', 2),
         mk('NCT 127, 일본에서 방콕 10만 관객 동원 콘서트', '비즈엔터', 2), mk('태국 노점상 칼로 발톱 손질 영상 확산 관광객 조회 82만회', '스페셜타임스', 2), mk('관광객은 줄고 객실은 늘고 태국 호텔 폐업 급증', '이데일리', 3),
+        mk('하루 방콕하면 1억 증발 2027시즌 MLB 락아웃 이정후', '매니아리포트', 1), mk('아이랩미디어, 방콕 아이뮤지엄 개관 해외 전시 사업', '미디어데일', 2), mk('아이랩미디어, 방콕에 실감형 아이뮤지엄 열었다', '뉴스피어', 3), mk('추계예대 방콕 탐방단 발대식 개최', '한국대학신문', 2), mk('고은자락, 방콕서 한복 K-뷰티 문화교류 성료', '시민행정신문', 2),
         mk('오래된 방콕 소식', '연합뉴스', 100), mk('서울 부동산 소식', '연합뉴스', 1), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'),
     ]
     out = build(items, now); titles = [i['title'] for i in out['items']]
@@ -173,7 +179,7 @@ def selftest():
     assert {'breaking', 'weather', 'fx', 'golf'} <= {i['cat'] for i in out['items']}, out                # 속보·날씨·환율·골프가 하나씩 들어감
     assert not any('기적' in t or '푸껫' in t or '해병대' in t or '방콕 문서' in t or '방콕 선언' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
-    assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t for t in titles), titles                    # 범죄·가상화폐 제외
+    assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t or 'MLB' in t or '아이뮤지엄' in t or '발대식' in t or '성료' in t for t in titles), titles                    # 범죄·가상화폐 제외
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
