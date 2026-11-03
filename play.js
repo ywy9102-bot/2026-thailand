@@ -429,3 +429,58 @@
     if(cur === -1 || (!e.shiftKey && cur === n-1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n-1 : 0].focus(); }
   });
 })();
+
+// ── 오늘의 한 장: 오늘(여행 전이면 첫 일정) 일정·날씨·환율을 한 장 이미지로 만들어 단톡방에 공유 ──
+(function(){
+  const strip = s => String(s || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&amp;/g, ' ').replace(/\s+/g, ' ').trim();
+  const todayKey = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' });   // 여행지(방콕) 날짜 기준
+  function pick(){
+    const all = [...ITIN_A.map(x => [2026, 12, x]), ...ITIN_B.map(x => [2026, 12, x]), ...ITIN_C.map(x => [2027, 1, x])]
+      .map(([y, m, x]) => ({ ...x, key: `${y}-${String(m).padStart(2, '0')}-${String(x.d).padStart(2, '0')}`, mon: m }));
+    const k = todayKey(); return all.find(x => x.key === k) || all.find(x => x.key > k) || null;
+  }
+  const dom = id => { const e = document.getElementById(id); return e ? e.textContent.trim() : ''; };
+  function wrap(c, text, maxW, maxLines){
+    const out = []; let line = '';
+    for(const ch of [...text]){
+      if(c.measureText(line + ch).width > maxW && line){ out.push(line); line = ch.trim() ? ch : ''; if(out.length === maxLines) break; } else line += ch;
+    }
+    if(out.length < maxLines && line) out.push(line);
+    if(out.length === maxLines && [...text].join('').length > out.join('').length + 1) out[maxLines - 1] = out[maxLines - 1].replace(/.$/, '…');
+    return out;
+  }
+  async function make(){
+    const it = pick(); if(!it) return 'empty';
+    const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+    const gr = c.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#0E2822'); gr.addColorStop(1, '#1E4B41'); c.fillStyle = gr; c.fillRect(0, 0, W, H);
+    c.fillStyle = 'rgba(245,231,192,.08)'; c.beginPath(); c.arc(W - 120, 160, 260, 0, 7); c.fill();
+    c.textAlign = 'left'; c.fillStyle = '#F5E7C0'; c.font = '600 44px system-ui, sans-serif'; c.fillText('📅 TODAY CARD', 80, 130);
+    c.fillStyle = '#F4EEDD'; c.font = '700 96px "Source Serif 4", Georgia, serif'; c.fillText(`${it.mon}월 ${+it.d}일 (${it.w})`, 80, 262);
+    c.fillStyle = '#B3CABF'; c.font = '500 40px system-ui, sans-serif'; c.fillText(strip(it.l).slice(0, 30), 80, 330);
+    c.font = '120px system-ui, sans-serif'; c.textAlign = 'right'; c.fillText(it.e || '📌', W - 90, 290); c.textAlign = 'left';
+    let y = 440; c.fillStyle = '#F4EEDD'; c.font = '700 66px system-ui, sans-serif';
+    wrap(c, strip(it.t), W - 160, 3).forEach(l => { c.fillText(l, 80, y); y += 88; });
+    y += 14; c.fillStyle = '#B3CABF'; c.font = '500 40px system-ui, sans-serif';
+    [strip(it.n), strip(it.x)].filter(Boolean).forEach(t => { wrap(c, t, W - 160, 3).forEach(l => { c.fillText(l, 80, y); y += 58; }); y += 14; });
+    if(it.rec){ const rec = '💡 ' + strip(it.rec); c.fillStyle = 'rgba(245,231,192,.16)'; const lines = wrap(c, rec, W - 220, 2), hh = 40 + lines.length * 56; c.beginPath(); c.roundRect(60, y, W - 120, hh, 28); c.fill(); c.fillStyle = '#F5E7C0'; c.font = '600 40px system-ui, sans-serif'; lines.forEach((l, i) => c.fillText(l, 96, y + 62 + i * 56)); y += hh + 24; }
+    const wx = dom('wxText'), tmp = dom('wxTemp'), thb = dom('fxThb');
+    const chips = []; if(wx && !/없음|동기화 전/.test(wx)) chips.push(`${dom('wxIco')} ${wx} ${tmp}`.trim()); if(thb && thb !== '–') chips.push(`฿1 = ${thb}원`);
+    let cx = 80, cy = Math.max(y + 10, 1090); c.font = '600 40px system-ui, sans-serif';
+    chips.forEach(t => { const w = c.measureText(t).width + 56; c.fillStyle = 'rgba(255,255,255,.10)'; c.beginPath(); c.roundRect(cx, cy, w, 84, 42); c.fill(); c.fillStyle = '#F4EEDD'; c.fillText(t, cx + 28, cy + 56); cx += w + 18; });
+    c.fillStyle = '#B3CABF'; c.font = '500 34px system-ui, sans-serif'; c.fillText('태국 겨울 여행 2026 · 3가족 9명', 80, H - 90);
+    const blob = await new Promise(res => cv.toBlob(res, 'image/png')); if(!blob) return 'fail';
+    const file = new File([blob], `today-${it.key}.png`, { type: 'image/png' });
+    try{ if(navigator.canShare && navigator.canShare({ files: [file] })){ await navigator.share({ files: [file], title: `${it.mon}/${+it.d} 오늘의 한 장` }); return 'shared'; } }catch(e){ if(e && e.name === 'AbortError') return 'cancel'; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); return 'saved';
+  }
+  let busy = false;
+  window.__dayCard = async () => {
+    if(busy) return; busy = true; const t = window.__toast || (() => {});
+    t('⏳', '오늘의 한 장 만드는 중…', 1800);
+    let how = 'fail'; try{ how = await make(); }catch(e){ how = 'fail'; }
+    busy = false;
+    if(how === 'saved') t('✅', '이미지로 저장했어요', 2600); else if(how === 'shared') t('✅', '공유했어요', 2200);
+    else if(how === 'empty') t('📅', '보여 줄 일정이 없어요', 2400); else if(how === 'fail') t('⚠️', '이미지를 만들지 못했어요', 2600);
+    if(how !== 'cancel' && how !== 'fail' && how !== 'empty' && typeof haptic === 'function') haptic('ok');
+  };
+})();
