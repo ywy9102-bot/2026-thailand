@@ -237,6 +237,20 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       const dl = page.waitForEvent('download', { timeout: 8000 }).catch(() => null);
       await page.evaluate(() => document.getElementById('dayCard').click());
       const d = await dl; ok('오늘의 한 장: 이미지(PNG)로 저장됨', !!d && /^today-2026-12-27\.png$/.test(d.suggestedFilename()));
+      // 노을 시계 · 한국 시계 · 나 모드
+      ok('노을 시계: 일몰 시각(방콕 12/27 약 17:5x)과 남은 시간', await page.evaluate(() => { const t = document.getElementById('scT').textContent; return /일몰 17:5\d/.test(t) && /(시간|분)/.test(t); }));
+      ok('한국 시계: 서울 시각이 카운트다운 아래에 표시', await page.evaluate(() => /서울 \d\d:\d\d · 한국이 2시간 빨라요/.test(document.getElementById('cdSub').textContent)));
+      await page.evaluate(() => document.getElementById('homeCard').click()); await page.waitForTimeout(500);
+      await page.evaluate(() => document.querySelector('#spWho [data-n="윤성욱"]').click()); await page.waitForTimeout(300);
+      ok('나 모드: 윤성욱을 고르면 오크우드가 내 숙소로 맨 위', await page.evaluate(() => /내 숙소 · 오크우드/.test(document.querySelector('#spList [data-stay]').textContent) && JSON.parse(localStorage.getItem('thai2026_todo_v1')).myName === '윤성욱'));
+      await page.evaluate(() => document.getElementById('spOk').click()); await page.waitForTimeout(500);
+      ok('나 모드: 인사말에 이름, 숙소 카드는 바로 보여주기, 내 라운드 표시', await page.evaluate(() => /윤성욱님, /.test(document.getElementById('heroGreet').textContent) && /윤성욱님 숙소/.test(document.getElementById('hmT').textContent) && document.querySelectorAll('.gcard.mine').length > 0));
+      await page.evaluate(() => document.getElementById('homeCard').click()); await page.waitForTimeout(700);
+      ok('나 모드: 한 번에 내 숙소(Oakwood) 영어 주소가 크게 뜨고 다른 숙소 버튼이 있음', await page.evaluate(() => /Oakwood/.test(document.getElementById('drvName').textContent) && !document.getElementById('drvMore').hidden));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(450);
+      await page.evaluate(() => document.getElementById('foodMapCard').click()); await page.waitForSelector('#foodScrim.on', { timeout: 6000 }).catch(() => {}); await page.waitForTimeout(900);
+      ok('카드 펼침 전환: 맛집 지도가 열리고 전환 이름·임시 클래스가 정리됨', await page.evaluate(() => document.getElementById('foodScrim').classList.contains('on') && !document.getElementById('foodScrim').classList.contains('vt') && !document.getElementById('foodMapCard').style.viewTransitionName));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(500);
       await page.context().setOffline(true); await page.evaluate(() => window.dispatchEvent(new Event('offline'))); await page.waitForTimeout(200);
       ok('오프라인이면 위에 띠가 뜸', await page.evaluate(() => !document.getElementById('offBar').hidden && /끊겼/.test(document.getElementById('offBar').textContent)));
       await page.context().setOffline(false); await page.evaluate(() => window.dispatchEvent(new Event('online'))); await page.waitForTimeout(200);
