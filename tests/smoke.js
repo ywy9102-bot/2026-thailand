@@ -354,8 +354,8 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('첫 화면: 덱의 점 개수 = 보이는 카드 수 (2개 이상)', r.slides >= 2 && r.dots === r.slides, r);
       ok('첫 화면: 3칸 요약·골프 요약 3칸·오늘의 태국 카드 없음, 덱 밖의 작은 카드 없음', !r.stats && !r.golfSum && !r.daily && r.loose === 0, r);
       ok('첫 화면: 인사말이 나옴', r.greet > 3, r);
-      await page.evaluate(() => { const d = document.getElementById('deck'); const s = [...d.children].filter(e => e.classList.contains('next-card') && getComputedStyle(e).display !== 'none'); d.scrollTo({ left: s[1].offsetLeft, behavior: 'instant' }); });
-      await page.waitForTimeout(400);
+      await page.evaluate(() => { const d = document.getElementById('deck'); d.dispatchEvent(new Event('pointerdown')); const s = [...d.children].filter(e => e.classList.contains('next-card') && getComputedStyle(e).display !== 'none'); d.scrollTo({ left: s[1].offsetLeft, behavior: 'instant' }); });
+      await page.waitForFunction(() => [...document.getElementById('deckDots').children].findIndex(i => i.classList.contains('on')) === 1, null, { timeout: 4000 }).catch(() => {});
       ok('덱: 옆으로 넘기면 점과 카드가 바뀜', await page.evaluate(() => [...document.getElementById('deckDots').children].findIndex(i => i.classList.contains('on')) === 1));
       await ctx.close();
     }
