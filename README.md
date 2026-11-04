@@ -12,7 +12,7 @@
 | [`index.html`](index.html) | 화면 뼈대 + 첫 화면용 스타일(`<style id="critical">`, 자동 생성) |
 | [`style.css`](style.css) | 전체 스타일 (색·간격 토큰은 `:root`, 설명은 [`DESIGN.md`](DESIGN.md)) |
 | [`app.js`](app.js) | 앱 본체 (일정·정산·골프·홈 위젯) |
-| `play.js` `story.js` `foodmap.js` `thai.js` | 놀이터·읽어보는 카드·맛집지도·태국어. 눌렀을 때(또는 한가할 때) 불러와요 |
+| `play.js` `hero.js` `story.js` `foodmap.js` `thai.js` | 놀이터·읽어보는 카드·맛집지도·태국어. 눌렀을 때(또는 한가할 때) 불러와요 |
 | [`sw.js`](sw.js) | 서비스 워커 — 한 번 연 뒤에는 인터넷이 없어도 열려요 |
 | [`PRODUCT.md`](PRODUCT.md) · [`DESIGN.md`](DESIGN.md) | 제품 맥락·디자인 규칙 |
 
@@ -64,6 +64,6 @@ npm run critical   # style.css를 고쳤다면 첫 화면용 스타일을 다시
 
 ## 파일 나누기와 데이터 절약
 
-- `play.js`(놀이터 대부분), `learn.js`(태국 역사·공부, 여행 예고편), `story.js`, `foodmap.js`, `thai.js`는 눌렀을 때(또는 한가할 때) 불러오는 조각이에요.
+- `play.js`(놀이터 대부분), `learn.js`(태국 역사·공부, 여행 예고편), `hero.js`(히어로 연출 모음), `story.js`, `foodmap.js`, `thai.js`는 눌렀을 때(또는 한가할 때) 불러오는 조각이에요.
 - 폰이 "데이터 절약 모드"이거나 2G 망이면 `play.js` 말고는 미리 받지 않고, 처음 쓸 때 받아서 저장해요(서비스 워커·한가할 때 불러오기 모두).
 - 전체 창에서 키 입력을 듣는 코드는 `app.js`의 `onKey(...)` 한 곳에서 나눠 받아요. 새 시트는 `onKey`로 등록해요.

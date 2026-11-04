@@ -283,6 +283,44 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('폰을 기울이면 히어로 층이 움직임(--tx)', await p2.evaluate(() => Math.abs(parseFloat(document.querySelector('header.hero').style.getPropertyValue('--tx'))) > 3 && !document.getElementById('tiltRow').hidden));
       await c2.close();
     }
+    // 4-1d5) 히어로 연출 모음(hero.js): 일정 맞춤 장면 · 안개 · 바람 · 비행기 · 불꽃 · 반짝임 · 시차 · 창문
+    {
+      const mk = async (clock, w = 390, h = 844) => { const o = await open(browser, base, w, h, { clock }); await o.page.waitForFunction(() => !!window.__heroTick, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => window.__heroTick && window.__heroTick()); return o; };
+      let o = await mk('2026-12-17T10:00:00+07:00');
+      ok('일정 맞춤 장면: 골프날(12/17)은 golf', await o.page.evaluate(() => document.querySelector('header.hero').dataset.scene === 'golf'));
+      ok('배: 파타야 보트가 있음', await o.page.evaluate(() => !!document.querySelector('.hx-boat.pat svg')));
+      ok('야경 창문: 방콕 스카이라인에 창문이 생성됨', await o.page.evaluate(() => document.querySelectorAll('.hx-win rect').length > 20));
+      await o.ctx.close();
+      o = await mk('2026-12-19T10:00:00+07:00'); ok('일정 맞춤 장면: 12/19는 섬(island)', await o.page.evaluate(() => document.querySelector('header.hero').dataset.scene === 'island')); await o.ctx.close();
+      o = await mk('2026-12-28T10:00:00+07:00'); ok('일정 맞춤 장면: 12/28은 사원(wat)', await o.page.evaluate(() => document.querySelector('header.hero').dataset.scene === 'wat')); await o.ctx.close();
+      o = await mk('2026-12-25T10:00:00+07:00'); ok('일정 맞춤 장면: 일정 없는 날(12/25)은 없음', await o.page.evaluate(() => document.querySelector('header.hero').dataset.scene === undefined)); await o.ctx.close();
+      o = await mk('2026-12-18T06:40:00+07:00'); ok('새벽 안개: 일출 직후(12/18 06:40)에 켜짐', await o.page.evaluate(() => document.querySelector('header.hero').dataset.mist === '1')); await o.ctx.close();
+      o = await mk('2026-12-18T13:00:00+07:00'); ok('새벽 안개: 한낮에는 꺼짐', await o.page.evaluate(() => document.querySelector('header.hero').dataset.mist === undefined));
+      await o.page.evaluate(() => { window.__wxNow = () => ({ wind: 30 }); window.__heroTick(); });
+      ok('바람 구름: 풍속 30km/h면 구름이 빨라짐(--wf < 1)', await o.page.evaluate(() => parseFloat(document.querySelector('header.hero').style.getPropertyValue('--wf')) < 1 && document.querySelector('header.hero').dataset.wind === '1'));
+      await o.page.evaluate(() => { window.__wxNow = () => ({ wind: 2 }); window.__heroTick(); });
+      ok('바람 구름: 풍속 2km/h면 느려짐(--wf > 1)', await o.page.evaluate(() => parseFloat(document.querySelector('header.hero').style.getPropertyValue('--wf')) > 1));
+      await o.ctx.close();
+      o = await mk('2026-12-18T20:00:00+07:00');
+      ok('하늘 위 비행기: OZ741 비행 중(12/18 20:00)에 표시', await o.page.evaluate(() => { const e = document.querySelector('.hx-plane'); const c = document.getElementById('flCard'); return !e.hidden && !c.hidden && /OZ741/.test(c.textContent) && /^도착까지/.test(document.getElementById('flT').textContent); }));
+      await o.ctx.close();
+      o = await mk('2026-12-20T20:00:00+07:00'); ok('하늘 위 비행기: 비행이 없는 시각에는 숨김', await o.page.evaluate(() => document.querySelector('.hx-plane').hidden && document.getElementById('flCard').hidden)); await o.ctx.close();
+      o = await mk('2026-12-31T23:59:55+07:00');
+      ok('자정 카운트다운: 23:59:55에 5가 보임', await o.page.evaluate(() => { const c = document.querySelector('.hx-count'); return !!c && c.textContent === '5'; })); await o.ctx.close();
+      o = await mk('2027-01-01T00:00:03+07:00');
+      await o.page.waitForTimeout(300);
+      ok('자정 불꽃: 1/1 00:00에 불꽃 화면(canvas)이 생김', await o.page.evaluate(() => !!document.querySelector('.hx-fw') || !!localStorage.getItem('thai2026_ny27')));
+      await o.ctx.close();
+      o = await mk('2026-12-18T10:00:00+07:00');
+      await o.page.evaluate(() => { const h = document.querySelector('header.hero'), r = h.getBoundingClientRect(); for (let i = 0; i < 6; i++) { h.dispatchEvent(new PointerEvent('pointermove', { clientX: r.left + 80 + i * 6, clientY: r.top + 140, bubbles: true })); } });
+      await o.page.waitForTimeout(120);
+      ok('손가락 반짝임: 히어로를 문지르면 반짝임이 생김', await o.page.evaluate(() => window.__heroDebug().sparks > 0));
+      await o.page.evaluate(() => { window.scrollTo({ top: 240, behavior: 'instant' }); }); await o.page.waitForTimeout(500);
+      ok('스크롤 시차: 스크롤하면 --sy가 바뀜', await o.page.evaluate(() => parseFloat(document.querySelector('header.hero').style.getPropertyValue('--sy')) > 100));
+      await o.page.evaluate(() => window.scrollTo({ top: 3000, behavior: 'instant' })); await o.page.waitForTimeout(600);
+      ok('히어로가 화면 밖이면 애니메이션 멈춤(hero-off)', await o.page.evaluate(() => document.querySelector('header.hero').classList.contains('hero-off')));
+      await o.ctx.close();
+    }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {
       const now = new Date().toISOString();

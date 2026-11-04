@@ -758,10 +758,10 @@ window.__ensureRain = (function(){
     fetching=true; wx.classList.add('loading');
     const {lat,lon}=CITIES[city]; let ok=false;
     try{
-      const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=Asia%2FBangkok`,{cache:'no-store'});
+      const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&timezone=Asia%2FBangkok`,{cache:'no-store'});
       const j=await r.json();
       if(j&&j.current){
-        state[city]={temp:j.current.temperature_2m, code:j.current.weather_code, ts:Date.now()};
+        state[city]={temp:j.current.temperature_2m, code:j.current.weather_code, wind:j.current.wind_speed_10m, ts:Date.now()};
         state.city=city; ok=true;
         try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){}
       }
@@ -798,6 +798,7 @@ window.__ensureRain = (function(){
   window.wxRefresh = ()=> sync(true);   // 당겨서 새로고침에서 호출
 
   renderCity(); timeEl.textContent=fmtTime(); renderWx();
+  window.__wxNow = () => state[city];   // 히어로 연출(바람 구름)이 읽어요
   setInterval(()=>{ timeEl.textContent=fmtTime(); agoEl.textContent=fmtAgo(state[city]&&state[city].ts); }, 3e4);
   if(!state[city] || Date.now()-(state[city].ts||0) > 30*6e4) sync();
 })();
@@ -1777,6 +1778,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🎆','히어로 연출 9가지 더 — 자정 불꽃·배·야경·일정 장면·안개·바람·반짝임·시차·하늘 위 비행기','12/31 자정에 10초 카운트다운과 불꽃, 파타야엔 롱테일 보트·방콕엔 강 배, 방콕 밤엔 건물 창문 불빛, 골프날엔 깃발과 공·12/19엔 섬·12/28엔 사원이 떠올라요. 새벽엔 안개, 바람이 센 날엔 구름이 빨라지고, 히어로를 문지르면 낮엔 햇살·밤엔 반딧불이가 따라와요. 스크롤하면 시차로 움직이고, 가족이 탄 비행기가 하늘에 떠 있는 동안 "지금 하늘 위" 카드로 도착까지 시간을 알려줘요.'],
     ['📝','할 일에 가족2 차량 바우처 3건 추가','12/27 공항 픽업, 12/30 티니디→GCP 이동, 1/2 공항 샌딩 바우처를 받으면 앱에 올릴 수 있게 "확인사항"에 체크 항목으로 넣었어요.'],
     ['🌕','히어로 연출 5가지 — 진짜 달·실제 노을·도시 실루엣·열기·기울기','밤하늘의 달이 그날의 실제 모양이에요(12/24은 보름달). 하늘은 그날의 실제 일출·일몰에 맞춰 바뀌고, 파타야|방콕을 바꾸면 히어로 뒤 실루엣(야자수·방콕 스카이라인)이 바뀌어요. 32°C 이상이면 아지랑이가 일렁이고, 폰을 기울이면 구름·해·실루엣이 시차를 두고 움직여요(할 일 탭 맨 아래에서 켜고 꺼요).'],
     ['🌇','노을 시계 · "나" 모드 · 한국 시계','여행 중에는 첫 화면 카드에 오늘 일몰 시각과 남은 시간이 떠요(인터넷 없이 계산). 숙소로 가기에서 "나는 누구예요?"를 고르면 내 숙소로 바로 가고, 골프 탭에서 내 라운드에 ⭐가 붙고, 인사말에 이름을 불러줘요. 카운트다운 아래에는 서울 시각이 보여요. 맛집 대동여지도 카드를 누르면 카드가 그대로 커지며 지도가 열려요.'],
@@ -2234,7 +2236,7 @@ const FOODS = [
   const idle = f => ('requestIdleCallback' in window) ? requestIdleCallback(f, {timeout:4000}) : setTimeout(f, 2500);
   // 데이터 절약 모드이거나 느린 망(2G)이면 미리 받지 않고, 눌렀을 때 받아요
   const lean = () => { const c = navigator.connection; return !!(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))); };
-  addEventListener('load', () => idle(() => { window.__loadChunk('play').catch(()=>{}); if(lean()) return; idle(() => { window.__loadChunk('story').catch(()=>{}); idle(() => { window.__loadChunk('foodmap').catch(()=>{}); idle(() => { window.__loadChunk('thai').catch(()=>{}); idle(() => window.__loadChunk('learn').catch(()=>{})); }); }); }); }));
+  addEventListener('load', () => idle(() => { window.__loadChunk('play').catch(()=>{}); if(lean()) return; idle(() => { window.__loadChunk('hero').catch(()=>{}); idle(() => { window.__loadChunk('story').catch(()=>{}); idle(() => { window.__loadChunk('foodmap').catch(()=>{}); idle(() => { window.__loadChunk('thai').catch(()=>{}); idle(() => window.__loadChunk('learn').catch(()=>{})); }); }); }); }); }));
 })();
 
 // ── 파타야 맛집 대동여지도: 후기 사이트 여러 곳에서 평가가 일관된 12곳 — 지도(구글)·메뉴·후기·가격 ──
@@ -3472,4 +3474,10 @@ function __initFunElements(){
     if(needPerm){ try{ if(await DeviceOrientationEvent.requestPermission() !== 'granted') return; }catch(e){ return; } }
     enable(); try{ localStorage.setItem(KEY, 'on'); }catch(e){}
   });
+})();
+
+/* ── 히어로가 화면 밖으로 스크롤되면 그 안의 애니메이션을 멈춰요(배터리·프레임) ── */
+(function(){
+  const hero = document.querySelector('header.hero'); if(!hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(es => es.forEach(e => hero.classList.toggle('hero-off', !e.isIntersecting)), { threshold: 0 }).observe(hero);
 })();
