@@ -764,7 +764,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
   border-radius:2px;background:var(--gold)}
 .day.today .dn{color:var(--jade)}
 .day-today-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;
-  letter-spacing:.05em;color:var(--card);background:var(--gold);padding:1px 5px;border-radius:99px;margin-top:4px}
+  letter-spacing:.05em;color:var(--card);background:var(--gold-text);padding:1px 5px;border-radius:99px;margin-top:4px}
 .dbox{text-align:center}
 .dn{font-family:'Source Serif 4',serif;font-weight:600;font-size:20px;color:var(--jade-d);line-height:1}
 .dw{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink3);margin-top:3px}
@@ -2113,11 +2113,11 @@ header.hero[data-wx="rain"] .sky-stars i,header.hero[data-wx="storm"] .sky-stars
 ::view-transition-old(fmcard),::view-transition-new(fmcard){height:100%}
 
 /* ── 히어로 연출: 도시 실루엣 · 열기 아지랑이 · 기울기 층 ── */
-.hero-skyline{position:absolute;left:0;right:0;top:96px;height:120px;pointer-events:none;overflow:hidden;z-index:0;color:var(--hero-fg);transform:translate3d(calc(var(--tx,0)*-.5px),calc(var(--ty,0)*-.3px),0);-webkit-mask-image:linear-gradient(to bottom,var(--ink) 55%,transparent);mask-image:linear-gradient(to bottom,var(--ink) 55%,transparent)}
+.hero-skyline{position:absolute;left:0;right:0;top:96px;height:120px;pointer-events:none;overflow:hidden;z-index:0;color:var(--hero-fg);transform:translate3d(calc(var(--tx,0)*-.5px),calc(var(--ty,0)*-.3px + var(--sy,0)*.16px),0);-webkit-mask-image:linear-gradient(to bottom,var(--ink) 55%,transparent);mask-image:linear-gradient(to bottom,var(--ink) 55%,transparent)}
 .hero-skyline svg{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .9s ease}
 header.hero[data-city="pat"] .sk-pat,header.hero[data-city="bkk"] .sk-bkk{opacity:.1}
-.hero-sky{transform:translate3d(calc(var(--tx,0)*.7px),calc(var(--ty,0)*.4px),0) scale(1.04)}
-.hero-fx{transform:translate3d(calc(var(--tx,0)*1.2px),calc(var(--ty,0)*.6px),0)}
+.hero-sky{transform:translate3d(calc(var(--tx,0)*.7px),calc(var(--ty,0)*.4px + var(--sy,0)*.3px),0) scale(1.04)}
+.hero-fx{transform:translate3d(calc(var(--tx,0)*1.2px),calc(var(--ty,0)*.6px + var(--sy,0)*.22px),0)}
 .hero-heat{position:absolute;left:0;right:0;bottom:0;height:46%;pointer-events:none;z-index:0;opacity:0;transition:opacity 1.2s ease;
   background:repeating-linear-gradient(180deg,var(--k-rgba-255-176-128-24) 0 5px,transparent 5px 13px);
   -webkit-mask-image:linear-gradient(to top,var(--ink),transparent);mask-image:linear-gradient(to top,var(--ink),transparent);filter:blur(2px)}
@@ -2126,3 +2126,58 @@ header.hero[data-heat] .hero-heat{opacity:.32;animation:heatWave 3.4s ease-in-ou
 @media (prefers-reduced-motion:reduce){ header.hero[data-heat] .hero-heat{animation:none} .hero-skyline,.hero-sky,.hero-fx{transform:none} .hero-skyline svg{transition:none} }
 .tilt-row{margin-top:14px;text-align:center}
 .tilt-row .ib-btn{width:100%}
+
+/* ── 히어로 연출 모음(hero.js): 배 · 야경 창문 · 오늘 일정 장면 · 새벽 안개 · 바람 · 불꽃 · 반짝임 · 비행기 ── */
+header.hero.hero-off *,header.hero.hero-off *::before,header.hero.hero-off *::after{animation-play-state:paused!important}
+.hero-fx2{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;color:var(--hero-fg);transform:translate3d(calc(var(--tx,0)*-.3px),calc(var(--ty,0)*-.2px + var(--sy,0)*.12px),0)}
+.hero-fx2 .hx-win{position:absolute;left:0;right:0;top:96px;height:120px;width:100%;fill:var(--gold-s);opacity:0;transition:opacity 1s ease}
+.hero-fx2 .hx-win .gw{opacity:.3}
+header.hero[data-city="bkk"][data-sky="night"] .hx-win{opacity:.9}
+header.hero[data-city="bkk"][data-sky="dusk"] .hx-win{opacity:.4}
+@media (prefers-reduced-motion:no-preference){
+  header.hero[data-sky="night"] .hx-win .gw0{animation:hxWin 4.2s ease-in-out infinite alternate}
+  header.hero[data-sky="night"] .hx-win .gw1{animation:hxWin 5.6s ease-in-out -1.7s infinite alternate}
+  header.hero[data-sky="night"] .hx-win .gw2{animation:hxWin 3.4s ease-in-out -2.4s infinite alternate}
+}
+@keyframes hxWin{0%{opacity:.18}100%{opacity:.85}}
+.hx-boat{position:absolute;left:0;top:176px;width:44px;opacity:0;transition:opacity .8s ease}
+.hx-boat svg{display:block;width:100%;height:auto}
+.hx-boat.bkk{width:52px}
+header.hero[data-city="pat"] .hx-boat.pat,header.hero[data-city="bkk"] .hx-boat.bkk{opacity:.2}
+@media (prefers-reduced-motion:no-preference){
+  header.hero[data-city="pat"] .hx-boat.pat{animation:hxSail 78s linear infinite}
+  header.hero[data-city="bkk"] .hx-boat.bkk{animation:hxSail 110s linear infinite;animation-delay:-40s}
+  header.hero[data-scene="island"] .hx-boat.pat{animation-duration:46s}
+}
+@keyframes hxSail{from{transform:translate3d(-70px,0,0)}to{transform:translate3d(calc(100vw + 70px),0,0)}}
+.hx-scene{position:absolute;right:6px;top:150px;width:120px;opacity:0;color:var(--hero-fg);transition:opacity 1s ease}
+.hx-scene svg{display:block;width:100%;height:auto}
+header.hero[data-scene="golf"] .sc-golf,header.hero[data-scene="island"] .sc-island,header.hero[data-scene="wat"] .sc-wat{opacity:.3}
+.sc-golf .hx-ball{position:absolute;left:0;top:0;width:5px;height:5px;border-radius:50%;background:var(--hero-fg);opacity:0;offset-path:path('M10 40 Q50 -14 90 38');offset-rotate:0deg}
+@media (prefers-reduced-motion:no-preference){
+  header.hero[data-scene="golf"] .sc-golf .hx-ball{animation:hxBall 8s ease-in-out infinite}
+  header.hero[data-scene="wat"] .sc-wat{animation:hxGlow 3.8s ease-in-out infinite alternate}
+}
+@keyframes hxBall{0%,12%{offset-distance:0%;opacity:0}16%{opacity:1}42%{offset-distance:100%;opacity:1}52%{offset-distance:100%;opacity:0;transform:scale(2.4)}100%{offset-distance:100%;opacity:0}}
+header.hero[data-scene="wat"] .sc-wat{width:46px;right:22px;top:142px;filter:drop-shadow(0 0 9px var(--gold))}
+@keyframes hxGlow{0%{opacity:.18}100%{opacity:.46}}
+.hx-mist{position:absolute;left:0;right:0;top:128px;height:110px;opacity:0;transition:opacity 2s ease}
+.hx-mist i{position:absolute;left:-30%;width:160%;height:56px;border-radius:50%;filter:blur(14px);background:var(--k-rgba-236-241-239-34)}
+.hx-mist i:first-child{top:10px}.hx-mist i:last-child{top:46px;opacity:.7}
+header.hero[data-mist] .hx-mist{opacity:.5}
+@media (prefers-reduced-motion:no-preference){
+  header.hero[data-mist] .hx-mist i:first-child{animation:hxMist 38s ease-in-out infinite alternate}
+  header.hero[data-mist] .hx-mist i:last-child{animation:hxMist 52s ease-in-out -20s infinite alternate-reverse}
+}
+@keyframes hxMist{from{transform:translateX(-8%)}to{transform:translateX(8%)}}
+header.hero[data-wind] .fx-cloud.a{animation-duration:calc(19s*var(--wf))}
+header.hero[data-wind] .fx-cloud.b{animation-duration:calc(27s*var(--wf))}
+header.hero[data-wind] .fx-cloud.c{animation-duration:calc(33s*var(--wf))}
+header.hero[data-wind] .fx-cloud.d{animation-duration:calc(23s*var(--wf))}
+.hx-plane{position:absolute;transform:translateX(-50%);transition:left 1s linear,top 1s linear;font-size:22px;line-height:1}
+.hx-plane.in .hx-pe{transform:scaleX(-1) rotate(8deg)}
+.hx-pe{display:block;filter:drop-shadow(0 3px 5px var(--k-rgba-0-0-0-35))}
+.hx-fw,.hx-spark{position:absolute;left:0;top:0;pointer-events:none}
+.hx-count{position:absolute;left:0;right:0;top:34%;text-align:center;font-family:'Source Serif 4',serif;font-weight:700;font-size:96px;line-height:1;color:var(--gold-s);opacity:.9;text-shadow:0 4px 18px var(--k-rgba-0-0-0-35);animation:hxCount 1s ease-out}
+@keyframes hxCount{0%{transform:scale(1.6);opacity:0}30%{opacity:.95}100%{transform:scale(.9);opacity:.5}}
+@media (prefers-reduced-motion:reduce){ .hx-count{animation:none} .hx-plane{transition:none} }
