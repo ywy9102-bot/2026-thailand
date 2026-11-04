@@ -257,6 +257,13 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('다시 연결되면 띠가 사라짐', await page.evaluate(() => document.getElementById('offBar').hidden));
       await ctx.close();
     }
+    // 4-1d3b) "오늘 일정" 카드: 태국 낮 시간에도 오늘 날짜의 일정이 나와야 함(UTC 날짜 오류 재발 방지)
+    for (const [clock, want] of [['2026-12-28T13:00:00+07:00', '12/28'], ['2026-12-28T01:00:00+07:00', '12/28'], ['2026-12-28T23:30:00+07:00', '12/28'], ['2026-12-17T10:00:00+07:00', '12/17']]) {
+      const { ctx, page } = await open(browser, base, 390, 844, { clock });
+      const r = await page.evaluate(() => ({ tag: document.getElementById('ncTag').textContent, t: document.getElementById('ncT').textContent }));
+      ok(`오늘 일정 카드(${clock.slice(5, 16)} 태국): 오늘(${want}) 일정이 "오늘"로`, /오늘/.test(r.tag) && r.t.startsWith(want));
+      await ctx.close();
+    }
     // 4-1d4) 히어로 연출: 오늘의 달 · 실제 일몰 하늘 · 도시 실루엣 · 열기 아지랑이 · 기울기
     {
       const { ctx, page } = await open(browser, base, 390, 844, { clock: '2026-12-24T22:00:00+07:00' });

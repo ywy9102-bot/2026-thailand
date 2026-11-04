@@ -942,8 +942,10 @@ window.__ensureRain = (function(){
     ...ITIN_B.map(x=>({...x, mon:12, yr:2026})),
     ...ITIN_C.map(x=>({...x, mon:1, yr:2027})),
   ].map(x=>({...x, date:mkDate(x.mon,+x.d,x.yr)}));
-  const now = new Date(), todayKey = now.toISOString().slice(0,10);
-  let match = all.find(x=>x.date.toISOString().slice(0,10)===todayKey);
+  // "오늘"은 태국(UTC+7) 날짜 기준: 일정 날짜와 같은 방식으로 비교해요(예전엔 UTC 날짜라 낮 시간에 다음 날 일정이 "오늘"로 나왔어요)
+  const now = new Date(), todayKey = new Date(Date.now() + 7 * 36e5).toISOString().slice(0,10);
+  const keyOf = x => `${x.yr}-${String(x.mon).padStart(2,'0')}-${String(x.d).padStart(2,'0')}`;
+  let match = all.find(x=>keyOf(x)===todayKey);
   let tag = match ? '📍 오늘 일정' : null;
   if(!match){ match = all.find(x=>x.date>now); tag = match ? '다음 일정' : null; }
   const card = $('nextCard');
