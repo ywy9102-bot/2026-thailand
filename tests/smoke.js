@@ -237,11 +237,51 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       const dl = page.waitForEvent('download', { timeout: 8000 }).catch(() => null);
       await page.evaluate(() => document.getElementById('dayCard').click());
       const d = await dl; ok('오늘의 한 장: 이미지(PNG)로 저장됨', !!d && /^today-2026-12-27\.png$/.test(d.suggestedFilename()));
+      // 노을 시계 · 한국 시계 · 나 모드
+      ok('노을 시계: 일몰 시각(방콕 12/27 약 17:5x)과 남은 시간', await page.evaluate(() => { const t = document.getElementById('scT').textContent; return /일몰 17:5\d/.test(t) && /(시간|분)/.test(t); }));
+      ok('한국 시계: 서울 시각이 카운트다운 아래에 표시', await page.evaluate(() => /서울 \d\d:\d\d · 한국이 2시간 빨라요/.test(document.getElementById('cdSub').textContent)));
+      await page.evaluate(() => document.getElementById('homeCard').click()); await page.waitForTimeout(500);
+      await page.evaluate(() => document.querySelector('#spWho [data-n="윤성욱"]').click()); await page.waitForTimeout(300);
+      ok('나 모드: 윤성욱을 고르면 오크우드가 내 숙소로 맨 위', await page.evaluate(() => /내 숙소 · 오크우드/.test(document.querySelector('#spList [data-stay]').textContent) && JSON.parse(localStorage.getItem('thai2026_todo_v1')).myName === '윤성욱'));
+      await page.evaluate(() => document.getElementById('spOk').click()); await page.waitForTimeout(500);
+      ok('나 모드: 인사말에 이름, 숙소 카드는 바로 보여주기, 내 라운드 표시', await page.evaluate(() => /윤성욱님, /.test(document.getElementById('heroGreet').textContent) && /윤성욱님 숙소/.test(document.getElementById('hmT').textContent) && document.querySelectorAll('.gcard.mine').length > 0));
+      await page.evaluate(() => document.getElementById('homeCard').click()); await page.waitForTimeout(700);
+      ok('나 모드: 한 번에 내 숙소(Oakwood) 영어 주소가 크게 뜨고 다른 숙소 버튼이 있음', await page.evaluate(() => /Oakwood/.test(document.getElementById('drvName').textContent) && !document.getElementById('drvMore').hidden));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(450);
+      await page.evaluate(() => document.getElementById('foodMapCard').click()); await page.waitForSelector('#foodScrim.on', { timeout: 6000 }).catch(() => {}); await page.waitForTimeout(900);
+      ok('카드 펼침 전환: 맛집 지도가 열리고 전환 이름·임시 클래스가 정리됨', await page.evaluate(() => document.getElementById('foodScrim').classList.contains('on') && !document.getElementById('foodScrim').classList.contains('vt') && !document.getElementById('foodMapCard').style.viewTransitionName));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(500);
       await page.context().setOffline(true); await page.evaluate(() => window.dispatchEvent(new Event('offline'))); await page.waitForTimeout(200);
       ok('오프라인이면 위에 띠가 뜸', await page.evaluate(() => !document.getElementById('offBar').hidden && /끊겼/.test(document.getElementById('offBar').textContent)));
       await page.context().setOffline(false); await page.evaluate(() => window.dispatchEvent(new Event('online'))); await page.waitForTimeout(200);
       ok('다시 연결되면 띠가 사라짐', await page.evaluate(() => document.getElementById('offBar').hidden));
       await ctx.close();
+    }
+    // 4-1d3b) "오늘 일정" 카드: 태국 낮 시간에도 오늘 날짜의 일정이 나와야 함(UTC 날짜 오류 재발 방지)
+    for (const [clock, want] of [['2026-12-28T13:00:00+07:00', '12/28'], ['2026-12-28T01:00:00+07:00', '12/28'], ['2026-12-28T23:30:00+07:00', '12/28'], ['2026-12-17T10:00:00+07:00', '12/17']]) {
+      const { ctx, page } = await open(browser, base, 390, 844, { clock });
+      const r = await page.evaluate(() => ({ tag: document.getElementById('ncTag').textContent, t: document.getElementById('ncT').textContent }));
+      ok(`오늘 일정 카드(${clock.slice(5, 16)} 태국): 오늘(${want}) 일정이 "오늘"로`, /오늘/.test(r.tag) && r.t.startsWith(want));
+      await ctx.close();
+    }
+    // 4-1d4) 히어로 연출: 오늘의 달 · 실제 일몰 하늘 · 도시 실루엣 · 열기 아지랑이 · 기울기
+    {
+      const { ctx, page } = await open(browser, base, 390, 844, { clock: '2026-12-24T22:00:00+07:00' });
+      ok('보름달(12/24 밤): 히어로 달이 🌕', await page.evaluate(() => document.getElementById('skyOrb').textContent === '🌕'));
+      ok('노을 시계 밤: 달 이름이 함께 보임(보름달)', await page.evaluate(() => /보름달/.test(document.getElementById('scT').textContent)));
+      await ctx.close();
+      const { ctx: c2, page: p2 } = await open(browser, base, 390, 844, { clock: '2026-12-18T17:40:00+07:00' });
+      ok('실제 일몰(12/18 17:53) 기준: 17:40은 해질녘(dusk)', await p2.evaluate(() => document.querySelector('header.hero').dataset.sky === 'dusk'));
+      ok('도시 실루엣: 파타야 선택이면 pat', await p2.evaluate(() => document.querySelector('header.hero').dataset.city === 'pat'));
+      await p2.evaluate(() => document.querySelector('.wx-c[data-city="방콕"]').click()); await p2.waitForTimeout(400);
+      ok('도시 실루엣: 방콕으로 바꾸면 bkk', await p2.evaluate(() => document.querySelector('header.hero').dataset.city === 'bkk'));
+      await p2.evaluate(() => { document.getElementById('wxTemp').textContent = '33°C'; document.dispatchEvent(new CustomEvent('wx:updated')); });
+      ok('33°C 이상이면 열기 아지랑이 켜짐', await p2.evaluate(() => document.querySelector('header.hero').dataset.heat === '1'));
+      await p2.evaluate(() => { document.getElementById('wxTemp').textContent = '28°C'; document.dispatchEvent(new CustomEvent('wx:updated')); });
+      ok('28°C면 아지랑이 꺼짐', await p2.evaluate(() => document.querySelector('header.hero').dataset.heat === undefined));
+      await p2.evaluate(() => { window.dispatchEvent(new DeviceOrientationEvent('deviceorientation', { gamma: 20, beta: 40 })); window.dispatchEvent(new DeviceOrientationEvent('deviceorientation', { gamma: 20, beta: 52 })); }); await p2.waitForTimeout(200);
+      ok('폰을 기울이면 히어로 층이 움직임(--tx)', await p2.evaluate(() => Math.abs(parseFloat(document.querySelector('header.hero').style.getPropertyValue('--tx'))) > 3 && !document.getElementById('tiltRow').hidden));
+      await c2.close();
     }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {

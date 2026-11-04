@@ -942,8 +942,10 @@ window.__ensureRain = (function(){
     ...ITIN_B.map(x=>({...x, mon:12, yr:2026})),
     ...ITIN_C.map(x=>({...x, mon:1, yr:2027})),
   ].map(x=>({...x, date:mkDate(x.mon,+x.d,x.yr)}));
-  const now = new Date(), todayKey = now.toISOString().slice(0,10);
-  let match = all.find(x=>x.date.toISOString().slice(0,10)===todayKey);
+  // "오늘"은 태국(UTC+7) 날짜 기준: 일정 날짜와 같은 방식으로 비교해요(예전엔 UTC 날짜라 낮 시간에 다음 날 일정이 "오늘"로 나왔어요)
+  const now = new Date(), todayKey = new Date(Date.now() + 7 * 36e5).toISOString().slice(0,10);
+  const keyOf = x => `${x.yr}-${String(x.mon).padStart(2,'0')}-${String(x.d).padStart(2,'0')}`;
+  let match = all.find(x=>keyOf(x)===todayKey);
   let tag = match ? '📍 오늘 일정' : null;
   if(!match){ match = all.find(x=>x.date>now); tag = match ? '다음 일정' : null; }
   const card = $('nextCard');
@@ -999,7 +1001,7 @@ function golfCard(g){
     ? triplocHTML({char:g.char, pids:['holidayinn','thongbura']})
     : triplocHTML({char:g.char, pids:[g.pid, ...(BKK_GOLF_STAY[g.d]||[])]});
   const hasDetail = !!(g.book || triploc);
-  return `<div class="gcard s-${g.st}" data-d="${g.d}">
+  return `<div class="gcard s-${g.st}" data-d="${g.d}" data-p="${g.p.join(',')}">
     <div class="gcard-head" role="button" tabindex="0" aria-expanded="false">
       <div class="g-top">
         <div><div class="g-dt">${g.d} (${g.w})</div><div class="g-nm">${g.c}</div></div>
@@ -1466,6 +1468,7 @@ $('whoamiChips').addEventListener('click', e=>{
   saveStore();
   renderWhoami(); renderBars(); updateMineLine();
   if(typeof refreshSettled === 'function') refreshSettled();
+  if(window.__markMine) window.__markMine(); if(window.__greet) window.__greet();
   haptic('tap');
 });
 
@@ -1771,6 +1774,8 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🌕','히어로 연출 5가지 — 진짜 달·실제 노을·도시 실루엣·열기·기울기','밤하늘의 달이 그날의 실제 모양이에요(12/24은 보름달). 하늘은 그날의 실제 일출·일몰에 맞춰 바뀌고, 파타야|방콕을 바꾸면 히어로 뒤 실루엣(야자수·방콕 스카이라인)이 바뀌어요. 32°C 이상이면 아지랑이가 일렁이고, 폰을 기울이면 구름·해·실루엣이 시차를 두고 움직여요(할 일 탭 맨 아래에서 켜고 꺼요).'],
+    ['🌇','노을 시계 · "나" 모드 · 한국 시계','여행 중에는 첫 화면 카드에 오늘 일몰 시각과 남은 시간이 떠요(인터넷 없이 계산). 숙소로 가기에서 "나는 누구예요?"를 고르면 내 숙소로 바로 가고, 골프 탭에서 내 라운드에 ⭐가 붙고, 인사말에 이름을 불러줘요. 카운트다운 아래에는 서울 시각이 보여요. 맛집 대동여지도 카드를 누르면 카드가 그대로 커지며 지도가 열려요.'],
     ['🏠','여행 중 카드 3가지 + 인터넷 끊김 알림','여행 기간에는 첫 화면 카드에 "🏠 숙소로 가기"(숙소를 고르면 영어 주소가 크게 떠요), "🖼️ 오늘의 한 장"(오늘 일정·날씨·환율을 한 장 이미지로 만들어 단톡방에 공유), 날씨 맞춤 카드(비 오는 날엔 실내 맛집)가 끼어요. 인터넷이 끊기면 화면 맨 위에 띠로 알려 줘요.'],
     ['🚕','기사님께 보여주기 + 홈 화면 바로가기','맛집·골프장·관광지 카드의 "🚕 기사님께 보여주기"를 누르면 영어 이름과 주소가 크게 뜨고, "여기로 가 주세요"·"미터기를 켜 주세요" 태국어가 함께 나와요. 열려 있는 동안 화면이 꺼지지 않아요. 안드로이드는 홈 화면 앱 아이콘을 길게 누르면 오늘 일정·맛집 지도·라운드 기록장으로 바로 들어가요.'],
     ['🗑️','놀이터 정리 — 쓰임이 적은 놀이 10가지를 뺐어요','여권 도장첩·태국 빙고·여행 퀴즈·운명의 룰렛·여행 칭호·오늘의 골프 운세·태국 먹킷리스트·바트 감각 테스트·티오프 스트레칭·맛집 월드컵을 정리했어요. 놀이터에는 태국 이야기·맛집 카드, 역사·공부, 나침반, 태국어, 라운드 기록장, 힐링 사운드가 남아 있어요.'],
@@ -2140,8 +2145,10 @@ const FOODS = [
     const ico = h < 6 ? '🌙' : h < 11 ? '☀️' : h < 17 ? '🌤️' : h < 20 ? '🌇' : '🌙';
     const left = Math.round((Date.UTC(2026, 11, 16) / 864e5) - day);
     const t = left > 0 ? TEASE[day % TEASE.length] : day <= Math.floor(Date.UTC(2027, 0, 2) / 864e5) ? `여행 ${1 - left}일차예요` : '우리 여행, 고마웠어요 💛';
-    g.textContent = ` ${ico} ${t}`;
+    const me = store.myName, who = me ? (/님$/.test(me) ? me : me + '님') + ', ' : '';
+    g.textContent = ` ${ico} ${who}${t}`;
   }
+  window.__greet = greet;
   greet(); setInterval(greet, 18e5);
   // 카드 덱: 보이는 카드만 점(•)으로 세고, 지금 카드를 또렷하게 보여줘요
   const deck = $('deck'), dots = $('deckDots'); if(!deck || !dots) return;
@@ -2232,7 +2239,7 @@ const FOODS = [
   const lf = () => { if(typeof window.__toast === 'function') window.__toast('📡','기능을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요', 2600); };
   const open = (...a) => window.__loadChunk('foodmap').then(() => window.__openFoodMap(...a), lf);
   window.__openFoodMap = open;
-  const fc = $('foodMapCard'); if(fc) fc.addEventListener('click', () => { haptic('tap'); open(); });
+  const fc = $('foodMapCard'); if(fc) fc.addEventListener('click', () => { haptic('tap'); window.__fmFromCard = true; open(); });
 })();
 
 // ── 놀이터 메뉴: 이야기 카드 · 역사·공부 · 나침반 · 태국어 · 라운드 기록장 · 힐링 사운드 ──
@@ -2297,20 +2304,36 @@ const FOODS = [
   window.__openThai = open;
 })();
 
+// 일출·일몰: 인터넷 없이 날짜와 위도·경도로 계산(NOAA 간이식, 오차 약 ±2분). 반환: 태국 시각(UTC+7) 기준 [일출, 일몰] (분)
+function sunTimes(lat, lon, y, m, d){
+  const n = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 0)) / 864e5), g = 2 * Math.PI / 365 * (n - 1), R = Math.PI / 180;
+  const eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+  const dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+  const ha = Math.acos(Math.cos(90.833 * R) / (Math.cos(lat * R) * Math.cos(dec)) - Math.tan(lat * R) * Math.tan(dec)) / R;
+  return [720 - 4 * (lon + ha) - eqt + 420, 720 - 4 * (lon - ha) - eqt + 420];
+}
+// 달 위상: 기준 신월(2000-01-06 18:14 UTC)에서 지난 날수로 8단계 이모지(북반구 모양, 태국도 같아요)
+function moonInfo(ms){
+  const syn = 29.530588853, age = (((ms - Date.UTC(2000, 0, 6, 18, 14)) / 864e5) % syn + syn) % syn, i = Math.floor(age / syn * 8 + .5) % 8;
+  return { e: ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'][i], n: ['달이 없는 밤', '초승달', '상현달', '차오르는 달', '보름달', '기우는 달', '하현달', '그믐달'][i] };
+}
 // ── 태국 하늘 라이브: 방콕 현지 시각에 맞춰 히어로 하늘(새벽·낮·노을·별밤)과 해/달 위치가 변함 ──
 (function(){
   const hero = document.querySelector('header.hero'), orb = $('skyOrb'), starsEl = $('skyStars');
   if(!hero || !orb) return;
-  // 12월 방콕 일출·일몰 근사값(현지 시각, 시)
-  const SR = 6.7, SS = 17.9;
+  // 오늘의 실제 일출·일몰(시): 여행 전·방콕 머무는 동안은 방콕, 그 사이 파타야 기준으로 계산
+  const sunHours = () => {
+    const n = Date.now(), t = new Date(n + 7 * 36e5), c = (n >= tripDate('depart').getTime() && n < tripDate('bkkFrom').getTime()) ? [12.93, 100.88] : [13.75, 100.5];
+    const r = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()); return [r[0] / 60, r[1] / 60];
+  };
   starsEl.innerHTML = Array.from({length:16}, (_, i) =>
     `<i style="left:${(6 + (i*61 % 88)).toFixed(0)}%;top:${(4 + (i*37 % 42)).toFixed(0)}%;--sd:${(i*0.37).toFixed(2)}s"></i>`).join('');
   function tick(){
-    const t = new Date(), h = ((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60;
+    const t = new Date(), h = ((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60, [SR, SS] = sunHours();
     const day = h >= SR && h < SS;
     const phase = h >= SR-.8 && h < SR+.7 ? 'dawn' : h >= SR+.7 && h < SS-1.1 ? 'day' : h >= SS-1.1 && h < SS+.6 ? 'dusk' : 'night';
     const p = day ? (h - SR)/(SS - SR) : ((h < SR ? h + 24 : h) - SS)/(24 - (SS - SR));
-    orb.textContent = day ? '☀️' : '🌙';
+    orb.textContent = day ? '☀️' : moonInfo(Date.now()).e;   // 밤에는 오늘의 실제 달 모양
     orb.style.left = (10 + p*80).toFixed(1) + '%';
     orb.style.top = (78 - 60*Math.sin(Math.PI*p)).toFixed(0) + 'px';
     hero.dataset.sky = phase;
@@ -3237,7 +3260,7 @@ function __initFunElements(){
 
 /* ── 기사님께 보여주기: 영어 이름·주소를 크게, 태국어 한마디와 함께. 열려 있는 동안 화면이 꺼지지 않아요 ── */
 (function(){
-  let sc = null, prev = null, wl = null;
+  let sc = null, prev = null, wl = null, moreFn = null;
   const SAY = [
     ['ไปที่นี่ครับ/ค่ะ', '빠이 티니 크랍/카', '여기로 가 주세요'],
     ['เปิดมิเตอร์ด้วยครับ/ค่ะ', '쁘읻 미떠 두어이 크랍/카', '미터기를 켜 주세요'],
@@ -3252,24 +3275,28 @@ function __initFunElements(){
       '<div class="drv-body"><h2 class="drv-name" id="drvName"></h2><p class="drv-addr" id="drvAddr"></p>' +
       '<ul class="drv-say">' + SAY.map(s => `<li><span class="drv-th" lang="th">${s[0]}</span><span class="drv-rm">${s[1]} · ${s[2]}</span></li>`).join('') + '</ul>' +
       '<p class="drv-wake" id="drvWake" role="status"></p></div>' +
+      '<button class="wn-close wn-ghost mt9" type="button" id="drvMore" hidden>다른 숙소 보기</button>' +
       '<button class="wn-close" type="button" id="drvOk">닫기</button></div>';
     document.body.appendChild(sc);
     $('drvOk').addEventListener('click', close);
+    $('drvMore').addEventListener('click', () => { const f = moreFn; close(); if(f) setTimeout(f, 200); });
     sc.addEventListener('click', e => { if(e.target === sc) close(); });
     onKey(e => {
       if(sc.hidden) return;
       if(e.key === 'Escape') close();
-      else if(e.key === 'Tab'){ e.preventDefault(); $('drvOk').focus(); }
+      else if(e.key === 'Tab'){ const f = [...sc.querySelectorAll('button:not([hidden])')], n = f.length, cur = f.indexOf(document.activeElement); if(cur === -1 || (!e.shiftKey && cur === n - 1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n - 1 : 0].focus(); } }
     });
     document.addEventListener('visibilitychange', () => { if(!sc.hidden && document.visibilityState === 'visible') lock(); });
   }
-  async function open(name, addr){
+  async function open(name, addr, opt){
     if(!sc) build();
+    moreFn = opt && opt.more || null; $('drvMore').hidden = !moreFn;
     if(addr.indexOf(name) === 0) addr = addr.slice(name.length).replace(/^[,\s]+/, '');
     $('drvName').textContent = name; $('drvAddr').textContent = addr;
     prev = document.activeElement; sc.hidden = false; document.documentElement.style.overflow = 'hidden';
     void sc.offsetHeight; sc.classList.add('on'); try{ $('drvOk').focus({ preventScroll: true }); }catch(e){}
     haptic('ok');
+    requestAnimationFrame(() => { const b = sc.querySelector('.drv-body'); if(b.scrollHeight > b.clientHeight + 1){ b.tabIndex = 0; b.setAttribute('role', 'group'); b.setAttribute('aria-label', '기사님께 보여줄 내용'); } else b.removeAttribute('tabindex'); });
     $('drvWake').textContent = (await lock()) ? '화면이 꺼지지 않게 켜 두었어요' : '';
   }
   function close(){
@@ -3300,7 +3327,7 @@ function __initFunElements(){
 
 /* ── 여행 중에만 덱에 끼는 카드: 날씨 맞춤 · 숙소로 가기 · 오늘의 한 장 ── */
 (function(){
-  const wxc = $('wxCard'), home = $('homeCard'), day = $('dayCard'); if(!wxc || !home || !day) return;
+  const wxc = $('wxCard'), home = $('homeCard'), day = $('dayCard'), sun = $('sunCard'); if(!wxc || !home || !day || !sun) return;
   const inTrip = () => { const n = Date.now(); return n >= tripDate('depart').getTime() && n <= tripDate('end', true).getTime(); };
   const city = () => Date.now() >= tripDate('bkkFrom').getTime() ? 'bkk' : 'pat';
   const STAYS = { pat: ['thongbura', 'holidayinn'], bkk: ['tinidee', 'gcp', 'oakwood'] };
@@ -3310,10 +3337,37 @@ function __initFunElements(){
     sunny:  ['☀️', '햇볕이 좋은 날이에요', '한낮엔 시원한 곳, 저녁엔 야시장 어때요'],
     cloudy: ['⛅', '구름 낀 날이에요', '걷기 좋은 날 · 볼거리 구경 어때요'],
   };
+  // 이름 → 오늘 묵는 숙소 (숙소·멤버 탭의 예약 기준)
+  const GCP_FROM = new Date('2026-12-30T00:00:00+07:00').getTime();
+  const stayFor = name => {
+    const bkk = Date.now() >= tripDate('bkkFrom').getTime();
+    if(['윤우열', '정유경', '정유현', '장모님'].includes(name)) return bkk ? 'tinidee' : 'thongbura';
+    if(name === '김태기') return 'thongbura';
+    if(name === '윤성욱') return bkk ? 'oakwood' : 'holidayinn';
+    if(['이준영', '박지해', '이동현'].includes(name)) return Date.now() >= GCP_FROM ? 'gcp' : 'tinidee';
+    return null;
+  };
+  const hm = m => { m = Math.round(m); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const dur = m => { m = Math.round(m); return m >= 60 ? `${Math.floor(m / 60)}시간${m % 60 ? ' ' + (m % 60) + '분' : ''}` : `${m}분`; };
+  function sunNow(){
+    const c = city() === 'pat' ? [12.93, 100.88] : [13.75, 100.5], t = new Date(Date.now() + 7 * 36e5), now = t.getUTCHours() * 60 + t.getUTCMinutes();
+    const [rise, set] = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate());
+    let e, s;
+    if(now < rise) { const mo = moonInfo(Date.now()); e = now < rise - 40 ? mo.e : '🌅'; s = `일출 ${hm(rise)} · ${dur(rise - now)} 뒤${now < rise - 40 ? ' · ' + mo.n : ''}`; }
+    else if(now < set - 90) { e = '☀️'; s = `일몰 ${hm(set)} · ${dur(set - now)} 남았어요`; }
+    else if(now < set) { e = '🌇'; s = `일몰 ${hm(set)} · 노을까지 ${dur(set - now)}`; }
+    else if(now < set + 40) { e = '🌆'; s = `일몰 ${hm(set)} · 해가 졌어요`; }
+    else { const [r2] = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate() + 1), mo = moonInfo(Date.now()); e = mo.e; s = `${mo.n} · 내일 일출 ${hm(r2)}`; }
+    return { e, s, set };
+  }
+  function paintSun(){ const r = sunNow(); $('scE').textContent = r.e; $('scT').textContent = r.s; sun.setAttribute('aria-label', r.s); }
+  sun.addEventListener('click', () => { haptic('tap'); const r = sunNow(); window.__toast('🌇', `사진은 해 지기 1시간 전부터가 가장 예뻐요 (${hm(r.set - 60)}~${hm(r.set)})`, 4200); });
   function paint(){
     const trip = inTrip(), g = (document.querySelector('header.hero') || {}).dataset && document.querySelector('header.hero').dataset.wx;
-    home.hidden = day.hidden = !trip;
-    $('hmT').textContent = (city() === 'pat' ? '파타야' : '방콕') + ' 숙소 ' + STAYS[city()].length + '곳 중 골라서 기사님께 보여주기';
+    home.hidden = day.hidden = sun.hidden = !trip;
+    const mine = store.myName && stayFor(store.myName);
+    $('hmT').textContent = mine ? `${store.myName}님 숙소 · ${PLACES[mine].ko} — 바로 보여주기` : (city() === 'pat' ? '파타야' : '방콕') + ' 숙소 ' + STAYS[city()].length + '곳 중 골라서 기사님께 보여주기';
+    if(trip) paintSun();
     const w = WX[g]; wxc.hidden = !(trip && w);
     if(w){ $('wcE').textContent = w[0]; $('wcT').textContent = w[1] + ' · ' + w[2]; wxc.setAttribute('aria-label', w[1]); }
   }
@@ -3325,19 +3379,31 @@ function __initFunElements(){
   let sc = null, prev = null;
   function build(){
     sc = document.createElement('div'); sc.className = 'wn-scrim'; sc.hidden = true;
-    sc.innerHTML = '<div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="spT"><div class="wn-head"><h2 class="wn-title" id="spT">어느 숙소로 갈까요?</h2></div><p class="wn-sub" id="spS"></p><div class="stay-pick" id="spList"></div><button class="wn-close wn-ghost" type="button" id="spOk">닫기</button></div>';
+    sc.innerHTML = '<div class="wn-sheet" role="dialog" aria-modal="true" aria-labelledby="spT"><div class="wn-head"><h2 class="wn-title" id="spT">어느 숙소로 갈까요?</h2></div><p class="wn-sub" id="spS"></p><div class="stay-pick" id="spList"></div><p class="wn-sub mt9">나는 누구예요? 알려 주시면 내 숙소로 바로 가요</p><div class="whoami-chips" id="spWho"></div><button class="wn-close wn-ghost" type="button" id="spOk">닫기</button></div>';
     document.body.appendChild(sc);
     $('spOk').addEventListener('click', close); sc.addEventListener('click', e => { if(e.target === sc) close(); });
+    $('spWho').addEventListener('click', e => {
+      const b = e.target.closest('.whoami-chip'); if(!b) return;
+      store.myName = store.myName === b.dataset.n ? null : b.dataset.n; saveStore(); haptic('tap');
+      if(window.__markMine) window.__markMine(); if(window.__greet) window.__greet(); paint(); fill();
+      if(typeof renderWhoami === 'function') try{ renderWhoami(); updateMineLine(); }catch(err){}
+      const again = $('spWho').querySelector(`[data-n="${b.dataset.n}"]`); if(again) try{ again.focus({ preventScroll: true }); }catch(err){}
+    });
     $('spList').addEventListener('click', e => {
       const b = e.target.closest('[data-stay]'); if(!b) return; const p = PLACES[b.dataset.stay]; if(!p) return;
       close(true); setTimeout(() => window.__showDriver(p.en, grabAddr(p)), 120);
     });
     onKey(e => { if(sc.hidden) return; if(e.key === 'Escape') close(); else if(e.key === 'Tab'){ const f = [...sc.querySelectorAll('button')], n = f.length, cur = f.indexOf(document.activeElement); if(cur === -1 || (!e.shiftKey && cur === n - 1) || (e.shiftKey && cur === 0)){ e.preventDefault(); f[e.shiftKey ? n - 1 : 0].focus(); } } });
   }
-  function openPicker(){
-    if(!sc) build(); const c = city();
+  function fill(){
+    const c = city(), mine = store.myName && stayFor(store.myName);
     $('spS').textContent = (c === 'pat' ? '파타야' : '방콕') + ' 숙소 · 누르면 영어 이름과 주소가 크게 떠요';
-    $('spList').innerHTML = STAYS[c].map(id => `<button class="wn-close wn-ghost" type="button" data-stay="${id}">🏠 ${PLACES[id].ko}</button>`).join('');
+    const order = STAYS[c].slice().sort((a, b) => (a === mine ? 0 : 1) - (b === mine ? 0 : 1));
+    $('spList').innerHTML = order.map(id => `<button class="wn-close wn-ghost" type="button" data-stay="${id}">${id === mine ? '⭐ 내 숙소 · ' : '🏠 '}${PLACES[id].ko}</button>`).join('');
+    $('spWho').innerHTML = FAMS.flatMap(f => f.rows).map(r => `<button class="whoami-chip${r.n === store.myName ? ' on' : ''}" type="button" data-n="${r.n}" aria-pressed="${r.n === store.myName}">${r.n}</button>`).join('');
+  }
+  function openPicker(){
+    if(!sc) build(); fill();
     prev = document.activeElement; sc.hidden = false; document.documentElement.style.overflow = 'hidden'; void sc.offsetHeight; sc.classList.add('on');
     try{ sc.querySelector('[data-stay]').focus({ preventScroll: true }); }catch(e){}
   }
@@ -3345,5 +3411,61 @@ function __initFunElements(){
     if(!sc || sc.hidden) return; sc.classList.remove('on'); if(keep !== true) document.documentElement.style.overflow = '';
     setTimeout(() => { sc.hidden = true; }, 340); if(keep !== true){ try{ prev && prev.focus && prev.focus(); }catch(e){} haptic('tap'); }
   }
-  home.addEventListener('click', () => { haptic('tap'); openPicker(); });
+  home.addEventListener('click', () => {
+    haptic('tap'); const id = store.myName && stayFor(store.myName);
+    if(id) window.__showDriver(PLACES[id].en, grabAddr(PLACES[id]), { more: openPicker }); else openPicker();
+  });
+})();
+
+/* ── "나" 모드: 내가 누군지 고르면 내 라운드에 표시하고 인사말에 이름을 불러줘요 ── */
+(function(){
+  window.__markMine = () => { const me = store.myName; document.querySelectorAll('.gcard[data-p]').forEach(c => c.classList.toggle('mine', !!me && c.dataset.p.split(',').includes(me))); };
+  window.__markMine();
+})();
+
+/* ── 여행 중엔 "한국은 지금" 시각을 카운트다운 아래 줄에 보여줘요(집에 연락할 시간인지 바로 알 수 있게) ── */
+(function(){
+  const sub = $('cdSub'); if(!sub) return;
+  const orig = sub.textContent, p2 = n => String(n).padStart(2, '0');
+  const tick = () => {
+    const n = Date.now();
+    if(n < tripDate('depart').getTime() || n > tripDate('end', true).getTime()){ sub.textContent = orig; return; }
+    const k = new Date(n + 9 * 36e5); sub.textContent = `🇰🇷 서울 ${p2(k.getUTCHours())}:${p2(k.getUTCMinutes())} · 한국이 2시간 빨라요`;
+  };
+  tick(); setInterval(tick, 30000);
+})();
+
+/* ── 히어로 연출: 도시 실루엣(파타야 야자수·방콕 스카이라인) · 더운 날 아지랑이 · 폰 기울이면 층이 움직임 ── */
+(function(){
+  const hero = document.querySelector('header.hero'); if(!hero) return;
+  const sync = () => {
+    const c = document.querySelector('.wx-c.on'); hero.dataset.city = c && c.dataset.city === '방콕' ? 'bkk' : 'pat';
+    const t = parseInt(($('wxTemp') || {}).textContent, 10);
+    if(t >= 32) hero.dataset.heat = '1'; else delete hero.dataset.heat;
+  };
+  sync(); document.addEventListener('wx:updated', sync);
+
+  // 기울이기: 안드로이드는 바로, 아이폰은 켜기 버튼을 눌러 허용했을 때만(권한 창은 눌러야 떠요)
+  const rm = matchMedia('(prefers-reduced-motion: reduce)').matches, row = $('tiltRow'), btn = $('tiltBtn');
+  if(rm || !('DeviceOrientationEvent' in window) || !matchMedia('(pointer: coarse)').matches) return;
+  const needPerm = typeof DeviceOrientationEvent.requestPermission === 'function', KEY = 'thai2026_tilt';
+  let on = false, b0 = null, raf = 0, tx = 0, ty = 0;
+  const apply = () => { raf = 0; hero.style.setProperty('--tx', tx.toFixed(1)); hero.style.setProperty('--ty', ty.toFixed(1)); };
+  const onO = e => {
+    if(e.gamma == null || e.beta == null) return; if(b0 == null) b0 = e.beta;
+    tx = Math.max(-24, Math.min(24, e.gamma)) / 24 * 10; ty = Math.max(-24, Math.min(24, e.beta - b0)) / 24 * 6;
+    if(!raf) raf = requestAnimationFrame(apply);
+  };
+  const paint = () => { if(btn){ btn.setAttribute('aria-pressed', String(on)); btn.textContent = '📱 폰을 기울이면 히어로가 움직여요 · ' + (on ? '켜짐' : '꺼짐'); } };
+  const enable = () => { if(on) return; on = true; b0 = null; addEventListener('deviceorientation', onO, { passive: true }); paint(); };
+  const disable = () => { on = false; removeEventListener('deviceorientation', onO); b0 = null; tx = ty = 0; apply(); paint(); };
+  let pref = null; try{ pref = localStorage.getItem(KEY); }catch(e){}
+  if(row) row.hidden = false; paint();
+  if(pref === 'on' || (pref == null && !needPerm)) enable();
+  if(btn) btn.addEventListener('click', async () => {
+    haptic('tap');
+    if(on){ disable(); try{ localStorage.setItem(KEY, 'off'); }catch(e){} return; }
+    if(needPerm){ try{ if(await DeviceOrientationEvent.requestPermission() !== 'granted') return; }catch(e){ return; } }
+    enable(); try{ localStorage.setItem(KEY, 'on'); }catch(e){}
+  });
 })();

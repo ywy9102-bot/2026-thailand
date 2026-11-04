@@ -382,8 +382,14 @@
     if(!CITY[want]) want = Date.now() >= BKK_FROM ? 'bkk' : 'pat';
     if(want !== city) useCity(want);
     selId = null; pickEl.hidden = true; renderChrome(); render();
-    scrim.hidden = false; document.documentElement.style.overflow = 'hidden';
-    void scrim.offsetHeight; scrim.classList.add('on');
+    const reveal = () => { scrim.hidden = false; document.documentElement.style.overflow = 'hidden'; void scrim.offsetHeight; scrim.classList.add('on'); };
+    const fc = $('foodMapCard'), sheet = scrim.querySelector('.wn-sheet'), fromCard = !!window.__fmFromCard; window.__fmFromCard = false;
+    if(document.startViewTransition && fc && sheet && (fromCard || fc.contains(prevFocus)) && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+      // 누른 카드가 그대로 커지면서 지도 시트가 되게 해요(지원하는 폰에서만)
+      fc.style.viewTransitionName = 'fmcard'; scrim.classList.add('vt');
+      const vt = document.startViewTransition(() => { fc.style.viewTransitionName = ''; sheet.style.viewTransitionName = 'fmcard'; reveal(); });
+      vt.finished.catch(() => {}).then(() => { sheet.style.viewTransitionName = ''; fc.style.viewTransitionName = ''; scrim.classList.remove('vt'); });
+    } else reveal();
     setView(view);
     const f = view === 'map' ? tabMap : tabList; try{ f.focus({preventScroll:true}); }catch(e){}
   }
