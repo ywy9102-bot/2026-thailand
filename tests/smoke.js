@@ -257,6 +257,25 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('다시 연결되면 띠가 사라짐', await page.evaluate(() => document.getElementById('offBar').hidden));
       await ctx.close();
     }
+    // 4-1d4) 히어로 연출: 오늘의 달 · 실제 일몰 하늘 · 도시 실루엣 · 열기 아지랑이 · 기울기
+    {
+      const { ctx, page } = await open(browser, base, 390, 844, { clock: '2026-12-24T22:00:00+07:00' });
+      ok('보름달(12/24 밤): 히어로 달이 🌕', await page.evaluate(() => document.getElementById('skyOrb').textContent === '🌕'));
+      ok('노을 시계 밤: 달 이름이 함께 보임(보름달)', await page.evaluate(() => /보름달/.test(document.getElementById('scT').textContent)));
+      await ctx.close();
+      const { ctx: c2, page: p2 } = await open(browser, base, 390, 844, { clock: '2026-12-18T17:40:00+07:00' });
+      ok('실제 일몰(12/18 17:53) 기준: 17:40은 해질녘(dusk)', await p2.evaluate(() => document.querySelector('header.hero').dataset.sky === 'dusk'));
+      ok('도시 실루엣: 파타야 선택이면 pat', await p2.evaluate(() => document.querySelector('header.hero').dataset.city === 'pat'));
+      await p2.evaluate(() => document.querySelector('.wx-c[data-city="방콕"]').click()); await p2.waitForTimeout(400);
+      ok('도시 실루엣: 방콕으로 바꾸면 bkk', await p2.evaluate(() => document.querySelector('header.hero').dataset.city === 'bkk'));
+      await p2.evaluate(() => { document.getElementById('wxTemp').textContent = '33°C'; document.dispatchEvent(new CustomEvent('wx:updated')); });
+      ok('33°C 이상이면 열기 아지랑이 켜짐', await p2.evaluate(() => document.querySelector('header.hero').dataset.heat === '1'));
+      await p2.evaluate(() => { document.getElementById('wxTemp').textContent = '28°C'; document.dispatchEvent(new CustomEvent('wx:updated')); });
+      ok('28°C면 아지랑이 꺼짐', await p2.evaluate(() => document.querySelector('header.hero').dataset.heat === undefined));
+      await p2.evaluate(() => { window.dispatchEvent(new DeviceOrientationEvent('deviceorientation', { gamma: 20, beta: 40 })); window.dispatchEvent(new DeviceOrientationEvent('deviceorientation', { gamma: 20, beta: 52 })); }); await p2.waitForTimeout(200);
+      ok('폰을 기울이면 히어로 층이 움직임(--tx)', await p2.evaluate(() => Math.abs(parseFloat(document.querySelector('header.hero').style.getPropertyValue('--tx'))) > 3 && !document.getElementById('tiltRow').hidden));
+      await c2.close();
+    }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {
       const now = new Date().toISOString();

@@ -1772,6 +1772,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🌕','히어로 연출 5가지 — 진짜 달·실제 노을·도시 실루엣·열기·기울기','밤하늘의 달이 그날의 실제 모양이에요(12/24은 보름달). 하늘은 그날의 실제 일출·일몰에 맞춰 바뀌고, 파타야|방콕을 바꾸면 히어로 뒤 실루엣(야자수·방콕 스카이라인)이 바뀌어요. 32°C 이상이면 아지랑이가 일렁이고, 폰을 기울이면 구름·해·실루엣이 시차를 두고 움직여요(할 일 탭 맨 아래에서 켜고 꺼요).'],
     ['🌇','노을 시계 · "나" 모드 · 한국 시계','여행 중에는 첫 화면 카드에 오늘 일몰 시각과 남은 시간이 떠요(인터넷 없이 계산). 숙소로 가기에서 "나는 누구예요?"를 고르면 내 숙소로 바로 가고, 골프 탭에서 내 라운드에 ⭐가 붙고, 인사말에 이름을 불러줘요. 카운트다운 아래에는 서울 시각이 보여요. 맛집 대동여지도 카드를 누르면 카드가 그대로 커지며 지도가 열려요.'],
     ['🏠','여행 중 카드 3가지 + 인터넷 끊김 알림','여행 기간에는 첫 화면 카드에 "🏠 숙소로 가기"(숙소를 고르면 영어 주소가 크게 떠요), "🖼️ 오늘의 한 장"(오늘 일정·날씨·환율을 한 장 이미지로 만들어 단톡방에 공유), 날씨 맞춤 카드(비 오는 날엔 실내 맛집)가 끼어요. 인터넷이 끊기면 화면 맨 위에 띠로 알려 줘요.'],
     ['🚕','기사님께 보여주기 + 홈 화면 바로가기','맛집·골프장·관광지 카드의 "🚕 기사님께 보여주기"를 누르면 영어 이름과 주소가 크게 뜨고, "여기로 가 주세요"·"미터기를 켜 주세요" 태국어가 함께 나와요. 열려 있는 동안 화면이 꺼지지 않아요. 안드로이드는 홈 화면 앱 아이콘을 길게 누르면 오늘 일정·맛집 지도·라운드 기록장으로 바로 들어가요.'],
@@ -2301,20 +2302,36 @@ const FOODS = [
   window.__openThai = open;
 })();
 
+// 일출·일몰: 인터넷 없이 날짜와 위도·경도로 계산(NOAA 간이식, 오차 약 ±2분). 반환: 태국 시각(UTC+7) 기준 [일출, 일몰] (분)
+function sunTimes(lat, lon, y, m, d){
+  const n = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 0)) / 864e5), g = 2 * Math.PI / 365 * (n - 1), R = Math.PI / 180;
+  const eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+  const dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+  const ha = Math.acos(Math.cos(90.833 * R) / (Math.cos(lat * R) * Math.cos(dec)) - Math.tan(lat * R) * Math.tan(dec)) / R;
+  return [720 - 4 * (lon + ha) - eqt + 420, 720 - 4 * (lon - ha) - eqt + 420];
+}
+// 달 위상: 기준 신월(2000-01-06 18:14 UTC)에서 지난 날수로 8단계 이모지(북반구 모양, 태국도 같아요)
+function moonInfo(ms){
+  const syn = 29.530588853, age = (((ms - Date.UTC(2000, 0, 6, 18, 14)) / 864e5) % syn + syn) % syn, i = Math.floor(age / syn * 8 + .5) % 8;
+  return { e: ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'][i], n: ['달이 없는 밤', '초승달', '상현달', '차오르는 달', '보름달', '기우는 달', '하현달', '그믐달'][i] };
+}
 // ── 태국 하늘 라이브: 방콕 현지 시각에 맞춰 히어로 하늘(새벽·낮·노을·별밤)과 해/달 위치가 변함 ──
 (function(){
   const hero = document.querySelector('header.hero'), orb = $('skyOrb'), starsEl = $('skyStars');
   if(!hero || !orb) return;
-  // 12월 방콕 일출·일몰 근사값(현지 시각, 시)
-  const SR = 6.7, SS = 17.9;
+  // 오늘의 실제 일출·일몰(시): 여행 전·방콕 머무는 동안은 방콕, 그 사이 파타야 기준으로 계산
+  const sunHours = () => {
+    const n = Date.now(), t = new Date(n + 7 * 36e5), c = (n >= tripDate('depart').getTime() && n < tripDate('bkkFrom').getTime()) ? [12.93, 100.88] : [13.75, 100.5];
+    const r = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()); return [r[0] / 60, r[1] / 60];
+  };
   starsEl.innerHTML = Array.from({length:16}, (_, i) =>
     `<i style="left:${(6 + (i*61 % 88)).toFixed(0)}%;top:${(4 + (i*37 % 42)).toFixed(0)}%;--sd:${(i*0.37).toFixed(2)}s"></i>`).join('');
   function tick(){
-    const t = new Date(), h = ((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60;
+    const t = new Date(), h = ((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60, [SR, SS] = sunHours();
     const day = h >= SR && h < SS;
     const phase = h >= SR-.8 && h < SR+.7 ? 'dawn' : h >= SR+.7 && h < SS-1.1 ? 'day' : h >= SS-1.1 && h < SS+.6 ? 'dusk' : 'night';
     const p = day ? (h - SR)/(SS - SR) : ((h < SR ? h + 24 : h) - SS)/(24 - (SS - SR));
-    orb.textContent = day ? '☀️' : '🌙';
+    orb.textContent = day ? '☀️' : moonInfo(Date.now()).e;   // 밤에는 오늘의 실제 달 모양
     orb.style.left = (10 + p*80).toFixed(1) + '%';
     orb.style.top = (78 - 60*Math.sin(Math.PI*p)).toFixed(0) + 'px';
     hero.dataset.sky = phase;
@@ -3328,25 +3345,17 @@ function __initFunElements(){
     if(['이준영', '박지해', '이동현'].includes(name)) return Date.now() >= GCP_FROM ? 'gcp' : 'tinidee';
     return null;
   };
-  // 일출·일몰: 인터넷 없이 날짜와 위도·경도로 계산(NOAA 간이식, 오차 약 ±2분). 반환: 태국 시각 기준 [일출, 일몰] (분)
-  function sunTimes(lat, lon, y, m, d){
-    const n = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 0)) / 864e5), g = 2 * Math.PI / 365 * (n - 1), R = Math.PI / 180;
-    const eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
-    const dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
-    const ha = Math.acos(Math.cos(90.833 * R) / (Math.cos(lat * R) * Math.cos(dec)) - Math.tan(lat * R) * Math.tan(dec)) / R;
-    return [720 - 4 * (lon + ha) - eqt + 420, 720 - 4 * (lon - ha) - eqt + 420];
-  }
   const hm = m => { m = Math.round(m); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
   const dur = m => { m = Math.round(m); return m >= 60 ? `${Math.floor(m / 60)}시간${m % 60 ? ' ' + (m % 60) + '분' : ''}` : `${m}분`; };
   function sunNow(){
     const c = city() === 'pat' ? [12.93, 100.88] : [13.75, 100.5], t = new Date(Date.now() + 7 * 36e5), now = t.getUTCHours() * 60 + t.getUTCMinutes();
     const [rise, set] = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate());
     let e, s;
-    if(now < rise) { e = '🌅'; s = `일출 ${hm(rise)} · ${dur(rise - now)} 뒤`; }
+    if(now < rise) { const mo = moonInfo(Date.now()); e = now < rise - 40 ? mo.e : '🌅'; s = `일출 ${hm(rise)} · ${dur(rise - now)} 뒤${now < rise - 40 ? ' · ' + mo.n : ''}`; }
     else if(now < set - 90) { e = '☀️'; s = `일몰 ${hm(set)} · ${dur(set - now)} 남았어요`; }
     else if(now < set) { e = '🌇'; s = `일몰 ${hm(set)} · 노을까지 ${dur(set - now)}`; }
     else if(now < set + 40) { e = '🌆'; s = `일몰 ${hm(set)} · 해가 졌어요`; }
-    else { const [r2] = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate() + 1); e = '🌙'; s = `내일 일출 ${hm(r2)}`; }
+    else { const [r2] = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate() + 1), mo = moonInfo(Date.now()); e = mo.e; s = `${mo.n} · 내일 일출 ${hm(r2)}`; }
     return { e, s, set };
   }
   function paintSun(){ const r = sunNow(); $('scE').textContent = r.e; $('scT').textContent = r.s; sun.setAttribute('aria-label', r.s); }
@@ -3422,4 +3431,39 @@ function __initFunElements(){
     const k = new Date(n + 9 * 36e5); sub.textContent = `🇰🇷 서울 ${p2(k.getUTCHours())}:${p2(k.getUTCMinutes())} · 한국이 2시간 빨라요`;
   };
   tick(); setInterval(tick, 30000);
+})();
+
+/* ── 히어로 연출: 도시 실루엣(파타야 야자수·방콕 스카이라인) · 더운 날 아지랑이 · 폰 기울이면 층이 움직임 ── */
+(function(){
+  const hero = document.querySelector('header.hero'); if(!hero) return;
+  const sync = () => {
+    const c = document.querySelector('.wx-c.on'); hero.dataset.city = c && c.dataset.city === '방콕' ? 'bkk' : 'pat';
+    const t = parseInt(($('wxTemp') || {}).textContent, 10);
+    if(t >= 32) hero.dataset.heat = '1'; else delete hero.dataset.heat;
+  };
+  sync(); document.addEventListener('wx:updated', sync);
+
+  // 기울이기: 안드로이드는 바로, 아이폰은 켜기 버튼을 눌러 허용했을 때만(권한 창은 눌러야 떠요)
+  const rm = matchMedia('(prefers-reduced-motion: reduce)').matches, row = $('tiltRow'), btn = $('tiltBtn');
+  if(rm || !('DeviceOrientationEvent' in window) || !matchMedia('(pointer: coarse)').matches) return;
+  const needPerm = typeof DeviceOrientationEvent.requestPermission === 'function', KEY = 'thai2026_tilt';
+  let on = false, b0 = null, raf = 0, tx = 0, ty = 0;
+  const apply = () => { raf = 0; hero.style.setProperty('--tx', tx.toFixed(1)); hero.style.setProperty('--ty', ty.toFixed(1)); };
+  const onO = e => {
+    if(e.gamma == null || e.beta == null) return; if(b0 == null) b0 = e.beta;
+    tx = Math.max(-24, Math.min(24, e.gamma)) / 24 * 10; ty = Math.max(-24, Math.min(24, e.beta - b0)) / 24 * 6;
+    if(!raf) raf = requestAnimationFrame(apply);
+  };
+  const paint = () => { if(btn){ btn.setAttribute('aria-pressed', String(on)); btn.textContent = '📱 폰을 기울이면 히어로가 움직여요 · ' + (on ? '켜짐' : '꺼짐'); } };
+  const enable = () => { if(on) return; on = true; b0 = null; addEventListener('deviceorientation', onO, { passive: true }); paint(); };
+  const disable = () => { on = false; removeEventListener('deviceorientation', onO); b0 = null; tx = ty = 0; apply(); paint(); };
+  let pref = null; try{ pref = localStorage.getItem(KEY); }catch(e){}
+  if(row) row.hidden = false; paint();
+  if(pref === 'on' || (pref == null && !needPerm)) enable();
+  if(btn) btn.addEventListener('click', async () => {
+    haptic('tap');
+    if(on){ disable(); try{ localStorage.setItem(KEY, 'off'); }catch(e){} return; }
+    if(needPerm){ try{ if(await DeviceOrientationEvent.requestPermission() !== 'granted') return; }catch(e){ return; } }
+    enable(); try{ localStorage.setItem(KEY, 'on'); }catch(e){}
+  });
 })();
