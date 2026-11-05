@@ -1,4 +1,6 @@
 :root{
+  --k-rgba-255-176-72-38:rgba(255,176,72,.38);
+  --k-rgba-255-196-110-5:rgba(255,196,110,.5);
   /* 일회성 색 토큰 (자동 정리) */
   --k-rgba-245-231-192-30:rgba(245,231,192,.30);
   --k-rgba-181-138-40-22:rgba(181,138,40,.22);
@@ -2204,3 +2206,22 @@ header.hero[data-wind] .fx-cloud.d{animation-duration:calc(23s*var(--wf))}
 @keyframes hxStomp{0%{transform:translateX(0) translateY(0)}10%{transform:translateX(50px) translateY(-6px)}20%{transform:translateX(100px) translateY(0)}30%{transform:translateX(150px) translateY(-6px)}40%{transform:translateX(200px) translateY(0)}50%{transform:translateX(250px) translateY(-6px)}60%{transform:translateX(300px) translateY(0)}70%{transform:translateX(350px) translateY(-6px)}80%{transform:translateX(400px) translateY(0)}100%{transform:translateX(520px) translateY(0)}}
 @media (prefers-reduced-motion:reduce){.hx-star,.hx-flock,.hx-lantern,.hx-ride,.hx-ele{display:none}}
 header.hero.hero-off .hx-star,header.hero.hero-off .hx-ride{animation-play-state:paused}
+
+/* ── 히어로 놀이 2: 골든아워·버디 새·밥시간 김·새벽 밴·도마뱀·신정 해돋이 ── */
+.hx-golden{position:absolute;inset:0;opacity:0;transition:opacity 4s ease;background:linear-gradient(to top,var(--k-rgba-255-176-72-38),transparent 62%)}
+header.hero[data-golden] .hx-golden{opacity:1}
+header.hero[data-nysun] .hx-golden{opacity:1;background:radial-gradient(ellipse at 50% 100%,var(--k-rgba-255-196-110-5),transparent 70%)}
+.hx-gbird{position:absolute;left:-30px;font-size:24px;line-height:1;filter:sepia(1) saturate(5) hue-rotate(-12deg) drop-shadow(0 0 8px var(--k-rgba-250-222-138-5));animation:hxGbird 3.8s ease-in-out forwards;pointer-events:none}
+.hx-meal{position:absolute;top:132px;right:12px;width:44px;height:44px;padding:0;border:0;background:none;font-size:26px;line-height:44px;text-align:center;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hx-meal i{position:absolute;bottom:34px;left:14px;width:2px;height:12px;border-radius:2px;background:var(--hero-fg);opacity:0;animation:hxSteam 2.4s ease-in infinite}
+.hx-meal i:nth-child(2){left:21px;animation-delay:.6s}.hx-meal i:nth-child(3){left:28px;animation-delay:1.2s}
+.hx-van{position:absolute;top:196px;font-size:24px;line-height:1;transition:left 1s linear;transform:translateX(-50%);filter:drop-shadow(0 0 3px var(--k-rgba-250-222-138-5))}
+.hx-van::before{content:"";position:absolute;right:92%;top:46%;width:46px;height:14px;transform:translateY(-50%);background:linear-gradient(to left,var(--k-rgba-255-196-110-5),transparent);border-radius:50%}
+.hx-gecko{position:absolute;right:-50px;width:44px;height:44px;padding:0;border:0;background:none;font-size:24px;line-height:44px;text-align:center;pointer-events:auto;cursor:pointer;animation:hxGecko 15s linear forwards;-webkit-tap-highlight-color:transparent}
+.hx-gecko.run{animation:hxGeckoRun .8s ease-in forwards}
+@keyframes hxGbird{0%{opacity:0;transform:translate(0,0)}10%{opacity:1}50%{transform:translate(200px,-22px)}100%{opacity:0;transform:translate(460px,6px)}}
+@keyframes hxSteam{0%{opacity:0;transform:translateY(8px) scaleY(.6)}40%{opacity:.7}100%{opacity:0;transform:translateY(-8px) scaleY(1.1)}}
+@keyframes hxGecko{0%{transform:translateX(0)}15%{transform:translateX(-80px)}30%{transform:translateX(-80px)}60%{transform:translateX(-220px)}70%{transform:translateX(-220px)}100%{transform:translateX(-470px)}}
+@keyframes hxGeckoRun{to{transform:translateX(-520px)}}
+@media (prefers-reduced-motion:reduce){.hx-gbird,.hx-meal,.hx-van,.hx-gecko{display:none} .hx-golden{transition:none}}
+header.hero.hero-off .hx-gecko,header.hero.hero-off .hx-meal i{animation-play-state:paused}

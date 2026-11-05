@@ -1,4 +1,4 @@
-/* 지연 로딩 조각(히어로 연출 모음): 별똥별 소원 · 새 떼 · 풍등 · 뚝뚝·파라세일 · 코끼리 · 자정 불꽃 · 배 · 방콕 야경 창문 · 오늘 일정 장면 · 새벽 안개 · 바람 구름 · 손가락 반짝임 · 스크롤 시차 · 하늘 위 비행기 */
+/* 지연 로딩 조각(히어로 연출 모음): 골든아워 · 해·달 이야기 · 버디 새 · 밥시간 김 · 새벽 밴 · 도마뱀 · 신정 해돋이 · 별똥별 소원 · 새 떼 · 풍등 · 뚝뚝·파라세일 · 코끼리 · 자정 불꽃 · 배 · 방콕 야경 창문 · 오늘 일정 장면 · 새벽 안개 · 바람 구름 · 손가락 반짝임 · 스크롤 시차 · 하늘 위 비행기 */
 (function(){
   if(innerWidth > 760) return;
   const hero = document.querySelector('header.hero'), heat = hero && hero.querySelector('.hero-heat'); if(!hero || !heat) return;
@@ -11,6 +11,7 @@
     '<div class="hx-scene sc-golf"><svg viewBox="0 0 120 50" focusable="false"><path fill="currentColor" d="M0 50Q36 30 92 40T120 42V50Z"/><path fill="currentColor" d="M86 8h2v32h-2z"/><path fill="currentColor" d="M88 8l16 6-16 6z"/></svg><i class="hx-ball"></i></div>' +
     '<div class="hx-scene sc-island"><svg viewBox="0 0 120 50" focusable="false"><path fill="currentColor" d="M0 50Q18 24 52 30T120 40V50Z"/><path d="M70 34Q66 18 76 8" fill="none" stroke="currentColor" stroke-width="2.2"/><path fill="currentColor" d="M76 8Q92 2 100 10Q88 8 76 8ZM76 8Q60 0 52 8Q64 6 76 8Z"/></svg></div>' +
     '<div class="hx-scene sc-wat"><svg viewBox="0 0 60 80" focusable="false"><path fill="currentColor" d="M26 80L28 40L30 18L32 40L34 80Z"/><path fill="currentColor" d="M12 80L15 56L18 46L21 56L24 80Z"/><path fill="currentColor" d="M36 80L39 56L42 46L45 56L48 80Z"/><path fill="currentColor" d="M29 18l1-12 1 12z"/></svg></div>' +
+    '<div class="hx-golden"></div>' +
     '<div class="hx-plane" hidden><span class="hx-pe">✈️</span></div>';
   heat.after(host);
 
@@ -184,6 +185,7 @@
   hero.addEventListener('click', e => {
     if(e.target.closest(IGN)) return; const r = hero.getBoundingClientRect(), py = e.clientY - r.top;
     if(!wished && Date.now() - starAt < 5000){ wish(); return; }
+    const ob = document.getElementById('skyOrb'); if(ob && parseFloat(getComputedStyle(ob).opacity) > .1){ const q = ob.getBoundingClientRect(); if(Math.hypot(e.clientX - (q.left + q.width / 2), e.clientY - (q.top + q.height / 2)) < 30){ hap('tap'); orbTalk(); return; } }
     if(py > 150) return;
     if(isNight()){ for(let i = 0; i < 10; i++) S.push({ x: e.clientX - r.left + rnd(-16, 16), y: py + rnd(-16, 16), vx: rnd(-.7, .7), vy: rnd(-.7, .3), a: 1, r: 1.2 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); hap('tap'); }
     else if(!rm) birds(py);
@@ -207,14 +209,92 @@
     [450, 1250, 2050].forEach(t => setTimeout(() => { hap('strong'); try{ hero.animate([{ translate: '0 0' }, { translate: '-3px 2px' }, { translate: '3px -1px' }, { translate: '0 0' }], { duration: 220 }); }catch(e){} }, t));
   });
 
+
+  // ── 놀이 더하기 2: 골든아워 · 해/달 이야기 · 버디 새 · 밥시간 김 · 새벽 밴 · 도마뱀 · 신정 해돋이 ──
+  const tripNow = () => { const n = Date.now(); return n >= tripDate('depart').getTime() && n <= tripDate('end', true).getTime(); };
+  const hm = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(Math.round(m % 60)).padStart(2, '0');
+  const dayKey = () => { const t = thai(); return t.getUTCFullYear() + '-' + (t.getUTCMonth() + 1) + '-' + t.getUTCDate(); };
+  const once = k => { fun.once = fun.once || {}; if(fun.once[k]) return false; fun.once[k] = 1; save(); return true; };
+  const sunNow = () => { const t = thai(), c = cityNow(), r = sunTimes(c[0], c[1], t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()); return { rise: r[0], set: r[1], min: t.getUTCHours() * 60 + t.getUTCMinutes() }; };
+
+  // 1) 골든아워: 일몰 30분 전부터 하늘이 금빛으로, 여행 중에는 하루 한 번 알려요
+  function golden(){
+    const { set, min } = sunNow(), on = min >= set - 30 && min <= set + 8;
+    if(on) hero.dataset.golden = '1'; else delete hero.dataset.golden;
+    if(on && tripNow() && once('gold' + dayKey())){ hap('ok'); toast('🌇', `일몰 30분 전 — 사진 찍기 좋은 시간이에요 (일몰 ${hm(set)})`, 4200); }
+  }
+
+  // 2) 해·달 누르면: 일출·일몰, 달 모양과 밝기, 보름달까지
+  function orbTalk(){
+    const { rise, set, min } = sunNow(), day = min >= rise && min < set;
+    if(day){ toast('☀️', `오늘 일출 ${hm(rise)} · 일몰 ${hm(set)} (현지 시각)`, 3600); return; }
+    const syn = 29.530588853, age = (((Date.now() - Date.UTC(2000, 0, 6, 18, 14)) / 864e5) % syn + syn) % syn, lit = Math.round((1 - Math.cos(2 * Math.PI * age / syn)) / 2 * 100);
+    const toFull = Math.round(((syn / 2 - age) % syn + syn) % syn), e = document.getElementById('skyOrb').textContent || '🌙';
+    toast(e, `밝기 ${lit}% · ${toFull <= 0 ? '오늘은 보름달 무렵이에요' : `보름달까지 ${toFull}일`}`, 3600);
+  }
+
+  // 3) 버디 새: 라운드 기록장에서 버디를 누르면, 기록장을 닫았을 때 금빛 새가 히어로를 가로질러요
+  let birdPending = 0;
+  document.addEventListener('hx:birdie', () => { if(!rm) birdPending = Math.min(birdPending + 1, 3); });
+  function goldBird(){
+    const b = document.createElement('span'); b.className = 'hx-gbird'; b.textContent = '🐦'; b.style.top = Math.round(rnd(30, 90)) + 'px'; host.appendChild(b); done(b, 4200); hap('ok');
+  }
+
+  // 4) 밥시간 김: 점심·저녁 시간대에 🍜 김이 오르고, 누르면 대동여지도가 열려요
+  let meal = null;
+  function mealTick(){
+    const { min } = sunNow(), slot = min >= 660 && min < 810 ? 'L' : min >= 1050 && min < 1200 ? 'D' : '';
+    const want = slot && tripNow() && !(fun.meal === dayKey() + slot);
+    if(want && !meal && !rm){
+      const el = document.createElement('button'); el.type = 'button'; el.className = 'hx-hit hx-meal'; el.setAttribute('tabindex', '-1'); el.innerHTML = '<i></i><i></i><i></i>🍜'; host.appendChild(el); meal = el;
+      el.addEventListener('click', ev => { ev.stopPropagation(); hap('ok'); fun.meal = dayKey() + slot; save(); el.remove(); meal = null; if(typeof window.__openFoodMap === 'function') window.__openFoodMap(); });
+    } else if(!want && meal){ meal.remove(); meal = null; }
+  }
+
+  // 5) 새벽 밴: 골프 밴 출발 20분 전부터 헤드라이트가 다가와요
+  let vanEl = null;
+  function vanTick(){
+    const t = thai(), md = (t.getUTCMonth() + 1) + '/' + t.getUTCDate(), g = tripNow() ? GOLF.find(x => x.d === md && x.van && x.van.time) : null;
+    let p = -1;
+    if(g){ const [h, m] = g.van.time.split(':').map(Number), dep = h * 60 + m, now = t.getUTCHours() * 60 + t.getUTCMinutes() + t.getUTCSeconds() / 60;
+      if(now >= dep - 20 && now <= dep + 3){ p = Math.max(0, Math.min(1, (now - (dep - 20)) / 20)); if(once('van' + dayKey())){ hap('strong'); toast('🚐', `골프 밴 출발 20분 전 (${g.van.time}) — 로비로 내려갈 준비!`, 4200); } } }
+    if(p >= 0 && !rm){
+      if(!vanEl){ vanEl = document.createElement('span'); vanEl.className = 'hx-van'; vanEl.textContent = '🚐'; host.appendChild(vanEl); }
+      vanEl.style.left = (104 - p * 92).toFixed(1) + '%';
+    } else if(vanEl){ vanEl.remove(); vanEl = null; }
+  }
+
+  // 6) 도마뱀: 가끔 벽을 기어가고, 누르면 쪼르르 도망가요
+  let nextGecko = Date.now() + 40000, gecko = null;
+  function startGecko(){
+    const el = document.createElement('button'); el.type = 'button'; el.className = 'hx-hit hx-gecko'; el.setAttribute('tabindex', '-1'); el.textContent = '🦎'; el.style.top = Math.round(rnd(110, 230)) + 'px'; host.appendChild(el); gecko = el;
+    el.addEventListener('click', ev => { ev.stopPropagation(); hap('combo'); el.classList.add('run'); toast('🦎', '찍찍! 숙소 벽의 도마뱀은 모기를 잡아 주는 흔한 손님이에요', 3200); setTimeout(() => { el.remove(); if(gecko === el) gecko = null; }, 900); });
+    setTimeout(() => { el.remove(); if(gecko === el) gecko = null; }, 16000);
+  }
+
+  // 7) 신정 첫 해돋이: 1/1 일출 15분 전 알림, 일출 때 금빛 하늘과 인사
+  function nyRise(){
+    const t = thai(); if(!(t.getUTCMonth() === 0 && t.getUTCDate() === 1 && t.getUTCFullYear() === 2027)) { delete hero.dataset.nysun; return; }
+    const { rise, min } = sunNow();
+    if(min >= rise - 15 && min < rise && once('nyrise15')){ hap('ok'); toast('🌅', `새해 첫 해돋이 15분 전이에요 (${hm(rise)})`, 4200); }
+    if(min >= rise && min <= rise + 25){ hero.dataset.nysun = '1'; if(once('nyrise')){ hap('combo'); toast('🌅', '2027년 첫 해돋이예요! 올해도 온 가족 건강하고 즐겁게', 5200); for(let i = 0; i < 24; i++) S.push({ x: rnd(20, SW - 20), y: rnd(20, 140), vx: rnd(-.5, .5), vy: rnd(-.5, .1), a: 1, r: 1.2 + Math.random() * 2, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); } }
+    else delete hero.dataset.nysun;
+  }
+
+  function fun2Tick(){
+    golden(); nyRise(); mealTick(); vanTick();
+    if(birdPending && live() && !document.querySelector('.wn-scrim.on')){ const n = birdPending; birdPending = 0; for(let i = 0; i < n; i++) setTimeout(goldBird, i * 900); }
+    const now = Date.now(); if(!rm && live() && !isNight() && !gecko && now > nextGecko){ nextGecko = now + rnd(70000, 140000); startGecko(); }
+  }
+
   function funTick(){
     if(rm || !live()) return; const now = Date.now();
     if(isNight() && now > nextStar){ nextStar = now + rnd(28000, 65000); star(); }
     if(!isNight() && !ride && now > nextRide){ nextRide = now + rnd(55000, 100000); startRide(); }
   }
 
-  window.__heroFun = { star, startRide, birds };
-  const tick = () => { layers(); plane(); ny(); funTick(); };
+  window.__heroFun = { star, startRide, birds, orbTalk, goldBird, startGecko, reset(){ fun.once = {}; delete fun.meal; } };
+  const tick = () => { layers(); plane(); ny(); funTick(); fun2Tick(); };
   window.__heroTick = tick; window.__heroDebug = () => ({ sparks: S.length });
   tick(); setInterval(tick, 1000); document.addEventListener('wx:updated', layers);
 })();

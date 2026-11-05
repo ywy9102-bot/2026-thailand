@@ -346,6 +346,39 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('히어로 놀이: 콘솔 오류 없음', o.errs.length === 0, o.errs);
       await o.ctx.close();
     }
+    // 4-1d7) 히어로 놀이 2: 골든아워 · 해/달 이야기 · 버디 새 · 밥시간 김 · 새벽 밴 · 도마뱀 · 신정 해돋이
+    {
+      const mk = async clock => { const o = await open(browser, base, 390, 844, { clock }); await o.page.waitForFunction(() => !!window.__heroFun, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} window.__heroFun.reset(); window.__tl = []; window.__toast = (k, m) => window.__tl.push(k + ' ' + m); window.__heroTick(); }); return o; };
+      const tl = page => page.evaluate(() => (window.__tl || []).join(' | '));
+      let o = await mk('2026-12-18T17:35:00+07:00');
+      ok('골든아워: 일몰 30분 전에 하늘이 금빛(data-golden)이고 알림이 뜸', await o.page.evaluate(() => document.querySelector('header.hero').dataset.golden === '1') && /일몰 30분 전/.test(await tl(o.page)));
+      await o.page.evaluate(() => window.__heroTick());
+      ok('골든아워: 같은 날 알림은 한 번만', (await tl(o.page)).split('일몰 30분 전').length === 2);
+      await o.ctx.close();
+      o = await mk('2026-12-18T12:00:00+07:00');
+      ok('골든아워: 한낮에는 꺼짐', await o.page.evaluate(() => document.querySelector('header.hero').dataset.golden === undefined));
+      await o.page.evaluate(() => window.__heroFun.orbTalk());
+      ok('해 이야기: 낮에 해를 누르면 일출·일몰 시각', /일출 \d\d:\d\d · 일몰 \d\d:\d\d/.test(await tl(o.page)));
+      ok('밥시간 김: 점심(12:00)에 🍜 버튼이 뜨고 44px 이상', await o.page.evaluate(() => { const e = document.querySelector('.hx-meal'); if(!e) return false; const r = e.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; }));
+      await o.page.evaluate(() => { window.__openFoodMap = () => { window.__fmCalled = 1; }; document.querySelector('.hx-meal').click(); });
+      ok('밥시간 김: 누르면 대동여지도가 열리고 버튼이 사라짐', await o.page.evaluate(() => window.__fmCalled === 1 && !document.querySelector('.hx-meal')));
+      await o.page.evaluate(() => window.__heroFun.startGecko());
+      ok('도마뱀: 나타나고 44px 이상, 누르면 알림', await o.page.evaluate(() => { const e = document.querySelector('.hx-gecko'); const r = e.getBoundingClientRect(); e.click(); return r.width >= 44; }) && /도마뱀/.test(await tl(o.page)));
+      await o.page.evaluate(() => { document.dispatchEvent(new Event('hx:birdie')); window.__heroTick(); });
+      await o.page.waitForTimeout(100);
+      ok('버디 새: 버디를 기록하면 금빛 새가 히어로를 가로지름', await o.page.evaluate(() => !!document.querySelector('.hx-gbird')));
+      await o.ctx.close();
+      o = await mk('2026-12-18T21:00:00+07:00');
+      await o.page.evaluate(() => window.__heroFun.orbTalk());
+      ok('달 이야기: 밤에 달을 누르면 밝기와 보름달까지 남은 날', /밝기 \d+%/.test(await tl(o.page)) && /(보름달까지 \d+일|보름달 무렵)/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-17T06:20:00+07:00');
+      ok('새벽 밴: 골프 밴 출발 10분 전에 헤드라이트 밴이 나타나고 알림', await o.page.evaluate(() => !!document.querySelector('.hx-van')) && /밴 출발 20분 전 \(06:30\)/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2027-01-01T06:45:00+07:00');
+      ok('신정 해돋이: 1/1 일출 직후에 금빛 하늘(data-nysun)과 인사', await o.page.evaluate(() => document.querySelector('header.hero').dataset.nysun === '1') && /첫 해돋이/.test(await tl(o.page)));
+      await o.ctx.close();
+    }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {
       const now = new Date().toISOString();
