@@ -2185,3 +2185,22 @@ header.hero[data-wind] .fx-cloud.d{animation-duration:calc(23s*var(--wf))}
 .lg-ok,.lg-wait,.lg-coral,.lg-jade{font-weight:700}
 .lg-ok{color:var(--ok)}.lg-wait{color:var(--wait)}.lg-coral{color:var(--coral)}.lg-jade{color:var(--jade)}.lg-gold{color:var(--gold-text)}
 .owe-mine{margin-top:6px;font-size:12.5px}
+
+/* ── 히어로 놀이 더하기: 별똥별·새 떼·풍등·뚝뚝/파라세일·코끼리 ── */
+.hx-star{position:absolute;left:var(--sx);top:var(--sy);width:64px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--hero-fg));opacity:0;transform:rotate(24deg);transform-origin:right center;animation:hxShoot 1.1s ease-in forwards}
+.hx-flock{position:absolute;left:-40px;width:0;height:0}
+.hx-bird{max-width:none;position:absolute;left:var(--bx);top:var(--by);width:22px;height:10px;color:var(--hero-fg);opacity:.7;animation:hxFly 6s linear var(--bd) forwards,hxFlap .5s ease-in-out infinite alternate}
+.hx-lantern{position:absolute;font-size:22px;line-height:1;transform:translate(-50%,-50%);filter:drop-shadow(0 0 10px var(--k-rgba-250-222-138-5));animation:hxLantern 7s ease-out forwards;pointer-events:none}
+.hx-ride{position:absolute;top:150px;right:-60px;width:44px;height:44px;padding:0;border:0;background:none;font-size:26px;line-height:1;pointer-events:auto;cursor:pointer;opacity:.75;-webkit-tap-highlight-color:transparent}
+.hx-ride.tuk{top:176px;animation:hxDrive 26s linear forwards}
+.hx-ride.para{top:36px;animation:hxDrive 40s linear forwards,hxBob 3.2s ease-in-out infinite alternate}
+.hx-ele{position:absolute;left:-60px;top:168px;font-size:40px;line-height:1;animation:hxStomp 3.4s linear forwards;filter:drop-shadow(0 3px 5px var(--k-rgba-0-0-0-35))}
+@keyframes hxShoot{0%{opacity:0;transform:translate(0,0) rotate(24deg)}15%{opacity:.9}100%{opacity:0;transform:translate(-150px,66px) rotate(24deg)}}
+@keyframes hxFly{from{transform:translateX(0)}to{transform:translateX(480px)}}
+@keyframes hxFlap{from{scale:1 1}to{scale:1 .45}}
+@keyframes hxLantern{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-300px) scale(1)}}
+@keyframes hxDrive{from{transform:translateX(0)}to{transform:translateX(-520px)}}
+@keyframes hxBob{from{translate:0 0}to{translate:0 10px}}
+@keyframes hxStomp{0%{transform:translateX(0) translateY(0)}10%{transform:translateX(50px) translateY(-6px)}20%{transform:translateX(100px) translateY(0)}30%{transform:translateX(150px) translateY(-6px)}40%{transform:translateX(200px) translateY(0)}50%{transform:translateX(250px) translateY(-6px)}60%{transform:translateX(300px) translateY(0)}70%{transform:translateX(350px) translateY(-6px)}80%{transform:translateX(400px) translateY(0)}100%{transform:translateX(520px) translateY(0)}}
+@media (prefers-reduced-motion:reduce){.hx-star,.hx-flock,.hx-lantern,.hx-ride,.hx-ele{display:none}}
+header.hero.hero-off .hx-star,header.hero.hero-off .hx-ride{animation-play-state:paused}

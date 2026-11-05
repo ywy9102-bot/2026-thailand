@@ -321,6 +321,31 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('히어로가 화면 밖이면 애니메이션 멈춤(hero-off)', await o.page.evaluate(() => document.querySelector('header.hero').classList.contains('hero-off')));
       await o.ctx.close();
     }
+    // 4-1d6) 히어로 놀이(hero.js): 별똥별 소원 · 새 떼 · 풍등 · 뚝뚝/파라세일 · 코끼리
+    {
+      const mk = async clock => { const o = await open(browser, base, 390, 844, { clock }); await o.page.waitForFunction(() => !!window.__heroFun, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => window.__heroTick && window.__heroTick()); await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} }); return o; };
+      const tap = (page, y) => page.evaluate(y => { const h = document.querySelector('header.hero'), r = h.getBoundingClientRect(); h.dispatchEvent(new MouseEvent('click', { clientX: r.left + 200, clientY: r.top + y, bubbles: true })); }, y);
+      let o = await mk('2026-12-18T22:00:00+07:00');
+      ok('히어로 놀이: 밤에는 하늘이 night', await o.page.evaluate(() => document.querySelector('header.hero').dataset.sky === 'night'));
+      await o.page.evaluate(() => window.__heroFun.star());
+      ok('별똥별: 밤에 별똥별이 나타남', await o.page.evaluate(() => !!document.querySelector('.hx-star')));
+      await tap(o.page, 100); await o.page.waitForTimeout(200);
+      ok('별똥별: 5초 안에 하늘을 누르면 소원이 저장됨', await o.page.evaluate(() => { try { return JSON.parse(localStorage.getItem('thai2026_hxfun')).wish === 1; } catch (e) { return false; } }));
+      await o.ctx.close();
+      o = await mk('2026-12-18T10:00:00+07:00');
+      await tap(o.page, 90); await o.page.waitForTimeout(150);
+      ok('새 떼: 낮에 하늘을 누르면 새가 날아감', await o.page.evaluate(() => document.querySelectorAll('.hx-bird').length >= 4 && document.querySelector('.hx-bird').getBoundingClientRect().width >= 20));
+      await o.page.evaluate(() => { const h = document.querySelector('header.hero'), r = h.getBoundingClientRect(); h.dispatchEvent(new PointerEvent('pointerdown', { clientX: r.left + 150, clientY: r.top + 260, bubbles: true, pointerType: 'touch' })); });
+      await o.page.waitForTimeout(900);
+      ok('풍등: 히어로를 길게 누르면 풍등이 뜨고 개수가 저장됨', await o.page.evaluate(() => !!document.querySelector('.hx-lantern') && JSON.parse(localStorage.getItem('thai2026_hxfun')).lantern === 1));
+      await o.page.evaluate(() => window.__heroFun.startRide());
+      ok('뚝뚝·파라세일: 지나가는 탈것이 생기고 누를 수 있는 크기(44px)', await o.page.evaluate(() => { const e = document.querySelector('.hx-ride'); if(!e) return false; const r = e.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; }));
+      await o.page.evaluate(() => { const e = document.getElementById('egFlag'); for (let i = 0; i < 6; i++) e.click(); });
+      ok('코끼리: 국기를 6번 빠르게 누르면 코끼리가 지나감', await o.page.evaluate(() => !!document.querySelector('.hx-ele')));
+      ok('히어로 놀이: 새 요소가 탭 순서에 끼지 않음(tabindex -1)', await o.page.evaluate(() => [...document.querySelectorAll('.hero-fx2 button')].every(b => b.tabIndex === -1)));
+      ok('히어로 놀이: 콘솔 오류 없음', o.errs.length === 0, o.errs);
+      await o.ctx.close();
+    }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {
       const now = new Date().toISOString();
