@@ -1,4 +1,4 @@
-/* 지연 로딩 조각(히어로 연출 모음): 자정 불꽃 · 배 · 방콕 야경 창문 · 오늘 일정 장면 · 새벽 안개 · 바람 구름 · 손가락 반짝임 · 스크롤 시차 · 하늘 위 비행기 */
+/* 지연 로딩 조각(히어로 연출 모음): 별똥별 소원 · 새 떼 · 풍등 · 뚝뚝·파라세일 · 코끼리 · 자정 불꽃 · 배 · 방콕 야경 창문 · 오늘 일정 장면 · 새벽 안개 · 바람 구름 · 손가락 반짝임 · 스크롤 시차 · 하늘 위 비행기 */
 (function(){
   if(innerWidth > 760) return;
   const hero = document.querySelector('header.hero'), heat = hero && hero.querySelector('.hero-heat'); if(!hero || !heat) return;
@@ -123,7 +123,98 @@
   let sy = 0, sraf = 0;
   if(!rm) addEventListener('scroll', () => { if(sraf) return; sraf = requestAnimationFrame(() => { sraf = 0; const y = Math.min(scrollY, 700); if(y !== sy){ sy = y; hero.style.setProperty('--sy', y); } }); }, { passive: true });
 
-  const tick = () => { layers(); plane(); ny(); };
+
+  // ── 놀이 더하기: 별똥별·소원 · 새 떼 · 풍등 · 뚝뚝/파라세일 · 코끼리 ──
+  const FUN_K = 'thai2026_hxfun';
+  const fun = (() => { let o = {}; try{ o = JSON.parse(localStorage.getItem(FUN_K)) || {}; }catch(e){} return o; })();
+  const save = () => { try{ localStorage.setItem(FUN_K, JSON.stringify(fun)); }catch(e){} };
+  const toast = (e, m, ms) => { if(typeof window.__toast === 'function') window.__toast(e, m, ms || 2600); };
+  const hap = k => { if(typeof haptic === 'function') haptic(k); };
+  const IGN = 'button,a,input,select,textarea,.hw,.countdown,.prog-wrap,.stats,#wxIco,#wxTemp,.hx-hit,.next-card,#deck,#deckDots,.eg-flag';
+  const isNight = () => hero.dataset.sky === 'night';
+  const live = () => !document.hidden && !hero.classList.contains('hero-off');
+  const done = (el, ms) => setTimeout(() => el.remove(), ms);
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  // 1) 별똥별: 밤에 가끔 가로지르고, 5초 안에 화면을 톡 누르면 소원을 빌어요
+  let nextStar = Date.now() + 12000, starAt = 0, wished = true;
+  function star(){
+    const st = document.createElement('i'); st.className = 'hx-star'; st.style.setProperty('--sx', rnd(40, 70) + '%'); st.style.setProperty('--sy', Math.round(rnd(14, 70)) + 'px');
+    host.appendChild(st); done(st, 1500); starAt = Date.now(); wished = false;
+    if(!fun.starSeen){ fun.starSeen = 1; save(); setTimeout(() => toast('🌠', '별똥별이에요! 화면을 톡 눌러 소원을 빌어 보세요', 3600), 700); }
+  }
+  function wish(){
+    wished = true; fun.wish = (fun.wish || 0) + 1; save(); hap(fun.wish % 3 === 0 ? 'combo' : 'ok');
+    toast('✨', fun.wish % 3 === 0 ? `소원 ${fun.wish}개째 — 이번 여행, 다 이뤄질 거예요` : `소원을 빌었어요 (${fun.wish}번째)`, 2800);
+    for(let i = 0; i < 14; i++) S.push({ x: SW * .5 + rnd(-60, 60), y: rnd(20, 90), vx: rnd(-.5, .5), vy: rnd(-.6, .2), a: 1, r: 1.2 + Math.random() * 1.8, t: Math.random() * 6 });
+    if(!raf) raf = requestAnimationFrame(loop);
+  }
+
+  // 2) 새 떼: 낮에 하늘을 톡 누르면 새가 날아가고, 밤엔 반딧불이가 퍼져요
+  let flocks = 0, lastBird = 0;
+  function birds(py){
+    if(flocks >= 2 || Date.now() - lastBird < 1500) return; lastBird = Date.now(); flocks++;
+    const fl = document.createElement('div'); fl.className = 'hx-flock'; fl.style.top = Math.max(12, Math.min(py, 120)) + 'px';
+    const n = 4 + Math.floor(Math.random() * 3); let h = '';
+    for(let i = 0; i < n; i++) h += `<svg class="hx-bird" style="--bx:${i * 22}px;--by:${(i % 2 ? 1 : -1) * Math.round(rnd(4, 14))}px;--bd:${(i * .12).toFixed(2)}s" viewBox="0 0 22 10" focusable="false"><path d="M1 8Q6 0 11 7Q16 0 21 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+    fl.innerHTML = h; host.appendChild(fl); done(fl, 7000); setTimeout(() => { flocks = Math.max(0, flocks - 1); }, 7000); hap('tap');
+  }
+
+  // 3) 풍등: 히어로를 길게 누르면 그 자리에서 소원 풍등이 떠올라요
+  let lanterns = 0;
+  function lantern(px, py){
+    fun.lantern = (fun.lantern || 0) + 1; save(); hap('strong');
+    toast('🏮', `풍등을 띄웠어요 (모두 ${fun.lantern}개)`, 2600);
+    if(rm || lanterns >= 6) return; lanterns++;
+    const l = document.createElement('span'); l.className = 'hx-lantern'; l.textContent = '🏮'; l.style.left = px + 'px'; l.style.top = py + 'px'; l.style.setProperty('--dx', Math.round(rnd(-26, 26)) + 'px');
+    host.appendChild(l); setTimeout(() => { l.remove(); lanterns = Math.max(0, lanterns - 1); }, 7200);
+  }
+  let lpT = 0, lpX = 0, lpY = 0;
+  const lpClear = () => { clearTimeout(lpT); lpT = 0; };
+  hero.addEventListener('pointerdown', e => {
+    if(e.target.closest(IGN)) return; lpClear(); lpX = e.clientX; lpY = e.clientY;
+    const r = hero.getBoundingClientRect();
+    lpT = setTimeout(() => { lpT = 0; lantern(lpX - r.left, lpY - r.top); }, 650);
+  }, { passive: true });
+  hero.addEventListener('pointermove', e => { if(lpT && Math.hypot(e.clientX - lpX, e.clientY - lpY) > 10) lpClear(); }, { passive: true });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => hero.addEventListener(ev, lpClear, { passive: true }));
+  addEventListener('scroll', lpClear, { passive: true });
+
+  // 하늘 탭: 별똥별 소원(밤) · 새 떼(낮) · 반딧불이(밤)
+  hero.addEventListener('click', e => {
+    if(e.target.closest(IGN)) return; const r = hero.getBoundingClientRect(), py = e.clientY - r.top;
+    if(!wished && Date.now() - starAt < 5000){ wish(); return; }
+    if(py > 150) return;
+    if(isNight()){ for(let i = 0; i < 10; i++) S.push({ x: e.clientX - r.left + rnd(-16, 16), y: py + rnd(-16, 16), vx: rnd(-.7, .7), vy: rnd(-.7, .3), a: 1, r: 1.2 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); hap('tap'); }
+    else if(!rm) birds(py);
+  });
+
+  // 4) 뚝뚝(방콕)·파라세일(파타야): 가끔 지나가고, 누르면 인사해요
+  let nextRide = Date.now() + 20000, ride = null;
+  function startRide(){
+    const bkk = hero.dataset.city === 'bkk'; const el = document.createElement('button'); el.type = 'button'; el.className = 'hx-hit hx-ride ' + (bkk ? 'tuk' : 'para');
+    el.setAttribute('tabindex', '-1'); el.textContent = bkk ? '🛺' : '🪂'; host.appendChild(el); ride = el;
+    el.addEventListener('click', ev => { ev.stopPropagation(); hap(bkk ? 'combo' : 'tap'); toast(bkk ? '🛺' : '🪂', bkk ? '빵빵! 뚝뚝 기사님이 손을 흔들어요' : '파라세일이 파타야 바다 위로 둥실~', 2400); });
+    setTimeout(() => { el.remove(); if(ride === el) ride = null; }, bkk ? 27000 : 42000);
+  }
+
+  // 5) 코끼리: 국기를 6번 빠르게 누르면 코끼리가 쿵쿵 지나가요
+  const fl2 = document.getElementById('egFlag'); let ft = 0, fT;
+  if(fl2) fl2.addEventListener('click', () => {
+    ft++; clearTimeout(fT); fT = setTimeout(() => { ft = 0; }, 2400); if(ft < 6) return; ft = 0;
+    toast('🐘', '코끼리 출동! 쿵쿵쿵', 2600); if(rm) return;
+    const el = document.createElement('span'); el.className = 'hx-ele'; el.textContent = '🐘'; host.appendChild(el); done(el, 3600);
+    [450, 1250, 2050].forEach(t => setTimeout(() => { hap('strong'); try{ hero.animate([{ translate: '0 0' }, { translate: '-3px 2px' }, { translate: '3px -1px' }, { translate: '0 0' }], { duration: 220 }); }catch(e){} }, t));
+  });
+
+  function funTick(){
+    if(rm || !live()) return; const now = Date.now();
+    if(isNight() && now > nextStar){ nextStar = now + rnd(28000, 65000); star(); }
+    if(!isNight() && !ride && now > nextRide){ nextRide = now + rnd(55000, 100000); startRide(); }
+  }
+
+  window.__heroFun = { star, startRide, birds };
+  const tick = () => { layers(); plane(); ny(); funTick(); };
   window.__heroTick = tick; window.__heroDebug = () => ({ sparks: S.length });
   tick(); setInterval(tick, 1000); document.addEventListener('wx:updated', layers);
 })();
