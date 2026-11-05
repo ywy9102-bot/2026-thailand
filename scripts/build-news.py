@@ -121,7 +121,7 @@ def select(items, now, n=5):
         if it['src'] in BLOCK_SRC or it['title'].endswith(' - 뉴스 및 통계') or NOT_CITY.search(it['title']): continue
         if CRIME.search(it['title']) or OFFTOPIC.search(it['title']) or SLANG.search(it['title']) or PROMO.search(it['title']): continue
         if not PLACE.search(it['title']) or (NOISE.search(it['title']) and '골프' not in it['title']): continue
-        if (now - it['ts']).total_seconds() > 72 * 3600: continue
+        if (now - it['ts']).total_seconds() > (168 if classify(it['title'])[0] in ('safety', 'econ') else 72) * 3600: continue   # 여행경보·경제는 천천히 바뀌므로 7일까지 봐요
         cid, s = score(it, now, it['hits'])
         if cid == 'breaking' and not TARGET.search(it['title']): continue   # 속보도 방콕·파타야 기사만 ("폭발한" 같은 비유 표현 방지)
         if cid == 'golf' and not TARGET.search(it['title']) and not STORM.search(it['title']): continue   # 방콕·파타야 밖 골프장 소식(나콘사완 등)은 빼요
@@ -150,6 +150,19 @@ def select(items, now, n=5):
     return picked
 
 
+def diagnose(items, now):
+    """진단용: 왜 빠졌는지 이유별 개수를 세요(고르는 규칙은 바꾸지 않아요)."""
+    from collections import Counter
+    c = Counter(); seen = set()
+    for it in items:
+        if it['url'] in seen: continue
+        seen.add(it['url']); t = it['title']
+        r = ('차단 매체' if it['src'] in BLOCK_SRC else '여행 지역 아님' if not PLACE.search(t) else '범죄' if CRIME.search(t) else '엉뚱한 주제' if OFFTOPIC.search(t) or SLANG.search(t) or NOT_CITY.search(t)
+             else '홍보·상품' if PROMO.search(t) else '잡음' if NOISE.search(t) and '골프' not in t else '오래됨' if (now - it['ts']).total_seconds() > 72 * 3600 else '후보')
+        c[r] += 1
+    return c
+
+
 def build(items, now):
     kst = now + timedelta(hours=9)
     pk = select(items, now)
@@ -176,6 +189,10 @@ def selftest():
     items += [mk('[출발확정] 방콕/아유타야 5일 아유타야고대유적지 방콕 5성호텔 핫플카페', '판다랭크', 2), mk('태국관광청, 방콕 웰니스 여행 3박 4일 일정 제안', '디스커버리뉴스', 2),
         mk('극동대 항공운항서비스학과, 방콕 타이항공 훈련센터서 객실안전훈련 수료', '국제뉴스', 2), mk('HK그룹, 태국 나콘사완 지라프라왓CC 장기 체류형 골프 회원권 출시', '더쎈뉴스', 2),
         mk('애프터눈 티 원조 호텔이 방콕에 새로 연 곳', '매일경제', 2), mk('태국관광청, 방콕 3박4일 웰니스 여행 프로모션', '국제뉴스', 2), mk('태국 골프 유망주, 경기 중 낙뢰로 참변', '데일리안', 2)]
+    old = [mk('외교부 태국 여행경보 유지 안내', '뉴시스', 100), mk('방콕 호텔 소식 한국인 여행', '연합뉴스', 100)]
+    ids = [x['title'] for x in select(old, now)]
+    assert any('여행경보' in t for t in ids) and not any('호텔' in t for t in ids), ids        # 여행경보는 7일까지, 일반 소식은 3일까지
+    assert diagnose(items, now).get('범죄', 0) >= 1
     out = build(items, now); titles = [i['title'] for i in out['items']]
     assert len(titles) == 5, titles
     assert not any('축구' in t or '부동산' in t or '오래된' in t for t in titles), titles          # 잡음·오래된 기사 제외
@@ -205,6 +222,7 @@ def main():
             except Exception as e: print('  해석 실패', q, e, file=sys.stderr)
     data = build(items, now)
     print(f"받은 기사 {len(items)}개 → 고른 기사 {len(data['items'])}개")
+    print('  걸러진 이유:', dict(diagnose(items, now)))
     for i in data['items']: print(' ', i['cat'], '|', i['title'], '|', i['src'])
     if not data['items']: print('고른 기사가 없어서 파일을 만들지 않아요', file=sys.stderr); return 2
     open(a.out or 'news.json', 'w', encoding='utf-8').write(json.dumps(data, ensure_ascii=False, indent=1))
