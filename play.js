@@ -175,6 +175,7 @@
     const btn = e.target.closest('[data-act]'); if(!btn || btn.tagName === 'INPUT') return;
     const card = btn.closest('.sc-card'); if(!card) return; const n = card.dataset.n, r = rec(sel, n), act = btn.dataset.act;
     if(act === 'bp'){
+      document.dispatchEvent(new Event('hx:birdie'));
       r.b++; openHoles = n; haptic(r.b >= 2 ? 'combo' : 'ok'); logBird(n, sel, r.b, short(GOLF.find(x => x.d === sel).c));
       if(typeof window.__celebrate === 'function') window.__celebrate({ kicker: '🐦 버디!', msg: `${n} · ${BIRD_MSG(r.b)}`, ms: 3000, at: card, dy: 0, n: 12 + r.b * 6, spread: 80 + r.b * 10, petals: r.b >= 2 });
       else toast('🐦 버디!', `${n} · 이번 라운드 ${r.b}개째`);
