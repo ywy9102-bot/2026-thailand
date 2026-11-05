@@ -481,8 +481,8 @@ main:focus{outline:none}
 .jr-seg{display:flex;flex-direction:column;gap:1px;padding:8px 10px;border-radius:12px;color:var(--ink);min-width:0}
 .jr-seg b{font-size:.9375rem;line-height:1.3}
 .jr-seg span{font-family:'IBM Plex Mono',monospace;font-size:.8125rem;font-weight:700;color:var(--ink2)}
-.jr-seg.pat{background:var(--ok-s)}
-.jr-seg.bkk{background:var(--gold-s)}
+.jr-seg.pat{background:var(--ok-s);flex:10}
+.jr-seg.bkk{background:var(--gold-s);flex:7}
 .jr-plane{position:absolute;top:-2px;left:0;font-size:1.5rem;line-height:1;transition:left .9s,transform .9s cubic-bezier(.16,1,.3,1)}
 .jr-txt{margin:6px 0 0;font-size:.9375rem;font-weight:700;color:var(--jade-d);word-break:keep-all}
 @media (prefers-reduced-motion:no-preference){ .jr-plane{animation:jrbob 2.4s ease-in-out infinite} @keyframes jrbob{0%,100%{margin-top:0}50%{margin-top:-4px}} .hi-pop{animation:hipop 1.1s cubic-bezier(.16,1,.3,1) forwards} @keyframes hipop{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translateY(-120px) scale(1.2)}} }
@@ -1389,7 +1389,7 @@ header.hero[data-wx="rain"] .hero-lanterns,header.hero[data-wx="storm"] .hero-la
     background:linear-gradient(157deg,var(--jade),var(--jade-d));color:var(--hero-fg);font-size:15px;
     display:flex;align-items:center;justify-content:center;cursor:pointer;
     box-shadow:0 6px 12px -4px var(--k-rgba-14-40-34-55);
-    opacity:0;transform:translateY(14px) scale(.88);transition:opacity .25s ease,transform .25s ease;
+    opacity:0;transform:translateY(14px);transition:opacity .25s ease,transform .25s ease;
     pointer-events:none}
   .to-top.show{opacity:1;transform:none;pointer-events:auto}
   .to-top:active{transform:scale(.9)}
@@ -2181,3 +2181,7 @@ header.hero[data-wind] .fx-cloud.d{animation-duration:calc(23s*var(--wf))}
 .hx-count{position:absolute;left:0;right:0;top:34%;text-align:center;font-family:'Source Serif 4',serif;font-weight:700;font-size:96px;line-height:1;color:var(--gold-s);opacity:.9;text-shadow:0 4px 18px var(--k-rgba-0-0-0-35);animation:hxCount 1s ease-out}
 @keyframes hxCount{0%{transform:scale(1.6);opacity:0}30%{opacity:.95}100%{transform:scale(.9);opacity:.5}}
 @media (prefers-reduced-motion:reduce){ .hx-count{animation:none} .hx-plane{transition:none} }
+
+.lg-ok,.lg-wait,.lg-coral,.lg-jade{font-weight:700}
+.lg-ok{color:var(--ok)}.lg-wait{color:var(--wait)}.lg-coral{color:var(--coral)}.lg-jade{color:var(--jade)}.lg-gold{color:var(--gold-text)}
+.owe-mine{margin-top:6px;font-size:12.5px}
