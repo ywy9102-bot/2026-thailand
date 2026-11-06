@@ -1,4 +1,4 @@
-/* 지연 로딩 조각(히어로 연출 모음): 골든아워 · 해·달 이야기 · 버디 새 · 밥시간 김 · 새벽 밴 · 도마뱀 · 신정 해돋이 · 별똥별 소원 · 새 떼 · 풍등 · 뚝뚝·파라세일 · 코끼리 · 자정 불꽃 · 배 · 방콕 야경 창문 · 오늘 일정 장면 · 새벽 안개 · 바람 구름 · 손가락 반짝임 · 스크롤 시차 · 하늘 위 비행기 */
+/* 지연 로딩 조각(히어로 연출 모음): 다가오는 비행기 · 가방 차오름 · 제목 태국어 · 활주로 · 도착 꽃비 · 취침 · 체크아웃 · 장면 탭 · 한국 집 · 골든아워 · 해·달 이야기 · 버디 새 · 밥시간 김 · 새벽 밴 · 도마뱀 · 신정 해돋이 · 별똥별 소원 · 새 떼 · 풍등 · 뚝뚝·파라세일 · 코끼리 · 자정 불꽃 · 배 · 방콕 야경 창문 · 오늘 일정 장면 · 새벽 안개 · 바람 구름 · 손가락 반짝임 · 스크롤 시차 · 하늘 위 비행기 */
 (function(){
   if(innerWidth > 760) return;
   const hero = document.querySelector('header.hero'), heat = hero && hero.querySelector('.hero-heat'); if(!hero || !heat) return;
@@ -185,6 +185,8 @@
   hero.addEventListener('click', e => {
     if(e.target.closest(IGN)) return; const r = hero.getBoundingClientRect(), py = e.clientY - r.top;
     if(!wished && Date.now() - starAt < 5000){ wish(); return; }
+    if(e.target.closest('.title')){ titleTalk(); return; }
+    if(sceneTap(e)) return;
     const ob = document.getElementById('skyOrb'); if(ob && parseFloat(getComputedStyle(ob).opacity) > .1){ const q = ob.getBoundingClientRect(); if(Math.hypot(e.clientX - (q.left + q.width / 2), e.clientY - (q.top + q.height / 2)) < 30){ hap('tap'); orbTalk(); return; } }
     if(py > 150) return;
     if(isNight()){ for(let i = 0; i < 10; i++) S.push({ x: e.clientX - r.left + rnd(-16, 16), y: py + rnd(-16, 16), vx: rnd(-.7, .7), vy: rnd(-.7, .3), a: 1, r: 1.2 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); hap('tap'); }
@@ -246,7 +248,7 @@
     const { min } = sunNow(), slot = min >= 660 && min < 810 ? 'L' : min >= 1050 && min < 1200 ? 'D' : '';
     const want = slot && tripNow() && !(fun.meal === dayKey() + slot);
     if(want && !meal && !rm){
-      const el = document.createElement('button'); el.type = 'button'; el.className = 'hx-hit hx-meal'; el.setAttribute('tabindex', '-1'); el.innerHTML = '<i></i><i></i><i></i>🍜'; host.appendChild(el); meal = el;
+      const el = document.createElement('button'); el.type = 'button'; el.className = 'hx-hit hx-meal'; el.setAttribute('tabindex', '-1'); el.innerHTML = '<svg viewBox="0 0 24 14" focusable="false"><path d="M5 14q-3-4 0-7t0-7M12 14q-3-4 0-7t0-7M19 14q-3-4 0-7t0-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>🍜'; host.appendChild(el); meal = el;
       el.addEventListener('click', ev => { ev.stopPropagation(); hap('ok'); fun.meal = dayKey() + slot; save(); el.remove(); meal = null; if(typeof window.__openFoodMap === 'function') window.__openFoodMap(); });
     } else if(!want && meal){ meal.remove(); meal = null; }
   }
@@ -287,14 +289,104 @@
     const now = Date.now(); if(!rm && live() && !isNight() && !gecko && now > nextGecko){ nextGecko = now + rnd(70000, 140000); startGecko(); }
   }
 
+
+  // ── 놀이 더하기 3: 다가오는 비행기 · 가방 차오름 · 제목 태국어 · 출발 전날 활주로 · 도착 꽃비 · 취침 · 체크아웃 · 일정 장면 탭 · 한국 집 ──
+  const kst = () => new Date(Date.now() + 9 * 36e5);
+  const clickTab = id => { const b = document.getElementById(id); if(b) b.click(); };
+  const mkHit = (cls, html, label) => { const el = document.createElement('button'); el.type = 'button'; el.className = 'hx-hit ' + cls; el.setAttribute('tabindex', '-1'); el.innerHTML = html; host.appendChild(el); return el; };
+
+  // 1) 다가오는 비행기: 출발 전에는 D-day가 가까워질수록 비행기가 하늘 가운데로 다가와요
+  let comeEl = null;
+  function comePlane(){
+    const dep = tripDate('depart').getTime(), start = new Date(TRIP.planStart + 'T00:00:00+07:00').getTime(), n = Date.now();
+    if(n >= dep){ if(comeEl){ comeEl.remove(); comeEl = null; } return; }
+    if(!comeEl){ comeEl = document.createElement('span'); comeEl.className = 'hx-come'; comeEl.textContent = '✈️'; host.appendChild(comeEl); }
+    const p = Math.max(0, Math.min(1, (n - start) / (dep - start)));
+    comeEl.style.left = (6 + p * 62).toFixed(1) + '%'; comeEl.style.top = (8 - p * 6).toFixed(0) + 'px';
+  }
+
+  // 2) 짐 가방: 출발 준비 할 일을 체크한 만큼 가방이 차올라요
+  let bagEl = null, bagMode = '';
+  function prepFrac(){ const g = TODO.find(x => x.g === '🧳 출발 준비'); if(!g || !g.items.length) return null; const d = g.items.filter(i => store.done && store.done[i]).length; return { d, n: g.items.length }; }
+  const CHECKOUT = { '12/26': ['오늘 방콕 이동 — 통부라 10:30 출발 → 티니디', 'tb-stay'], '12/30': ['가족2 이동 — 10:30 티니디 출발 → GCP (체크인 14:00부터)', 'tb-stay'], '1/2': ['귀국일 — 08:30 호텔 출발, 체크아웃 후 공항으로', 'tb-stay'] };
+  function bagTick(){
+    const trip = tripNow(), t = thai(), md = (t.getUTCMonth() + 1) + '/' + t.getUTCDate(), h = t.getUTCHours();
+    const co = trip && CHECKOUT[md] && h >= 5 && h < 13 ? CHECKOUT[md] : null;
+    const pre = !trip && Date.now() < tripDate('depart').getTime(), pf = pre ? prepFrac() : null;
+    const mode = co ? 'co' : pf ? 'prep' : '';
+    if(mode !== bagMode && bagEl){ bagEl.remove(); bagEl = null; }
+    bagMode = mode; if(!mode) return;
+    if(!bagEl){
+      bagEl = mkHit('hx-bag', '<span class="hx-bag-e">🧳</span><b><i></i></b>');
+      bagEl.addEventListener('click', ev => { ev.stopPropagation(); hap('ok');
+        if(bagMode === 'co'){ toast('🧳', co ? co[0] : '', 4200); clickTab('tb-stay'); }
+        else { const f = prepFrac(); toast('🧳', f.d >= f.n ? '짐 다 쌌어요! 이제 설레는 일만 남았어요' : `출발 준비 ${f.d}/${f.n} — 남은 ${f.n - f.d}개를 체크하러 가요`, 3600); clickTab('tb-todo'); } });
+    }
+    const fill = bagEl.querySelector('i'); fill.style.transform = 'scaleX(' + (mode === 'prep' ? (pf.d / pf.n).toFixed(3) : (1).toFixed(3)) + ')';
+    bagEl.setAttribute('data-full', mode === 'prep' && pf.d >= pf.n ? '1' : '');
+    if(mode === 'prep' && pf.d >= pf.n && once('bagfull')){ hap('combo'); toast('🧳', '짐 다 쌌어요! 이제 설레는 일만 남았어요', 3600); }
+  }
+
+  // 3) 제목을 누르면 태국어 한마디(앱의 "자주 쓰는 말" 목록에서)
+  let phI = Math.floor(Math.random() * 14);
+  function titleTalk(){ phI = (phI + 1 + Math.floor(Math.random() * 3)) % PHRASES.length; const [th, ko] = PHRASES[phI]; hap('tap'); toast('🇹🇭', `${th} — ${ko}`, 3600); }
+
+  // 4) 출발 전날 밤~당일 아침: 활주로 불빛과 알림(한국 시간 기준)
+  let runEl = null;
+  function eveTick(){
+    const k = kst(), d = k.getUTCFullYear() + '-' + String(k.getUTCMonth() + 1).padStart(2, '0') + '-' + String(k.getUTCDate()).padStart(2, '0'), h = k.getUTCHours();
+    const eve = d === '2026-12-15' && h >= 18, dday = d === '2026-12-16' && h < 11;
+    if((eve || dday) && !rm){ if(!runEl){ runEl = document.createElement('div'); runEl.className = 'hx-runway';  host.appendChild(runEl); } } else if(runEl){ runEl.remove(); runEl = null; }
+    if(eve && once('eve15')){ hap('strong'); toast('🛫', '내일 출발이에요! 여권·충전기·환전 마지막 확인', 4600); }
+    if(dday && once('dday16')){ hap('combo'); toast('🛫', '오늘 출발! 안전하게, 즐겁게 다녀와요', 4600); }
+  }
+
+  // 5) 도착 순간: 비행기가 닿는 시각에 꽃비와 인사(각 편마다 한 번)
+  function arriveTick(){
+    const n = Date.now(); const f = FLIGHTS.find(x => n >= x.arr && n <= x.arr + 10 * 6e4); if(!f) return;
+    if(!once('arr' + f.id + f.who + f.arr)) return; hap('combo');
+    toast(f.dir === 'in' ? '🛬' : '🏠', f.dir === 'in' ? `${f.who} 태국 도착! 사와디캅~ 🌺` : `${f.who} 한국 도착! 즐거운 여행이었어요`, 5200);
+    if(rm || !live()) return;
+    for(let i = 0; i < 9; i++){ const fl = document.createElement('span'); fl.className = 'hx-flower'; fl.textContent = ['🌺', '🌼', '🌸'][i % 3]; fl.style.left = Math.round(rnd(4, 92)) + '%'; fl.style.animationDelay = (i * .25).toFixed(2) + 's'; host.appendChild(fl); done(fl, 5200); }
+  }
+
+  // 6) 골프 전날 밤: 일찍 자라는 졸음 연출과 알림
+  let zzz = null;
+  function sleepTick(){
+    const t = thai(), h = t.getUTCHours() + t.getUTCMinutes() / 60; let g = null;
+    if(tripNow() && h >= 21.5){ const nx = new Date(t.getTime() + 864e5), md = (nx.getUTCMonth() + 1) + '/' + nx.getUTCDate(); g = GOLF.find(x => x.d === md && x.van && x.van.time); }
+    if(g && !rm){ if(!zzz){ zzz = document.createElement('span'); zzz.className = 'hx-zzz'; zzz.textContent = '💤'; host.appendChild(zzz); } } else if(zzz){ zzz.remove(); zzz = null; }
+    if(g && once('sleep' + dayKey())){ hap('ok'); toast('😴', `내일 ${g.van.time} 골프 밴 (${g.c.split(' ')[0]}) — 일찍 주무세요`, 4600); }
+  }
+
+  // 8) 일정 장면 누르기: 골프 깃대 · 꼬란섬 거북이 · 사원 종
+  function sceneTap(e){
+    const sc = hero.dataset.scene; if(!sc) return false; const el = host.querySelector('.sc-' + sc); if(!el || parseFloat(getComputedStyle(el).opacity) < .1) return false;
+    const r = el.getBoundingClientRect(); if(e.clientX < r.left - 8 || e.clientX > r.right + 8 || e.clientY < r.top - 8 || e.clientY > r.bottom + 8) return false;
+    if(sc === 'golf'){ hap('ok'); toast('⛳', '나이스 샷! 오늘도 페어웨이 직진~', 2600); }
+    else if(sc === 'island'){ hap('tap'); toast('🐢', '꼬란섬 바다 위로 거북이가 스윽~ 오늘 물놀이 즐겁게!', 3000); if(!rm){ const tu = document.createElement('span'); tu.className = 'hx-turtle'; tu.textContent = '🐢'; host.appendChild(tu); done(tu, 7200); } }
+    else { hap('combo'); [350, 800].forEach(t => setTimeout(() => hap('strong'), t)); toast('🔔', '댕—… 사원에선 어깨·무릎을 가리고 조용히 걸어요', 3600); }
+    return true;
+  }
+
+  // 12) 한국은 지금: 한국이 밤이면 작은 집 불빛, 누르면 한국 시각
+  let homeEl = null;
+  function homeTick(){
+    const k = kst(), h = k.getUTCHours(), night = h >= 22 || h < 6;
+    if(night && !homeEl){ homeEl = mkHit('hx-home', '🏠'); homeEl.addEventListener('click', ev => { ev.stopPropagation(); hap('tap'); const q = kst(); toast('🏠', `한국은 지금 ${String(q.getUTCHours()).padStart(2, '0')}:${String(q.getUTCMinutes()).padStart(2, '0')} — 집은 고요한 밤이에요`, 3200); }); }
+    else if(!night && homeEl){ homeEl.remove(); homeEl = null; }
+  }
+
+  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); }
+
   function funTick(){
     if(rm || !live()) return; const now = Date.now();
     if(isNight() && now > nextStar){ nextStar = now + rnd(28000, 65000); star(); }
     if(!isNight() && !ride && now > nextRide){ nextRide = now + rnd(55000, 100000); startRide(); }
   }
 
-  window.__heroFun = { star, startRide, birds, orbTalk, goldBird, startGecko, reset(){ fun.once = {}; delete fun.meal; } };
-  const tick = () => { layers(); plane(); ny(); funTick(); fun2Tick(); };
+  window.__heroFun = { star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
+  const tick = () => { layers(); plane(); ny(); funTick(); fun2Tick(); fun3Tick(); };
   window.__heroTick = tick; window.__heroDebug = () => ({ sparks: S.length });
   tick(); setInterval(tick, 1000); document.addEventListener('wx:updated', layers);
 })();

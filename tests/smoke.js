@@ -379,6 +379,40 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('신정 해돋이: 1/1 일출 직후에 금빛 하늘(data-nysun)과 인사', await o.page.evaluate(() => document.querySelector('header.hero').dataset.nysun === '1') && /첫 해돋이/.test(await tl(o.page)));
       await o.ctx.close();
     }
+    // 4-1d8) 히어로 놀이 3: 다가오는 비행기 · 가방 · 제목 태국어 · 활주로 · 도착 꽃비 · 취침 · 체크아웃 · 장면 탭 · 한국 집
+    {
+      const mk = async clock => { const o = await open(browser, base, 390, 844, { clock }); await o.page.waitForFunction(() => !!window.__heroFun, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} window.__heroFun.reset(); window.__tl = []; window.__toast = (k, m) => window.__tl.push(k + ' ' + m); window.__heroTick(); }); return o; };
+      const tl = page => page.evaluate(() => (window.__tl || []).join(' | '));
+      const size44 = (page, sel) => page.evaluate(sel => { const e = document.querySelector(sel); if(!e) return false; const r = e.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; }, sel);
+      let o = await mk('2026-11-20T10:00:00+09:00');
+      ok('다가오는 비행기: 출발 전 하늘에 비행기가 있고 위치(left)가 6~68%', await o.page.evaluate(() => { const e = document.querySelector('.hx-come'); const l = parseFloat(e && e.style.left); return !!e && l >= 6 && l <= 68; }));
+      ok('가방: 출발 전 가방(44px)과 준비율 막대가 보임', await size44(o.page, '.hx-bag') && await o.page.evaluate(() => /^scaleX\(/.test(document.querySelector('.hx-bag i').style.transform)));
+      await o.page.evaluate(() => { const g = TODO.find(x => x.g === '🧳 출발 준비'); g.items.forEach(i => { store.done[i] = true; }); window.__heroTick(); });
+      ok('가방: 준비를 다 체크하면 가득 차고 "짐 다 쌌어요" 알림', await o.page.evaluate(() => document.querySelector('.hx-bag').dataset.full === '1' && /^scaleX\(1(\.0+)?\)$/.test(document.querySelector('.hx-bag i').style.transform)) && /짐 다 쌌어요/.test(await tl(o.page)));
+      await o.page.evaluate(() => document.querySelector('header.hero .title').dispatchEvent(new MouseEvent('click', { bubbles: true })));
+      ok('제목 태국어: 제목을 누르면 태국어 한마디가 알림으로 나옴', /🇹🇭 .+ — .+/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-15T21:00:00+09:00');
+      ok('출발 전날 밤: 활주로 불빛과 알림', await o.page.evaluate(() => !!document.querySelector('.hx-runway')) && /내일 출발/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-16T11:20:00+07:00');
+      ok('도착 순간: OZ743 도착 직후 꽃비와 알림', await o.page.evaluate(() => document.querySelectorAll('.hx-flower').length > 0) && /윤우열 태국 도착/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-16T22:00:00+07:00');
+      ok('취침: 골프 전날 밤에 💤와 "내일 06:30 골프 밴" 알림', await o.page.evaluate(() => !!document.querySelector('.hx-zzz')) && /내일 06:30 골프 밴/.test(await tl(o.page)));
+      ok('한국 집: 한국이 밤(12/17 00:00)이면 🏠이 뜨고 누르면 한국 시각', await size44(o.page, '.hx-home') && await o.page.evaluate(() => { document.querySelector('.hx-home').click(); return true; }) && /한국은 지금 00:00/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-30T09:00:00+07:00');
+      ok('체크아웃 날: 12/30 아침에 가방 버튼이 뜨고 이동 안내', await size44(o.page, '.hx-bag') && await o.page.evaluate(() => { document.querySelector('.hx-bag').click(); return true; }) && /10:30 티니디 출발/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-17T14:00:00+07:00');
+      ok('한국 집: 한국이 낮(16:00)이면 🏠 없음', await o.page.evaluate(() => !document.querySelector('.hx-home')));
+      await o.page.waitForTimeout(1500);
+      const tapScene = await o.page.evaluate(() => { const el = document.querySelector('.hx-scene.sc-golf'); if(!el || parseFloat(getComputedStyle(el).opacity) < .1) return false; const r = el.getBoundingClientRect(), h = document.querySelector('header.hero'); h.dispatchEvent(new MouseEvent('click', { clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, bubbles: true })); return true; });
+      ok('일정 장면 탭: 골프날(12/17) 깃대 장면을 누르면 "나이스 샷"', tapScene && /나이스 샷/.test(await tl(o.page)));
+      ok('히어로 놀이 3: 콘솔 오류 없음', o.errs.length === 0, o.errs);
+      await o.ctx.close();
+    }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
     {
       const now = new Date().toISOString();
