@@ -36,6 +36,8 @@ OFFTOPIC = re.compile(r'학과|대학교|수료|졸업|훈련센터|파크골프
 RELEVANT = re.compile(r'여행|관광|항공|공항|입국|출국|비자|여권|한국인|교민|호텔|리조트|날씨|안전|교통|환전|택시|지하철|철도|렌터카')   # 일반 소식은 여행과 닿는 말이 있을 때만
 PROMO = re.compile(r'고발|기소|제재|웹·앱\s*차단|회원권|프로모션|특가|분양|출시|할인|패키지|이벤트|출발\s*확정|핫플|\d성\s*호텔|\d+박\s*\d+일\s*(일정|여행)\s*(제안|추천)|관광청.{0,20}(제안|추천|소개|선정)')   # 상품·회원권·관광 홍보 기사는 골프 소식이어도 빼요
 STORM = re.compile(r'낙뢰|벼락|번개|폭염|열사병')   # 골프장 안전에 닿는 말은 지역이 달라도 참고가 되므로 남겨요
+INDICATOR = re.compile(r'소비자물가|물가지수|물가상승률|성장률|\bGDP\b|실업률|경상수지|무역수지|제조업|PMI|지수')   # 경제 지표 기사
+DIRECT = re.compile(r'환율|바트|항공권|입국료|관광세|환전|유가|항공료|숙박|여행')   # 한국인 여행 비용에 직접 닿는 말
 EVENT = re.compile(r'새로 연|새로 오픈|신규 오픈|그랜드 오픈|개관|발대식|성료|협약|출범|탐방단|개최|오픈식|론칭')   # 기업·단체 행사 홍보
 SLANG = re.compile(r'방콕\s*(하면|하다|하고|족|생활)|집콕|이정후|MLB|락아웃')   # "방콕"이 도시가 아니라 "집에 틀어박힘" 속어로 쓰인 기사
 GOV = re.compile(r'해병대|사령관|국방|군사|정상회담|외교장관|대사 ')
@@ -126,6 +128,7 @@ def select(items, now, n=5):
         if cid == 'breaking' and not TARGET.search(it['title']): continue   # 속보도 방콕·파타야 기사만 ("폭발한" 같은 비유 표현 방지)
         if cid == 'golf' and not TARGET.search(it['title']) and not STORM.search(it['title']): continue   # 방콕·파타야 밖 골프장 소식(나콘사완 등)은 빼요
         if cid in ('news', 'econ') and s < 6: continue
+        if cid in ('fx', 'econ') and INDICATOR.search(it['title']) and not DIRECT.search(it['title']): continue   # 경제 지표 기사는 여행 비용에 직접 닿는 말이 있을 때만
         if cid == 'fx' and s < 5: continue
         if cid == 'news' and (not TARGET.search(it['title']) or not RELEVANT.search(it['title']) or EVENT.search(it['title'])): continue   # 일반 소식은 방콕·파타야 기사 중 점수가 충분한 것만(억지로 5개를 채우지 않아요)
         pool.append({**it, 'cat': cid, 'score': s})
@@ -186,7 +189,8 @@ def selftest():
         mk('하루 방콕하면 1억 증발 2027시즌 MLB 락아웃 이정후', '매니아리포트', 1), mk('아이랩미디어, 방콕 아이뮤지엄 개관 해외 전시 사업', '미디어데일', 2), mk('아이랩미디어, 방콕에 실감형 아이뮤지엄 열었다', '뉴스피어', 3), mk('추계예대 방콕 탐방단 발대식 개최', '한국대학신문', 2), mk('고은자락, 방콕서 한복 K-뷰티 문화교류 성료', '시민행정신문', 2),
         mk('오래된 방콕 소식', '연합뉴스', 100), mk('서울 부동산 소식', '연합뉴스', 1), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'),
     ]
-    items += [mk('태국 SEC, 비트겟 운영사 고발…12월 5일 웹·앱 차단 예정', '토큰포스트', 2),
+    items += [mk('태국 소비자물가지수, 10월 약 4년 만에 최고치 기록', 'Investing.com', 2), mk('태국 바트 환율 하락, 항공권 값 영향은', '한국경제', 2),
+        mk('태국 SEC, 비트겟 운영사 고발…12월 5일 웹·앱 차단 예정', '토큰포스트', 2),
         mk('[출발확정] 방콕/아유타야 5일 아유타야고대유적지 방콕 5성호텔 핫플카페', '판다랭크', 2), mk('태국관광청, 방콕 웰니스 여행 3박 4일 일정 제안', '디스커버리뉴스', 2),
         mk('극동대 항공운항서비스학과, 방콕 타이항공 훈련센터서 객실안전훈련 수료', '국제뉴스', 2), mk('HK그룹, 태국 나콘사완 지라프라왓CC 장기 체류형 골프 회원권 출시', '더쎈뉴스', 2),
         mk('애프터눈 티 원조 호텔이 방콕에 새로 연 곳', '매일경제', 2), mk('태국관광청, 방콕 3박4일 웰니스 여행 프로모션', '국제뉴스', 2), mk('태국 골프 유망주, 경기 중 낙뢰로 참변', '데일리안', 2)]
@@ -204,7 +208,7 @@ def selftest():
     assert not any('기적' in t or '푸껫' in t or '해병대' in t or '방콕 문서' in t or '방콕 선언' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
     assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t or 'MLB' in t or '아이뮤지엄' in t or '발대식' in t or '성료' in t for t in titles), titles                    # 범죄·가상화폐 제외
-    assert not any('학과' in t or '회원권' in t or '새로 연' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
+    assert not any('학과' in t or '회원권' in t or '새로 연' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
