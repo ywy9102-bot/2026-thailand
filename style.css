@@ -2231,7 +2231,7 @@ header.hero.hero-off .hx-gecko,header.hero.hero-off .hx-meal svg{animation-play-
 .hx-bag-e{display:block;font-size:24px;line-height:36px;text-align:center}
 .hx-bag b{position:absolute;left:8px;right:8px;bottom:3px;height:4px;border-radius:2px;background:var(--k-rgba-255-255-255-16);overflow:hidden}
 .hx-bag i{display:block;height:100%;width:100%;border-radius:2px;background:var(--hero-fg);transform:scaleX(0);transform-origin:left;transition:transform .8s ease}
-.hx-bag[data-full] .hx-bag-e{animation:hxBagPop 1.6s ease-in-out infinite alternate}
+.hx-bag[data-full="1"] .hx-bag-e{animation:hxBagPop 1.6s ease-in-out infinite alternate}
 .hx-home{position:absolute;top:48px;left:205px;width:44px;height:44px;padding:0;border:0;background:none;font-size:20px;line-height:44px;text-align:center;pointer-events:auto;cursor:pointer;opacity:.85;filter:drop-shadow(0 0 6px var(--k-rgba-250-222-138-5));-webkit-tap-highlight-color:transparent}
 .hx-runway{position:absolute;left:8%;right:8%;top:212px;height:5px;color:var(--hero-fg);background:radial-gradient(circle,currentColor 0 2px,transparent 2.6px) 0 0/11.11% 5px repeat-x;opacity:.45}
 .hx-runway::before,.hx-runway::after{content:"";position:absolute;inset:0;background:inherit}
@@ -2245,5 +2245,5 @@ header.hero.hero-off .hx-gecko,header.hero.hero-off .hx-meal svg{animation-play-
 @keyframes hxFall{0%{opacity:0;transform:translate(0,0) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(24px,300px) rotate(220deg)}}
 @keyframes hxZzz{from{transform:translateY(0) scale(.9)}to{transform:translateY(-8px) scale(1.1)}}
 @keyframes hxSwim{from{transform:translateX(0)}to{transform:translateX(460px)}}
-@media (prefers-reduced-motion:reduce){.hx-flower,.hx-zzz,.hx-turtle{display:none} .hx-come{transition:none} .hx-runway::after{animation:none} .hx-bag[data-full] .hx-bag-e{animation:none}}
+@media (prefers-reduced-motion:reduce){.hx-flower,.hx-zzz,.hx-turtle{display:none} .hx-come{transition:none} .hx-runway::after{animation:none} .hx-bag[data-full="1"] .hx-bag-e{animation:none}}
 header.hero.hero-off .hx-runway::after,header.hero.hero-off .hx-zzz{animation-play-state:paused}
