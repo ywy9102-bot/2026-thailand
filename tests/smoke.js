@@ -414,6 +414,32 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('히어로 놀이 3: 콘솔 오류 없음', o.errs.length === 0, o.errs);
       await o.ctx.close();
     }
+    // 4-1d9) 히어로 놀이 4: 겹치지 않는 자리 · 놀이 도감 · 무지개 · 폭염 알림
+    {
+      const mk = async (clock, w = 390) => { const o = await open(browser, base, w, 844, { clock }); await o.page.waitForFunction(() => !!window.__heroFun, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} window.__heroFun.reset(); window.__tl = []; window.__toast = (k, m) => window.__tl.push(k + ' ' + m); window.__heroTick(); }); return o; };
+      const tl = page => page.evaluate(() => (window.__tl || []).join(' | '));
+      const clash = page => page.evaluate(() => { const ov = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)); const cs = [...document.querySelectorAll('header.hero .hero-in button, header.hero .hero-in a, header.hero .hero-in [role=button]')].map(e => e.getBoundingClientRect()).filter(r => r.width > 0); return [...document.querySelectorAll('.hx-bag,.hx-meal,.hx-home')].filter(e => getComputedStyle(e).display !== 'none').map(e => { const r = e.getBoundingClientRect(); return cs.reduce((m, c) => Math.max(m, ov(r, c)), 0); }); });
+      for (const w of [390, 320]) {
+        const o = await mk('2026-11-20T23:30:00+09:00', w);
+        await o.page.waitForTimeout(3300);
+        const cl = await clash(o.page);
+        ok(`놀이 버튼 자리: ${w}px에서 가방·🏠이 진짜 버튼(동기화·환율·더보기)과 겹치지 않음`, cl.length >= 1 && cl.every(v => v <= 40), cl);
+        await o.ctx.close();
+      }
+      let o = await mk('2026-12-17T12:10:00+07:00', 320);
+      const cl2 = await clash(o.page);
+      ok('놀이 버튼 자리: 320px 점심 🍜도 진짜 버튼과 겹치지 않음', cl2.length >= 1 && cl2.every(v => v <= 40), cl2);
+      await o.page.evaluate(() => { window.__heroFun.found('gecko'); window.__heroFun.found('gecko'); window.__heroFun.found('bag'); });
+      ok('놀이 도감: 같은 놀이는 한 번만 세고 두 개를 발견', await o.page.evaluate(() => window.__heroFun.dex() === 2));
+      await o.page.waitForTimeout(3400);
+      ok('놀이 도감: "새 발견! (N/13)" 알림', /새 발견!.*\/13\)/.test(await tl(o.page)));
+      await o.page.evaluate(() => { window.__wxNow = () => ({ code: 61, temp: 28, wind: 5 }); window.__heroFun.wxTick(); window.__wxNow = () => ({ code: 1, temp: 30, wind: 5 }); window.__heroFun.wxTick(); });
+      ok('무지개: 비가 그친 낮에 무지개와 알림', await o.page.evaluate(() => !!document.querySelector('.hx-rainbow')) && /무지개/.test(await tl(o.page)));
+      await o.page.evaluate(() => { window.__wxNow = () => ({ code: 0, temp: 36, wind: 5 }); window.__heroFun.wxTick(); });
+      ok('폭염: 34°C 이상이면 물 한 모금 알림', /36°C — 물 자주/.test(await tl(o.page)));
+      ok('히어로 놀이 4: 콘솔 오류 없음', o.errs.length === 0, o.errs);
+      await o.ctx.close();
+    }
     // 4-1e0) 소식이 없는 날: 빈 목록이 오면 낡은 소식을 지우고 카드를 숨김
     {
       const o = await open(browser, base, 390, 844, { news: { updated: new Date().toISOString(), date: '2026-11-09', items: [] } });
