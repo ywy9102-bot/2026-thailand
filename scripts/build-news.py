@@ -33,8 +33,8 @@ FEATURE = re.compile(r'\[글로벌 pick\]|기적|인생|화제|스토리|이야�
 NOT_CITY = re.compile(r'방콕\s*(문서|선언|합의|회의|포럼|프로세스|협약|성명|원칙|결의|공동선언)')   # 도시가 아니라 문서·회의 이름으로 쓰인 "방콕"
 FEATURE2 = re.compile(r'투어|팁|가성비|매력|로컬|진짜|세계테마기행|구석구석')   # 골프 밖 분야에서는 홍보성 여행 읽을거리로 봄
 OFFTOPIC = re.compile(r'학과|대학교|수료|졸업|훈련센터|파크골프|코스메틱|화장품|인-코스|인종차별|김치맨|관중|감독|우승|준우승|\d+위|마스터스|아마골프|대표팀')   # "골프"·"코스"가 들어 있어도 골프장 소식이 아님
-RELEVANT = re.compile(r'여행|관광|항공|공항|입국|출국|비자|여권|한국인|교민|호텔|리조트|날씨|안전|교통|환전|택시|지하철|철도|렌터카')   # 일반 소식은 여행과 닿는 말이 있을 때만
-PROMO = re.compile(r'고발|기소|제재|웹·앱\s*차단|회원권|프로모션|특가|분양|출시|할인|패키지|이벤트|출발\s*확정|핫플|\d성\s*호텔|\d+박\s*\d+일\s*(일정|여행)\s*(제안|추천)|관광청.{0,20}(제안|추천|소개|선정)')   # 상품·회원권·관광 홍보 기사는 골프 소식이어도 빼요
+RELEVANT = re.compile(r'여행|관광|항공|공항|입국|출국|비자|여권|한국인|교민|날씨|안전|교통|환전|택시|지하철|철도|렌터카')   # 일반 소식은 여행과 닿는 말이 있을 때만
+PROMO = re.compile(r'프리미엄|럭셔리|웰니스|여정\s*제시|호텔\s*그룹|리조트\s*그룹|고발|기소|제재|웹·앱\s*차단|회원권|프로모션|특가|분양|출시|할인|패키지|이벤트|출발\s*확정|핫플|\d성\s*호텔|\d+박\s*\d+일\s*(일정|여행)\s*(제안|추천)|관광청.{0,20}(제안|추천|소개|선정)')   # 상품·회원권·관광 홍보 기사는 골프 소식이어도 빼요
 STORM = re.compile(r'낙뢰|벼락|번개|폭염|열사병')   # 골프장 안전에 닿는 말은 지역이 달라도 참고가 되므로 남겨요
 INDICATOR = re.compile(r'소비자물가|물가지수|물가상승률|성장률|\bGDP\b|실업률|경상수지|무역수지|제조업|PMI|지수')   # 경제 지표 기사
 DIRECT = re.compile(r'환율|바트|항공권|입국료|관광세|환전|유가|항공료|숙박|여행')   # 한국인 여행 비용에 직접 닿는 말
@@ -190,7 +190,8 @@ def selftest():
         mk('하루 방콕하면 1억 증발 2027시즌 MLB 락아웃 이정후', '매니아리포트', 1), mk('아이랩미디어, 방콕 아이뮤지엄 개관 해외 전시 사업', '미디어데일', 2), mk('아이랩미디어, 방콕에 실감형 아이뮤지엄 열었다', '뉴스피어', 3), mk('추계예대 방콕 탐방단 발대식 개최', '한국대학신문', 2), mk('고은자락, 방콕서 한복 K-뷰티 문화교류 성료', '시민행정신문', 2),
         mk('오래된 방콕 소식', '연합뉴스', 100), mk('서울 부동산 소식', '연합뉴스', 1), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'), mk('방콕 날씨 폭염 경보', '연합뉴스', 3, 'https://x/dup'),
     ]
-    items += [mk('폭우 맞으며 노래한 빅뱅, 결국 방콕 공연 중단…"아쉽고 속상"', '머니투데이', 1), mk('빅뱅, 폭우·뇌우에 방콕 공연 중단…주최 측 전액 환불 결정', 'frame-less.co.kr', 1), mk('경남창조경제혁신센터, 태국 국가혁신청·디지털경제진흥청과 MOU 체결', '전자신문', 1),
+    items += [mk('카펠라 호텔 그룹, 교토부터 방콕까지 아시아 5개 도시 프리미엄 웰니스 여정 제시', '퍼블릭뉴스통신', 2),
+        mk('폭우 맞으며 노래한 빅뱅, 결국 방콕 공연 중단…"아쉽고 속상"', '머니투데이', 1), mk('빅뱅, 폭우·뇌우에 방콕 공연 중단…주최 측 전액 환불 결정', 'frame-less.co.kr', 1), mk('경남창조경제혁신센터, 태국 국가혁신청·디지털경제진흥청과 MOU 체결', '전자신문', 1),
         mk('태국 소비자물가지수, 10월 약 4년 만에 최고치 기록', 'Investing.com', 2), mk('태국 바트 환율 하락, 항공권 값 영향은', '한국경제', 2),
         mk('태국 SEC, 비트겟 운영사 고발…12월 5일 웹·앱 차단 예정', '토큰포스트', 2),
         mk('[출발확정] 방콕/아유타야 5일 아유타야고대유적지 방콕 5성호텔 핫플카페', '판다랭크', 2), mk('태국관광청, 방콕 웰니스 여행 3박 4일 일정 제안', '디스커버리뉴스', 2),
@@ -211,7 +212,7 @@ def selftest():
     assert not any('기적' in t or '푸껫' in t or '해병대' in t or '방콕 문서' in t or '방콕 선언' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
     assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t or 'MLB' in t or '아이뮤지엄' in t or '발대식' in t or '성료' in t for t in titles), titles                    # 범죄·가상화폐 제외
-    assert not any('학과' in t or '회원권' in t or '새로 연' in t or '빅뱅' in t or 'MOU' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
+    assert not any('학과' in t or '회원권' in t or '새로 연' in t or '카펠라' in t or '웰니스 여정' in t or '빅뱅' in t or 'MOU' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
