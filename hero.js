@@ -323,7 +323,7 @@
         else { const f = prepFrac(); toast('🧳', f.d >= f.n ? '짐 다 쌌어요! 이제 설레는 일만 남았어요' : `출발 준비 ${f.d}/${f.n} — 남은 ${f.n - f.d}개를 체크하러 가요`, 3600); clickTab('tb-todo'); } });
     }
     const fill = bagEl.querySelector('i'); fill.style.transform = 'scaleX(' + (mode === 'prep' ? (pf.d / pf.n).toFixed(3) : (1).toFixed(3)) + ')';
-    bagEl.setAttribute('data-full', mode === 'prep' && pf.d >= pf.n ? '1' : '');
+    if(mode === 'prep' && pf.d >= pf.n) bagEl.setAttribute('data-full', '1'); else bagEl.removeAttribute('data-full');
     if(mode === 'prep' && pf.d >= pf.n && once('bagfull')){ hap('combo'); toast('🧳', '짐 다 쌌어요! 이제 설레는 일만 남았어요', 3600); }
   }
 

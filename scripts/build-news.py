@@ -200,6 +200,7 @@ def selftest():
     ids = [x['title'] for x in select(old, now)]
     assert any('여행경보' in t for t in ids) and not any('호텔' in t for t in ids), ids        # 여행경보는 7일까지, 일반 소식은 3일까지
     assert diagnose(items, now).get('범죄', 0) >= 1
+    assert build([], now)['items'] == [], 'empty'   # 기사가 없으면 빈 목록
     out = build(items, now); titles = [i['title'] for i in out['items']]
     assert len(titles) == 5, titles
     assert not any('축구' in t or '부동산' in t or '오래된' in t for t in titles), titles          # 잡음·오래된 기사 제외
@@ -231,7 +232,7 @@ def main():
     print(f"받은 기사 {len(items)}개 → 고른 기사 {len(data['items'])}개")
     print('  걸러진 이유:', dict(diagnose(items, now)))
     for i in data['items']: print(' ', i['cat'], '|', i['title'], '|', i['src'])
-    if not data['items']: print('고른 기사가 없어서 파일을 만들지 않아요', file=sys.stderr); return 2
+    if not data['items']: print('고른 기사가 없어요 — 앱이 낡은 소식을 계속 보여주지 않도록 빈 목록으로 올려요')
     open(a.out or 'news.json', 'w', encoding='utf-8').write(json.dumps(data, ensure_ascii=False, indent=1))
     return 0
 

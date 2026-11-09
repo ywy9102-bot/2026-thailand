@@ -387,6 +387,7 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       let o = await mk('2026-11-20T10:00:00+09:00');
       ok('다가오는 비행기: 출발 전 하늘에 비행기가 있고 위치(left)가 6~68%', await o.page.evaluate(() => { const e = document.querySelector('.hx-come'); const l = parseFloat(e && e.style.left); return !!e && l >= 6 && l <= 68; }));
       ok('가방: 출발 전 가방(44px)과 준비율 막대가 보임', await size44(o.page, '.hx-bag') && await o.page.evaluate(() => /^scaleX\(/.test(document.querySelector('.hx-bag i').style.transform)));
+      ok('가방: 다 안 찼을 때는 움직이지 않음(애니메이션 없음)', await o.page.evaluate(() => { const b = document.querySelector('.hx-bag'); return !b.hasAttribute('data-full') && getComputedStyle(b.querySelector('.hx-bag-e')).animationName === 'none'; }));
       await o.page.evaluate(() => { const g = TODO.find(x => x.g === '🧳 출발 준비'); g.items.forEach(i => { store.done[i] = true; }); window.__heroTick(); });
       ok('가방: 준비를 다 체크하면 가득 차고 "짐 다 쌌어요" 알림', await o.page.evaluate(() => document.querySelector('.hx-bag').dataset.full === '1' && /^scaleX\(1(\.0+)?\)$/.test(document.querySelector('.hx-bag i').style.transform)) && /짐 다 쌌어요/.test(await tl(o.page)));
       await o.page.evaluate(() => document.querySelector('header.hero .title').dispatchEvent(new MouseEvent('click', { bubbles: true })));
@@ -411,6 +412,14 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       const tapScene = await o.page.evaluate(() => { const el = document.querySelector('.hx-scene.sc-golf'); if(!el || parseFloat(getComputedStyle(el).opacity) < .1) return false; const r = el.getBoundingClientRect(), h = document.querySelector('header.hero'); h.dispatchEvent(new MouseEvent('click', { clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, bubbles: true })); return true; });
       ok('일정 장면 탭: 골프날(12/17) 깃대 장면을 누르면 "나이스 샷"', tapScene && /나이스 샷/.test(await tl(o.page)));
       ok('히어로 놀이 3: 콘솔 오류 없음', o.errs.length === 0, o.errs);
+      await o.ctx.close();
+    }
+    // 4-1e0) 소식이 없는 날: 빈 목록이 오면 낡은 소식을 지우고 카드를 숨김
+    {
+      const o = await open(browser, base, 390, 844, { news: { updated: new Date().toISOString(), date: '2026-11-09', items: [] } });
+      await o.page.evaluate(() => { try { localStorage.setItem('thai2026_news', JSON.stringify({ updated: new Date().toISOString(), items: [{ cat: 'news', title: '낡은 소식', src: 'x', url: 'https://x/1', ts: new Date().toISOString() }] })); } catch (e) {} });
+      await o.page.reload(); await o.page.waitForTimeout(1500);
+      ok('소식 없는 날: 빈 목록이면 소식 카드가 숨겨지고 낡은 저장본이 지워짐', await o.page.evaluate(() => document.getElementById('newsCard').hidden && localStorage.getItem('thai2026_news') === null));
       await o.ctx.close();
     }
     // 4-1e) 오늘의 태국 소식: 카드·목록·하루 첫 실행 공지(하루 한 번)
