@@ -1,4 +1,6 @@
 :root{
+  --k-rgba-143-208-180-5:rgba(143,208,180,.5);
+  --k-rgba-138-192-228-5:rgba(138,192,228,.5);
   --k-rgba-255-176-72-38:rgba(255,176,72,.38);
   --k-rgba-255-196-110-5:rgba(255,196,110,.5);
   /* 일회성 색 토큰 (자동 정리) */
@@ -2247,3 +2249,7 @@ header.hero.hero-off .hx-gecko,header.hero.hero-off .hx-meal svg{animation-play-
 @keyframes hxSwim{from{transform:translateX(0)}to{transform:translateX(460px)}}
 @media (prefers-reduced-motion:reduce){.hx-flower,.hx-zzz,.hx-turtle{display:none} .hx-come{transition:none} .hx-runway::after{animation:none} .hx-bag[data-full="1"] .hx-bag-e{animation:none}}
 header.hero.hero-off .hx-runway::after,header.hero.hero-off .hx-zzz{animation-play-state:paused}
+
+.hx-rainbow{position:absolute;left:50%;top:78px;width:280px;height:140px;margin-left:-140px;pointer-events:none;opacity:.38;background:radial-gradient(circle 140px at 50% 100%,transparent 0 62%,var(--k-rgba-239-168-149-5) 62% 70%,var(--k-rgba-250-222-138-5) 70% 78%,var(--k-rgba-143-208-180-5) 78% 86%,var(--k-rgba-138-192-228-5) 86% 94%,transparent 94%);animation:hxBow 5s ease-out}
+@keyframes hxBow{from{opacity:0}to{opacity:.38}}
+@media (prefers-reduced-motion:reduce){.hx-rainbow{animation:none}}
