@@ -34,7 +34,7 @@ NOT_CITY = re.compile(r'방콕\s*(문서|선언|합의|회의|포럼|프로세�
 FEATURE2 = re.compile(r'투어|팁|가성비|매력|로컬|진짜|세계테마기행|구석구석')   # 골프 밖 분야에서는 홍보성 여행 읽을거리로 봄
 OFFTOPIC = re.compile(r'학과|대학교|수료|졸업|훈련센터|파크골프|코스메틱|화장품|인-코스|인종차별|김치맨|관중|감독|우승|준우승|\d+위|마스터스|아마골프|대표팀')   # "골프"·"코스"가 들어 있어도 골프장 소식이 아님
 RELEVANT = re.compile(r'여행|관광|항공|공항|입국|출국|비자|여권|한국인|교민|날씨|안전|교통|환전|택시|지하철|철도|렌터카')   # 일반 소식은 여행과 닿는 말이 있을 때만
-PROMO = re.compile(r'프리미엄|럭셔리|웰니스|여정\s*제시|호텔\s*그룹|리조트\s*그룹|고발|기소|제재|웹·앱\s*차단|회원권|프로모션|특가|분양|출시|할인|패키지|이벤트|출발\s*확정|핫플|\d성\s*호텔|\d+박\s*\d+일\s*(일정|여행)\s*(제안|추천)|관광청.{0,20}(제안|추천|소개|선정)')   # 상품·회원권·관광 홍보 기사는 골프 소식이어도 빼요
+PROMO = re.compile(r'프리미엄|럭셔리|웰니스|여정\s*제시|호텔\s*그룹|리조트\s*그룹|고발|기소|제재|웹·앱\s*차단|회원권|프로모션|특가|분양|출시|할인|패키지|이벤트|출발\s*확정|핫플|\d성\s*호텔|\d+박\s*\d+일\s*(일정|여행)\s*(제안|추천)|골프스쿨|골프\s*캠프|아카데미|레슨|연수|관광청.{0,20}(제안|추천|소개|선정)')   # 상품·회원권·관광 홍보 기사는 골프 소식이어도 빼요
 STORM = re.compile(r'낙뢰|벼락|번개|폭염|열사병')   # 골프장 안전에 닿는 말은 지역이 달라도 참고가 되므로 남겨요
 INDICATOR = re.compile(r'소비자물가|물가지수|물가상승률|성장률|\bGDP\b|실업률|경상수지|무역수지|제조업|PMI|지수')   # 경제 지표 기사
 DIRECT = re.compile(r'환율|바트|항공권|입국료|관광세|환전|유가|항공료|숙박|여행')   # 한국인 여행 비용에 직접 닿는 말
@@ -43,7 +43,7 @@ DIRECT2 = re.compile(r'비자|입국\s*(금지|제한|규제|심사|절차)|결�
 EVENT = re.compile(r'MOU|업무협약|새로 연|새로 오픈|신규 오픈|그랜드 오픈|개관|발대식|성료|협약|출범|탐방단|개최|오픈식|론칭')   # 기업·단체 행사 홍보
 SLANG = re.compile(r'방콕\s*(하면|하다|하고|족|생활)|집콕|이정후|MLB|락아웃')   # "방콕"이 도시가 아니라 "집에 틀어박힘" 속어로 쓰인 기사
 GOV = re.compile(r'해병대|사령관|국방|군사|정상회담|외교장관|대사 ')
-CRIME = re.compile(r'살인|살해|피살|강도|절도|소매치기|사기|마약|성폭행|성범죄|성추행|체포|구속|검거|납치|흉기|총격|범죄|밀수|도박|폭행|실종')   # 범죄 기사는 빼요
+CRIME = re.compile(r'살인|살해|피살|강도|절도|소매치기|사기|마약|성폭행|성범죄|성추행|체포|구속|검거|납치|흉기|총격|범죄|밀수|도박|폭행|실종|피싱|재판|징역|선고|검찰|용의자')   # 범죄 기사는 빼요
 NOISE = re.compile(r'공연|빅뱅|아티스트|내한|비트겟|바이낸스|업비트|빗썸|코인원|거래소|증권위|증권법|SEC|NCT|콘서트|관객|팬미팅|월드투어|영상 확산|조회\s*\d|USDT|USDC|스테이블|토큰|블록체인|암호화폐|가상화폐|비트코인|코인|Binance|게임쇼|게임스컴|전시회|박람회|화보|드레스룩|공항패션|민니|축구|야구|농구|배구|연예|아이돌|팬미팅|드라마|걸그룹|가수|영화|K-?팝|BTS|주가|증시|코스피|부동산|분양|채용|모집')
 CATS = [  # (id, 정규식, 기본 점수) — 위에서부터 먼저 맞는 것으로 분류
     ('breaking', re.compile(r'속보|사망|숨져|폭발|테러|시위|쿠데타|계엄|화재|붕괴|추락|대피|지진|공항\s*폐쇄'), 6),
@@ -200,7 +200,8 @@ def selftest():
         mk('태국 SEC, 비트겟 운영사 고발…12월 5일 웹·앱 차단 예정', '토큰포스트', 2),
         mk('[출발확정] 방콕/아유타야 5일 아유타야고대유적지 방콕 5성호텔 핫플카페', '판다랭크', 2), mk('태국관광청, 방콕 웰니스 여행 3박 4일 일정 제안', '디스커버리뉴스', 2),
         mk('극동대 항공운항서비스학과, 방콕 타이항공 훈련센터서 객실안전훈련 수료', '국제뉴스', 2), mk('HK그룹, 태국 나콘사완 지라프라왓CC 장기 체류형 골프 회원권 출시', '더쎈뉴스', 2),
-        mk('애프터눈 티 원조 호텔이 방콕에 새로 연 곳', '매일경제', 2), mk('태국관광청, 방콕 3박4일 웰니스 여행 프로모션', '국제뉴스', 2), mk('태국 골프 유망주, 경기 중 낙뢰로 참변', '데일리안', 2)]
+        mk('애프터눈 티 원조 호텔이 방콕에 새로 연 곳', '매일경제', 2), mk('태국관광청, 방콕 3박4일 웰니스 여행 프로모션', '국제뉴스', 2), mk('태국 골프 유망주, 경기 중 낙뢰로 참변', '데일리안', 2),
+        mk('태국 파타야서 한국인 돈 150억 \'피싱\'…줄줄이 재판행', '채널A', 1), mk('KPGA 프로 골프스쿨, 태국 골프 캠프 참가자 모집', '리버티코리아포스트', 1)]
     old = [mk('외교부 태국 여행경보 유지 안내', '뉴시스', 100), mk('방콕 호텔 소식 한국인 여행', '연합뉴스', 100)]
     ids = [x['title'] for x in select(old, now)]
     assert any('여행경보' in t for t in ids) and not any('호텔' in t for t in ids), ids        # 여행경보는 7일까지, 일반 소식은 3일까지
@@ -216,7 +217,7 @@ def selftest():
     assert not any('기적' in t or '푸껫' in t or '해병대' in t or '방콕 문서' in t or '방콕 선언' in t for t in titles), titles                 # 읽을거리·먼 지역·군 소식·막은 매체 제외
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
     assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t or 'MLB' in t or '아이뮤지엄' in t or '발대식' in t or '성료' in t for t in titles), titles                    # 범죄·가상화폐 제외
-    assert not any('학과' in t or '회원권' in t or '새로 연' in t or '입국 누계' in t or '카펠라' in t or '웰니스 여정' in t or '빅뱅' in t or 'MOU' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
+    assert not any('학과' in t or '회원권' in t or '새로 연' in t or '입국 누계' in t or '카펠라' in t or '웰니스 여정' in t or '빅뱅' in t or 'MOU' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t or '피싱' in t or '재판' in t or '골프스쿨' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
