@@ -330,7 +330,7 @@ const ITIN_A=[
  {...gday('12/21','파타야','정유현·장모님 개별일정'),
   rec:'비골퍼 2인(정유현·장모님) — 쿠킹 클래스 등',
   recd:[
-   ['Plan A','타이 쿠킹 클래스(시장투어 포함 반나절) — 아이 동반 가능한 곳으로'],
+   ['Plan A','타이 쿠킹 클래스(시장투어 포함 반나절) — 초보도 따라 하기 쉬운 곳으로'],
    ['Plan B','파타야 수상시장(배·간식·공예) + 스파(Let’s Relax·Health Land 등)'],
    ['Plan C','언더워터월드 파타야(아쿠아리움, 실내) + Terminal 21'],
   ]},
@@ -339,7 +339,7 @@ const ITIN_A=[
   recd:[
    ['Plan A','Art in Paradise(3D 트릭아트) + Frost Magical Ice of Siam — 실내·짧음'],
    ['Plan B','카오 프라 야이(Big Buddha, 부다힐) + 카오 프라 땀낙 전망대, 또는 파타야 파크 타워 전망대 — TAT 추천'],
-   ['Plan C','스위스 십 팜 / 파타야 십 팜(양·알파카, 아이) 또는 언더워터월드'],
+   ['Plan C','스위스 십 팜 / 파타야 십 팜(양·알파카) 또는 언더워터월드'],
    ['참고','한낮 더위 → 실내·그늘 위주'],
   ]},
  {...gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:40)'),
@@ -355,7 +355,7 @@ const ITIN_A=[
   recd:[
    ['Plan A','농눅빌리지 — 코끼리쇼·전통쇼 + 정원(카트 필수). 반나절, 입장 약 600밧. <a href="https://www.nongnoochpattaya.com" target="_blank" rel="noopener">공식 ↗</a>'],
    ['Plan B','카오키여우 오픈주(20일 미방문 시). <a href="https://maps.google.com/?q=Khao+Kheow+Open+Zoo+Chonburi" target="_blank" rel="noopener">지도 ↗</a>'],
-   ['Plan C','백만년 바위공원 & 악어농장(TAT 소개) — 짧고 아이 흥미'],
+   ['Plan C','백만년 바위공원 & 악어농장(TAT 소개) — 짧게 둘러보기 좋음'],
   ]},
  {d:'25',w:'금',l:'파타야',e:'🎄',t:'크리스마스',n:'파타야 마지막 날',
   rec:'크리스마스 · 26일 이동 준비',
@@ -398,7 +398,7 @@ const ITIN_B=[
  {...gday('12/29','BKK','골프 밴 05:30 출발 (오크우드→티니디)'),
   rec:'비골퍼 4인 (정유경·장모님·박지해·이동현)',
   recd:[
-   ['Plan A','수상시장 — 담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일). 07:30~08:00 출발, 점심 무렵 복귀. 아이들이 좋아함 · TAT 소개 유형'],
+   ['Plan A','수상시장 — 담넌사두억 수상시장 + 매끌렁 기찻길 시장(반일). 07:30~08:00 출발, 점심 무렵 복귀. 가볍게 즐기기 좋음 · TAT 소개 유형'],
    ['Plan B','동물 — 사파리월드 & 마린파크. 드라이브 사파리 + 돌고래·오랑우탄·물개 쇼. 종일, 시내서 편도 40~60분. <a href="https://maps.google.com/?q=Safari+World+Bangkok" target="_blank" rel="noopener">지도 ↗</a>'],
    ['Plan C',`강+실내 — ${gm('iconsiam','아이콘시암')}(쑥시암 실내 수상시장·18시 분수쇼) + 짜오프라야 셔틀보트. 냉방·전 연령. <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>`],
    ['야시장',`밤 — ${gm('joddfairs','JODD FAIRS')}(라마9·MRT 프라람9역 인근, 레트로 테마 야시장, 약 16시~24시). 옛 기차 야시장이 옮겨온 곳으로 거대 해산물·렝쌉(매운 돼지등뼈)이 유명`],
@@ -409,7 +409,7 @@ const ITIN_B=[
   rec:'가족2 GCP 이동 · 라차프라송',
   recd:[
    ['오전','가족2 10:30 티니디 출발 → GCP(랏차담리, 센트럴월드 옆) 이동·정착 (밴 #200859534, 이준영 님 개별 진행)'],
-   ['Plan A','쇼핑+아이 — 에라완 사당 + 센트럴월드·시암파라곤 + 씨라이프 방콕(시암파라곤 지하 아쿠아리움)'],
+   ['Plan A','쇼핑+아쿠아리움 — 에라완 사당 + 센트럴월드·시암파라곤 + 씨라이프 방콕(시암파라곤 지하 아쿠아리움)'],
    ['Plan B',`전망 — <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('King Power Mahanakhon SkyWalk, Bangkok')}" target="_blank" rel="noopener">킹파워 마하나콘 스카이워크 ↗</a>(310m, 유리 바닥, 일몰). <a href="https://kingpowermahanakhon.co.th" target="_blank" rel="noopener">공식 ↗</a>`],
    ['Plan C','문화 — 짐 톰슨 하우스(27일 미방문 시) + BACC(방콕예술문화센터, 무료·냉방)'],
    ['미리 읽기',hl('에라완 사당','📜 에라완 사당 이야기 읽기')],
@@ -423,7 +423,7 @@ const ITIN_B=[
    ['Plan B',`${gm('iconsiam','아이콘시암')} — 12/29~31 리버사이드 파크 카운트다운, 차오프라야강 대형 불꽃(방콕 최대 스케일). <a href="https://www.iconsiam.com" target="_blank" rel="noopener">공식 ↗</a>`],
    ['Plan C','짜오프라야 NYE 디너크루즈 — 배 위 불꽃, 인파 크러시 없음. 조기 매진 → 지금 예약'],
    ['미리 읽기',hl('룸피니 공원','📜 룸피니 공원 이야기 읽기')],
-   ['추천','오전 골프 + 아이 2명 + 장모님 → Plan C 크루즈 또는 GCP 고층 조망'],
+   ['추천','오전 골프 + 비골퍼(정유현·장모님·박지해·이동현) → Plan C 크루즈 또는 GCP 고층 조망'],
   ]},
 ];
 const ITIN_C=[
