@@ -2255,8 +2255,8 @@ header.hero.hero-off .hx-runway::after,header.hero.hero-off .hx-zzz{animation-pl
 @media (prefers-reduced-motion:reduce){.hx-rainbow{animation:none}}
 
 /* ── 히어로 놀이 5: 티오프 샷·크리스마스 불빛·박쥐·작별 인사 ── */
-.hx-ball{position:absolute;left:10%;top:170px;width:9px;height:9px;border-radius:50%;background:var(--hero-fg);box-shadow:0 0 6px var(--k-rgba-250-222-138-5);pointer-events:none;animation:hxBall 2.6s linear forwards}
-@keyframes hxBall{0%{opacity:0;transform:translate(0,0)}8%{opacity:1}25%{transform:translate(70px,-62px)}50%{transform:translate(150px,-92px)}75%{transform:translate(230px,-60px)}100%{opacity:0;transform:translate(300px,0)}}
+.hx-tee{position:absolute;left:10%;top:170px;width:9px;height:9px;border-radius:50%;background:var(--hero-fg);box-shadow:0 0 6px var(--k-rgba-250-222-138-5);pointer-events:none;animation:hxTee 2.6s linear forwards}
+@keyframes hxTee{0%{opacity:0;transform:translate(0,0)}8%{opacity:1}25%{transform:translate(70px,-62px)}50%{transform:translate(150px,-92px)}75%{transform:translate(230px,-60px)}100%{opacity:0;transform:translate(300px,0)}}
 .hx-xmas{position:absolute;left:0;right:0;top:0;height:22px;display:flex;justify-content:space-around;padding:0 8px;pointer-events:none;z-index:1}
 .hx-xmas::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--hero-fg);opacity:.25}
 .hx-xmas i{width:7px;height:10px;margin-top:4px;border-radius:50% 50% 50% 50%/45% 45% 55% 55%;background:var(--k-rgba-250-222-138-5);animation:hxBulb 2.2s ease-in-out infinite alternate}
@@ -2265,4 +2265,4 @@ header.hero.hero-off .hx-runway::after,header.hero.hero-off .hx-zzz{animation-pl
 @keyframes hxBulb{from{opacity:.4}to{opacity:1}}
 .hx-bat{width:20px;height:9px;opacity:.55}
 .hx-bye{position:absolute;width:44px;height:44px;padding:0;border:0;background:none;font-size:26px;line-height:44px;text-align:center;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
-@media (prefers-reduced-motion:reduce){.hx-ball{display:none} .hx-xmas i{animation:none;opacity:.85}}
+@media (prefers-reduced-motion:reduce){.hx-tee{display:none} .hx-xmas i{animation:none;opacity:.85}}

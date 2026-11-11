@@ -425,7 +425,7 @@
     const t = thai(), now = t.getUTCHours() * 60 + t.getUTCMinutes(), tee = +m[1] * 60 + +m[2];
     if(now >= tee && now < tee + 15 && once('tee' + dayKey())){
       found('tee'); hap('ok'); toast('⛳', `티오프! ${g.c} — 나이스 샷, 오늘 라운드 즐겁게!`, 4200);
-      if(!rm){ const b = document.createElement('i'); b.className = 'hx-ball'; host.appendChild(b); done(b, 2800); }
+      if(!rm){ const b = document.createElement('i'); b.className = 'hx-tee'; host.appendChild(b); done(b, 2800); }
     }
   }
   // 2) 크리스마스: 12/24·25 히어로 위에 반짝이는 전구 줄

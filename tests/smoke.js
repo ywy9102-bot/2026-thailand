@@ -432,7 +432,7 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await o.page.evaluate(() => { window.__heroFun.found('gecko'); window.__heroFun.found('gecko'); window.__heroFun.found('bag'); });
       ok('놀이 도감: 같은 놀이는 한 번만 세고 두 개를 발견', await o.page.evaluate(() => window.__heroFun.dex() === 2));
       await o.page.waitForTimeout(3400);
-      ok('놀이 도감: "새 발견! (N/13)" 알림', /새 발견!.*\/13\)/.test(await tl(o.page)));
+      ok('놀이 도감: "새 발견! (N/18)" 알림', /새 발견!.*\/18\)/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 61, temp: 28, wind: 5 }); window.__heroFun.wxTick(); window.__wxNow = () => ({ code: 1, temp: 30, wind: 5 }); window.__heroFun.wxTick(); });
       ok('무지개: 비가 그친 낮에 무지개와 알림', await o.page.evaluate(() => !!document.querySelector('.hx-rainbow')) && /무지개/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 0, temp: 36, wind: 5 }); window.__heroFun.wxTick(); });
@@ -445,12 +445,12 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       const mk = async clock => { const o = await open(browser, base, 390, 844, { clock }); await o.page.waitForFunction(() => !!window.__heroFun, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} window.__heroFun.reset(); window.__tl = []; window.__toast = (k, m) => window.__tl.push(k + ' ' + m); window.__heroTick(); }); return o; };
       const tl = page => page.evaluate(() => (window.__tl || []).join(' | '));
       let o = await mk('2026-12-17T08:40:00+07:00');
-      ok('티오프 샷: 티오프 시각 직후 공이 날고 알림이 한 번', await o.page.evaluate(() => !!document.querySelector('.hx-ball')) && /티오프! Chee Chan/.test(await tl(o.page)));
+      ok('티오프 샷: 티오프 시각 직후 공이 날고 알림이 한 번', await o.page.evaluate(() => !!document.querySelector('.hx-tee')) && /티오프! Chee Chan/.test(await tl(o.page)));
       await o.page.evaluate(() => window.__heroTick());
       ok('티오프 샷: 같은 날 알림은 한 번만', (await tl(o.page)).split('티오프!').length === 2);
       await o.ctx.close();
       o = await mk('2026-12-17T12:00:00+07:00');
-      ok('티오프 샷: 티오프 시각이 지나면 없음', await o.page.evaluate(() => !document.querySelector('.hx-ball')) && !/티오프!/.test(await tl(o.page)));
+      ok('티오프 샷: 티오프 시각이 지나면 없음', await o.page.evaluate(() => !document.querySelector('.hx-tee')) && !/티오프!/.test(await tl(o.page)));
       await o.ctx.close();
       o = await mk('2026-12-25T12:00:00+07:00');
       ok('크리스마스: 12/25에 전구 줄 14개와 알림', await o.page.evaluate(() => document.querySelectorAll('.hx-xmas i').length === 14) && /메리 크리스마스/.test(await tl(o.page)));
