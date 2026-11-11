@@ -502,7 +502,8 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('풍선: 누르면 펑 — 사라지고 반짝임', await o.page.evaluate(() => !document.querySelector('.hx-balloon') && window.__heroDebug().sparks > 0));
       await o.page.evaluate(() => { const h = document.querySelector('header.hero'); const ev = (t, x) => h.dispatchEvent(new PointerEvent(t, { clientX: x, clientY: 100, bubbles: true })); ev('pointerdown', 40); ev('pointerup', 240); });
       ok('파도 쓸기: 옆으로 쓱 밀면 물결이 지나감', await o.page.evaluate(() => !!document.querySelector('.hx-wave')) && /파도가 지나갔어요/.test(await tl(o.page)));
-      ok('놀이 도감: 새 놀이 5가지가 모두 기록됨', await o.page.evaluate(() => window.__heroFun.dex() >= 5));
+      await o.page.evaluate(() => window.__heroFun.bubbles(150, 60));
+      ok('놀이 도감: 새 놀이 5가지가 모두 기록됨', await o.page.evaluate(() => window.__heroFun.dex() === 5));
       ok('히어로 놀이 6: 콘솔 오류 없음', o.errs.length === 0, o.errs);
       await o.ctx.close();
       o = await mk('2026-12-28T11:00:00+07:00');
