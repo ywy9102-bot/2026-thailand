@@ -189,6 +189,7 @@
     if(sceneTap(e)) return;
     const ob = document.getElementById('skyOrb'); if(ob && parseFloat(getComputedStyle(ob).opacity) > .1){ const q = ob.getBoundingClientRect(); if(Math.hypot(e.clientX - (q.left + q.width / 2), e.clientY - (q.top + q.height / 2)) < 30){ hap('tap'); orbTalk(); return; } }
     if(py > 150) return;
+    if(!rm && dusk() && tripNow()){ bats(py, true); return; }
     if(isNight()){ for(let i = 0; i < 10; i++) S.push({ x: e.clientX - r.left + rnd(-16, 16), y: py + rnd(-16, 16), vx: rnd(-.7, .7), vy: rnd(-.7, .3), a: 1, r: 1.2 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); hap('tap'); }
     else if(!rm) birds(py);
   });
@@ -386,16 +387,16 @@
   // 진짜 버튼(동기화·환율 조회·더보기 등)과 겹치면 눌리지 않으므로, 겹치지 않는 자리를 골라 둬요
   function fitSlot(el, slots){
     const cs = [...hero.querySelectorAll('.hero-in button, .hero-in a, .hero-in [role="button"], .hero-in input')].map(e => e.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
-    const others = [...host.querySelectorAll('.hx-hit')].filter(x => x !== el && /hx-(bag|meal|home)/.test(x.className)).map(x => x.getBoundingClientRect());
+    const others = [...host.querySelectorAll('.hx-hit')].filter(x => x !== el && /hx-(bag|meal|home|bye)/.test(x.className)).map(x => x.getBoundingClientRect());
     for(const sl of slots){
       el.style.top = sl[0] + 'px'; el.style.left = sl[1] == null ? 'auto' : sl[1] + 'px'; el.style.right = sl[2] == null ? 'auto' : sl[2] + 'px';
       const r = el.getBoundingClientRect(); if(![...cs, ...others].some(c => overlap(r, c) > 40)) return;
     }
   }
-  addEventListener('resize', () => { host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home').forEach(e => fitSlot(e, SLOT_H)); });
+  addEventListener('resize', () => { host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye').forEach(e => fitSlot(e, SLOT_H)); });
 
   // 놀이 도감: 처음 발견할 때마다 "새 발견! (N/전체)"
-  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개' };
+  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개', tee: '⛳ 티오프 샷', xmas: '🎄 크리스마스 불빛', dday: '🎉 D-day 마일스톤', bats: '🦇 황혼 박쥐', bye: '👋 작별 인사' };
   function found(id){
     fun.dex = fun.dex || {}; if(fun.dex[id] || !DEX[id]) return; fun.dex[id] = 1; save();
     const n = Object.keys(fun.dex).length, all = Object.keys(DEX).length;
@@ -416,9 +417,55 @@
     if(w.temp >= 34 && tripNow() && once('hot' + dayKey())){ hap('ok'); toast('🥵', `지금 ${Math.round(w.temp)}°C — 물 자주 마시고 그늘에서 쉬어요`, 4200); }
   }
 
+  // ── 놀이 더하기 5: 티오프 샷 · 크리스마스 불빛 · D-day 마일스톤 · 황혼 박쥐 · 귀국 작별 ──
+  const mdNow = () => { const t = thai(); return (t.getUTCMonth() + 1) + '/' + t.getUTCDate(); };
+  // 1) 티오프 샷: 골프 날 티오프 시각이 되면 공이 포물선으로 날아가고 "나이스 샷"
+  function teeTick(){
+    if(!tripNow()) return; const g = GOLF.find(x => x.d === mdNow() && x.tee), m = g && /(\d\d):(\d\d)/.exec(g.tee); if(!m) return;
+    const t = thai(), now = t.getUTCHours() * 60 + t.getUTCMinutes(), tee = +m[1] * 60 + +m[2];
+    if(now >= tee && now < tee + 15 && once('tee' + dayKey())){
+      found('tee'); hap('ok'); toast('⛳', `티오프! ${g.c} — 나이스 샷, 오늘 라운드 즐겁게!`, 4200);
+      if(!rm){ const b = document.createElement('i'); b.className = 'hx-tee'; host.appendChild(b); done(b, 2800); }
+    }
+  }
+  // 2) 크리스마스: 12/24·25 히어로 위에 반짝이는 전구 줄
+  let xmasEl = null;
+  function xmasTick(){
+    const t = thai(), on = t.getUTCFullYear() === 2026 && t.getUTCMonth() === 11 && (t.getUTCDate() === 24 || t.getUTCDate() === 25);
+    if(on && !xmasEl){ xmasEl = document.createElement('div'); xmasEl.className = 'hx-xmas'; xmasEl.innerHTML = '<i></i>'.repeat(14); host.appendChild(xmasEl); }
+    else if(!on && xmasEl){ xmasEl.remove(); xmasEl = null; }
+    if(on && once('xmas' + dayKey())){ found('xmas'); hap('ok'); toast('🎄', t.getUTCDate() === 24 ? '크리스마스 이브예요 — 한여름 파타야에서 맞는 특별한 밤' : '메리 크리스마스! 파타야 마지막 날, 여름 크리스마스를 즐겨요', 4600); }
+  }
+  // 3) D-day 마일스톤: 출발 100·50·30·20·10·7·3·1일 전에 색종이가 흩날려요
+  const MILES = { 100: '백 일 남았어요', 50: '50일 — 슬슬 설레기 시작!', 30: '한 달 전 — 바우처 PDF를 저장해 둘 때예요', 20: '20일 — 여권 유효기간·보험을 확인해요', 10: '10일 — 짐 싸기를 시작해요', 7: '일주일 — 환전과 eSIM을 챙겨요', 3: '사흘 — 상비약·보조배터리까지!', 1: '내일이에요 — 여권과 바우처 마지막 확인!' };
+  function ddTick(){
+    if(Date.now() >= tripDate('depart').getTime()) return;
+    const t = thai(), n = Math.round((Date.UTC(2026, 11, 16) - Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate())) / 864e5);
+    if(!MILES[n] || !once('dd' + n)) return;
+    found('dday'); hap('combo'); toast('🎉', `D-${n} — ${MILES[n]}`, 4800);
+    if(!rm && SW){ for(let i = 0; i < 26; i++) S.push({ x: rnd(8, SW - 8), y: rnd(0, 40), vx: rnd(-.4, .4), vy: rnd(.25, .8), a: 1, r: 1.4 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); }
+  }
+  // 4) 황혼 박쥐: 해 질 무렵 박쥐 떼가 가끔 지나가고, 하늘을 톡 누르면 날아가요
+  const dusk = () => { const { set, min } = sunNow(); return min >= set - 5 && min <= set + 50; };
+  let nextBat = Date.now() + 15000;
+  function bats(py, tapped){
+    if(flocks >= 2 || Date.now() - lastBird < 1500) return; lastBird = Date.now(); flocks++; if(tapped){ found('bats'); hap('tap'); if(once('bat1')) toast('🦇', '해 질 무렵이면 박쥐가 날아다녀요 — 열대의 저녁이에요', 3400); }
+    const fl = document.createElement('div'); fl.className = 'hx-flock'; fl.style.top = Math.max(12, Math.min(py, 120)) + 'px'; let h = '';
+    for(let i = 0; i < 4; i++) h += `<svg class="hx-bird hx-bat" style="--bx:${i * 26}px;--by:${(i % 2 ? 1 : -1) * Math.round(rnd(6, 16))}px;--bd:${(i * .15).toFixed(2)}s" viewBox="0 0 22 10" focusable="false"><path d="M1 3Q4 0 7 4Q9 1 11 5Q13 1 15 4Q18 0 21 3Q17 5 15 8Q13 6 11 9Q9 6 7 8Q5 5 1 3Z" fill="currentColor"/></svg>`;
+    fl.innerHTML = h; host.appendChild(fl); done(fl, 7000); setTimeout(() => { flocks = Math.max(0, flocks - 1); }, 7000);
+  }
+  function batTick(){ if(rm || !live() || !tripNow() || !dusk()) return; const now = Date.now(); if(now > nextBat){ nextBat = now + rnd(25000, 50000); bats(rnd(30, 100), false); } }
+  // 5) 귀국 작별: 1/2 아침~낮에 👋 버튼, 누르면 태국어 작별 인사
+  let byeEl = null;
+  function byeTick(){
+    const t = thai(), h = t.getUTCHours(), on = t.getUTCFullYear() === 2027 && t.getUTCMonth() === 0 && t.getUTCDate() === 2 && h >= 6 && h < 13;
+    if(on && !byeEl){ byeEl = mkHit('hx-bye', '👋'); byeEl.setAttribute('aria-label', '작별 인사'); fitSlot(byeEl, SLOT_H); byeEl.addEventListener('click', ev => { ev.stopPropagation(); found('bye'); hap('combo'); toast('👋', '라껀 쁘라텟 타이 (ลาก่อน) — 안녕, 태국! 래우 쯔어 깐 마이 (แล้วเจอกันใหม่) — 또 만나요', 5200); }); }
+    else if(!on && byeEl){ byeEl.remove(); byeEl = null; }
+  }
+
   let fitN = 0;
-  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick();
-    if(fitN++ % 3 === 0){ host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home').forEach(e => fitSlot(e, SLOT_H)); }   // 날씨 글이 늦게 들어와 줄이 바뀌어도 겹치지 않게 다시 맞춰요
+  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick(); teeTick(); xmasTick(); ddTick(); batTick(); byeTick();
+    if(fitN++ % 3 === 0){ host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye').forEach(e => fitSlot(e, SLOT_H)); }   // 날씨 글이 늦게 들어와 줄이 바뀌어도 겹치지 않게 다시 맞춰요
   }
 
   function funTick(){
@@ -427,7 +474,7 @@
     if(!isNight() && !ride && now > nextRide){ nextRide = now + rnd(55000, 100000); startRide(); }
   }
 
-  window.__heroFun = { dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
+  window.__heroFun = { tee: teeTick, xmas: xmasTick, dday: ddTick, bats, bye: byeTick, dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
   const tick = () => { layers(); plane(); ny(); funTick(); fun2Tick(); fun3Tick(); };
   window.__heroTick = tick; window.__heroDebug = () => ({ sparks: S.length });
   tick(); setInterval(tick, 1000); document.addEventListener('wx:updated', layers);

@@ -432,12 +432,50 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await o.page.evaluate(() => { window.__heroFun.found('gecko'); window.__heroFun.found('gecko'); window.__heroFun.found('bag'); });
       ok('놀이 도감: 같은 놀이는 한 번만 세고 두 개를 발견', await o.page.evaluate(() => window.__heroFun.dex() === 2));
       await o.page.waitForTimeout(3400);
-      ok('놀이 도감: "새 발견! (N/13)" 알림', /새 발견!.*\/13\)/.test(await tl(o.page)));
+      ok('놀이 도감: "새 발견! (N/18)" 알림', /새 발견!.*\/18\)/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 61, temp: 28, wind: 5 }); window.__heroFun.wxTick(); window.__wxNow = () => ({ code: 1, temp: 30, wind: 5 }); window.__heroFun.wxTick(); });
       ok('무지개: 비가 그친 낮에 무지개와 알림', await o.page.evaluate(() => !!document.querySelector('.hx-rainbow')) && /무지개/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 0, temp: 36, wind: 5 }); window.__heroFun.wxTick(); });
       ok('폭염: 34°C 이상이면 물 한 모금 알림', /36°C — 물 자주/.test(await tl(o.page)));
       ok('히어로 놀이 4: 콘솔 오류 없음', o.errs.length === 0, o.errs);
+      await o.ctx.close();
+    }
+    // 4-1d10) 히어로 놀이 5: 티오프 샷 · 크리스마스 불빛 · D-day 마일스톤 · 황혼 박쥐 · 귀국 작별
+    {
+      const mk = async clock => { const o = await open(browser, base, 390, 844, { clock }); await o.page.waitForFunction(() => !!window.__heroFun, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} window.__heroFun.reset(); window.__tl = []; window.__toast = (k, m) => window.__tl.push(k + ' ' + m); window.__heroTick(); }); return o; };
+      const tl = page => page.evaluate(() => (window.__tl || []).join(' | '));
+      let o = await mk('2026-12-17T08:40:00+07:00');
+      ok('티오프 샷: 티오프 시각 직후 공이 날고 알림이 한 번', await o.page.evaluate(() => !!document.querySelector('.hx-tee')) && /티오프! Chee Chan/.test(await tl(o.page)));
+      await o.page.evaluate(() => window.__heroTick());
+      ok('티오프 샷: 같은 날 알림은 한 번만', (await tl(o.page)).split('티오프!').length === 2);
+      await o.ctx.close();
+      o = await mk('2026-12-17T12:00:00+07:00');
+      ok('티오프 샷: 티오프 시각이 지나면 없음', await o.page.evaluate(() => !document.querySelector('.hx-tee')) && !/티오프!/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-25T12:00:00+07:00');
+      ok('크리스마스: 12/25에 전구 줄 14개와 알림', await o.page.evaluate(() => document.querySelectorAll('.hx-xmas i').length === 14) && /메리 크리스마스/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-26T12:00:00+07:00');
+      ok('크리스마스: 12/26에는 전구 줄이 없음', await o.page.evaluate(() => !document.querySelector('.hx-xmas')));
+      await o.ctx.close();
+      o = await mk('2026-11-16T10:00:00+07:00');
+      ok('D-day 마일스톤: D-30에 색종이와 알림', /D-30 — 한 달 전/.test(await tl(o.page)) && await o.page.evaluate(() => window.__heroDebug().sparks > 0));
+      await o.ctx.close();
+      o = await mk('2026-11-17T10:00:00+07:00');
+      ok('D-day 마일스톤: D-29는 조용함', !/D-\d+ —/.test(await tl(o.page)));
+      await o.ctx.close();
+      o = await mk('2026-12-18T18:10:00+07:00');
+      await o.page.evaluate(() => window.__heroFun.bats(60, true));
+      ok('황혼 박쥐: 해 진 직후 하늘을 누르면 박쥐 떼가 날고 도감에 기록', await o.page.evaluate(() => document.querySelectorAll('.hx-bat').length === 4 && window.__heroFun.dex() >= 1));
+      await o.ctx.close();
+      o = await mk('2027-01-02T09:00:00+07:00');
+      ok('귀국 작별: 1/2 아침에 👋 버튼이 44px 이상으로 뜸', await o.page.evaluate(() => { const e = document.querySelector('.hx-bye'); if(!e) return false; const r = e.getBoundingClientRect(); return r.width >= 44 && r.height >= 44 && e.tabIndex === -1; }));
+      await o.page.evaluate(() => document.querySelector('.hx-bye').click());
+      ok('귀국 작별: 누르면 태국어 작별 인사', /라껀 쁘라텟 타이/.test(await tl(o.page)));
+      ok('히어로 놀이 5: 콘솔 오류 없음', o.errs.length === 0, o.errs);
+      await o.ctx.close();
+      o = await mk('2027-01-02T15:00:00+07:00');
+      ok('귀국 작별: 오후에는 사라짐', await o.page.evaluate(() => !document.querySelector('.hx-bye')));
       await o.ctx.close();
     }
     // 4-1e0) 소식이 없는 날: 빈 목록이 오면 낡은 소식을 지우고 카드를 숨김
