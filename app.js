@@ -1363,7 +1363,7 @@ const prepaidTotal = Object.values(PREPAID).flat().reduce((a,it)=>a+it.amt,0);
 const paidKey = o => `${o.n} → 윤우열 ${won(o.t)}원`;
 // 코드 기준 정산완료 — 정산완료 표시는 기기별 저장이라, 확인된 완료 건은 여기에 적어 모든 기기에서 완료로 보이게 함.
 // 기기마다 처음 한 번만 반영하고(seeded), 이후 수금 담당이 해제하면 해제 상태 유지. 금액이 바뀌면(키 불일치) 자동으로 반영 안 됨
-const PAID_SEED = { '정유경': 2192356, '김태기': 1309101, '윤성욱': 1921615, '이준영': 556272 };
+const PAID_SEED = { '정유경': 2192356, '정유현': 1966209, '장모님': 1002003, '김태기': 1309101, '윤성욱': 1921615, '이준영': 556272 };
 (function(){
   store.seeded = store.seeded || {};
   OWE.forEach(o => { if(PAID_SEED[o.n] === o.t){ const k = paidKey(o); if(!store.seeded[k]){ store.seeded[k] = true; store.done[k] = true; } } });
