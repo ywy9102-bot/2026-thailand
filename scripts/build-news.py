@@ -49,6 +49,7 @@ CATS = [  # (id, 정규식, 기본 점수) — 위에서부터 먼저 맞는 것
     ('breaking', re.compile(r'속보|사망|숨져|폭발|테러|시위|쿠데타|계엄|화재|붕괴|추락|대피|지진|공항\s*폐쇄'), 6),
     ('safety',   re.compile(r'여행경보|여행금지|특별여행주의보|여행주의보|외교부|영사|안전공지|안전\s*유의|입국\s*(금지|제한|규제)'), 5),
     ('weather',  re.compile(r'날씨|폭우|호우|폭염|태풍|홍수|침수|기온|우기|건기|미세먼지|스콜|열대성|기상|경보'), 4),
+    ('travel',   re.compile(r'출국세|입국료|입국세|도착세|체류세|관광세'), 5),   # 입국료·출국세는 환율이 아니라 여행 제도 소식이에요 ('바트'가 들어 있어도 환율로 분류하지 않아요)
     ('fx',       re.compile(r'환율|바트|물가|환전'), 3),
     ('econ',     re.compile(r'경제|관광세|입국료|항공권|유가|금리|성장률|물가'), 2),
     ('golf',     re.compile(r'골프|라운드|티오프|그린피|캐디'), 4),
@@ -218,6 +219,7 @@ def selftest():
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
     assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t or 'MLB' in t or '아이뮤지엄' in t or '발대식' in t or '성료' in t for t in titles), titles                    # 범죄·가상화폐 제외
     assert not any('학과' in t or '회원권' in t or '새로 연' in t or '입국 누계' in t or '카펠라' in t or '웰니스 여정' in t or '빅뱅' in t or 'MOU' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t or '피싱' in t or '재판' in t or '골프스쿨' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
+    assert classify('태국 출국세 1,000바트·입국료 450바트 추진…한국·일본과 비교')[0] == 'travel' and classify('태국 바트 환율 5년 만에 최저')[0] == 'fx'      # 출국세·입국료는 여행, 환율은 환율
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
     sample = b'<rss><channel><item><title>\xeb\xb0\xa9\xec\xbd\x95 \xeb\x82\xa0\xec\x94\xa8 - \xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</title><link>https://n/1</link><pubDate>Sat, 19 Dec 2026 23:00:00 GMT</pubDate><source url="https://y">\xec\x97\xb0\xed\x95\xa9\xeb\x89\xb4\xec\x8a\xa4</source></item></channel></rss>'
