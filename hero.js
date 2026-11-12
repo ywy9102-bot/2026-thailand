@@ -183,12 +183,13 @@
 
   // 하늘 탭: 별똥별 소원(밤) · 새 떼(낮) · 반딧불이(밤)
   hero.addEventListener('click', e => {
-    if(e.target.closest(IGN)) return; const r = hero.getBoundingClientRect(), py = e.clientY - r.top;
+    if(e.target.closest(IGN)) return; if(Date.now() - swipedAt < 400) return; const r = hero.getBoundingClientRect(), py = e.clientY - r.top;
     if(!wished && Date.now() - starAt < 5000){ wish(); return; }
     if(e.target.closest('.title')){ titleTalk(); return; }
     if(sceneTap(e)) return;
     const ob = document.getElementById('skyOrb'); if(ob && parseFloat(getComputedStyle(ob).opacity) > .1){ const q = ob.getBoundingClientRect(); if(Math.hypot(e.clientX - (q.left + q.width / 2), e.clientY - (q.top + q.height / 2)) < 30){ hap('tap'); orbTalk(); return; } }
     if(py > 150) return;
+    { const nt = Date.now(); if(!rm && nt - lastTap < 350){ lastTap = 0; bubbles(e.clientX - r.left, py); return; } lastTap = nt; }
     if(!rm && dusk() && tripNow()){ bats(py, true); return; }
     if(isNight()){ for(let i = 0; i < 10; i++) S.push({ x: e.clientX - r.left + rnd(-16, 16), y: py + rnd(-16, 16), vx: rnd(-.7, .7), vy: rnd(-.7, .3), a: 1, r: 1.2 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); hap('tap'); }
     else if(!rm) birds(py);
@@ -396,7 +397,7 @@
   addEventListener('resize', () => { host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye').forEach(e => fitSlot(e, SLOT_H)); });
 
   // 놀이 도감: 처음 발견할 때마다 "새 발견! (N/전체)"
-  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개', tee: '⛳ 티오프 샷', xmas: '🎄 크리스마스 불빛', dday: '🎉 D-day 마일스톤', bats: '🦇 황혼 박쥐', bye: '👋 작별 인사' };
+  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개', tee: '⛳ 티오프 샷', xmas: '🎄 크리스마스 불빛', dday: '🎉 D-day 마일스톤', bats: '🦇 황혼 박쥐', bye: '👋 작별 인사', bubble: '🫧 비눗방울', sea: '🐬 바다 친구', cloud: '☁️ 구름 변신', wave: '🌊 파도 쓸기', balloon: '🎈 풍선' };
   function found(id){
     fun.dex = fun.dex || {}; if(fun.dex[id] || !DEX[id]) return; fun.dex[id] = 1; save();
     const n = Object.keys(fun.dex).length, all = Object.keys(DEX).length;
@@ -463,8 +464,63 @@
     else if(!on && byeEl){ byeEl.remove(); byeEl = null; }
   }
 
+  // ── 놀이 더하기 6: 비눗방울 · 돌고래/배 · 구름 변신 · 파도 쓸기 · 풍선 (점수도 목표도 없는 장난감) ──
+  // 1) 비눗방울: 하늘을 두 번 빠르게 누르면 비눗방울이 떠올라요. 하나씩 누르면 퐁!
+  let lastTap = 0;
+  function pop(b){ if(b.classList.contains('pop')) return; b.classList.add('pop'); hap('tap'); setTimeout(() => b.remove(), 260); }
+  function bubbles(x, y){
+    if(rm) return; found('bubble'); hap('ok');
+    for(let i = 0; i < 6 && host.querySelectorAll('.hx-bub').length < 14; i++){
+      const b = mkHit('hx-bub', '<i></i>'); b.style.left = Math.max(0, Math.min(x - 22 + rnd(-40, 40), SW - 44)) + 'px'; b.style.top = Math.max(0, y - 22 + rnd(-14, 24)) + 'px';
+      b.style.setProperty('--bd', rnd(4.5, 6.5).toFixed(1) + 's'); b.style.setProperty('--bx', Math.round(rnd(-30, 30)) + 'px'); b.setAttribute('aria-label', '비눗방울');
+      b.addEventListener('click', ev => { ev.stopPropagation(); pop(b); }); done(b, 6600);
+    }
+    if(once('bub1')) toast('🫧', '비눗방울! 하나씩 눌러서 퐁 터뜨려 보세요', 3000);
+  }
+  // 2) 바다 친구: 낮에 가끔 파타야에선 돌고래가 뛰고, 방콕에선 배가 떠가요. 누르면 인사
+  let seaEl = null, nextSea = Date.now() + 30000;
+  function seaGo(){
+    if(seaEl) return; const bkk = hero.dataset.city === 'bkk', e = bkk ? '🛶' : '🐬';
+    seaEl = mkHit('hx-sea ' + (bkk ? 'boat' : 'dolphin'), e); seaEl.setAttribute('aria-label', bkk ? '배' : '돌고래'); const el = seaEl;
+    el.addEventListener('click', ev => { ev.stopPropagation(); found('sea'); hap('ok'); toast(e, bkk ? '강바람 솔솔~ 천천히 떠가는 배예요' : '첨벙! 오늘 바다도 반짝여요', 2600); });
+    done(el, bkk ? 12200 : 7200); setTimeout(() => { seaEl = null; }, bkk ? 12200 : 7200);
+  }
+  // 3) 구름 변신: 낮에 구름이 흘러가고, 누르면 다른 모양으로 변해요
+  let cloudEl = null, nextCloud = Date.now() + 20000;
+  const SHAPES = ['🐘', '🐠', '🦆', '🍦', '🥥', '🐢', '🍍'];
+  function cloudGo(){
+    if(cloudEl) return; const el = cloudEl = mkHit('hx-cloud', '<span>☁️</span>'); el.setAttribute('aria-label', '구름');
+    el.addEventListener('click', ev => { ev.stopPropagation(); const sh = SHAPES[Math.floor(Math.random() * SHAPES.length)]; found('cloud'); hap('ok'); el.classList.add('morph'); el.innerHTML = `<span>${sh}</span>`; toast('☁️', `구름이 ${sh} 모양이 됐어요`, 2200); });
+    done(el, 42200); setTimeout(() => { cloudEl = null; }, 42200);
+  }
+  // 4) 파도 쓸기: 하늘을 옆으로 쓱 밀면 물결이 지나가요
+  let swipedAt = 0, lastWave = 0, pd = null;
+  function wave(ltr){
+    if(rm || Date.now() - lastWave < 1200) return; lastWave = Date.now(); found('wave'); hap('tap');
+    const w = document.createElement('div'); w.className = 'hx-wave' + (ltr ? '' : ' rtl'); w.innerHTML = '<svg viewBox="0 0 360 36" preserveAspectRatio="none" focusable="false"><path d="M0 18Q22 4 45 18T90 18T135 18T180 18T225 18T270 18T315 18T360 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M0 28Q22 16 45 28T90 28T135 28T180 28T225 28T270 28T315 28T360 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg>';
+    host.appendChild(w); done(w, 1200); if(once('wave1')) toast('🌊', '쓰윽~ 파도가 지나갔어요', 2400);
+  }
+  hero.addEventListener('pointerdown', e => { pd = e.target.closest(IGN) ? null : { x: e.clientX, y: e.clientY, t: Date.now() }; }, { passive: true });
+  hero.addEventListener('pointerup', e => { if(!pd) return; const dx = e.clientX - pd.x, dy = e.clientY - pd.y, dt = Date.now() - pd.t; pd = null; if(Math.abs(dx) > 90 && Math.abs(dy) < 40 && dt < 600){ swipedAt = Date.now(); wave(dx > 0); } });
+  // 5) 풍선: 낮에 가끔 풍선이 떠오르고, 누르면 펑!
+  let balEl = null, nextBal = Date.now() + 45000;
+  function balloonGo(){
+    if(balEl) return; const el = balEl = mkHit('hx-balloon', '🎈'); el.setAttribute('aria-label', '풍선'); el.style.left = Math.round(rnd(30, Math.max(60, SW - 80))) + 'px'; el.style.filter = `hue-rotate(${Math.round(rnd(0, 330))}deg)`;
+    el.addEventListener('click', ev => {
+      ev.stopPropagation(); const r = el.getBoundingClientRect(), hr = hero.getBoundingClientRect(); found('balloon'); hap('combo'); el.remove(); balEl = null;
+      for(let i = 0; i < 18; i++) S.push({ x: r.left - hr.left + 22 + rnd(-8, 8), y: r.top - hr.top + 22 + rnd(-8, 8), vx: rnd(-1.2, 1.2), vy: rnd(-1.2, .6), a: 1, r: 1.4 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop);
+    });
+    done(el, 13200); setTimeout(() => { balEl = null; }, 13200);
+  }
+  function toysTick(){
+    if(rm || !live() || isNight()) return; const now = Date.now();
+    if(now > nextSea){ nextSea = now + rnd(70000, 120000); seaGo(); }
+    if(now > nextCloud){ nextCloud = now + rnd(90000, 150000); cloudGo(); }
+    if(now > nextBal){ nextBal = now + rnd(110000, 180000); balloonGo(); }
+  }
+
   let fitN = 0;
-  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick(); teeTick(); xmasTick(); ddTick(); batTick(); byeTick();
+  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick(); teeTick(); xmasTick(); ddTick(); batTick(); byeTick(); toysTick();
     if(fitN++ % 3 === 0){ host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye').forEach(e => fitSlot(e, SLOT_H)); }   // 날씨 글이 늦게 들어와 줄이 바뀌어도 겹치지 않게 다시 맞춰요
   }
 
@@ -474,7 +530,7 @@
     if(!isNight() && !ride && now > nextRide){ nextRide = now + rnd(55000, 100000); startRide(); }
   }
 
-  window.__heroFun = { tee: teeTick, xmas: xmasTick, dday: ddTick, bats, bye: byeTick, dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
+  window.__heroFun = { bubbles, seaGo, cloudGo, wave, balloonGo, tee: teeTick, xmas: xmasTick, dday: ddTick, bats, bye: byeTick, dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
   const tick = () => { layers(); plane(); ny(); funTick(); fun2Tick(); fun3Tick(); };
   window.__heroTick = tick; window.__heroDebug = () => ({ sparks: S.length });
   tick(); setInterval(tick, 1000); document.addEventListener('wx:updated', layers);
