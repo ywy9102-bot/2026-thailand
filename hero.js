@@ -188,8 +188,11 @@
     if(e.target.closest('.title')){ titleTalk(); return; }
     if(sceneTap(e)) return;
     const ob = document.getElementById('skyOrb'); if(ob && parseFloat(getComputedStyle(ob).opacity) > .1){ const q = ob.getBoundingClientRect(); if(Math.hypot(e.clientX - (q.left + q.width / 2), e.clientY - (q.top + q.height / 2)) < 30){ hap('tap'); orbTalk(); return; } }
+    if(rainNow && !rm){ ripple(e.clientX - r.left, py); return; }
     if(py > 150) return;
-    { const nt = Date.now(); if(!rm && nt - lastTap < 350){ lastTap = 0; bubbles(e.clientX - r.left, py); return; } lastTap = nt; }
+    { const nt = Date.now(); tapN = nt - lastTap < 350 ? tapN + 1 : 1; lastTap = nt;
+      if(!rm && tapN === 2){ bubbles(e.clientX - r.left, py); return; }
+      if(!rm && tapN >= 3){ tapN = 0; lastTap = 0; burst(e.clientX - r.left, py); return; } }
     if(!rm && dusk() && tripNow()){ bats(py, true); return; }
     if(isNight()){ for(let i = 0; i < 10; i++) S.push({ x: e.clientX - r.left + rnd(-16, 16), y: py + rnd(-16, 16), vx: rnd(-.7, .7), vy: rnd(-.7, .3), a: 1, r: 1.2 + Math.random() * 1.8, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop); hap('tap'); }
     else if(!rm) birds(py);
@@ -388,16 +391,16 @@
   // 진짜 버튼(동기화·환율 조회·더보기 등)과 겹치면 눌리지 않으므로, 겹치지 않는 자리를 골라 둬요
   function fitSlot(el, slots){
     const cs = [...hero.querySelectorAll('.hero-in button, .hero-in a, .hero-in [role="button"], .hero-in input')].map(e => e.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
-    const others = [...host.querySelectorAll('.hx-hit')].filter(x => x !== el && /hx-(bag|meal|home|bye)/.test(x.className)).map(x => x.getBoundingClientRect());
+    const others = [...host.querySelectorAll('.hx-hit')].filter(x => x !== el && /hx-(bag|meal|home|bye|chime)/.test(x.className)).map(x => x.getBoundingClientRect());
     for(const sl of slots){
       el.style.top = sl[0] + 'px'; el.style.left = sl[1] == null ? 'auto' : sl[1] + 'px'; el.style.right = sl[2] == null ? 'auto' : sl[2] + 'px';
       const r = el.getBoundingClientRect(); if(![...cs, ...others].some(c => overlap(r, c) > 40)) return;
     }
   }
-  addEventListener('resize', () => { host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye').forEach(e => fitSlot(e, SLOT_H)); });
+  addEventListener('resize', () => { host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye,.hx-chime').forEach(e => fitSlot(e, SLOT_H)); });
 
   // 놀이 도감: 처음 발견할 때마다 "새 발견! (N/전체)"
-  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개', tee: '⛳ 티오프 샷', xmas: '🎄 크리스마스 불빛', dday: '🎉 D-day 마일스톤', bats: '🦇 황혼 박쥐', bye: '👋 작별 인사', bubble: '🫧 비눗방울', sea: '🐬 바다 친구', cloud: '☁️ 구름 변신', wave: '🌊 파도 쓸기', balloon: '🎈 풍선' };
+  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개', tee: '⛳ 티오프 샷', xmas: '🎄 크리스마스 불빛', dday: '🎉 D-day 마일스톤', bats: '🦇 황혼 박쥐', bye: '👋 작별 인사', bubble: '🫧 비눗방울', sea: '🐬 바다 친구', cloud: '☁️ 구름 변신', wave: '🌊 파도 쓸기', balloon: '🎈 풍선', burst: '🎆 연타 불꽃·꽃잎', ripple: '💧 빗방울 파문', chime: '🎐 풍경', butterfly: '🦋 나비', coconut: '🥥 코코넛' };
   function found(id){
     fun.dex = fun.dex || {}; if(fun.dex[id] || !DEX[id]) return; fun.dex[id] = 1; save();
     const n = Object.keys(fun.dex).length, all = Object.keys(DEX).length;
@@ -405,10 +408,10 @@
   }
 
   // 비 그친 뒤 무지개, 폭염엔 물 한 모금 알림(날씨는 앱이 받아 둔 현재 값)
-  let bowEl = null;
+  let bowEl = null, rainNow = false;
   function wxTick(){
     const w = typeof window.__wxNow === 'function' ? window.__wxNow() : null; if(!w || w.code == null) return;
-    const c = w.code, rain = (c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95, now = Date.now();
+    const c = w.code, rain = (c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95, now = Date.now(); rainNow = rain; chimeTick(+w.wind || 0);
     if(rain && (!fun.rainTs || now - fun.rainTs > 6e4)){ fun.rainTs = now; save(); }
     const { rise, set, min } = sunNow(), day = min >= rise + 30 && min <= set - 30, since = now - (fun.rainTs || 0);
     const bow = !rain && c <= 3 && fun.rainTs && since >= 0 && since < 3 * 36e5 && day;
@@ -519,9 +522,59 @@
     if(now > nextBal){ nextBal = now + rnd(110000, 180000); balloonGo(); }
   }
 
+  // ── 놀이 더하기 7: 연타 불꽃 · 빗방울 파문 · 풍경 · 나비 · 코코넛 ──
+  let tapN = 0;
+  // 1) 하늘을 빠르게 세 번 누르면 밤엔 작은 불꽃, 낮엔 꽃잎이 터져요
+  function burst(x, y){
+    if(rm) return; found('burst'); hap('combo'); const night = isNight();
+    for(let i = 0; i < (night ? 30 : 22); i++){
+      const a = night ? Math.PI * 2 * i / 30 : rnd(0, Math.PI * 2), sp = night ? rnd(1.1, 1.9) : rnd(.3, .9);
+      S.push({ x, y, vx: Math.cos(a) * sp, vy: night ? Math.sin(a) * sp : Math.sin(a) * sp * .4 + .35, a: 1, r: night ? 1.4 + Math.random() * 1.2 : 2 + Math.random() * 1.8, t: Math.random() * 6 });
+    }
+    if(!raf) raf = requestAnimationFrame(loop); if(once('burst1')) toast(night ? '🎆' : '🌸', night ? '펑! 작은 불꽃이 터졌어요' : '꽃잎이 흩날려요', 2400);
+  }
+  // 2) 비 오는 날 화면을 누르면 물웅덩이처럼 동그란 파문이 퍼져요
+  function ripple(x, y){
+    if(rm) return; found('ripple'); hap('tap');
+    const el = document.createElement('i'); el.className = 'hx-rip'; el.style.left = x + 'px'; el.style.top = y + 'px'; host.appendChild(el); done(el, 1300);
+    const el2 = document.createElement('i'); el2.className = 'hx-rip hx-rip2'; el2.style.left = x + 'px'; el2.style.top = y + 'px'; host.appendChild(el2); done(el2, 1500);
+    if(once('rip1')) toast('💧', '톡— 빗방울 파문이에요. 비가 오는 동안 눌러 보세요', 2800);
+  }
+  // 3) 바람이 센 날(시속 12km 이상) 풍경이 달려요. 누르면 딸랑~
+  let chimeEl = null;
+  function chimeTick(wind){
+    const want = wind >= 12 && !rm;
+    if(want && !chimeEl){ chimeEl = mkHit('hx-chime', '🎐'); chimeEl.setAttribute('aria-label', '풍경'); fitSlot(chimeEl, SLOT_H);
+      chimeEl.addEventListener('click', ev => { ev.stopPropagation(); found('chime'); hap('combo'); chimeEl.classList.remove('ring'); void chimeEl.offsetWidth; chimeEl.classList.add('ring'); toast('🎐', '딸랑~ 바람이 시원해요', 2400); }); }
+    else if(!want && chimeEl){ chimeEl.remove(); chimeEl = null; }
+  }
+  // 4) 나비: 낮에 가끔 날아와요. 누르면 반짝이며 날아가요
+  let flyEl = null, nextFly = Date.now() + 60000;
+  function butterflyGo(){
+    if(flyEl) return; const el = flyEl = mkHit('hx-fly', '🦋'); el.setAttribute('aria-label', '나비'); el.style.top = Math.round(rnd(40, 120)) + 'px';
+    el.addEventListener('click', ev => {
+      ev.stopPropagation(); found('butterfly'); hap('ok'); const q = el.getBoundingClientRect(), hr = hero.getBoundingClientRect(); el.classList.add('away');
+      for(let i = 0; i < 12; i++) S.push({ x: q.left - hr.left + 22 + rnd(-8, 8), y: q.top - hr.top + 22 + rnd(-8, 8), vx: rnd(-.8, .8), vy: rnd(-.8, .4), a: 1, r: 1.3 + Math.random() * 1.5, t: Math.random() * 6 }); if(!raf) raf = requestAnimationFrame(loop);
+      if(once('fly1')) toast('🦋', '나비가 손끝에 앉았다 날아갔어요', 2600); setTimeout(() => { el.remove(); flyEl = null; }, 700);
+    });
+    done(el, 17200); setTimeout(() => { flyEl = null; }, 17200);
+  }
+  // 5) 코코넛: 낮에 가끔 야자수에서 툭 떨어져 통통 튀어요. 누르면 데굴
+  let cocoEl = null, nextCoco = Date.now() + 90000;
+  function coconutGo(){
+    if(cocoEl) return; const el = cocoEl = mkHit('hx-coco', '🥥'); el.setAttribute('aria-label', '코코넛'); el.style.left = Math.round(rnd(20, Math.max(40, SW - 70))) + 'px';
+    el.addEventListener('click', ev => { ev.stopPropagation(); found('coconut'); hap('strong'); el.classList.add('roll'); if(once('coco1')) toast('🥥', '통! 시원한 코코넛 주스 한 잔 어때요?', 2800); setTimeout(() => { el.remove(); cocoEl = null; }, 900); });
+    done(el, 9200); setTimeout(() => { cocoEl = null; }, 9200);
+  }
+  function toys2Tick(){
+    if(rm || !live() || isNight()) return; const now = Date.now();
+    if(now > nextFly && !rainNow){ nextFly = now + rnd(120000, 200000); butterflyGo(); }
+    if(now > nextCoco){ nextCoco = now + rnd(150000, 260000); coconutGo(); }
+  }
+
   let fitN = 0;
-  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick(); teeTick(); xmasTick(); ddTick(); batTick(); byeTick(); toysTick();
-    if(fitN++ % 3 === 0){ host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye').forEach(e => fitSlot(e, SLOT_H)); }   // 날씨 글이 늦게 들어와 줄이 바뀌어도 겹치지 않게 다시 맞춰요
+  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick(); teeTick(); xmasTick(); ddTick(); batTick(); byeTick(); toysTick(); toys2Tick();
+    if(fitN++ % 3 === 0){ host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye,.hx-chime').forEach(e => fitSlot(e, SLOT_H)); }   // 날씨 글이 늦게 들어와 줄이 바뀌어도 겹치지 않게 다시 맞춰요
   }
 
   function funTick(){
@@ -530,7 +583,7 @@
     if(!isNight() && !ride && now > nextRide){ nextRide = now + rnd(55000, 100000); startRide(); }
   }
 
-  window.__heroFun = { bubbles, seaGo, cloudGo, wave, balloonGo, tee: teeTick, xmas: xmasTick, dday: ddTick, bats, bye: byeTick, dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
+  window.__heroFun = { burst, ripple, butterflyGo, coconutGo, bubbles, seaGo, cloudGo, wave, balloonGo, tee: teeTick, xmas: xmasTick, dday: ddTick, bats, bye: byeTick, dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
   const tick = () => { layers(); plane(); ny(); funTick(); fun2Tick(); fun3Tick(); };
   window.__heroTick = tick; window.__heroDebug = () => ({ sparks: S.length });
   tick(); setInterval(tick, 1000); document.addEventListener('wx:updated', layers);
