@@ -314,7 +314,7 @@
   // 2) 짐 가방: 출발 준비 할 일을 체크한 만큼 가방이 차올라요
   let bagEl = null, bagMode = '';
   function prepFrac(){ const g = TODO.find(x => x.g === '🧳 출발 준비'); if(!g || !g.items.length) return null; const d = g.items.filter(i => store.done && store.done[i]).length; return { d, n: g.items.length }; }
-  const CHECKOUT = { '12/26': ['오늘 방콕 이동 — 통부라 10:30 출발 → 티니디', 'tb-stay'], '12/30': ['가족2 이동 — 10:30 티니디 출발 → GCP (체크인 14:00부터)', 'tb-stay'], '1/2': ['귀국일 — 08:30 호텔 출발, 체크아웃 후 공항으로', 'tb-stay'] };
+  const CHECKOUT = { '12/26': ['오늘 방콕 이동 — 통부라 10:00 출발 → 무앙보란 → 티니디', 'tb-stay'], '12/30': ['가족2 이동 — 10:30 티니디 출발 → GCP (체크인 14:00부터)', 'tb-stay'], '1/2': ['귀국일 — 08:30 호텔 출발, 체크아웃 후 공항으로', 'tb-stay'] };
   function bagTick(){
     const trip = tripNow(), t = thai(), md = (t.getUTCMonth() + 1) + '/' + t.getUTCDate(), h = t.getUTCHours();
     const co = trip && CHECKOUT[md] && h >= 5 && h < 13 ? CHECKOUT[md] : null;
