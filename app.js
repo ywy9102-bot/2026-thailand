@@ -240,8 +240,8 @@ const FAMS=[
  {tag:'가족 2',cnt:'3명',rows:[
    {n:'이준영',p:'12/27–1/2',g:1},{n:'박지해',p:'12/27–1/2',g:0},{n:'이동현',p:'12/27–1/2',g:0},
  ]},
- {tag:'가족 3',cnt:'2명',rows:[
-   {n:'김태기',p:'12/16–12/23',g:1},{n:'윤성욱',p:'12/1–1/4(미정)',g:1},
+ {tag:'가족 3',cnt:'3명',rows:[
+   {n:'김태기',p:'12/16–12/23',g:1},{n:'정영삼',p:'12/16–12/23',g:0},{n:'윤성욱',p:'12/1–1/4(미정)',g:1},
  ]},
 ];
 $('famsWrap').innerHTML = FAMS.map(f=>`
@@ -283,7 +283,7 @@ function gday(dk,l,extra){ // dk: GOLF의 d 필드('12/17' 등), l: 지역표시
     book:g.book, pid:g.pid, pids, van:g.van};
 }
 const ITIN_A=[
- {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기 도착',n:'OZ743 07:10–11:15 · KE657 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류',
+ {d:'16',w:'수',l:'BKK→파타야',e:'✈️',t:'윤우열·김태기·정영삼 도착',n:'OZ743(윤우열) 07:10–11:15 · KE657(김태기·정영삼) 09:15–13:25',x:'파타야 이동(~16시) · 통부라 체크인 · 윤성욱 합류',
   van:{book:'200673718',per:58266,route:'13:35 수완나품 공항 출발(KE657 도착 후 윤우열·김태기 동승) → 경유지에서 생수·간식 구매(2시간 레이오버) → 빌라 통부라 도착',pay:'정산완료',label:'이동 밴 확정'},
   rec:'도착 · 통부라(나 좀티엔) 근처 저녁',
   recd:[
@@ -342,13 +342,13 @@ const ITIN_A=[
    ['Plan C','스위스 십 팜 / 파타야 십 팜(양·알파카) 또는 언더워터월드'],
    ['참고','한낮 더위 → 실내·그늘 위주'],
   ]},
- {...gday('12/23','파타야','김태기 귀국 · 통부라 17시 출발 (KE658 21:40)'),
+ {...gday('12/23','파타야','김태기·정영삼 귀국 · 통부라 17시 출발 (KE658 21:40)'),
   van:{book:'200675397',route:'17:00 빌라 통부라 1층 로비 출발 → 수완나품 공항 출국장 (SUV 1대 · 김태기 단독, KE658)',note:'📄 예약확정서 확인 — 이용 1~2일 전 기사 배정 후 확정서가 다시 발송돼요. 편도 팁 100바트 권장',pay:'김태기 송금완료 · 80,676원',label:'공항 샌딩 확정 · 김태기'},
   rec:'비골퍼 오전 + 김태기 배웅',
   recd:[
    ['Plan A','실버레이크 포도농원(20일 미방문 시)'],
    ['Plan B','Frost Magical Ice + Art in Paradise — 짧게'],
-   ['오후','통부라 17시 출발 → 김태기 공항 샌딩 (KE658 21:40)'],
+   ['오후','통부라 17시 출발 → 김태기·정영삼 공항 샌딩 (KE658 21:40)'],
   ]},
  {...gday('12/24','파타야'),
   rec:'비골퍼(장모님) — 농눅빌리지',
@@ -477,7 +477,7 @@ const T_CAR=[
 
 const TODO=[
  {g:'🧳 출발 준비',items:[
-  'D-60 — 전 참가자(9명) 여행자보험 가입',
+  'D-60 — 전 참가자(10명) 여행자보험 가입',
   'D-45 — 항공권·숙소 바우처 PDF 미리 저장 (오프라인 대비)',
   'D-30 — 골프백 항공 위탁수하물 규정 확인 (OZ·KE 항공사별 상이)',
   'D-14 — 여권 유효기간 6개월 이상 확인',
@@ -1484,7 +1484,7 @@ function renderBudget(done, total){
   const paidSum = OWE.reduce((a,o)=> a + (store.done[paidKey(o)] ? o.t : 0), 0), owner = selfTotal + prepaidTotal, doneAmt = paidSum + owner, left = T - doneAmt;
   const pct = T ? Math.round(doneAmt/T*100) : 0;
   $('bgTotal').innerHTML = won(T) + '<small>원</small>';
-  $('bgNote').textContent = `숙박 + 골프 + 차량 · 참가자 9명 · 1인 평균 약 ${won(Math.round(T/9))}원`;
+  $('bgNote').textContent = `숙박 + 골프 + 차량 · 정산 참가자 9명 · 1인 평균 약 ${won(Math.round(T/9))}원`;
   const seg = (v,c) => v > 0 ? `<i style="flex:${v};background:${c}"></i>` : '';
   $('bgStack').innerHTML = seg(paidSum,'#7FD8A4') + seg(owner,'#8FB7E8') + seg(left,'#E3C169');
   $('bgLegend').innerHTML =
@@ -2519,7 +2519,7 @@ function __initFunElements(){
     if(seenFlag('thai2026_farewell')) return;
     setTimeout(()=>{
       const cd = pulseMilestoneRing();
-      celebrate({ kicker:'🏠 귀국', msg:'3가족 9명이 함께한 18일, 정말 수고 많으셨어요! 집까지 안전하게 도착하세요', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
+      celebrate({ kicker:'🏠 귀국', msg:'3가족 10명이 함께한 18일, 정말 수고 많으셨어요! 집까지 안전하게 도착하세요', ms:4800, at:cd||$('cd'), dy:28, n:34, spread:110, petals:true, plane:true });
     }, 900);
   })();
 
@@ -2661,10 +2661,10 @@ function __initFunElements(){
   const pair = (t,d)=> '<div class="cd-ln"><b>'+t+'</b></div><div class="cd-ln cd-tip">'+d+'</div>';
   const PAGES = [
     ['✈ 출발 · ICN → BKK', ()=>
-     '<div class="cd-fl"><b>OZ743</b> 07:10 <span>윤우열</span> · <b>KE657</b> 09:15 <span>김태기</span></div>'+
+     '<div class="cd-fl"><b>OZ743</b> 07:10 <span>윤우열</span> · <b>KE657</b> 09:15 <span>김태기·정영삼</span></div>'+
      '<div class="cd-fl"><b>OZ741</b> 12/18 18:05 <span>가족1 3인</span></div>'],
     ['🛬 귀국 · BKK → ICN', ()=>
-     '<div class="cd-fl"><b>KE658</b> 12/23 21:40 <span>김태기</span></div>'+
+     '<div class="cd-fl"><b>KE658</b> 12/23 21:40 <span>김태기·정영삼</span></div>'+
      '<div class="cd-fl"><b>OZ744</b> 1/2 12:25 <span>가족1·2</span> · <span>윤성욱 1/4</span></div>'],
     ['💡 태국 여행 팁', ()=>{ tipI = (tipI + 1) % TIPS.length; return '<div class="cd-ln cd-tip">'+TIPS[tipI]+'</div>'; }],
     ['💬 태국어 한마디', ()=>{ phI = (phI + 1) % PHRASES.length; return pair(PHRASES[phI][0], PHRASES[phI][1]); }],
