@@ -1089,7 +1089,7 @@ wireExpand(['stay'], '.lg-head', '.lg');
 (function(){
   const rows = GOLFERS.map(p=>{
     const cells = GOLF.map(g=>g.p.includes(p)
-      ? `<td title="${g.d} ${g.c}"><span class="mdot" style="background:${pc(p)}"></span></td>` : `<td class="no">·</td>`).join('');
+      ? `<td title="${g.d} ${g.c}"><span class="mdot" style="background:${pc(p)}"></span></td>` : `<td class="no"><span aria-hidden="true">·</span></td>`).join('');
     const cnt = GOLF.filter(g=>g.p.includes(p)).length;
     const perfect = cnt === GOLF.length;
     return `<tr><td>${dot(p)}${p}${perfect?' <span class="mx-crown" title="전 라운드 개근">👑</span>':''}</td><td class="mx-cnt">${cnt}</td>${cells}</tr>`;
