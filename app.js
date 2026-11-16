@@ -262,7 +262,7 @@ $('famsWrap').innerHTML = FAMS.map(f=>`
     let msg = golfCnt ? `⛳ 골프 ${golfCnt}라운드 참여` : '';
     if(owe){
       const paid = !!store.done[paidKey(owe)];
-      msg += (msg?' · ':'') + `💰 정산 ${won(owe.t)}원${paid?' (완료)':' (대기)'}`;
+      msg += (msg?' · ':'') + `💰 정산 ${won(owe.t)}원${paid?' (완료)':RECEIVED[owe.n]?` (추가 ${won(oweLeft(owe))}원 대기)`:' (대기)'}`;
     } else if(name==='윤우열'){
       msg += (msg?' · ':'') + '💰 정산금 수금 담당';
     }
@@ -371,13 +371,7 @@ const ITIN_A=[
 ];
 const ITIN_B=[
  {d:'26',w:'토',l:'파타야→BKK',e:'🚐',t:'방콕 이동 · 무앙보란',n:'통부라 10:00 출발 → 무앙보란 관광 5시간 → 티니디 체크인',
-  van:{book:'200754271',route:'10:00 빌라 통부라 로비 미팅 → 10:00–11:30 무앙보란(The Ancient City) 이동 → 11:30–16:30 관광 약 5시간(기사 대기·짐은 차에 보관) → 16:30–17:30 티니디 트렌디 카오산 도착 · 성인 4인 탑승(윤우열·정유경·정유현·장모님) · 5석 중 1석 여유분 · 12시간 렌탈',note:'📄 예약확정서 확인 — 유류·톨비 포함. 팁·시간 초과(12시간 넘으면 1시간 200바트)·주차비 불포함. 렌탈은 팁 200~300바트 권장',pay:'완료 · 윤우열 선결제 · 총 157,472원 (기존 89,376 + 변경 추가 68,096) · 추가분은 윤우열 22,698 · 정유경 22,699 · 정유현 22,699 (장모님은 기존 22,344만)',label:'이동 밴 확정 · 무앙보란 경유'},
-  rec:'저녁 쏨분시푸드 ① (가족1만)',
-  recd:[
-   ['식당','쏨분시푸드 — 반탓통(원조·분위기) 또는 수라웡(미쉐린). 카오산에서 그랩 15~20분'],
-   ['메뉴','푸팟퐁커리·꿍채남쁠라·뿌님팟퐁·카나무쌉'],
-   ['예약','<a href="https://www.somboonseafood.com" target="_blank" rel="noopener">somboonseafood.com ↗</a> · 피크 18~20시 → 17:30 또는 20:30'],
-  ]},
+  van:{book:'200754271',route:'10:00 빌라 통부라 로비 미팅 → 10:00–11:30 무앙보란(The Ancient City) 이동 → 11:30–16:30 관광 약 5시간(기사 대기·짐은 차에 보관) → 16:30–17:30 티니디 트렌디 카오산 도착 · 성인 4인 탑승(윤우열·정유경·정유현·장모님) · 5석 중 1석 여유분 · 12시간 렌탈',note:'📄 예약확정서 확인 — 유류·톨비 포함. 팁·시간 초과(12시간 넘으면 1시간 200바트)·주차비 불포함. 렌탈은 팁 200~300바트 권장',pay:'완료 · 윤우열 선결제 · 총 157,472원 (기존 89,376 + 변경 추가 68,096) · 추가분은 윤우열 22,698 · 정유경 22,699 · 정유현 22,699 (장모님은 기존 22,344만)',label:'이동 밴 확정 · 무앙보란 경유'}},
  {d:'27',w:'일',l:'BKK',e:'✈️',t:'가족1 낮 · 가족2 합류',n:'OZ741 19:35–23:20 · 티니디 ~24시 도착',
   van2:{book:'200675627',route:'가족2 · 23:20 수완나품 공항 입국장 2층 3·4번 게이트 사이 미팅(OZ741 인천 19:35 → 방콕 23:20) → 티니디 트렌디 카오산 (성인 3인: 이준영·박지해·이동현)',note:'📄 예약확정서 확인 — 야간 연락처 095-772-3924(19:00~05:00), 비상 086-902-0011. 기사가 차를 가져오느라 10~15분 기다릴 수 있어요. 호텔 옛 이름: Ibis Styles Bangkok Khaosan Viengtai',pay:'이준영 님 개별 예약·결제 (정산 제외)',label:'공항 픽업 밴 확정 · 가족2'},
   rec:'가족1 낮 · 가족2 밤 도착',
@@ -445,6 +439,8 @@ const ITIN_C=[
  {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
 ];
 
+// 금액이 아직 확정 전이라 "임시"로 표시할 사람 — 확정되면 이 줄에서 지우세요 (정영삼: 12/17 Chee Chan 골프 요금 미정, 입금 미수령)
+const TENTATIVE={'정영삼':'12/17 치찬 골프 요금 확정 전'};
 const OWE=[
  {n:'정유경',t:1699424,b:'숙박 935,425 + 골프 581,956 + 차량 182,043'},
  {n:'정유현',t:1735802,b:'숙박 935,425 + 골프 618,334 + 차량 182,043'},
@@ -454,6 +450,11 @@ const OWE=[
  {n:'장모님',t:1002003,b:'숙박 935,424 + 차량 66,579'},
  {n:'이준영',t:556272,b:'골프 476,148 + 차량 80,124'},
 ];
+// 청구액이 바뀌기 전에 이미 받은 금액 — 금액이 바뀌어 "정산완료"가 풀려도 남은 금액은 (청구액 − 받은 금액)만 보여요.
+// 새 금액을 전액 받아 정산완료를 누르면 자동으로 전액 완료로 계산돼요. 이미 정산완료인 분은 여기에 적지 않아도 돼요.
+const RECEIVED={'정유경':1676725,'정유현':1713103};
+const oweLeft = o => Math.max(0, o.t - (RECEIVED[o.n]||0));            // 아직 받을 금액
+const payText = o => RECEIVED[o.n] ? `${o.n} → 윤우열 추가 ${won(oweLeft(o))}원 (총 ${won(o.t)}원 중 받은 ${won(RECEIVED[o.n])}원 제외)` : `${o.n} → 윤우열 ${won(o.t)}원`;
 
 const T_STAY=[
  ['통부라 2BR','1,802,000','720,500','360,500','360,500','360,500'],
@@ -492,7 +493,7 @@ const TODO=[
  {g:'🔍 확인사항',items:[
   '12/21 정유경·정유현·장모님 별도 일정 확정 (쿠킹클래스 등)',
  ]},
- {g:'💸 정산 회수',items:OWE.map(o=>`${o.n} → 윤우열 ${o.t.toLocaleString()}원`)},
+ {g:'💸 정산 회수',items:OWE.map(payText)},
 ];
 
 /* ═══ RENDER ═══ */
@@ -1330,7 +1331,7 @@ function owedItems(name){
   const items=[];
   GOLF.forEach(g=>{
     if(g.amt && g.p.includes(name) && name!=='윤우열'){
-      items.push({label:`⛳ ${g.d} ${g.c}`, amt:(g.adj&&g.adj[name])||g.per});
+      items.push({label:`⛳ ${g.d} ${g.c}${g.d==='12/17'&&TENTATIVE[name]?' (임시)':''}`, amt:(g.adj&&g.adj[name])||g.per});
       if(g.van && !g.van.pending && (!g.van.riders || g.van.riders.includes(name))) items.push({label:`🚐 ${g.d} 왕복밴`, amt:g.van.per});
     }
   });
@@ -1365,7 +1366,7 @@ const prepaidTotal = Object.values(PREPAID).flat().reduce((a,it)=>a+it.amt,0);
 })();
 
 // "정산 회수" 완료 체크는 별도 저장소 없이 할일탭의 체크 상태(store.done)를 그대로 읽음 — 두 탭 어디서 체크해도 서로 반영됨
-const paidKey = o => `${o.n} → 윤우열 ${won(o.t)}원`;
+const paidKey = payText;
 // 코드 기준 정산완료 — 정산완료 표시는 기기별 저장이라, 확인된 완료 건은 여기에 적어 모든 기기에서 완료로 보이게 함.
 // 기기마다 처음 한 번만 반영하고(seeded), 이후 수금 담당이 해제하면 해제 상태 유지. 금액이 바뀌면(키 불일치) 자동으로 반영 안 됨
 const PAID_SEED = { '정유경': 1676725, '정유현': 1713103, '장모님': 1002003, '김태기': 1289859, '윤성욱': 1902373, '이준영': 556272 };
@@ -1435,7 +1436,8 @@ function renderBars(){
     const isMe = o.n === store.myName;
     return `<div class="bar-row ${paid?'settled':''} ${isMe?'is-me':''}" data-paid-key="${qesc(paidKey(o))}">
       <div class="bar-head">
-        <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}${isMe?' <span class="me-tag">⭐ 나</span>':''}<button class="chip ${paid?'ok':'wait'} pay-toggle" type="button" aria-pressed="${paid}" aria-label="${o.n} 정산완료 표시">${paid?'✅ 정산완료':'정산 대기'}</button></span><span class="bar-amt">${won(o.t)}원</span></div>
+        <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}${isMe?' <span class="me-tag">⭐ 나</span>':''}<button class="chip ${paid?'ok':'wait'} pay-toggle" type="button" aria-pressed="${paid}" aria-label="${o.n} 정산완료 표시">${paid?'✅ 정산완료':RECEIVED[o.n]?'추가분 대기':'정산 대기'}</button></span><span class="bar-amt">${TENTATIVE[o.n]?'<span class="chip todo">임시</span> ':''}${won(o.t)}원</span></div>
+        ${(!paid&&RECEIVED[o.n])?`<p class="th-note bar-rest" style="margin:4px 0 6px">이미 받은 ${won(RECEIVED[o.n])}원 · <b>추가 ${won(oweLeft(o))}원 대기</b></p>`:''}
         <div class="bar-track"><div class="bar-fill" data-w="${(o.t/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc(o.n)} 0%,${pc(o.n)}CC 100%)"></div></div>
         <button class="bar-brk" type="button" aria-expanded="false"><span class="chev" aria-hidden="true">▾</span><span>${o.b}</span></button>
       </div>
@@ -1443,7 +1445,8 @@ function renderBars(){
         ${items.map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label}</span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace">${won(it.amt)}원</span></div>`).join('')}
         ${(PREPAID[o.n]||[]).map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label} <b style="color:var(--ok)">✅ 사전 송금</b></span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace;color:var(--ink3)">${won(it.amt)}원</span></div>`).join('')}
         ${(PREPAID[o.n]||[]).length ? `<p class="th-note" style="margin:6px 0 0">위 "사전 송금" 항목은 이미 보내주셔서 위 정산 금액에 포함하지 않았어요.</p>` : ''}
-        <button class="bar-copy" type="button" data-n="${o.n}" data-t="${o.t}" data-b="${o.b.replace(/"/g,'&quot;')}">📋 정산 요청 메시지 복사</button>
+        ${TENTATIVE[o.n]?`<p class="th-note" style="margin:6px 0 0">⚠️ 임시 금액이에요 — ${TENTATIVE[o.n]}이라 확정되면 바뀔 수 있고, 아직 입금 전이에요.</p>`:''}
+        <button class="bar-copy" type="button" data-n="${o.n}" data-rcv="${(!paid&&RECEIVED[o.n])||''}" data-tent="${TENTATIVE[o.n]?'1':''}" data-t="${o.t}" data-b="${o.b.replace(/"/g,'&quot;')}">📋 정산 요청 메시지 복사</button>
       </div>
     </div>`;
   }).join('') + selfRowHTML();
@@ -1464,7 +1467,9 @@ function updateMineLine(){
   if(!mine){ el.style.display='none'; return; }
   const paid = !!store.done[paidKey(mine)];
   el.style.display='block';
-  el.innerHTML = `⭐ <b>${mine.n}</b>님이 보낼 금액: <b>${won(mine.t)}원</b>${paid?' · ✅ 이미 보냈어요':''}`;
+  el.innerHTML = paid || !RECEIVED[mine.n]
+    ? `⭐ <b>${mine.n}</b>님이 보낼 금액: <b>${won(mine.t)}원</b>${paid?' · ✅ 이미 보냈어요':''}`
+    : `⭐ <b>${mine.n}</b>님이 더 보낼 금액: <b>${won(oweLeft(mine))}원</b> · 총 ${won(mine.t)}원 중 ${won(RECEIVED[mine.n])}원은 이미 받았어요`;
 }
 renderWhoami();
 updateMineLine();
@@ -1486,7 +1491,7 @@ function budgetCats(){
 }
 function renderBudget(done, total){
   const cat = budgetCats(), T = cat.stay + cat.golf + cat.car;
-  const paidSum = OWE.reduce((a,o)=> a + (store.done[paidKey(o)] ? o.t : 0), 0), owner = selfTotal + prepaidTotal, doneAmt = paidSum + owner, left = T - doneAmt;
+  const paidSum = OWE.reduce((a,o)=> a + (store.done[paidKey(o)] ? o.t : (RECEIVED[o.n]||0)), 0), owner = selfTotal + prepaidTotal, doneAmt = paidSum + owner, left = T - doneAmt;
   const pct = T ? Math.round(doneAmt/T*100) : 0;
   $('bgTotal').innerHTML = won(T) + '<small>원</small>';
   $('bgNote').textContent = `숙박 + 골프 + 차량 · 참가자 10명 · 1인 평균 약 ${won(Math.round(T/10))}원`;
@@ -1560,7 +1565,7 @@ $('bars').addEventListener('click', async e=>{
   const cp = e.target.closest('.bar-copy');
   if(cp){
     e.stopPropagation();
-    const msg = `${cp.dataset.n}님, 태국 여행 정산 ${(+cp.dataset.t).toLocaleString()}원을 윤우열에게 보내주세요.\n(${cp.dataset.b})`;
+    const msg = (cp.dataset.rcv ? `${cp.dataset.n}님, 태국 여행 정산이 변경되어 추가 ${(+cp.dataset.t-+cp.dataset.rcv).toLocaleString()}원을 윤우열에게 보내주세요.\n(총 ${(+cp.dataset.t).toLocaleString()}원 중 이미 받은 ${(+cp.dataset.rcv).toLocaleString()}원 제외)` : `${cp.dataset.n}님, 태국 여행 정산 ${(+cp.dataset.t).toLocaleString()}원을 윤우열에게 보내주세요.`) + `\n(${cp.dataset.b})${cp.dataset.tent?'\n※ 임시 금액이에요. 골프 요금이 확정되면 다시 알려드릴게요.':''}`;
     try{ await navigator.clipboard.writeText(msg); }
     catch(_){ const ta=document.createElement('textarea'); ta.value=msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
     const o=cp.textContent; cp.textContent='✅ 복사됨'; cp.classList.add('copied'); haptic('ok');
@@ -1780,6 +1785,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🍤','12/26 저녁 쏨분시푸드 일정 삭제','12/26은 방콕 도착 후 근처에서 자유롭게 드시기로 해서, 일정표의 쏨분시푸드(가족1) 추천 코스를 뺐어요. 쏨분 지점들은 맛집 지도에 핀으로만 남아 있어요'],
     ['🏛️','12/26 방콕 이동 — 무앙보란 5시간 경유로 변경','12/26은 통부라 10:00에 출발해 무앙보란(The Ancient City)에서 약 5시간(11:30–16:30) 관광한 뒤 17:30쯤 티니디에 도착해요. 같은 예약(#200754271)이 12시간 렌탈로 바뀌었고, 5석 중 4명이 타고 1석은 여유분이에요. 짐은 기사님이 차에 보관해 줘요'],
     ['🌸','히어로 장난감 5가지 더 — 연타 불꽃·빗방울 파문·풍경·나비·코코넛','하늘을 빠르게 세 번 누르면 밤엔 작은 불꽃, 낮엔 꽃잎이 터져요. 비 오는 날 화면을 누르면 물웅덩이처럼 동그란 파문이 퍼지고, 바람이 센 날엔 풍경이 달려 딸랑~ 소리 대신 진동이 와요. 낮에는 가끔 나비가 날아오고 야자수에서 코코넛이 툭 떨어져 통통 튀어요. 놀이 도감은 28가지가 됐어요'],
     ['🫧','히어로 장난감 5가지 — 비눗방울·바다 친구·구름 변신·파도 쓸기·풍선','점수도 목표도 없는 장난감이에요. 하늘을 두 번 빠르게 누르면 비눗방울이 떠오르고 하나씩 누르면 퐁! 낮에는 가끔 돌고래(방콕에서는 배)가 지나가고, 구름을 누르면 코끼리·파인애플 같은 모양으로 변해요. 하늘을 옆으로 쓱 밀면 파도가 지나가고, 떠오르는 풍선을 누르면 펑 터져요. 진동도 함께 와요. 놀이 도감은 23가지가 됐어요'],
