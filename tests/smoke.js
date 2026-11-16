@@ -432,7 +432,7 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await o.page.evaluate(() => { window.__heroFun.found('gecko'); window.__heroFun.found('gecko'); window.__heroFun.found('bag'); });
       ok('놀이 도감: 같은 놀이는 한 번만 세고 두 개를 발견', await o.page.evaluate(() => window.__heroFun.dex() === 2));
       await o.page.waitForTimeout(3400);
-      ok('놀이 도감: "새 발견! (N/23)" 알림', /새 발견!.*\/23\)/.test(await tl(o.page)));
+      ok('놀이 도감: "새 발견! (N/28)" 알림', /새 발견!.*\/28\)/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 61, temp: 28, wind: 5 }); window.__heroFun.wxTick(); window.__wxNow = () => ({ code: 1, temp: 30, wind: 5 }); window.__heroFun.wxTick(); });
       ok('무지개: 비가 그친 낮에 무지개와 알림', await o.page.evaluate(() => !!document.querySelector('.hx-rainbow')) && /무지개/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 0, temp: 36, wind: 5 }); window.__heroFun.wxTick(); });
@@ -509,6 +509,33 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       o = await mk('2026-12-28T11:00:00+07:00');
       await o.page.evaluate(() => { window.__heroFun.seaGo(); });
       ok('작은 배: 방콕에서는 🛶', await o.page.evaluate(() => document.querySelector('.hx-sea').classList.contains('boat')));
+      await o.ctx.close();
+    }
+    // 4-1d12) 히어로 놀이 7: 연타 불꽃 · 빗방울 파문 · 풍경 · 나비 · 코코넛
+    {
+      const mk = async (clock, w = 390) => { const o = await open(browser, base, w, 844, { clock }); await o.page.waitForFunction(() => !!window.__heroFun, null, { timeout: 8000 }).catch(() => {}); await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} window.__heroFun.reset(); window.__tl = []; window.__toast = (k, m) => window.__tl.push(k + ' ' + m); window.__heroTick(); }); return o; };
+      const tl = page => page.evaluate(() => (window.__tl || []).join(' | '));
+      for (const w of [390, 320]) {
+        const o = await mk('2026-12-18T11:00:00+07:00', w);
+        await o.page.evaluate(() => { window.__wxNow = () => ({ code: 1, temp: 30, wind: 20 }); window.__heroFun.wxTick(); window.__heroFun.butterflyGo(); window.__heroFun.coconutGo(); });
+        ok(`풍경·나비·코코넛(${w}px): 모두 44px 이상·탭 순서 밖`, await o.page.evaluate(() => ['.hx-chime', '.hx-fly', '.hx-coco'].every(q => { const e = document.querySelector(q); if(!e) return false; const r = e.getBoundingClientRect(); return r.width >= 44 && r.height >= 44 && e.tabIndex === -1; })));
+        await o.ctx.close();
+      }
+      let o = await mk('2026-12-18T11:00:00+07:00');
+      await o.page.evaluate(() => { window.__wxNow = () => ({ code: 1, temp: 30, wind: 20 }); window.__heroFun.wxTick(); document.querySelector('.hx-chime').click(); });
+      ok('풍경: 바람 센 날 달리고 누르면 알림', /딸랑/.test(await tl(o.page)));
+      await o.page.evaluate(() => { window.__wxNow = () => ({ code: 1, temp: 30, wind: 3 }); window.__heroFun.wxTick(); });
+      ok('풍경: 바람이 잦아들면 사라짐', await o.page.evaluate(() => !document.querySelector('.hx-chime')));
+      await o.page.evaluate(() => { window.__heroFun.butterflyGo(); document.querySelector('.hx-fly').click(); });
+      ok('나비: 누르면 알림과 반짝임', /나비가 손끝/.test(await tl(o.page)) && await o.page.evaluate(() => window.__heroDebug().sparks > 0));
+      await o.page.evaluate(() => { window.__heroFun.coconutGo(); document.querySelector('.hx-coco').click(); });
+      ok('코코넛: 누르면 알림', /코코넛 주스/.test(await tl(o.page)));
+      await o.page.evaluate(() => window.__heroFun.burst(120, 60));
+      ok('연타 불꽃·꽃잎: 반짝임 입자가 생기고 알림', await o.page.evaluate(() => window.__heroDebug().sparks >= 20) && /꽃잎|불꽃/.test(await tl(o.page)));
+      await o.page.evaluate(() => { window.__wxNow = () => ({ code: 61, temp: 27, wind: 5 }); window.__heroFun.wxTick(); const h = document.querySelector('header.hero'); h.dispatchEvent(new MouseEvent('click', { clientX: 150, clientY: h.getBoundingClientRect().top + 60, bubbles: true })); });
+      ok('빗방울 파문: 비 오는 동안 누르면 파문 2겹', await o.page.evaluate(() => document.querySelectorAll('.hx-rip').length === 2) && /빗방울 파문/.test(await tl(o.page)));
+      ok('놀이 도감: 새 놀이 5가지가 모두 기록됨', await o.page.evaluate(() => window.__heroFun.dex() === 5));
+      ok('히어로 놀이 7: 콘솔 오류 없음', o.errs.length === 0, o.errs);
       await o.ctx.close();
     }
     // 4-1e0) 소식이 없는 날: 빈 목록이 오면 낡은 소식을 지우고 카드를 숨김
