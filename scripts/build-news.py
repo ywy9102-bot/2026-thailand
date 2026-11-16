@@ -158,7 +158,7 @@ def select(items, now, n=5):
     return picked
 
 
-def diagnose(items, now):
+def diagnose(items, now, keep=None):
     """진단용: 왜 빠졌는지 이유별 개수를 세요(고르는 규칙은 바꾸지 않아요)."""
     from collections import Counter
     c = Counter(); seen = set()
@@ -168,6 +168,7 @@ def diagnose(items, now):
         r = ('차단 매체' if it['src'] in BLOCK_SRC else '여행 지역 아님' if not PLACE.search(t) else '범죄' if CRIME.search(t) else '엉뚱한 주제' if OFFTOPIC.search(t) or SLANG.search(t) or NOT_CITY.search(t)
              else '홍보·상품' if PROMO.search(t) else '잡음' if NOISE.search(t) and '골프' not in t else '오래됨' if (now - it['ts']).total_seconds() > 72 * 3600 else '후보')
         c[r] += 1
+        if keep is not None: keep.setdefault(r, []).append(f"{t} | {it['src']}")
     return c
 
 
@@ -239,7 +240,10 @@ def main():
             except Exception as e: print('  해석 실패', q, e, file=sys.stderr)
     data = build(items, now)
     print(f"받은 기사 {len(items)}개 → 고른 기사 {len(data['items'])}개")
-    print('  걸러진 이유:', dict(diagnose(items, now)))
+    kept = {}
+    print('  걸러진 이유:', dict(diagnose(items, now, kept)))
+    for r in ('후보', '여행 지역 아님'):   # 왜 0~1개인지 볼 수 있게 탈락한 기사 제목도 남겨요(고르는 규칙은 그대로)
+        for t in kept.get(r, [])[:25]: print(f'  [{r}]', t)
     for i in data['items']: print(' ', i['cat'], '|', i['title'], '|', i['src'])
     if not data['items']: print('고른 기사가 없어요 — 앱이 낡은 소식을 계속 보여주지 않도록 빈 목록으로 올려요')
     open(a.out or 'news.json', 'w', encoding='utf-8').write(json.dumps(data, ensure_ascii=False, indent=1))
