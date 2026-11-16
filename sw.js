@@ -22,6 +22,10 @@ self.addEventListener('fetch', e => {
   if(req.method !== 'GET') return;
   const url = new URL(req.url);
   if(url.origin !== self.location.origin || url.pathname.endsWith('/sw.js')) return;
+  // 앱 폴더 밖/하위 폴더(예: 영상 전용 페이지)는 저장하지 않고 그대로 통과시켜요. 영상이 앱 저장소에 쌓이거나 앱 화면 저장본을 덮어쓰지 않게 해요.
+  const base = new URL('./', self.location.href).pathname;
+  const rel = url.pathname.startsWith(base) ? url.pathname.slice(base.length) : null;
+  if(rel === null || rel.includes('/')) return;
   if(req.mode === 'navigate') {
     e.respondWith(fetch(req).then(res => {
       if(res.ok){ const copy = res.clone(); caches.open(CACHE).then(c => c.put('index.html', copy)); }
