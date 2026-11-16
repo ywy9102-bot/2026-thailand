@@ -1,10 +1,10 @@
 골프 일정 (날짜 / 골프장 / 참가자)
 
-12/17(목) / Chee Chan Golf Resort / 윤우열, 김태기, 윤성욱
-12/18(금) / Siam CC Rolling Hills / 윤우열, 김태기, 윤성욱
-12/21(월) / Siam CC Plantation / 윤우열, 김태기, 윤성욱, 정유경
-12/22(화) / Siam CC Waterside / 윤우열, 김태기, 윤성욱, 정유경, 정유현
-12/23(수) / Siam CC Plantation / 윤우열, 김태기, 윤성욱, 정유경, 정유현
+12/17(목) / Chee Chan Golf Resort / 윤우열, 김태기, 윤성욱, 정영삼
+12/18(금) / Siam CC Rolling Hills / 윤우열, 김태기, 윤성욱, 정영삼
+12/21(월) / Siam CC Plantation / 윤우열, 김태기, 윤성욱, 정영삼
+12/22(화) / Siam CC Waterside / 윤우열, 김태기, 윤성욱, 정영삼, 정유현
+12/23(수) / Siam CC Plantation / 윤우열, 김태기, 윤성욱, 정유경, 정영삼
 12/24(목) / Phoenix Gold Golf & CC / 윤우열, 윤성욱, 정유경, 정유현
 12/29(화) / Nikanti Golf Club / 윤우열, 이준영, 윤성욱, 정유현
 12/31(목) / Royal Bang Pa-In Golf Club / 윤우열, 이준영, 윤성욱, 정유경
