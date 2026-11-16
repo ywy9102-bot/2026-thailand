@@ -27,6 +27,8 @@ QUERIES = [
 ]
 PLACE = re.compile(r'방콕|파타야|태국|수완나품|돈므앙|타이랜드|바트')
 TARGET = re.compile(r'방콕|파타야|사타힙|촌부리|수완나품|돈므앙')            # 이번 여행 지역
+CASUALTY = re.compile(r'(?:1\d|[2-9]\d|\d{3,})\s*명\s*(?:이\s*)?(?:사망|숨져|숨지|숨진)|사망\s*(?:1\d|[2-9]\d|\d{3,})\s*명')   # 사망자 10명 이상
+def major(t): return '태국' in t and bool(CASUALTY.search(t))   # 태국 어디서든 일어난 대형 사고(사망 10명 이상)는 여행 지역이 아니어도 속보로 보여줘요
 FAR = re.compile(r'푸껫|푸켓|치앙마이|치앙라이|사무이|끄라비|핫야이|후아힌|코팡안|남부|북부|이산')   # 여행 지역이 아닌 곳
 BLOCK_SRC = {'Vietnam.vn', 'IndexBox', '판다랭크', '톱스타뉴스', 'TV리포트', 'MHN스포츠', '티브이데일리', '싱글리스트', '미디어파인', '텐아시아', '뉴스엔', 'Weverse'}                                          # 번역·자동 생성 느낌이 강한 곳
 FEATURE = re.compile(r'\[글로벌 pick\]|기적|인생|화제|스토리|이야기|맛집|후기|추천|꿀팁')   # 소식이 아니라 읽을거리
@@ -106,7 +108,7 @@ def classify(title):
 def score(item, now, hits):
     cid, base = classify(item['title'])
     s = base + (3 if re.search(r'방콕|파타야', item['title']) else 1 if '태국' in item['title'] else 0)
-    if FAR.search(item['title']) and not TARGET.search(item['title']): s -= 4
+    if FAR.search(item['title']) and not TARGET.search(item['title']) and not major(item['title']): s -= 4
     if FEATURE.search(item['title']): s -= 3
     if cid != 'golf' and FEATURE2.search(item['title']): s -= 3
     if cid == 'news' and GOV.search(item['title']): s -= 3
@@ -128,7 +130,7 @@ def select(items, now, n=5):
         if not PLACE.search(it['title']) or (NOISE.search(it['title']) and '골프' not in it['title']): continue
         if (now - it['ts']).total_seconds() > (168 if classify(it['title'])[0] in ('safety', 'econ') else 72) * 3600: continue   # 여행경보·경제는 천천히 바뀌므로 7일까지 봐요
         cid, s = score(it, now, it['hits'])
-        if cid == 'breaking' and not TARGET.search(it['title']): continue   # 속보도 방콕·파타야 기사만 ("폭발한" 같은 비유 표현 방지)
+        if cid == 'breaking' and not TARGET.search(it['title']) and not major(it['title']): continue   # 속보도 방콕·파타야 기사만 ("폭발한" 같은 비유 표현 방지)
         if cid == 'golf' and not TARGET.search(it['title']) and not STORM.search(it['title']): continue   # 방콕·파타야 밖 골프장 소식(나콘사완 등)은 빼요
         if cid in ('news', 'econ') and s < 6: continue
         if cid in ('news', 'econ', 'travel') and STATS.search(it['title']) and not DIRECT2.search(it['title']): continue   # 통계·동향 기사는 여행객에게 바로 닿는 말이 있을 때만
@@ -147,7 +149,7 @@ def select(items, now, n=5):
     for cid in ('breaking', 'weather', 'safety', 'fx', 'golf', 'econ'):
         for x in pool:
             if len(picked) >= n: break
-            if x['cat'] == cid and (cid in ('fx', 'safety', 'econ') or TARGET.search(x['title'])) and ok(x, False):
+            if x['cat'] == cid and (cid in ('fx', 'safety', 'econ') or TARGET.search(x['title']) or major(x['title'])) and ok(x, False):
                 picked.append(x); per_src[x['src']] = per_src.get(x['src'], 0) + 1; per_cat[cid] = per_cat.get(cid, 0) + 1; break
     for strict in (True, False):
         for x in pool:
@@ -223,6 +225,8 @@ def selftest():
     assert all(i['src'] != 'Vietnam.vn' for i in out['items']), out
     assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t or 'MLB' in t or '아이뮤지엄' in t or '발대식' in t or '성료' in t for t in titles), titles                    # 범죄·가상화폐 제외
     assert not any('학과' in t or '회원권' in t or '새로 연' in t or '입국 누계' in t or '카펠라' in t or '웰니스 여정' in t or '빅뱅' in t or 'MOU' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t or '피싱' in t or '재판' in t or '골프스쿨' in t or '블랙핑크' in t or '뉴진스' in t or 'QWER' in t or '송혜교' in t or '보안 강화로' in t or '열애설' in t or '가상자산' in t or '정상회담' in t or '팝업스토어' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
+    big = [x['title'] for x in select([mk('태국 푸껫 상가서 큰불…11명 사망·16명 부상', '연합뉴스', 3), mk('태국 푸껫 상가서 큰불…11명 숨지고 16명 부상', '경향신문', 3), mk('태국 푸껫 리조트 정전으로 투숙객 불편', '뉴시스', 3), mk('태국 치앙마이 버스 사고, 2명 사망', '뉴스1', 3)], now)]
+    assert len(big) == 1 and '11명' in big[0], big      # 태국 대형 사고(사망 10명 이상)는 푸껫이어도 속보로 한 건만, 작은 사고·정전은 제외
     assert classify('태국 출국세 1,000바트·입국료 450바트 추진…한국·일본과 비교')[0] == 'travel' and classify('태국 바트 환율 5년 만에 최저')[0] == 'fx'      # 출국세·입국료는 여행, 환율은 환율
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
     assert out['date'] == '2026-12-20' and out['updated'].startswith('2026-12-20'), out
