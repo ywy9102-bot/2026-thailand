@@ -28,6 +28,8 @@ QUERIES = [
 PLACE = re.compile(r'방콕|파타야|태국|수완나품|돈므앙|타이랜드|바트')
 TARGET = re.compile(r'방콕|파타야|사타힙|촌부리|수완나품|돈므앙')            # 이번 여행 지역
 CASUALTY = re.compile(r'(?:1\d|[2-9]\d|\d{3,})\s*명\s*(?:이\s*)?(?:사망|숨져|숨지|숨진)|사망\s*(?:1\d|[2-9]\d|\d{3,})\s*명')   # 사망자 10명 이상
+def cas_key(t):   # 사망자 수(예: 11)로 같은 대형 사고인지 가려요
+    m = CASUALTY.search(t); d = re.search(r'\d+', m.group(0)) if m else None; return d.group(0) if d else None
 def major(t): return '태국' in t and bool(CASUALTY.search(t))   # 태국 어디서든 일어난 대형 사고(사망 10명 이상)는 여행 지역이 아니어도 속보로 보여줘요
 FAR = re.compile(r'푸껫|푸켓|치앙마이|치앙라이|사무이|끄라비|핫야이|후아힌|코팡안|남부|북부|이산')   # 여행 지역이 아닌 곳
 BLOCK_SRC = {'Vietnam.vn', 'IndexBox', '판다랭크', '톱스타뉴스', 'TV리포트', 'MHN스포츠', '티브이데일리', '싱글리스트', '미디어파인', '텐아시아', '뉴스엔', 'Weverse'}                                          # 번역·자동 생성 느낌이 강한 곳
@@ -143,6 +145,7 @@ def select(items, now, n=5):
     picked, per_src, per_cat = [], {}, {}
     def ok(x, strict):
         if any(similar(x['title'], p['title']) for p in picked): return False
+        if major(x['title']) and any(major(p['title']) and cas_key(p['title']) == cas_key(x['title']) for p in picked): return False   # 매체마다 제목이 달라도 사망자 수가 같은 대형 사고는 한 건만
         if per_src.get(x['src'], 0) >= 2: return False
         return not strict or per_cat.get(x['cat'], 0) < CAP.get(x['cat'], 2)
     # 먼저 속보·날씨·안전·환율·골프·경제에서 하나씩(있으면) 골라 주제가 고르게 들어가게 해요
@@ -226,6 +229,8 @@ def selftest():
     assert not any('소매치기' in t or '마약' in t or '블록체인' in t or 'USDT' in t or '민니' in t or '게임쇼' in t or '코스메틱' in t or '파크골프' in t or '가성비' in t or '로컬' in t or '김치맨' in t or '아마골프' in t or 'NCT' in t or '노점상' in t or '호텔 폐업' in t or 'MLB' in t or '아이뮤지엄' in t or '발대식' in t or '성료' in t for t in titles), titles                    # 범죄·가상화폐 제외
     assert not any('학과' in t or '회원권' in t or '새로 연' in t or '입국 누계' in t or '카펠라' in t or '웰니스 여정' in t or '빅뱅' in t or 'MOU' in t or '소비자물가지수' in t or '비트겟' in t or '프로모션' in t or '출발확정' in t or '일정 제안' in t or '피싱' in t or '재판' in t or '골프스쿨' in t or '블랙핑크' in t or '뉴진스' in t or 'QWER' in t or '송혜교' in t or '보안 강화로' in t or '열애설' in t or '가상자산' in t or '정상회담' in t or '팝업스토어' in t for t in titles), titles   # 학교 행사·회원권·신규 오픈·관광 홍보 제외
     big = [x['title'] for x in select([mk('태국 푸껫 상가서 큰불…11명 사망·16명 부상', '연합뉴스', 3), mk('태국 푸껫 상가서 큰불…11명 숨지고 16명 부상', '경향신문', 3), mk('태국 푸껫 리조트 정전으로 투숙객 불편', '뉴시스', 3), mk('태국 치앙마이 버스 사고, 2명 사망', '뉴스1', 3)], now)]
+    real = [x['title'] for x in select([mk('태국 푸껫 상가서 화재, 11명 사망…관광객 피해는 없어', '동행미디어 시대', 3), mk('태국 휴양지 푸껫 상가서 한밤 화재…11명 사망·16명 부상', '뉴스1', 3), mk('태국 푸껫 상가 건물서 화재, 11명 사망', '국제뉴스', 3), mk('태국 휴양지 푸껫서 큰불...11명 사망·최소 16명 부상', 'KBC광주방송', 3)], now)]
+    assert len(real) == 1, real      # 같은 사고를 매체마다 다르게 쓴 실제 제목 4개도 한 건만
     assert len(big) == 1 and '11명' in big[0], big      # 태국 대형 사고(사망 10명 이상)는 푸껫이어도 속보로 한 건만, 작은 사고·정전은 제외
     assert classify('태국 출국세 1,000바트·입국료 450바트 추진…한국·일본과 비교')[0] == 'travel' and classify('태국 바트 환율 5년 만에 최저')[0] == 'fx'      # 출국세·입국료는 여행, 환율은 환율
     assert {'safety'} <= {i['cat'] for i in out['items']}, out                                          # 여행경보는 들어감
