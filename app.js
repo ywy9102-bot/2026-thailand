@@ -439,6 +439,8 @@ const ITIN_C=[
  {d:'4',w:'월',l:'BKK',e:'✈️',t:'윤성욱 귀국',n:'일자 미정 · 본인 자체 해결'},
 ];
 
+// 금액이 아직 확정 전이라 "임시"로 표시할 사람 — 확정되면 이 줄에서 지우세요 (정영삼: 12/17 Chee Chan 골프 요금 미정, 입금 미수령)
+const TENTATIVE={'정영삼':'12/17 치찬 골프 요금 확정 전'};
 const OWE=[
  {n:'정유경',t:1699424,b:'숙박 935,425 + 골프 581,956 + 차량 182,043'},
  {n:'정유현',t:1735802,b:'숙박 935,425 + 골프 618,334 + 차량 182,043'},
@@ -1324,7 +1326,7 @@ function owedItems(name){
   const items=[];
   GOLF.forEach(g=>{
     if(g.amt && g.p.includes(name) && name!=='윤우열'){
-      items.push({label:`⛳ ${g.d} ${g.c}`, amt:(g.adj&&g.adj[name])||g.per});
+      items.push({label:`⛳ ${g.d} ${g.c}${g.d==='12/17'&&TENTATIVE[name]?' (임시)':''}`, amt:(g.adj&&g.adj[name])||g.per});
       if(g.van && !g.van.pending && (!g.van.riders || g.van.riders.includes(name))) items.push({label:`🚐 ${g.d} 왕복밴`, amt:g.van.per});
     }
   });
@@ -1429,7 +1431,7 @@ function renderBars(){
     const isMe = o.n === store.myName;
     return `<div class="bar-row ${paid?'settled':''} ${isMe?'is-me':''}" data-paid-key="${qesc(paidKey(o))}">
       <div class="bar-head">
-        <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}${isMe?' <span class="me-tag">⭐ 나</span>':''}<button class="chip ${paid?'ok':'wait'} pay-toggle" type="button" aria-pressed="${paid}" aria-label="${o.n} 정산완료 표시">${paid?'✅ 정산완료':'정산 대기'}</button></span><span class="bar-amt">${won(o.t)}원</span></div>
+        <div class="bar-top"><span class="bar-nm">${dot(o.n)}${o.n}${isMe?' <span class="me-tag">⭐ 나</span>':''}<button class="chip ${paid?'ok':'wait'} pay-toggle" type="button" aria-pressed="${paid}" aria-label="${o.n} 정산완료 표시">${paid?'✅ 정산완료':'정산 대기'}</button></span><span class="bar-amt">${TENTATIVE[o.n]?'<span class="chip todo">임시</span> ':''}${won(o.t)}원</span></div>
         <div class="bar-track"><div class="bar-fill" data-w="${(o.t/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc(o.n)} 0%,${pc(o.n)}CC 100%)"></div></div>
         <button class="bar-brk" type="button" aria-expanded="false"><span class="chev" aria-hidden="true">▾</span><span>${o.b}</span></button>
       </div>
@@ -1437,7 +1439,8 @@ function renderBars(){
         ${items.map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label}</span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace">${won(it.amt)}원</span></div>`).join('')}
         ${(PREPAID[o.n]||[]).map(it=>`<div class="gd-row"><span class="gd-v" style="flex:1">${it.label} <b style="color:var(--ok)">✅ 사전 송금</b></span><span class="gd-v n" style="flex:none;font-family:'IBM Plex Mono',monospace;color:var(--ink3)">${won(it.amt)}원</span></div>`).join('')}
         ${(PREPAID[o.n]||[]).length ? `<p class="th-note" style="margin:6px 0 0">위 "사전 송금" 항목은 이미 보내주셔서 위 정산 금액에 포함하지 않았어요.</p>` : ''}
-        <button class="bar-copy" type="button" data-n="${o.n}" data-t="${o.t}" data-b="${o.b.replace(/"/g,'&quot;')}">📋 정산 요청 메시지 복사</button>
+        ${TENTATIVE[o.n]?`<p class="th-note" style="margin:6px 0 0">⚠️ 임시 금액이에요 — ${TENTATIVE[o.n]}이라 확정되면 바뀔 수 있고, 아직 입금 전이에요.</p>`:''}
+        <button class="bar-copy" type="button" data-n="${o.n}" data-tent="${TENTATIVE[o.n]?'1':''}" data-t="${o.t}" data-b="${o.b.replace(/"/g,'&quot;')}">📋 정산 요청 메시지 복사</button>
       </div>
     </div>`;
   }).join('') + selfRowHTML();
@@ -1554,7 +1557,7 @@ $('bars').addEventListener('click', async e=>{
   const cp = e.target.closest('.bar-copy');
   if(cp){
     e.stopPropagation();
-    const msg = `${cp.dataset.n}님, 태국 여행 정산 ${(+cp.dataset.t).toLocaleString()}원을 윤우열에게 보내주세요.\n(${cp.dataset.b})`;
+    const msg = `${cp.dataset.n}님, 태국 여행 정산 ${(+cp.dataset.t).toLocaleString()}원을 윤우열에게 보내주세요.\n(${cp.dataset.b})${cp.dataset.tent?'\n※ 임시 금액이에요. 골프 요금이 확정되면 다시 알려드릴게요.':''}`;
     try{ await navigator.clipboard.writeText(msg); }
     catch(_){ const ta=document.createElement('textarea'); ta.value=msg; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
     const o=cp.textContent; cp.textContent='✅ 복사됨'; cp.classList.add('copied'); haptic('ok');
