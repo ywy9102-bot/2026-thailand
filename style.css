@@ -814,6 +814,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .bg-legend li{display:flex;align-items:center;gap:7px}
 .bg-legend li i{flex:none;width:10px;height:10px;border-radius:50%}
 .bg-legend li b{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-weight:600;color:inherit}
+.cost-hero.all-done .bg-stack,.cost-hero.all-done .bg-legend,.cost-hero.all-done .bg-two{display:none}
 .bg-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .bg-two>div{padding:10px 12px;border-radius:12px;background:var(--k-rgba-255-255-255-1)}
 .bg-two span{display:block;font-size:13px;color:var(--fg-soft)}

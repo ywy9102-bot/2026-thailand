@@ -1415,7 +1415,7 @@ function selfRowHTML(){
   const brk = `숙박 ${won(cat.stay)} + 골프 ${won(cat.golf)} + 차량 ${won(cat.car)}`;
   return `<div class="bar-row self" data-self="1">
       <div class="bar-head">
-        <div class="bar-top"><span class="bar-nm">${dot('윤우열')}윤우열 <span class="me-tag">💼 수금 담당</span><span class="chip ok" aria-label="윤우열 선지불 완료">✅ 선지불 완료</span></span><span class="bar-amt">${won(selfTotal)}원</span></div>
+        <div class="bar-top"><span class="bar-nm">${dot('윤우열')}윤우열 <span class="me-tag">💼 수금 담당</span><span class="chip ok" aria-label="윤우열 정산완료">✅ 정산완료</span></span><span class="bar-amt">${won(selfTotal)}원</span></div>
         <div class="bar-track"><div class="bar-fill" data-w="${Math.min(100, selfTotal/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc('윤우열')} 0%,${pc('윤우열')}CC 100%)"></div></div>
         <button class="bar-brk" type="button" aria-expanded="false"><span class="chev" aria-hidden="true">▾</span><span>${brk}</span></button>
       </div>
@@ -1542,7 +1542,9 @@ function renderBudget(done, total){
   const paidSum = OWE.reduce((a,o)=> a + (store.done[paidKey(o)] ? o.t : (RECEIVED[o.n]||0)), 0), owner = selfTotal + prepaidTotal, doneAmt = paidSum + owner, left = T - doneAmt;
   const pct = T ? Math.round(doneAmt/T*100) : 0;
   $('bgTotal').innerHTML = won(T) + '<small>원</small>';
-  $('bgNote').textContent = `숙박 + 골프 + 차량 · 참가자 10명 · 1인 평균 약 ${won(Math.round(T/10))}원`;
+  const allDone = left <= 0 && done === total;
+  $('budgetHero').classList.toggle('all-done', allDone);
+  $('bgNote').textContent = allDone ? `✅ 전원 정산완료 · 1인 평균 약 ${won(Math.round(T/10))}원` : `숙박 + 골프 + 차량 · 참가자 10명 · 1인 평균 약 ${won(Math.round(T/10))}원`;
   const seg = (v,c) => v > 0 ? `<i style="flex:${v};background:${c}"></i>` : '';
   $('bgStack').innerHTML = seg(paidSum,'#7FD8A4') + seg(owner,'#8FB7E8') + seg(left,'#E3C169');
   $('bgLegend').innerHTML =
