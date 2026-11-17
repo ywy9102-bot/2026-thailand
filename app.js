@@ -1955,6 +1955,39 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   }, 650);
 })();
 
+// ── 시트 아래로 끌어 닫기: 아래서 올라오는 시트(이번 업데이트 등)의 맨 위 손잡이 부분을 아래로 끌어 놓으면 닫혀요 ──
+// 끌 수 있는 곳은 시트 맨 위 52px(손잡이·제목 줄)뿐이라 목록 스크롤과 겹치지 않아요. 닫기 동작은 각 시트의 "닫기" 버튼을 그대로 눌러요.
+(function(){
+  const ZONE = 52, CLOSE_DY = 90, CLOSE_V = 0.6;   // 끌 수 있는 높이(px) · 닫히는 거리(px) · 빠르게 쓸어내릴 때 속도(px/ms)
+  let sh = null, scrim = null, y0 = 0, t0 = 0, dy = 0, active = false;
+  const isBottomSheet = s => { const sc = s.closest('.wn-scrim'); return !!sc && !sc.hidden && sc.classList.contains('on') && getComputedStyle(sc).alignItems === 'flex-end'; };
+  function start(target, y){
+    const s = target && target.closest && target.closest('.wn-sheet'); if(!s || !isBottomSheet(s)) return;
+    if(target.closest('button,a,input,select,textarea,label')) return;
+    const r = s.getBoundingClientRect(); if(y < r.top || y - r.top > ZONE) return;
+    sh = s; scrim = s.closest('.wn-scrim'); y0 = y; t0 = performance.now(); dy = 0; active = true; sh.style.transition = 'none';
+  }
+  function move(y){
+    if(!active) return;
+    dy = Math.max(0, y - y0);
+    sh.style.transform = 'translateY(' + dy + 'px)';
+    scrim.style.background = 'rgba(12,35,29,' + (0.55 * Math.max(0, 1 - dy / 320)).toFixed(3) + ')';
+  }
+  function end(){
+    if(!active) return; active = false;
+    const v = dy / Math.max(1, performance.now() - t0), go = dy > CLOSE_DY || (dy > 30 && v > CLOSE_V);
+    sh.style.transition = ''; sh.style.transform = ''; scrim.style.background = '';
+    if(go){ const c = sh.querySelector('.wn-close'); if(c) c.click(); else scrim.dispatchEvent(new MouseEvent('click', {bubbles:true})); }
+    sh = scrim = null; dy = 0;
+  }
+  document.addEventListener('touchstart', e => { if(e.touches.length === 1) start(e.target, e.touches[0].clientY); }, {passive:true});
+  document.addEventListener('touchmove', e => { if(!active) return; move(e.touches[0].clientY); if(e.cancelable) e.preventDefault(); }, {passive:false});
+  document.addEventListener('touchend', end); document.addEventListener('touchcancel', end);
+  document.addEventListener('mousedown', e => { if(e.button === 0) start(e.target, e.clientY); });
+  document.addEventListener('mousemove', e => move(e.clientY));
+  document.addEventListener('mouseup', end);
+})();
+
 // ── 여행 콘텐츠 풀 (카운트다운 뒷면 · 오늘의 태국 카드가 공유) ──
 // 여행 팁 — "공항에서 한 번 훑는" 실전 준비물·이동 위주 (문화·예절 상세는 일정탭 OX 퀴즈로 분리)
 const TIPS = [
