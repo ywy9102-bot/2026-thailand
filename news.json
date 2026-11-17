@@ -1,13 +1,41 @@
 {
- "updated": "2026-11-16T06:58:14+00:00",
- "date": "2026-11-16",
+ "updated": "2026-11-17T04:43:10+00:00",
+ "date": "2026-11-17",
  "items": [
   {
    "cat": "breaking",
-   "title": "태국 푸껫 상가서 화재, 11명 사망…관광객 피해는 없어",
-   "src": "동행미디어 시대",
-   "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFA0NFpxdzBuemZMaFUzWTB1aGxyWlNoTGg4ZW83UVJ4a0FzZ1B5OUoxZGduT1REUXQzTmZIRnlMaDVBR3hfdGJ5dUlIS3NqXzRnZVlCc3RZdlp1NGRUU1E?oc=5",
-   "ts": "2026-11-16T06:08:31+00:00"
+   "title": "태국 푸껫 화재에 11명 사망·16명 부상…관광객 피해는 없어",
+   "src": "강원도민일보",
+   "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9SS2w0alI3U0pyU3R5YUJzSVNzY0J4RVBDX3dPbEJvWXV4b0ZKcnBtQkVHRnZiUnNkLTFFWDVpQzBaWjlJSHZJeHU4OHVzYm5wZlA1OXc0S2dMN1EzeUdITlMzT1ZtN2s?oc=5",
+   "ts": "2026-11-16T04:57:17+00:00"
+  },
+  {
+   "cat": "weather",
+   "title": "태국, 방콕 일기예보 | MSN 날씨",
+   "src": "MSN",
+   "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZDd1dzhDVUhHNG9QUmlqbGFYV3BPcDBleS1zVkpiTG9CZ00taTEyVTFHdFEwVzZhbzlGcG5FaDRGakw4QWF4U1lMb2d0MGxLdkd4ZXc4ZncwdDFySnNMV1RuUjdocFoxdDBNZ0tPVWFXbkZVdFZSOUFfWTJ6Z2hUTDhVUmVCSG5VNlV3?oc=5",
+   "ts": "2026-11-16T01:57:31+00:00"
+  },
+  {
+   "cat": "econ",
+   "title": "미얀마 뉴스 - 미얀마·인도네시아, 방콕서 경제협력 논의…교역·투자 확대 모색",
+   "src": "AD Shofar",
+   "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9UbDJxemM2UFBhckpEVEEyM2VMbTF4d2ZEY0JPZ09WSVhWM1hWZF9pMmJtbmpHRnRYWERKcHRjNnJLdUY5ZGR0YmFxTDNWTTREZHJJ?oc=5",
+   "ts": "2026-11-16T06:46:00+00:00"
+  },
+  {
+   "cat": "travel",
+   "title": "태국인 18명 불법입국 알선…브로커 부부 송치 : 사회",
+   "src": "재경일보",
+   "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBrbjZJRG9DdU5hS0dfVXhrUlJ3RlozRk1nSGJMOVVrV245cmJYRHp0UGwySFd0bGtNMGlFOWI3UF9PWjE0c1FLUmM3cw?oc=5",
+   "ts": "2026-11-17T03:57:20+00:00"
+  },
+  {
+   "cat": "travel",
+   "title": "관광객 행세 교육까지…태국인 불법입국시킨 부부 송치 : 사회",
+   "src": "재경일보",
+   "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBlVUtObGRncnRuMDZtOGNDeFNBMW90RFhsZDdBdHhSdHU1TWxYV0NFQmZHYzZEWFNRd0psWjA3SnQwZjM3cGd5aWlidw?oc=5",
+   "ts": "2026-11-17T03:53:54+00:00"
   }
  ]
 }
