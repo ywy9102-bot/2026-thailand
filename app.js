@@ -1835,6 +1835,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🕰️','히어로 "하늘 시간 돌리기" — 하루가 휙 지나가요','첫 화면 하늘을 손가락으로 꾹(0.5초) 누른 채 좌우로 밀어 보세요. 해와 달이 하늘을 가로지르고 하늘빛이 새벽 보라 → 아침 복숭아 → 낮 하늘 → 금빛 → 노을 주홍 → 별밤로 바뀌어요. 해·달 아래에 지금 보는 시각이 따라다니고, 손을 떼면 부드럽게 지금 시각으로 돌아와요. 점수도 목표도 없는 장난감이고 놀이 도감은 29가지가 됐어요'],
     ['⏰','12/17 치찬 티오프 08:34 → 08:26로 변경','12/17 Chee Chan 예약확정서(#200693563)에 확정 티오프가 08:26으로 나와 있어서 일정과 골프 카드를 맞췄어요. 치찬은 티오프 시간을 예약된 시간에서 앞당기거나 늦출 수 없고, 현장에서도 변경이 안 된다고 안내돼 있어요. 12/18 롤링힐스(#200691954)는 07:56·4명 그대로예요'],
     ['🍤','12/26 저녁 쏨분시푸드 일정 삭제','12/26은 방콕 도착 후 근처에서 자유롭게 드시기로 해서, 일정표의 쏨분시푸드(가족1) 추천 코스를 뺐어요. 쏨분 지점들은 맛집 지도에 핀으로만 남아 있어요'],
     ['🏛️','12/26 방콕 이동 — 무앙보란 5시간 경유로 변경','12/26은 통부라 10:00에 출발해 무앙보란(The Ancient City)에서 약 5시간(11:30–16:30) 관광한 뒤 17:30쯤 티니디에 도착해요. 같은 예약(#200754271)이 12시간 렌탈로 바뀌었고, 5석 중 4명이 타고 1석은 여유분이에요. 짐은 기사님이 차에 보관해 줘요'],
@@ -2444,8 +2445,9 @@ function moonInfo(ms){
   };
   starsEl.innerHTML = Array.from({length:16}, (_, i) =>
     `<i style="left:${(6 + (i*61 % 88)).toFixed(0)}%;top:${(4 + (i*37 % 42)).toFixed(0)}%;--sd:${(i*0.37).toFixed(2)}s"></i>`).join('');
-  function tick(){
-    const t = new Date(), h = ((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60, [SR, SS] = sunHours();
+  // 주어진 시각(h, 방콕 현지 시)의 하늘을 그려요. 평소엔 지금 시각, "하늘 시간 돌리기"(히어로)에선 손가락 위치에 맞는 시각이에요
+  function paint(h){
+    const [SR, SS] = sunHours(); h = ((h % 24) + 24) % 24;
     const day = h >= SR && h < SS;
     const phase = h >= SR-.8 && h < SR+.7 ? 'dawn' : h >= SR+.7 && h < SS-1.1 ? 'day' : h >= SS-1.1 && h < SS+.6 ? 'dusk' : 'night';
     const p = day ? (h - SR)/(SS - SR) : ((h < SR ? h + 24 : h) - SS)/(24 - (SS - SR));
@@ -2453,7 +2455,13 @@ function moonInfo(ms){
     orb.style.left = (10 + p*80).toFixed(1) + '%';
     orb.style.top = (78 - 60*Math.sin(Math.PI*p)).toFixed(0) + 'px';
     hero.dataset.sky = phase;
+    return { phase, day };
   }
+  function tick(){
+    if(window.__skyHold) return;   // 하늘 시간 돌리기 중에는 지금 시각으로 되돌리지 않아요
+    const t = new Date(); paint(((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60);
+  }
+  window.__skyAt = paint; window.__skyReal = tick;
   tick(); setInterval(tick, 60000);
 })();
 

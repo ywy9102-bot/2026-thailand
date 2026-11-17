@@ -432,7 +432,7 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await o.page.evaluate(() => { window.__heroFun.found('gecko'); window.__heroFun.found('gecko'); window.__heroFun.found('bag'); });
       ok('놀이 도감: 같은 놀이는 한 번만 세고 두 개를 발견', await o.page.evaluate(() => window.__heroFun.dex() === 2));
       await o.page.waitForTimeout(3400);
-      ok('놀이 도감: "새 발견! (N/28)" 알림', /새 발견!.*\/28\)/.test(await tl(o.page)));
+      ok('놀이 도감: "새 발견! (N/29)" 알림', /새 발견!.*\/29\)/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 61, temp: 28, wind: 5 }); window.__heroFun.wxTick(); window.__wxNow = () => ({ code: 1, temp: 30, wind: 5 }); window.__heroFun.wxTick(); });
       ok('무지개: 비가 그친 낮에 무지개와 알림', await o.page.evaluate(() => !!document.querySelector('.hx-rainbow')) && /무지개/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 0, temp: 36, wind: 5 }); window.__heroFun.wxTick(); });
@@ -536,6 +536,30 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       ok('빗방울 파문: 비 오는 동안 누르면 파문 2겹', await o.page.evaluate(() => document.querySelectorAll('.hx-rip').length === 2) && /빗방울 파문/.test(await tl(o.page)));
       ok('놀이 도감: 새 놀이 5가지가 모두 기록됨', await o.page.evaluate(() => window.__heroFun.dex() === 5));
       ok('히어로 놀이 7: 콘솔 오류 없음', o.errs.length === 0, o.errs);
+      await o.ctx.close();
+    }
+    // 4-1d13) 히어로 놀이 8: 하늘 시간 돌리기 (하늘을 꾹 누른 채 좌우로 밀면 하루가 지나가고, 떼면 지금으로 돌아와요)
+    {
+      const o = await open(browser, base, 390, 844, { clock: '2026-12-18T11:00:00+07:00' });
+      await o.page.waitForFunction(() => !!window.__heroFun && !!window.__skyAt, null, { timeout: 8000 }).catch(() => {});
+      await o.page.evaluate(() => { try { localStorage.removeItem('thai2026_hxfun'); } catch (e) {} window.__heroFun.reset(); window.__tl = []; window.__toast = (k, m) => window.__tl.push(k + ' ' + m); window.__heroTick(); });
+      const st = () => o.page.evaluate(() => ({ sky: document.querySelector('header.hero').dataset.sky, clk: document.querySelector('.hx-clk').textContent, on: window.__heroFun.scrubOn(), hold: !!window.__skyHold, g: parseFloat(getComputedStyle(document.querySelector('.hx-grade')).opacity) }));
+      ok('하늘 시간 돌리기: 평소엔 낮(11시)이고 꺼져 있음', (await st()).sky === 'day' && !(await st()).on);
+      await o.page.evaluate(() => window.__heroFun.scrubTo(22));
+      let s = await st();
+      ok('하늘 시간 돌리기: 밤 10시로 돌리면 별밤 하늘과 시각 표시', s.sky === 'night' && /오후 10:00 · 별밤/.test(s.clk) && s.hold && s.on);
+      await o.page.evaluate(() => window.__heroFun.scrubTo(6.3));
+      ok('하늘 시간 돌리기: 새벽 6시대는 새벽 하늘', (await st()).sky === 'dawn');
+      await o.page.evaluate(() => window.__heroFun.scrubTo(18.4));
+      ok('하늘 시간 돌리기: 저녁 6시대는 노을 하늘', (await st()).sky === 'dusk');
+      await o.page.waitForTimeout(500);
+      ok('하늘 시간 돌리기: 하늘빛 층이 켜짐', (await st()).g > 0.9);
+      await o.page.evaluate(() => window.__heroFun.scrubEnd(true));
+      await o.page.waitForTimeout(500);
+      s = await st();
+      ok('하늘 시간 돌리기: 손을 떼면 지금(낮)으로 돌아오고 고정이 풀림', s.sky === 'day' && !s.hold && !s.on && s.g < 0.5);
+      ok('하늘 시간 돌리기: 도감에 기록되고 "다시 지금" 알림', (await o.page.evaluate(() => window.__heroFun.dex())) === 1 && /다시 지금이에요/.test(await o.page.evaluate(() => (window.__tl || []).join(' | '))));
+      ok('하늘 시간 돌리기: 콘솔 오류 없음', o.errs.length === 0, o.errs);
       await o.ctx.close();
     }
     // 4-1e0) 소식이 없는 날: 빈 목록이 오면 낡은 소식을 지우고 카드를 숨김

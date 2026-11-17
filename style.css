@@ -2325,3 +2325,11 @@ header.hero.hero-off .hx-sea,header.hero.hero-off .hx-cloud,header.hero.hero-off
 @keyframes hxCocoRoll{0%{opacity:1;transform:translateY(170px) rotate(0)}100%{opacity:0;transform:translate(170px,170px) rotate(540deg)}}
 @media (prefers-reduced-motion:reduce){.hx-rip,.hx-fly,.hx-coco{display:none} .hx-chime.ring{animation:none}}
 header.hero.hero-off .hx-fly,header.hero.hero-off .hx-coco{animation-play-state:paused}
+
+/* 하늘 시간 돌리기: 누른 채 밀면 하늘빛이 하루치로 변해요 */
+.hx-grade{position:absolute;inset:0;opacity:0;transition:opacity .35s ease}
+.hx-grade.on{opacity:1}
+.hx-clk{position:absolute;z-index:6;pointer-events:none;top:44px;left:50%;transform:translate(-50%,-6px);padding:6px 14px;border-radius:99px;background:var(--k-rgba-12-35-29-55);color:var(--hero-fg);font-size:14px;font-weight:700;letter-spacing:.02em;white-space:nowrap;opacity:0;transition:opacity .25s ease,transform .25s ease}
+.hx-clk.on{opacity:1;transform:translate(-50%,0)}
+header.hero{-webkit-touch-callout:none}
+@media (prefers-reduced-motion:reduce){ .hx-grade,.hx-clk{transition:none} }
