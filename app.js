@@ -1835,6 +1835,7 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
   };
   if(getShownCount() >= WN_MAX_SHOWS) return;   // 이미 이 버전을 충분히 봤음
   const WHATS_NEW=[
+    ['🕰️','히어로 "하늘 시간 돌리기" — 하루가 휙 지나가요','첫 화면 하늘을 손가락으로 꾹(0.5초) 누른 채 좌우로 밀어 보세요. 해와 달이 하늘을 가로지르고 하늘빛이 새벽 보라 → 아침 복숭아 → 낮 하늘 → 금빛 → 노을 주홍 → 별밤로 바뀌어요. 해·달 아래에 지금 보는 시각이 따라다니고, 손을 떼면 부드럽게 지금 시각으로 돌아와요. 점수도 목표도 없는 장난감이고 놀이 도감은 29가지가 됐어요'],
     ['⏰','12/17 치찬 티오프 08:34 → 08:26로 변경','12/17 Chee Chan 예약확정서(#200693563)에 확정 티오프가 08:26으로 나와 있어서 일정과 골프 카드를 맞췄어요. 치찬은 티오프 시간을 예약된 시간에서 앞당기거나 늦출 수 없고, 현장에서도 변경이 안 된다고 안내돼 있어요. 12/18 롤링힐스(#200691954)는 07:56·4명 그대로예요'],
     ['🍤','12/26 저녁 쏨분시푸드 일정 삭제','12/26은 방콕 도착 후 근처에서 자유롭게 드시기로 해서, 일정표의 쏨분시푸드(가족1) 추천 코스를 뺐어요. 쏨분 지점들은 맛집 지도에 핀으로만 남아 있어요'],
     ['🏛️','12/26 방콕 이동 — 무앙보란 5시간 경유로 변경','12/26은 통부라 10:00에 출발해 무앙보란(The Ancient City)에서 약 5시간(11:30–16:30) 관광한 뒤 17:30쯤 티니디에 도착해요. 같은 예약(#200754271)이 12시간 렌탈로 바뀌었고, 5석 중 4명이 타고 1석은 여유분이에요. 짐은 기사님이 차에 보관해 줘요'],
@@ -1953,6 +1954,39 @@ try{ $('appVer').textContent = APP_VER; }catch(e){}
     scrim.classList.add('on');
     try{ closeBtn.focus({preventScroll:true}); }catch(e){ closeBtn.focus(); }
   }, 650);
+})();
+
+// ── 시트 아래로 끌어 닫기: 아래서 올라오는 시트(이번 업데이트 등)의 맨 위 손잡이 부분을 아래로 끌어 놓으면 닫혀요 ──
+// 끌 수 있는 곳은 시트 맨 위 52px(손잡이·제목 줄)뿐이라 목록 스크롤과 겹치지 않아요. 닫기 동작은 각 시트의 "닫기" 버튼을 그대로 눌러요.
+(function(){
+  const ZONE = 52, CLOSE_DY = 90, CLOSE_V = 0.6;   // 끌 수 있는 높이(px) · 닫히는 거리(px) · 빠르게 쓸어내릴 때 속도(px/ms)
+  let sh = null, scrim = null, y0 = 0, t0 = 0, dy = 0, active = false;
+  const isBottomSheet = s => { const sc = s.closest('.wn-scrim'); return !!sc && !sc.hidden && sc.classList.contains('on') && getComputedStyle(sc).alignItems === 'flex-end'; };
+  function start(target, y){
+    const s = target && target.closest && target.closest('.wn-sheet'); if(!s || !isBottomSheet(s)) return;
+    if(target.closest('button,a,input,select,textarea,label')) return;
+    const r = s.getBoundingClientRect(); if(y < r.top || y - r.top > ZONE) return;
+    sh = s; scrim = s.closest('.wn-scrim'); y0 = y; t0 = performance.now(); dy = 0; active = true; sh.style.transition = 'none';
+  }
+  function move(y){
+    if(!active) return;
+    dy = Math.max(0, y - y0);
+    sh.style.transform = 'translateY(' + dy + 'px)';
+    scrim.style.background = 'rgba(12,35,29,' + (0.55 * Math.max(0, 1 - dy / 320)).toFixed(3) + ')';
+  }
+  function end(){
+    if(!active) return; active = false;
+    const v = dy / Math.max(1, performance.now() - t0), go = dy > CLOSE_DY || (dy > 30 && v > CLOSE_V);
+    sh.style.transition = ''; sh.style.transform = ''; scrim.style.background = '';
+    if(go){ const c = sh.querySelector('.wn-close'); if(c) c.click(); else scrim.dispatchEvent(new MouseEvent('click', {bubbles:true})); }
+    sh = scrim = null; dy = 0;
+  }
+  document.addEventListener('touchstart', e => { if(e.touches.length === 1) start(e.target, e.touches[0].clientY); }, {passive:true});
+  document.addEventListener('touchmove', e => { if(!active) return; move(e.touches[0].clientY); if(e.cancelable) e.preventDefault(); }, {passive:false});
+  document.addEventListener('touchend', end); document.addEventListener('touchcancel', end);
+  document.addEventListener('mousedown', e => { if(e.button === 0) start(e.target, e.clientY); });
+  document.addEventListener('mousemove', e => move(e.clientY));
+  document.addEventListener('mouseup', end);
 })();
 
 // ── 여행 콘텐츠 풀 (카운트다운 뒷면 · 오늘의 태국 카드가 공유) ──
@@ -2411,8 +2445,9 @@ function moonInfo(ms){
   };
   starsEl.innerHTML = Array.from({length:16}, (_, i) =>
     `<i style="left:${(6 + (i*61 % 88)).toFixed(0)}%;top:${(4 + (i*37 % 42)).toFixed(0)}%;--sd:${(i*0.37).toFixed(2)}s"></i>`).join('');
-  function tick(){
-    const t = new Date(), h = ((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60, [SR, SS] = sunHours();
+  // 주어진 시각(h, 방콕 현지 시)의 하늘을 그려요. 평소엔 지금 시각, "하늘 시간 돌리기"(히어로)에선 손가락 위치에 맞는 시각이에요
+  function paint(h){
+    const [SR, SS] = sunHours(); h = ((h % 24) + 24) % 24;
     const day = h >= SR && h < SS;
     const phase = h >= SR-.8 && h < SR+.7 ? 'dawn' : h >= SR+.7 && h < SS-1.1 ? 'day' : h >= SS-1.1 && h < SS+.6 ? 'dusk' : 'night';
     const p = day ? (h - SR)/(SS - SR) : ((h < SR ? h + 24 : h) - SS)/(24 - (SS - SR));
@@ -2420,7 +2455,13 @@ function moonInfo(ms){
     orb.style.left = (10 + p*80).toFixed(1) + '%';
     orb.style.top = (78 - 60*Math.sin(Math.PI*p)).toFixed(0) + 'px';
     hero.dataset.sky = phase;
+    return { phase, day };
   }
+  function tick(){
+    if(window.__skyHold) return;   // 하늘 시간 돌리기 중에는 지금 시각으로 되돌리지 않아요
+    const t = new Date(); paint(((t.getUTCHours() + 7) % 24) + t.getUTCMinutes()/60);
+  }
+  window.__skyAt = paint; window.__skyReal = tick;
   tick(); setInterval(tick, 60000);
 })();
 
