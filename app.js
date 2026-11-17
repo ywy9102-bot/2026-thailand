@@ -1455,6 +1455,56 @@ function renderBars(){
 }
 renderBars();
 
+// ── 송금 정리: 정영삼 → 윤우열 → 가족 (정영삼 합류로 바뀐 금액을 한 번에 정리) ──
+// parts: [이름, 금액(마이너스는 차감), 설명]. 합계는 정영삼이 보내는 금액(OWE)과 같아야 해요.
+const FLOW_OUT=[
+ {n:'정유경',parts:[['골프',463397,'12/21, 12/22 정영삼님 골프 대체 환불'],['밴',52234,'12/21, 12/22 정영삼님 골프 대체 밴 환불'],['12/26 추가 납입',-22699,'무앙보란']]},
+ {n:'정유현',parts:[['골프',230720,'12/23 정영삼님 골프 대체 환불'],['밴',22386,'12/23 정영삼님 골프 대체 밴 환불'],['12/26 추가 납입',-22699,'무앙보란']]},
+ {n:'윤성욱',parts:[['밴',19242,'12/17, 12/18 정영삼님 합류로 밴 인원 3명→4명, 인당 38,484→28,863원']]},
+ {n:'김태기',parts:[['밴',19242,'12/17, 12/18 밴 인원 증가'],['사전 송금 환불',59760,'12/16 공항 밴 19,422 + 12/23 공항 샌딩 40,338']]},
+ {n:'윤우열',parts:[['골프',463399,'12/17, 12/18 정영삼님 골프 사전 대납분'],['밴',38664,'12/16, 12/17, 12/18 밴 인원 증가로 본인 부담 감소'],['12/26 추가 납입',45398,'정유경·정유현 무앙보란 분']]},
+];
+const flowAmt = r => r.parts.reduce((s,p)=>s+p[1],0);
+const flowFormula = r => r.parts.map((p,i)=> (p[1]<0 ? '- ' : (i? '+ ' : '')) + p[0] + ' ' + won(Math.abs(p[1]))).join(' ');
+const flowDetail = r => r.parts.map(p=>`${p[0]}: ${p[2]}`).join(' · ');
+const flowIn = () => { const o = OWE.find(x=>x.n==='정영삼'); return o ? {amt:o.t, brk:o.b.replace('차량','차량')} : null; };
+function flowText(){
+  const fi = flowIn(), tot = FLOW_OUT.reduce((s,r)=>s+flowAmt(r),0);
+  return ['[정영삼 → 윤우열 → 가족 정산표]','',
+    '1. 정영삼 → 윤우열',`정영삼 님이 윤우열에게 송금: ${won(fi.amt)}원 (${fi.brk.replace(/ \+ /,' + ')})`,'',
+    '2. 윤우열 → 가족 (실제 송금액)',
+    ...FLOW_OUT.map(r=>`윤우열 → ${r.n}: ${won(flowAmt(r))}원`),
+    '장모님, 이준영: 변동 없음',`합계: ${won(tot)}원 (1번과 같음)`,'',
+    '3. 항목 설명',
+    ...FLOW_OUT.map(r=>`${r.n}: ${won(flowAmt(r))}원 = ${r.parts.map((p,i)=>(p[1]<0?'- ':(i?'+ ':''))+p[0]+' '+won(Math.abs(p[1]))+' ('+p[2]+')').join(' ')}`),'',
+    '4. 검산',`${FLOW_OUT.map(r=>won(flowAmt(r))).join(' + ')} = ${won(tot)}원`].join('\n');
+}
+function renderFlow(){
+  const box = $('flowBox'); if(!box) return;
+  const fi = flowIn(); if(!fi) return;
+  const tot = FLOW_OUT.reduce((s,r)=>s+flowAmt(r),0);
+  if(tot !== fi.amt) console.warn(`[송금 정리 드리프트] 정영삼 청구 ${fi.amt} vs 송금 합계 ${tot} (차이 ${tot-fi.amt}원)`);
+  box.innerHTML =
+    `<div class="fl-h">1. 정영삼 → 윤우열</div>
+     <div class="fl-row"><span>${dot('정영삼')}정영삼 → 윤우열</span><span class="n">${won(fi.amt)}원</span></div>
+     <p class="fl-f">${fi.brk}</p>
+     <div class="fl-h">2. 윤우열 → 가족 (실제 송금액)</div>`+
+    FLOW_OUT.map(r=>`<div class="fl-row"><span>${dot(r.n)}윤우열 → ${r.n}</span><span class="n">${won(flowAmt(r))}원</span></div>
+     <p class="fl-f">${flowFormula(r)}</p><p class="fl-d">${flowDetail(r)}</p>`).join('')+
+    `<p class="fl-d">장모님·이준영: 변동 없음</p>
+     <div class="fl-sum"><span>합계 (1번과 같음)</span><span class="n">${won(tot)}원</span></div>
+     <p class="fl-chk">${FLOW_OUT.map(r=>won(flowAmt(r))).join(' + ')} = ${won(tot)}원</p>
+     <button class="bar-copy" type="button" id="flowCopy">📋 송금 정리 텍스트 복사</button>`;
+}
+renderFlow();
+document.addEventListener('click', async e=>{
+  const b = e.target.closest('#flowCopy'); if(!b) return;
+  try{ await navigator.clipboard.writeText(flowText()); }
+  catch(_){ const ta = document.createElement('textarea'); ta.value = flowText(); ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(__){} ta.remove(); }
+  const o = b.textContent; b.textContent = '✅ 복사했어요'; b.classList.add('copied'); haptic('ok');
+  setTimeout(()=>{ b.textContent = o; b.classList.remove('copied'); }, 1600);
+});
+
 // "이 중에 나예요" 선택 — 내 항목 강조 + 상단 고정 (localStorage 저장)
 function renderWhoami(){
   $('whoamiChips').innerHTML = OWE.map(o=>
