@@ -878,6 +878,7 @@ table.mx tfoot td{background:var(--paper);font-weight:700;font-family:'IBM Plex 
 .fl-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0 3px;font-size:14px;font-weight:700;color:var(--ink);border-top:1px dashed var(--line)}
 .fl-row:first-of-type{border-top:none}
 .fl-row .n{font-family:'IBM Plex Mono',monospace;white-space:nowrap}
+.fl-ok{margin-left:4px;font-size:12px;font-weight:700;color:var(--jade-d);white-space:nowrap}
 .fl-f,.fl-d{margin:0;font-size:13px;line-height:1.6;color:var(--ink2);word-break:keep-all}
 .fl-d{color:var(--ink3);padding-bottom:6px}
 .fl-sum{display:flex;justify-content:space-between;gap:10px;margin-top:8px;padding-top:10px;border-top:1px solid var(--line);font-size:14px;font-weight:800;color:var(--jade-d)}

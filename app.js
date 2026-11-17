@@ -452,7 +452,7 @@ const OWE=[
 ];
 // 청구액이 바뀌기 전에 이미 받은 금액 — 금액이 바뀌어 "정산완료"가 풀려도 남은 금액은 (청구액 − 받은 금액)만 보여요.
 // 새 금액을 전액 받아 정산완료를 누르면 자동으로 전액 완료로 계산돼요. 이미 정산완료인 분은 여기에 적지 않아도 돼요.
-const RECEIVED={'정유경':1676725,'정유현':1713103};
+const RECEIVED={};   // 부분 수령 중인 사람만 (현재 없음 — 전원 정산 완료)
 const oweLeft = o => Math.max(0, o.t - (RECEIVED[o.n]||0));            // 아직 받을 금액
 const payText = o => RECEIVED[o.n] ? `${o.n} → 윤우열 추가 ${won(oweLeft(o))}원 (총 ${won(o.t)}원 중 받은 ${won(RECEIVED[o.n])}원 제외)` : `${o.n} → 윤우열 ${won(o.t)}원`;
 
@@ -1366,7 +1366,7 @@ const prepaidTotal = Object.values(PREPAID).flat().reduce((a,it)=>a+it.amt,0);
 const paidKey = payText;
 // 코드 기준 정산완료 — 정산완료 표시는 기기별 저장이라, 확인된 완료 건은 여기에 적어 모든 기기에서 완료로 보이게 함.
 // 기기마다 처음 한 번만 반영하고(seeded), 이후 수금 담당이 해제하면 해제 상태 유지. 금액이 바뀌면(키 불일치) 자동으로 반영 안 됨
-const PAID_SEED = { '정유경': 1676725, '정유현': 1713103, '장모님': 1002003, '김태기': 1289859, '윤성욱': 1902373, '이준영': 556272 };
+const PAID_SEED = { '정유경': 1699424, '정유현': 1735802, '정영삼': 1369044, '장모님': 1002003, '김태기': 1289859, '윤성욱': 1902373, '이준영': 556272 };
 (function(){
   store.seeded = store.seeded || {};
   OWE.forEach(o => { if(PAID_SEED[o.n] === o.t){ const k = paidKey(o); if(!store.seeded[k]){ store.seeded[k] = true; store.done[k] = true; } } });
@@ -1461,6 +1461,7 @@ const FLOW_OUT=[
  {n:'김태기',parts:[['밴',19242,'12/17, 12/18 밴 인원 증가'],['사전 송금 환불',59760,'12/16 공항 밴 19,422 + 12/23 공항 샌딩 40,338']]},
  {n:'윤우열',parts:[['골프',463399,'12/17, 12/18 정영삼님 골프 사전 대납분'],['밴',38664,'12/16, 12/17, 12/18 밴 인원 증가로 본인 부담 감소'],['12/26 추가 납입',45398,'정유경·정유현 무앙보란 밴 비용']]},
 ];
+const FLOW_DONE = true;   // 2026-11-17: 정영삼→윤우열 수령, 윤우열→가족 송금 모두 완료
 const flowAmt = r => r.parts.reduce((s,p)=>s+p[1],0);
 const flowFormula = r => r.parts.map((p,i)=> (p[1]<0 ? '- ' : (i? '+ ' : '')) + p[0] + ' ' + won(Math.abs(p[1]))).join(' ');
 const flowDetail = r => r.parts.map(p=>`${p[0]}: ${p[2]}`).join(' · ');
@@ -1483,10 +1484,10 @@ function renderFlow(){
   if(tot !== fi.amt) console.warn(`[송금 정리 드리프트] 정영삼 청구 ${fi.amt} vs 송금 합계 ${tot} (차이 ${tot-fi.amt}원)`);
   box.innerHTML =
     `<div class="fl-h">1. 정영삼 → 윤우열</div>
-     <div class="fl-row"><span>${dot('정영삼')}정영삼 → 윤우열</span><span class="n">${won(fi.amt)}원</span></div>
+     <div class="fl-row"><span>${dot('정영삼')}정영삼 → 윤우열${FLOW_DONE?' <b class="fl-ok">✅ 수령완료</b>':''}</span><span class="n">${won(fi.amt)}원</span></div>
      <p class="fl-f">${fi.brk}</p>
      <div class="fl-h">2. 윤우열 → 가족 (실제 송금액)</div>`+
-    FLOW_OUT.map(r=>`<div class="fl-row"><span>${dot(r.n)}윤우열 → ${r.n}</span><span class="n">${won(flowAmt(r))}원</span></div>
+    FLOW_OUT.map(r=>`<div class="fl-row"><span>${dot(r.n)}윤우열 → ${r.n}${FLOW_DONE&&r.n!=='윤우열'?' <b class="fl-ok">✅ 송금완료</b>':''}</span><span class="n">${won(flowAmt(r))}원</span></div>
      <p class="fl-f">${flowFormula(r)}</p><p class="fl-d">${flowDetail(r)}</p>`).join('')+
     `<p class="fl-d">장모님·이준영: 변동 없음</p>
      <div class="fl-sum"><span>합계 (1번과 같음)</span><span class="n">${won(tot)}원</span></div>
