@@ -273,6 +273,7 @@
     body.scrollTop = 0; syncTabs(); if(mode === 'time') roll(true);
   }
   tabsEl.innerHTML = TABS.map(([id, l]) => `<button class="wh-tab" role="tab" type="button" data-id="${id}" aria-selected="${id === mode}">${l}</button>`).join('');
+  syncTabs();   // 열기 전부터 탭패널이 선택된 탭과 연결되게
   tabsEl.addEventListener('click', e => { const b = e.target.closest('.wh-tab'); if(!b) return; mode = b.dataset.id; haptic('tap'); paint(); });
   window.__historyInfo = () => ({ time: TIMELINE.length, sights: SIGHTS.length, basics: BASICS.length, quiz: QUIZ.length, kr: KR_PAIRS.length });
   let prevFocus = null;
