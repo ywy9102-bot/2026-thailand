@@ -1415,7 +1415,7 @@ function selfRowHTML(){
   const brk = `숙박 ${won(cat.stay)} + 골프 ${won(cat.golf)} + 차량 ${won(cat.car)}`;
   return `<div class="bar-row self" data-self="1">
       <div class="bar-head">
-        <div class="bar-top"><span class="bar-nm">${dot('윤우열')}윤우열 <span class="me-tag">💼 수금 담당</span><span class="chip ok" aria-label="윤우열 정산완료">✅ 정산완료</span></span><span class="bar-amt">${won(selfTotal)}원</span></div>
+        <div class="bar-top"><span class="bar-nm">${dot('윤우열')}<span style="white-space:nowrap">윤우열</span> <span class="me-tag" title="수금 담당">💼 수금</span><span class="chip ok" aria-label="윤우열 정산완료">✅ 정산완료</span></span><span class="bar-amt">${won(selfTotal)}원</span></div>
         <div class="bar-track"><div class="bar-fill" data-w="${Math.min(100, selfTotal/oweMax*100).toFixed(1)}" style="background:linear-gradient(90deg,${pc('윤우열')} 0%,${pc('윤우열')}CC 100%)"></div></div>
         <button class="bar-brk" type="button" aria-expanded="false"><span class="chev" aria-hidden="true">▾</span><span>${brk}</span></button>
       </div>
