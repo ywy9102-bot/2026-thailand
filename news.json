@@ -1,7 +1,21 @@
 {
- "updated": "2026-11-18T03:48:43+00:00",
- "date": "2026-11-18",
+ "updated": "2026-11-19T03:46:23+00:00",
+ "date": "2026-11-19",
  "items": [
+  {
+   "cat": "travel",
+   "title": "국토부, 방콕 ESCAP 교통장관회의 참석···AI 기반 교통 협력 확대",
+   "src": "서울파이낸스",
+   "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBZNWVyQ3hJdkgxc0V5c21pYWxhVHhXLWdRSVhQOHVETmhRVWZlSV9VQm85eVpFLTdwRnljWVZqVUo4TjJXekN3amp3WnlBNGcyZDRjZlVwS0lmS2RSNU5KSFF2dXZENkQ5Y0E?oc=5",
+   "ts": "2026-11-18T23:58:48+00:00"
+  },
+  {
+   "cat": "travel",
+   "title": "아·태 교통장관 방콕 집결…한국, AI 교통기술 협력 확대",
+   "src": "파이낸셜뉴스",
+   "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5YSU5pQU9WZm5tM2ZITWttMjN2MTgzaXFJSWhyUjBVbUlJbEV1aDFfS3Z5NUN1X0lnMHFqQjFuVkxzb29kR2tyR0sxclVaRkxfQVRHVGtXdTZrZw?oc=5",
+   "ts": "2026-11-18T21:00:00+00:00"
+  },
   {
    "cat": "travel",
    "title": "트리니티항공-태국정부관광청, 공동 캠페인 전개… 동계 방콕·치앙마이 노선 활성화",
@@ -15,20 +29,6 @@
    "src": "강원도민일보",
    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9SS2w0alI3U0pyU3R5YUJzSVNzY0J4RVBDX3dPbEJvWXV4b0ZKcnBtQkVHRnZiUnNkLTFFWDVpQzBaWjlJSHZJeHU4OHVzYm5wZlA1OXc0S2dMN1EzeUdITlMzT1ZtN2s?oc=5",
    "ts": "2026-11-16T04:57:17+00:00"
-  },
-  {
-   "cat": "econ",
-   "title": "태국 여행 준비한다면 주목… 트리니티항공, 항공권·쿠폰 혜택 마련",
-   "src": "ER 이코노믹리뷰",
-   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8yWGlSRlh2UVlvakRXTGVJNTg1S3FqQm95ZUdMd1FIOTQ1b0VZc29hTnlVX2tmX3B4bDA4VEtkYlVlZC11Q0h0UE1WR1NCd1ZNYlQtbjBNaW9nSFhqMUFmOVJ0dXpNT2hPdFJLYg?oc=5",
-   "ts": "2026-11-17T06:30:35+00:00"
-  },
-  {
-   "cat": "econ",
-   "title": "미얀마 뉴스 - 미얀마·인도네시아, 방콕서 경제협력 논의…교역·투자 확대 모색",
-   "src": "AD Shofar",
-   "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9UbDJxemM2UFBhckpEVEEyM2VMbTF4d2ZEY0JPZ09WSVhWM1hWZF9pMmJtbmpHRnRYWERKcHRjNnJLdUY5ZGR0YmFxTDNWTTREZHJJ?oc=5",
-   "ts": "2026-11-16T06:46:00+00:00"
   },
   {
    "cat": "travel",
