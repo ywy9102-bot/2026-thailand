@@ -400,7 +400,7 @@
   addEventListener('resize', () => { host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye,.hx-chime').forEach(e => fitSlot(e, SLOT_H)); });
 
   // 놀이 도감: 처음 발견할 때마다 "새 발견! (N/전체)"
-  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개', tee: '⛳ 티오프 샷', xmas: '🎄 크리스마스 불빛', dday: '🎉 D-day 마일스톤', bats: '🦇 황혼 박쥐', bye: '👋 작별 인사', bubble: '🫧 비눗방울', sea: '🐬 바다 친구', cloud: '☁️ 구름 변신', wave: '🌊 파도 쓸기', balloon: '🎈 풍선', burst: '🎆 연타 불꽃·꽃잎', ripple: '💧 빗방울 파문', chime: '🎐 풍경', butterfly: '🦋 나비', coconut: '🥥 코코넛', time: '🕰️ 하늘 시간 돌리기' };
+  const DEX = { wish: '🌠 별똥별 소원', birds: '🐦 새 떼', lantern: '🏮 소원 풍등', ride: '🛺 뚝뚝·파라세일', ele: '🐘 코끼리', orb: '☀️ 해·달 이야기', title: '🗣️ 태국어 한마디', scene: '⛳ 일정 장면', gecko: '🦎 도마뱀', meal: '🍜 밥시간', bag: '🧳 가방', home: '🏠 한국 집', rainbow: '🌈 무지개', tee: '⛳ 티오프 샷', xmas: '🎄 크리스마스 불빛', dday: '🎉 D-day 마일스톤', bats: '🦇 황혼 박쥐', bye: '👋 작별 인사', bubble: '🫧 비눗방울', sea: '🐬 바다 친구', cloud: '☁️ 구름 변신', wave: '🌊 파도 쓸기', balloon: '🎈 풍선', burst: '🎆 연타 불꽃·꽃잎', ripple: '💧 빗방울 파문', chime: '🎐 풍경', butterfly: '🦋 나비', coconut: '🥥 코코넛', time: '🕰️ 하늘 시간 돌리기', con: '✨ 별자리 잇기' };
   function found(id){
     fun.dex = fun.dex || {}; if(fun.dex[id] || !DEX[id]) return; fun.dex[id] = 1; save();
     const n = Object.keys(fun.dex).length, all = Object.keys(DEX).length;
@@ -625,8 +625,48 @@
     setTimeout(() => { if(live() && once('scrubHint')) toast('🕰️', '하늘을 꾹 누른 채 좌우로 밀어 보세요 — 하루가 휙 지나가요', 4400); }, 9000);
   }
 
+  // ── 놀이 더하기 9: 별자리 잇기 — 별밤에 흐릿한 별 몇 개가 떠요. 하나씩 누르면 금빛으로 켜지고 선이 이어지다가, 다 켜면 별자리가 완성돼요(점수도 목표도 없어요) ──
+  // 각 별: [가로 비율, 위에서 px]. 선: 이을 별 번호 쌍
+  const CON = [   // 제목·시계 글자와 덜 겹치도록 하늘의 오른쪽 위에 모아요
+    { n: '⛳ 깃발자리', p: [[.64, 32], [.90, 46], [.64, 60], [.64, 92], [.80, 92]], l: [[0, 1], [1, 2], [0, 3], [3, 4]] },
+    { n: '🌴 야자수자리', p: [[.76, 32], [.58, 44], [.94, 44], [.76, 56], [.76, 74], [.76, 94]], l: [[0, 1], [0, 2], [0, 3], [3, 4], [4, 5], [1, 3], [2, 3]] },
+    { n: '🥄 북두칠성', p: [[.50, 40], [.60, 46], [.70, 48], [.79, 56], [.80, 82], [.95, 86], [.96, 62]], l: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 3]] },
+  ];
+  let conEl = null, conTs = 0, nextCon = Date.now() + 22000;
+  function conClear(){ if(conEl){ conEl.stars.forEach(s => s.remove()); conEl.svg.remove(); conEl = null; } }
+  // 진짜 버튼과 겹치면 그 그림은 건너뛰어요(겹치지 않는 그림이 없으면 다음에)
+  function conFits(c, W){
+    const cs = [...hero.querySelectorAll('.hero-in button, .hero-in a, .hero-in [role="button"], .hero-in input')].map(e => e.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0), hr = hero.getBoundingClientRect();
+    return c.p.every(q => { const x = hr.left + q[0] * W - 22, y = hr.top + q[1] - 22, r = { left: x, right: x + 44, top: y, bottom: y + 44 }; return !cs.some(b => overlap(r, b) > 40); });
+  }
+  function conGo(force){
+    if(rm || conEl) return false; const W = hero.clientWidth, H = Math.min(hero.clientHeight, 720); if(W < 240) return false;
+    const day = thai().getUTCDate(), order = [0, 1, 2].map(i => (day + i) % 3); let c = null;
+    for(const i of order) if(CON[i].p.every(q => q[1] + 22 < H) && conFits(CON[i], W)){ c = CON[i]; break; }
+    if(!c) return false;
+    const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'hx-cline'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('focusable', 'false'); host.appendChild(svg);
+    const lit = new Set(), pts = c.p.map(q => [q[0] * W, q[1]]);
+    const stars = pts.map((q, i) => { const el = mkHit('hx-cstar', '<i></i>'); el.style.left = (q[0] - 22).toFixed(0) + 'px'; el.style.top = (q[1] - 22).toFixed(0) + 'px'; el.style.animationDelay = (i * .35).toFixed(2) + 's'; el.setAttribute('aria-label', `${c.n} 별 ${i + 1}/${pts.length}`);
+      el.addEventListener('click', ev => {
+        ev.stopPropagation(); if(lit.has(i)) return; lit.add(i); el.classList.add('lit'); hap(lit.size === pts.length ? 'combo' : 'tap');
+        for(let k = 0; k < 8; k++){ const a = rnd(0, 6.28), sp = rnd(.3, 1); S.push({ x: q[0], y: q[1], vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - .2, a: 1, r: 1.2 + Math.random() * 1.2, t: Math.random() * 6 }); } if(!raf) raf = requestAnimationFrame(loop);
+        c.l.forEach(([a, b], k) => { if(lit.has(a) && lit.has(b) && !svg.querySelector('[data-k="' + k + '"]')){ const ln = document.createElementNS(NS, 'line'); ln.setAttribute('x1', pts[a][0].toFixed(1)); ln.setAttribute('y1', pts[a][1]); ln.setAttribute('x2', pts[b][0].toFixed(1)); ln.setAttribute('y2', pts[b][1]); ln.setAttribute('pathLength', 1); ln.dataset.k = k; svg.appendChild(ln); } });
+        if(lit.size === pts.length){ found('con'); svg.classList.add('done'); stars.forEach(s => s.classList.add('all')); toast('✨', `${c.n} 완성! 오늘 밤 하늘에 새겨졌어요`, 3600);
+          for(let k = 0; k < 28; k++){ const q2 = pts[k % pts.length], a = rnd(0, 6.28), sp = rnd(.4, 1.3); S.push({ x: q2[0], y: q2[1], vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, a: 1, r: 1.2 + Math.random() * 1.6, t: Math.random() * 6 }); } if(!raf) raf = requestAnimationFrame(loop);
+          conTs = Date.now(); setTimeout(conClear, 5200); }
+        else if(once('con1')) toast('✨', '별을 하나씩 눌러 별자리를 이어 보세요', 2800);
+      }); return el; });
+    conEl = { stars, svg, born: Date.now(), name: c.n }; conTs = Date.now(); return true;
+  }
+  function conTick(){
+    if(rm){ return; } const now = Date.now();
+    if(conEl && (!isNight() || !live() || now - conEl.born > 150000)){ conClear(); nextCon = now + rnd(60000, 110000); return; }
+    if(!conEl && isNight() && live() && now > nextCon){ nextCon = now + 20000; if(conGo()) nextCon = now + rnd(120000, 200000); }
+  }
+  addEventListener('resize', conClear);
+
   let fitN = 0;
-  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick(); teeTick(); xmasTick(); ddTick(); batTick(); byeTick(); toysTick(); toys2Tick();
+  function fun3Tick(){ comePlane(); bagTick(); eveTick(); arriveTick(); sleepTick(); homeTick(); wxTick(); teeTick(); xmasTick(); ddTick(); batTick(); byeTick(); toysTick(); toys2Tick(); conTick();
     if(fitN++ % 3 === 0){ host.querySelectorAll('.hx-bag,.hx-meal').forEach(e => fitSlot(e, SLOT_R)); host.querySelectorAll('.hx-home,.hx-bye,.hx-chime').forEach(e => fitSlot(e, SLOT_H)); }   // 날씨 글이 늦게 들어와 줄이 바뀌어도 겹치지 않게 다시 맞춰요
   }
 
@@ -636,7 +676,7 @@
     if(!isNight() && !ride && now > nextRide){ nextRide = now + rnd(55000, 100000); startRide(); }
   }
 
-  window.__heroFun = { scrubTo: v => { scrubStart(); scrubPaint(v); }, scrubEnd, scrubOn: () => scrub, burst, ripple, butterflyGo, coconutGo, bubbles, seaGo, cloudGo, wave, balloonGo, tee: teeTick, xmas: xmasTick, dday: ddTick, bats, bye: byeTick, dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
+  window.__heroFun = { scrubTo: v => { scrubStart(); scrubPaint(v); }, scrubEnd, scrubOn: () => scrub, burst, ripple, butterflyGo, coconutGo, bubbles, seaGo, cloudGo, wave, balloonGo, tee: teeTick, xmas: xmasTick, dday: ddTick, bats, bye: byeTick, dex(){ return Object.keys(fun.dex || {}).length; }, wxTick, found, conGo, conClear, star, startRide, birds, orbTalk, goldBird, startGecko, titleTalk, reset(){ fun.once = {}; delete fun.meal; } };
   const tick = () => { layers(); plane(); ny(); funTick(); fun2Tick(); fun3Tick(); };
   window.__heroTick = tick; window.__heroDebug = () => ({ sparks: S.length });
   tick(); setInterval(tick, 1000); document.addEventListener('wx:updated', layers);
