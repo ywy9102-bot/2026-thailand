@@ -432,7 +432,7 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       await o.page.evaluate(() => { window.__heroFun.found('gecko'); window.__heroFun.found('gecko'); window.__heroFun.found('bag'); });
       ok('놀이 도감: 같은 놀이는 한 번만 세고 두 개를 발견', await o.page.evaluate(() => window.__heroFun.dex() === 2));
       await o.page.waitForTimeout(3400);
-      ok('놀이 도감: "새 발견! (N/29)" 알림', /새 발견!.*\/29\)/.test(await tl(o.page)));
+      ok('놀이 도감: "새 발견! (N/30)" 알림', /새 발견!.*\/30\)/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 61, temp: 28, wind: 5 }); window.__heroFun.wxTick(); window.__wxNow = () => ({ code: 1, temp: 30, wind: 5 }); window.__heroFun.wxTick(); });
       ok('무지개: 비가 그친 낮에 무지개와 알림', await o.page.evaluate(() => !!document.querySelector('.hx-rainbow')) && /무지개/.test(await tl(o.page)));
       await o.page.evaluate(() => { window.__wxNow = () => ({ code: 0, temp: 36, wind: 5 }); window.__heroFun.wxTick(); });
@@ -467,6 +467,26 @@ const smallTargets = (page, root) => page.evaluate(root => [...document.querySel
       o = await mk('2026-12-18T18:10:00+07:00');
       await o.page.evaluate(() => window.__heroFun.bats(60, true));
       ok('황혼 박쥐: 해 진 직후 하늘을 누르면 박쥐 떼가 날고 도감에 기록', await o.page.evaluate(() => document.querySelectorAll('.hx-bat').length === 4 && window.__heroFun.dex() >= 1));
+      await o.ctx.close();
+      for(const w of [320, 375, 390]){
+        o = await mk('2026-12-17T22:00:00+07:00', w);
+        const okGo = await o.page.evaluate(() => window.__heroFun.conGo(true));
+        const info = await o.page.evaluate(() => { const s = [...document.querySelectorAll('.hx-cstar')]; return { n: s.length, big: s.every(e => { const r = e.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; }), tab: s.every(e => e.tabIndex === -1), inside: s.every(e => { const r = e.getBoundingClientRect(), h = document.querySelector('header.hero').getBoundingClientRect(); return r.left >= h.left - 22 && r.right <= h.right + 22; }) }; });
+        ok(`별자리 잇기(${w}px): 밤에 별 5개 이상이 뜨고 44px 이상·탭 순서 밖·화면 안`, okGo === true && info.n >= 5 && info.big && info.tab && info.inside, info);
+        const clash2 = await o.page.evaluate(() => { const cs = [...document.querySelectorAll('header.hero .hero-in button, header.hero .hero-in a, header.hero .hero-in [role="button"], header.hero .hero-in input')].map(e => e.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0); return [...document.querySelectorAll('.hx-cstar')].map(e => { const r = e.getBoundingClientRect(); return Math.max(0, ...cs.map(c => Math.max(0, Math.min(r.right, c.right) - Math.max(r.left, c.left)) * Math.max(0, Math.min(r.bottom, c.bottom) - Math.max(r.top, c.top)))); }); });
+        ok(`별자리 잇기(${w}px): 별이 진짜 버튼과 겹치지 않음`, clash2.every(v => v <= 40), clash2);
+        if(w === 375){
+          const before = await o.page.evaluate(() => window.__heroFun.dex());
+          const res = await o.page.evaluate(async () => { const st = [...document.querySelectorAll('.hx-cstar')]; const n = st.length; st[0].click(); st[1].click(); const part = document.querySelectorAll('.hx-cline line').length; st.slice(2).forEach(e => e.click()); return { n, part, lines: document.querySelectorAll('.hx-cline line').length, done: document.querySelector('.hx-cline').classList.contains('done'), lit: document.querySelectorAll('.hx-cstar.lit').length }; });
+          ok('별자리 잇기: 두 별을 켜면 선 1개, 다 켜면 모든 선이 이어지고 완성', res.part >= 1 && res.lines >= res.n - 1 && res.done && res.lit === res.n, res);
+          ok('별자리 잇기: 완성하면 도감에 +1, 같은 별을 또 눌러도 중복 없음', await o.page.evaluate(() => { document.querySelectorAll('.hx-cstar')[0].click(); return window.__heroFun.dex(); }) === before + 1);
+          await o.page.waitForTimeout(5600);
+          ok('별자리 잇기: 완성 5초 뒤 별과 선이 사라짐', await o.page.evaluate(() => document.querySelectorAll('.hx-cstar').length === 0 && document.querySelectorAll('.hx-cline').length === 0));
+        }
+        await o.ctx.close();
+      }
+      o = await mk('2026-12-17T13:00:00+07:00');
+      ok('별자리 잇기: 낮에는 자동으로 나타나지 않음', await o.page.evaluate(() => { window.__heroFun.conClear(); return document.querySelectorAll('.hx-cstar').length === 0; }));
       await o.ctx.close();
       o = await mk('2027-01-02T09:00:00+07:00');
       ok('귀국 작별: 1/2 아침에 👋 버튼이 44px 이상으로 뜸', await o.page.evaluate(() => { const e = document.querySelector('.hx-bye'); if(!e) return false; const r = e.getBoundingClientRect(); return r.width >= 44 && r.height >= 44 && e.tabIndex === -1; }));
