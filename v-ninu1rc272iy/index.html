@@ -7,6 +7,15 @@
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
 <title>Copen Haus</title>
+<link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#fcf7ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161b15" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Copen Haus – Welcome">
+<meta property="og:description" content="Check-in, Wi-Fi and house rules for Copen Haus, Seoul.">
+<meta property="og:image" content="https://ywy9102-bot.github.io/2026-thailand/v-ninu1rc272iy/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 :root{--bg:#fcf7ef;--card:#f3ecdc;--card2:#f1f4ee;--field:#fbf8f0;--line:#dcdbc9;--ink:#2e3a2a;--mute:#55644b;--green:#5d7048;--white:#fff}
 @media (prefers-color-scheme:dark){:root{--bg:#161b15;--card:#252a1f;--card2:#1f261d;--field:#2a3126;--line:#3b4434;--ink:#eef2e6;--mute:#a9b79c;--green:#9db683;--white:#2a3126}}
@@ -18,8 +27,14 @@ main{max-width:480px;margin:0 auto;padding:16px 16px 40px;display:grid;grid-temp
 .eyebrow{margin:0;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
 h1{margin:4px 0 10px;font:400 clamp(30px,9vw,40px)/1.15 "Source Serif 4",Georgia,"Noto Serif KR",serif;color:var(--ink)}
 .rule{height:2px;width:56px;background:var(--green);border:0;margin:0 0 12px}
-.hero{display:flex;gap:14px;align-items:center}
-.hero img{flex:none;width:44%;max-width:190px;height:auto;display:block;border-radius:12px}
+.photo{position:relative;border-radius:22px;overflow:hidden;background:var(--card);aspect-ratio:4/5;max-height:78svh}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;display:block}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,20,10,0) 32%,rgba(14,20,10,.7) 58%,rgba(14,20,10,.9) 100%)}
+.photo-txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:20px;color:#fff}
+.photo-txt .eyebrow{color:#fff}
+.photo-txt h1{color:#fff;margin:2px 0 8px}
+.photo-txt .addr{color:#fff}
+.photo-txt .addr-ko{color:#fff}
 .addr{margin:0;font-weight:700;font-size:15px;line-height:1.4}
 .nb{white-space:nowrap}
 .addr-ko{margin:4px 0 0;font-size:13px;color:var(--mute);word-break:keep-all}
@@ -67,12 +82,11 @@ li span{padding-top:2px}
 </head>
 <body>
 <main>
-  <section class="card hero" aria-label="Copen Haus">
-    <img src="building.png" width="440" height="545" alt="Copen Haus building illustration">
-    <div>
+  <section class="photo" aria-label="Copen Haus">
+    <img src="hero.jpg" width="960" height="1200" alt="Copen Haus: a three-storey brick house with white terraces and a pine garden, seen from the street under a clear blue sky" fetchpriority="high">
+    <div class="photo-txt">
       <p class="eyebrow">Welcome to</p>
       <h1>Copen Haus</h1>
-      <hr class="rule">
       <p class="addr">32-14, <span class="nb">Pildong-ro 8-gil</span>, Jung-gu, Seoul</p>
       <p class="addr-ko" lang="ko">서울특별시 중구 필동로8길 32-14</p>
     </div>
