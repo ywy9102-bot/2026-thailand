@@ -92,12 +92,12 @@ p{margin:0}
 
 /* copy fields */
 .field{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:14px;padding:8px 14px;font:inherit;cursor:pointer;min-height:56px;-webkit-tap-highlight-color:transparent}
-.field span{display:block;font-size:12px;color:var(--mute)}
+.field .fx>span{display:block;font-size:12px;color:var(--mute)}
 .field b{display:block;font-size:18px;overflow-wrap:anywhere}
 .field.ko b{font-size:16px}
 .wifi-grid{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
 .fields{display:grid;gap:10px;min-width:0}
-.qr{width:112px;height:112px;border-radius:16px;display:block}
+.qr{width:132px;height:132px;border-radius:11%;display:block}
 .cap{margin:14px 0 0;text-align:center;font-size:13px;color:var(--mute)}
 
 /* host */
@@ -122,7 +122,7 @@ li span{padding-top:2px}
 #top svg{width:22px;height:22px}
 #toast{z-index:20;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);width:max-content;max-width:min(92vw,360px);text-align:center;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:18px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
-@media (max-width:420px){.wifi-grid{grid-template-columns:1fr}.qr{margin:0 auto}}
+@media (max-width:420px){.wifi-grid{grid-template-columns:1fr}.qr{width:156px;height:156px;margin:0 auto}}
 @media (max-width:359px){.pill{padding:10px;gap:0}.pill svg{display:none}.pill b{font-size:14px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.photo .g{transition:none}#top{transition:none}.photo img,.photo-txt>*{animation:none}#toast{transition:none}}
 
@@ -209,7 +209,7 @@ a.tel .ic{width:18px;height:18px;color:var(--green)}
           <button class="field" type="button" data-copy="Copen_Green" aria-label="Network Copen_Green, tap to copy"><span class="fx"><span>Network</span><b>Copen_Green</b></span><svg class="ic cpy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
           <button class="field" type="button" data-copy="Copen_0077" aria-label="Password Copen_0077, tap to copy"><span class="fx"><span>Password</span><b>Copen_0077</b></span><svg class="ic cpy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
         </div>
-        <img class="qr" src="qr.png" width="412" height="412" alt="Wi-Fi QR code for Copen_Green">
+        <img class="qr" src="qr.png" width="560" height="560" alt="Wi-Fi QR code for Copen_Green. Scan it with your camera to join the network." loading="lazy" decoding="async">
       </div>
       <p class="cap">Scan the QR code with your camera to connect<br>or tap a field to copy it</p>
     </div>
