@@ -38,6 +38,22 @@ h1{margin:4px 0 10px;font:400 clamp(30px,9vw,40px)/1.15 "Source Serif 4",Georgia
 .addr{margin:0;font-weight:700;font-size:15px;line-height:1.4}
 .nb{white-space:nowrap}
 .addr-ko{margin:4px 0 0;font-size:13px;color:var(--mute);word-break:keep-all}
+.addr-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0;border:0;background:none;color:#fff;font:inherit;font-weight:700;font-size:15px;line-height:1.4;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.addr-btn .t{min-width:0}
+.addr-btn svg{flex:none;opacity:.9}
+.addr-btn:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:6px}
+.map{border-radius:16px;overflow:hidden;background:var(--card);margin:0 0 12px;aspect-ratio:16/10}
+.map iframe{display:block;width:100%;height:100%;border:0}
+.btns{display:grid;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 16px;border:1px solid var(--line);border-radius:14px;background:var(--field);color:var(--ink);font-family:inherit;font-size:15px;font-weight:700;line-height:1;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btn.primary{background:var(--green);border-color:var(--green);color:var(--bg)}
+.btn:active{filter:brightness(.94)}
+.btn:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.tip{margin:12px 0 4px}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.links a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:99px;background:var(--field);color:var(--ink);font-size:14px;font-weight:600;text-decoration:none}
+.links a:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.field.ko b{font-size:16px}
 .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
 .two .card{padding:14px 12px}
 .two .lbl,.two .val{white-space:nowrap}
@@ -87,7 +103,7 @@ li span{padding-top:2px}
     <div class="photo-txt">
       <p class="eyebrow">Welcome to</p>
       <h1>Copen Haus</h1>
-      <p class="addr">32-14, <span class="nb">Pildong-ro 8-gil</span>, Jung-gu, Seoul</p>
+      <button class="addr addr-btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied" aria-label="Copy address: 32-14, Pildong-ro 8-gil, Jung-gu, Seoul"><span class="t">32-14, <span class="nb">Pildong-ro 8-gil</span>, Jung-gu, Seoul</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
       <p class="addr-ko" lang="ko">서울특별시 중구 필동로8길 32-14</p>
     </div>
   </section>
@@ -106,6 +122,19 @@ li span{padding-top:2px}
   <section class="card row enter" aria-label="How to enter">
     <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="15" r="3.5"/><path d="M10.5 12.5L19 4M16 7l2.5 2.5"/></svg></span>
     <div><b>How to enter</b>We'll send the door lock code by Airbnb message on check-in day.</div>
+  </section>
+
+  <section class="card" aria-label="Getting here">
+    <h2 class="sec-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5A7 7 0 005 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Getting here</h2>
+    <div class="map"><iframe title="Map showing Copen Haus" src="https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;output=embed&amp;hl=en" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe></div>
+    <div class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="1.8"/><path d="M9 21l2-6-2-2 1-5 3 1 2 4 3 1M11 15l4 2 1 4M9.5 8L7 11"/></svg>Walking directions</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14">Open in Google Maps</a>
+      <button class="btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied">Copy address</button>
+    </div>
+    <p class="small tip">Walking directions start from your current location. Starting from a station instead:</p>
+    <p class="links"><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Dongguk%20University%20Station%2C%20Seoul&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking">Dongguk Univ. Station</a><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Chungmuro%20Station%2C%20Seoul&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking">Chungmuro Station</a></p>
+    <button class="field ko" type="button" data-copy="서울특별시 중구 필동로8길 32-14" data-toast="Korean address copied · show it to a taxi driver" aria-label="Copy Korean address for taxi, 서울특별시 중구 필동로8길 32-14"><span>Korean address · tap to copy for taxi</span><b lang="ko">서울특별시 중구 필동로8길 32-14</b></button>
   </section>
 
   <section class="card g host" aria-label="Host">
