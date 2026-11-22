@@ -32,7 +32,7 @@ main{max-width:480px;margin:0 auto;padding:16px 16px 56px}
 /* hero */
 .photo{position:relative;border-radius:26px;overflow:hidden;background:var(--card);aspect-ratio:4/5;max-height:80svh}
 .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;display:block;animation:kb 1.8s cubic-bezier(.16,1,.3,1) backwards}
-.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,20,10,0) 20%,rgba(14,20,10,.72) 48%,rgba(14,20,10,.94) 100%)}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,20,10,0) 12%,rgba(14,20,10,.74) 42%,rgba(14,20,10,.95) 100%)}
 .photo .g{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 1.2s cubic-bezier(.16,1,.3,1)}
 .g-dawn{background:linear-gradient(180deg,rgba(150,120,205,.34),rgba(255,176,140,.2) 70%,rgba(255,176,140,0))}
 .g-dusk{background:linear-gradient(180deg,rgba(255,150,90,.3),rgba(190,70,95,.26) 70%,rgba(190,70,95,0))}
@@ -57,7 +57,7 @@ h1{margin:0 0 10px;font:600 clamp(40px,12.5vw,56px)/1.02 var(--serif);letter-spa
 .addr-btn .t{min-width:0}
 .addr-btn svg{flex:none;opacity:.9}
 .addr-btn:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:6px}
-.addr-ko{margin:0 0 14px;font-size:13px;color:#fff;word-break:keep-all}
+.addr-ko{margin:10px 0 14px;font-size:13px;color:#fff;word-break:keep-all}
 .pills{display:flex;gap:8px}
 .pill{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.3);border-radius:16px;background:rgba(14,20,10,.5)}
 .pill svg{flex:none;width:20px;height:20px}
@@ -154,6 +154,7 @@ a.tel .ic{width:18px;height:18px;color:var(--green)}
 .addr-btn .cp .ic{width:15px;height:15px}
 .clock .hint{width:16px;height:16px;opacity:.95;margin-left:2px}
 @media (hover:hover){.btn:hover,.jump a:hover,.links a:hover,.chip:hover,.field:hover,a.tel:hover{box-shadow:0 1px 0 rgba(38,51,31,.12),0 5px 14px rgba(38,51,31,.2);transform:translateY(-1px)}.btn.primary:hover{filter:brightness(1.06)}}
+@media (max-width:359px){.photo{aspect-ratio:3/4}}
 @media (max-width:420px){.jump a .ic{display:none}.jump a{padding:0 14px}}
 @media (prefers-reduced-motion:reduce){.btn,.jump a,.links a,.chip,.field,a.tel{transition:none}.btn:active,.jump a:active,.links a:active,.chip:active,.field:active,a.tel:active,.addr-btn:active,.clock:active{transform:none}}
 </style>
