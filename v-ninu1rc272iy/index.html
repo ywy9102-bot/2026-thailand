@@ -33,6 +33,18 @@ main{max-width:480px;margin:0 auto;padding:16px 16px 56px}
 .photo{position:relative;border-radius:26px;overflow:hidden;background:var(--card);aspect-ratio:4/5;max-height:80svh}
 .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;display:block;animation:kb 1.8s cubic-bezier(.16,1,.3,1) backwards}
 .photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,20,10,0) 20%,rgba(14,20,10,.72) 48%,rgba(14,20,10,.94) 100%)}
+.photo .g{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 1.2s cubic-bezier(.16,1,.3,1)}
+.g-dawn{background:linear-gradient(180deg,rgba(150,120,205,.34),rgba(255,176,140,.2) 70%,rgba(255,176,140,0))}
+.g-dusk{background:linear-gradient(180deg,rgba(255,150,90,.3),rgba(190,70,95,.26) 70%,rgba(190,70,95,0))}
+.g-night{background:linear-gradient(180deg,rgba(8,18,52,.62),rgba(8,18,52,.5))}
+.photo[data-phase=dawn] .g-dawn,.photo[data-phase=dusk] .g-dusk,.photo[data-phase=night] .g-night{opacity:1}
+.photo::after{z-index:0}
+.clock{position:absolute;top:14px;left:14px;z-index:2;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 14px 6px 10px;border:1px solid rgba(255,255,255,.34);border-radius:99px;background:rgba(14,20,10,.74);color:#fff;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.clock svg{flex:none;width:22px;height:22px}
+.clock .ct{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;text-align:left}
+.clock b{font-size:15px;font-variant-numeric:tabular-nums}
+.clock small{font-size:12px;opacity:.95}
+.clock:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .photo-txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:22px 20px 20px;color:#fff}
 .photo-txt>*{animation:rise .9s cubic-bezier(.16,1,.3,1) backwards}
 .photo-txt>:nth-child(2){animation-delay:.08s}.photo-txt>:nth-child(3){animation-delay:.16s}.photo-txt>:nth-child(4){animation-delay:.24s}
@@ -112,13 +124,18 @@ li span{padding-top:2px}
 #toast.on{opacity:1}
 @media (max-width:420px){.wifi-grid{grid-template-columns:1fr}.qr{margin:0 auto}}
 @media (max-width:359px){.pill{padding:10px;gap:0}.pill svg{display:none}.pill b{font-size:14px}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#top{transition:none}.photo img,.photo-txt>*{animation:none}#toast{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.photo .g{transition:none}#top{transition:none}.photo img,.photo-txt>*{animation:none}#toast{transition:none}}
 </style>
 </head>
 <body>
 <main>
   <header class="photo">
     <img src="hero.jpg" width="960" height="1200" alt="Copen Haus: a three-storey brick house with white terraces and a pine garden, seen from the street under a clear blue sky" fetchpriority="high">
+    <i class="g g-dawn" aria-hidden="true"></i><i class="g g-dusk" aria-hidden="true"></i><i class="g g-night" aria-hidden="true"></i>
+    <button id="clock" class="clock" type="button" aria-label="Seoul time">
+      <svg id="clkIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+      <span class="ct"><b id="clkT">--:--</b><small id="clkP">Seoul</small></span>
+    </button>
     <div class="photo-txt">
       <h1><span class="sr">Welcome to </span>Copen Haus</h1>
       <button class="addr addr-btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied" aria-label="Copy address: 32-14, Pildong-ro 8-gil, Jung-gu, Seoul"><span class="t">32-14, <span class="nb">Pildong-ro 8-gil</span>, <span class="nb">Jung-gu</span>, Seoul</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
@@ -205,6 +222,29 @@ document.addEventListener('click',async e=>{
   const o=document.getElementById('toast');o.textContent=b.dataset.toast||('Copied: '+v);o.classList.add('on');clearTimeout(o._t);o._t=setTimeout(()=>o.classList.remove('on'),b.dataset.toast?3600:1600);
 });
 
+(function(){
+  // 서울 시각에 맞춰 사진 분위기가 바뀌어요(새벽·낮·노을·밤). 시각 칩을 누르면 다른 시간대를 미리 볼 수 있어요
+  const photo=document.querySelector('.photo'),clk=document.getElementById('clock'),T=document.getElementById('clkT'),P=document.getElementById('clkP'),I=document.getElementById('clkIcon');
+  const NAME={dawn:'Dawn',day:'Daytime',dusk:'Sunset',night:'Night'},ORDER=['dawn','day','dusk','night'];
+  const SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',MOON='<path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/>',RISE='<path d="M5 17a7 7 0 0114 0M12 5v4M7.5 8.5L9 10M16.5 8.5L15 10M2 20h20"/>',SET='<path d="M5 17a7 7 0 0114 0M12 9V5M9 7l3 3 3-3M2 20h20"/>';
+  const ICON={dawn:RISE,day:SUN,dusk:SET,night:MOON};
+  function sunMin(y,m,d){const lat=37.5665,lon=126.978,rad=Math.PI/180,N=Math.round((Date.UTC(y,m-1,d)-Date.UTC(y,0,0))/864e5),g=2*Math.PI/365*(N-1),
+    eq=229.18*(.000075+.001868*Math.cos(g)-.032077*Math.sin(g)-.014615*Math.cos(2*g)-.040849*Math.sin(2*g)),
+    dc=.006918-.399912*Math.cos(g)+.070257*Math.sin(g)-.006758*Math.cos(2*g)+.000907*Math.sin(2*g)-.002697*Math.cos(3*g)+.00148*Math.sin(3*g),
+    ha=Math.acos(Math.cos(90.833*rad)/(Math.cos(lat*rad)*Math.cos(dc))-Math.tan(lat*rad)*Math.tan(dc))/rad,k=x=>((x+540)%1440+1440)%1440;
+    return{rise:k(720-4*(lon+ha)-eq),set:k(720-4*(lon-ha)-eq)}}
+  function seoul(){const f=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()),o={};f.forEach(x=>o[x.type]=x.value);
+    return{y:+o.year,m:+o.month,d:+o.day,min:(+o.hour%24)*60+ +o.minute,hh:String(+o.hour%24).padStart(2,'0'),mm:o.minute}}
+  function phaseOf(s){const {rise,set}=sunMin(s.y,s.m,s.d),x=s.min;
+    if(x>=rise-30&&x<rise+60)return'dawn';if(x>=rise+60&&x<set-60)return'day';if(x>=set-60&&x<set+45)return'dusk';return'night'}
+  let pv=-1,cur='';   // pv: -1이면 실시간, 0~3이면 미리보기
+  function paint(){const s=seoul(),live=phaseOf(s),ph=pv<0?live:ORDER[pv];
+    if(ph!==cur){cur=ph;photo.dataset.phase=ph;I.innerHTML=ICON[ph]}
+    T.textContent=s.hh+':'+s.mm;P.textContent='Seoul · '+NAME[ph]+(pv<0?'':' (preview)');
+    clk.setAttribute('aria-label','Seoul time '+s.hh+':'+s.mm+', '+NAME[ph].toLowerCase()+(pv<0?'':', preview')+'. Tap to preview the house at another time of day.')}
+  clk.addEventListener('click',()=>{const live=ORDER.indexOf(phaseOf(seoul()));pv=pv<0?(live+1)%4:(pv+1)%4;if(pv===live)pv=-1;paint()});
+  paint();setInterval(paint,30000);
+})();
 (function(){
   const btn=document.getElementById('top'),rm=matchMedia('(prefers-reduced-motion: reduce)');let tick=0;
   const upd=()=>{tick=0;btn.classList.toggle('on',scrollY>innerHeight*.6)};
