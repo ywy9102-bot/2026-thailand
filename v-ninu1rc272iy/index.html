@@ -32,7 +32,7 @@ main{max-width:480px;margin:0 auto;padding:16px 16px 56px}
 /* hero */
 .photo{position:relative;border-radius:26px;overflow:hidden;background:var(--card);aspect-ratio:4/5;max-height:80svh}
 .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;display:block;animation:kb 1.8s cubic-bezier(.16,1,.3,1) backwards}
-.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,20,10,0) 20%,rgba(14,20,10,.72) 48%,rgba(14,20,10,.94) 100%)}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,20,10,0) 12%,rgba(14,20,10,.74) 42%,rgba(14,20,10,.95) 100%)}
 .photo .g{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 1.2s cubic-bezier(.16,1,.3,1)}
 .g-dawn{background:linear-gradient(180deg,rgba(150,120,205,.34),rgba(255,176,140,.2) 70%,rgba(255,176,140,0))}
 .g-dusk{background:linear-gradient(180deg,rgba(255,150,90,.3),rgba(190,70,95,.26) 70%,rgba(190,70,95,0))}
@@ -57,7 +57,7 @@ h1{margin:0 0 10px;font:600 clamp(40px,12.5vw,56px)/1.02 var(--serif);letter-spa
 .addr-btn .t{min-width:0}
 .addr-btn svg{flex:none;opacity:.9}
 .addr-btn:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:6px}
-.addr-ko{margin:0 0 14px;font-size:13px;color:#fff;word-break:keep-all}
+.addr-ko{margin:10px 0 14px;font-size:13px;color:#fff;word-break:keep-all}
 .pills{display:flex;gap:8px}
 .pill{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.3);border-radius:16px;background:rgba(14,20,10,.5)}
 .pill svg{flex:none;width:20px;height:20px}
@@ -101,7 +101,7 @@ p{margin:0}
 .cap{margin:14px 0 0;text-align:center;font-size:13px;color:var(--mute)}
 
 /* host */
-.who{margin:0 0 2px;font:600 30px/1.1 var(--serif)}
+.who{margin:0 0 10px;font:600 30px/1.1 var(--serif)}
 a.tel{display:inline-flex;align-items:center;min-height:44px;padding:0;color:var(--ink);font-size:17px;font-weight:600;text-decoration:none}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 12px}
 .chip{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:99px;font-family:inherit;font-size:14px;font-weight:600;line-height:1;background:var(--field);color:var(--ink);text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -125,6 +125,38 @@ li span{padding-top:2px}
 @media (max-width:420px){.wifi-grid{grid-template-columns:1fr}.qr{margin:0 auto}}
 @media (max-width:359px){.pill{padding:10px;gap:0}.pill svg{display:none}.pill b{font-size:14px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.photo .g{transition:none}#top{transition:none}.photo img,.photo-txt>*{animation:none}#toast{transition:none}}
+
+/* ── 누르는 것처럼 보이게: 진한 테두리(3:1↑)·아이콘·부드러운 그림자·눌림 반응 ── */
+:root{--ctl:#7f8d73;--ctl-bg:#fff;--lift:0 1px 0 rgba(38,51,31,.1),0 3px 8px rgba(38,51,31,.14)}
+@media (prefers-color-scheme:dark){:root{--ctl:#7d8c70;--ctl-bg:#2a3126;--lift:0 1px 0 rgba(0,0,0,.4),0 3px 8px rgba(0,0,0,.35)}}
+.ic{flex:none;width:18px;height:18px}
+.btn,.jump a,.links a,.chip,.field,a.tel{border:1.5px solid var(--ctl);background:var(--ctl-bg);box-shadow:var(--lift);transition:transform .12s cubic-bezier(.16,1,.3,1),box-shadow .12s cubic-bezier(.16,1,.3,1)}
+.btn:active,.jump a:active,.links a:active,.chip:active,.field:active,a.tel:active,.addr-btn:active,.clock:active{transform:translateY(1px) scale(.985);box-shadow:0 0 0 rgba(0,0,0,0);filter:none}
+.btn.primary{border-color:var(--green);background:var(--green);color:var(--bg)}
+.btn{min-height:52px;justify-content:center;position:relative}
+.btn .lead{margin-right:2px}
+.btn .trail{position:absolute;right:16px}
+.jump{gap:8px}
+.jump a{gap:4px;padding:0 11px 0 14px;font-weight:700}
+.jump a .ic{width:15px;height:15px;margin-top:1px}
+.links a{gap:8px;padding:0 14px}
+.links a .ic{width:16px;height:16px;color:var(--green)}
+.chip{gap:8px;padding:0 14px;font-weight:700}
+.chip .ic{width:16px;height:16px;color:var(--green)}
+a.tel{gap:10px;padding:0 18px 0 14px;border-radius:99px;font-size:16px;font-weight:700}
+a.tel .ic{width:18px;height:18px;color:var(--green)}
+.field{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.field .fx{min-width:0;display:block}
+.field .fx span{display:block}
+.field .cpy{width:20px;height:20px;color:var(--green)}
+.addr-btn{width:100%;justify-content:space-between;gap:12px;padding:8px 8px 8px 14px;border:1.5px solid rgba(255,255,255,.55);border-radius:16px;background:rgba(14,20,10,.62)}
+.addr-btn .cp{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:99px;background:#fff;color:#26331f;font-size:13px;font-weight:700}
+.addr-btn .cp .ic{width:15px;height:15px}
+.clock .hint{width:16px;height:16px;opacity:.95;margin-left:2px}
+@media (hover:hover){.btn:hover,.jump a:hover,.links a:hover,.chip:hover,.field:hover,a.tel:hover{box-shadow:0 1px 0 rgba(38,51,31,.12),0 5px 14px rgba(38,51,31,.2);transform:translateY(-1px)}.btn.primary:hover{filter:brightness(1.06)}}
+@media (max-width:359px){.photo{aspect-ratio:3/4}}
+@media (max-width:420px){.jump a .ic{display:none}.jump a{padding:0 14px}}
+@media (prefers-reduced-motion:reduce){.btn,.jump a,.links a,.chip,.field,a.tel{transition:none}.btn:active,.jump a:active,.links a:active,.chip:active,.field:active,a.tel:active,.addr-btn:active,.clock:active{transform:none}}
 </style>
 </head>
 <body>
@@ -134,11 +166,11 @@ li span{padding-top:2px}
     <i class="g g-dawn" aria-hidden="true"></i><i class="g g-dusk" aria-hidden="true"></i><i class="g g-night" aria-hidden="true"></i>
     <button id="clock" class="clock" type="button" aria-label="Seoul time">
       <svg id="clkIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
-      <span class="ct"><b id="clkT">--:--</b><small id="clkP">Seoul</small></span>
+      <span class="ct"><b id="clkT">--:--</b><small id="clkP">Seoul</small></span><svg class="ic hint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0113.5-5.8L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 01-13.5 5.8L4 15.5M4 20v-4.5h4.5"/></svg>
     </button>
     <div class="photo-txt">
       <h1><span class="sr">Welcome to </span>Copen Haus</h1>
-      <button class="addr addr-btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied" aria-label="Copy address: 32-14, Pildong-ro 8-gil, Jung-gu, Seoul"><span class="t">32-14, <span class="nb">Pildong-ro 8-gil</span>, <span class="nb">Jung-gu</span>, Seoul</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
+      <button class="addr addr-btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied" aria-label="Copy address: 32-14, Pildong-ro 8-gil, Jung-gu, Seoul"><span class="t">32-14, <span class="nb">Pildong-ro 8-gil</span>, <span class="nb">Jung-gu</span>, Seoul</span><span class="cp"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>Copy</span></button>
       <p class="addr-ko" lang="ko">서울특별시 중구 필동로8길 32-14</p>
       <div class="pills">
         <div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><div><small>Check-in</small><b>After 3 PM</b></div></div>
@@ -148,7 +180,7 @@ li span{padding-top:2px}
   </header>
 
   <nav class="jump" aria-label="Jump to a section">
-    <a href="#directions">Directions</a><a href="#wifi">Wi-Fi</a><a href="#host">Host</a><a href="#rules">Rules</a>
+    <a href="#directions">Directions<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#wifi">Wi-Fi<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#host">Host<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#rules">Rules<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
   </nav>
 
   <section class="s" aria-labelledby="h-enter">
@@ -160,13 +192,13 @@ li span{padding-top:2px}
     <h2 id="h-dir">Getting here</h2>
     <div class="map"><iframe title="Map showing Copen Haus" src="https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;output=embed&amp;hl=en" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe></div>
     <div class="btns">
-      <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="1.8"/><path d="M9 21l2-6-2-2 1-5 3 1 2 4 3 1M11 15l4 2 1 4M9.5 8L7 11"/></svg>Walking directions</a>
-      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14">Open in Google Maps</a>
-      <button class="btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied">Copy address</button>
+      <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="1.8"/><path d="M9 21l2-6-2-2 1-5 3 1 2 4 3 1M11 15l4 2 1 4M9.5 8L7 11"/></svg>Walking directions<svg class="ic trail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14">Open in Google Maps<svg class="ic trail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <button class="btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied"><svg class="ic lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>Copy address</button>
     </div>
     <p class="small tip">Walking directions start from your current location. Starting from a station instead:</p>
-    <p class="links"><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Dongguk%20University%20Station%2C%20Seoul&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking">Dongguk Univ. Station</a><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Chungmuro%20Station%2C%20Seoul&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking">Chungmuro Station</a></p>
-    <button class="field ko" type="button" data-copy="서울특별시 중구 필동로8길 32-14" data-toast="Korean address copied · show it to a taxi driver" aria-label="Copy Korean address for taxi, 서울특별시 중구 필동로8길 32-14"><span>Korean address · tap to copy for taxi</span><b lang="ko">서울특별시 중구 필동로8길 32-14</b></button>
+    <p class="links"><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Dongguk%20University%20Station%2C%20Seoul&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking">Dongguk Univ. Station<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Chungmuro%20Station%2C%20Seoul&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking">Chungmuro Station<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
+    <button class="field ko" type="button" data-copy="서울특별시 중구 필동로8길 32-14" data-toast="Korean address copied · show it to a taxi driver" aria-label="Copy Korean address for taxi, 서울특별시 중구 필동로8길 32-14"><span class="fx"><span>Korean address · tap to copy for taxi</span><b lang="ko">서울특별시 중구 필동로8길 32-14</b></span><svg class="ic cpy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
   </section>
 
   <section class="s" id="wifi" aria-labelledby="h-wifi">
@@ -174,8 +206,8 @@ li span{padding-top:2px}
     <div class="panel">
       <div class="wifi-grid">
         <div class="fields">
-          <button class="field" type="button" data-copy="Copen_Green" aria-label="Network Copen_Green, tap to copy"><span>Network</span><b>Copen_Green</b></button>
-          <button class="field" type="button" data-copy="Copen_0077" aria-label="Password Copen_0077, tap to copy"><span>Password</span><b>Copen_0077</b></button>
+          <button class="field" type="button" data-copy="Copen_Green" aria-label="Network Copen_Green, tap to copy"><span class="fx"><span>Network</span><b>Copen_Green</b></span><svg class="ic cpy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
+          <button class="field" type="button" data-copy="Copen_0077" aria-label="Password Copen_0077, tap to copy"><span class="fx"><span>Password</span><b>Copen_0077</b></span><svg class="ic cpy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
         </div>
         <img class="qr" src="qr.png" width="412" height="412" alt="Wi-Fi QR code for Copen_Green">
       </div>
@@ -186,11 +218,11 @@ li span{padding-top:2px}
   <section class="s" id="host" aria-labelledby="h-host">
     <h2 id="h-host">Your host</h2>
     <p class="who">Lisa</p>
-    <a class="tel" href="tel:+821093280969" aria-label="Call Lisa +82 10 9328 0969">+82-10-9328-0969</a>
+    <a class="tel" href="tel:+821093280969" aria-label="Call Lisa +82 10 9328 0969"><svg class="ic lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>+82-10-9328-0969</a>
     <div class="chips">
-      <button class="chip" type="button" data-copy="free01270" data-toast="ID copied · KakaoTalk ▸ Add friend ▸ Search by ID ▸ paste" aria-label="KakaoTalk: copy ID free01270, then add friend by ID in the app">KakaoTalk</button>
-      <a class="chip" href="https://line.me/R/ti/p/~free01270" data-copy="free01270" data-toast="LINE ID copied · if LINE doesn't open, search this ID under Add friend" aria-label="Add Lisa on LINE (opens LINE in the app or on the web, and copies the ID)">LINE</a>
-      <a class="chip" href="https://api.whatsapp.com/send?phone=821093280969" data-copy="+821093280969" data-toast="Number copied · if WhatsApp doesn't open, add +82 10 9328 0969 as a new contact" aria-label="Chat with Lisa on WhatsApp (opens WhatsApp in the app or on the web, and copies the number)">WhatsApp</a>
+      <button class="chip" type="button" data-copy="free01270" data-toast="ID copied · KakaoTalk ▸ Add friend ▸ Search by ID ▸ paste" aria-label="KakaoTalk: copy ID free01270, then add friend by ID in the app">KakaoTalk<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
+      <a class="chip" href="https://line.me/R/ti/p/~free01270" data-copy="free01270" data-toast="LINE ID copied · if LINE doesn't open, search this ID under Add friend" aria-label="Add Lisa on LINE (opens LINE in the app or on the web, and copies the ID)">LINE<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <a class="chip" href="https://api.whatsapp.com/send?phone=821093280969" data-copy="+821093280969" data-toast="Number copied · if WhatsApp doesn't open, add +82 10 9328 0969 as a new contact" aria-label="Chat with Lisa on WhatsApp (opens WhatsApp in the app or on the web, and copies the number)">WhatsApp<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
     </div>
     <p class="small">ID: free01270</p>
     <ul class="hints">
