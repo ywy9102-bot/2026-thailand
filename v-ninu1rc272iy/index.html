@@ -13,15 +13,15 @@
 <meta name="theme-color" content="#161b15" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Copen Haus – Welcome">
-<meta property="og:description" content="Check-in, Wi-Fi and house rules for Copen Haus, Seoul.">
+<meta property="og:description" content="Check-in, directions, Wi-Fi and house rules for Copen Haus, Seoul.">
 <meta property="og:image" content="https://ywy9102-bot.github.io/2026-thailand/v-ninu1rc272iy/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&amp;display=swap">
 <style>
-:root{--bg:#fcf7ef;--card:#f3ecdc;--card2:#eef2e8;--field:#fbf8f0;--line:#dcdbc9;--ink:#26331f;--mute:#55644b;--green:#5d7048;--white:#fff;--serif:"Source Serif 4",Georgia,"Noto Serif KR","Apple SD Gothic Neo",serif}
-@media (prefers-color-scheme:dark){:root{--bg:#161b15;--card:#252a1f;--card2:#1f261d;--field:#2a3126;--line:#3b4434;--ink:#eef2e6;--mute:#a9b79c;--green:#9db683;--white:#2a3126}}
+:root{--bg:#fbf6ee;--card:#f3ecdc;--card2:#eef2e8;--field:#fbf8f0;--line:#dcdbc9;--ink:#1c2a19;--mute:#52604a;--green:#3a5533;--brick:#b0553a;--paper:#fff;--white:#fff;--serif:"Source Serif 4",Georgia,"Noto Serif KR","Apple SD Gothic Neo",serif}
+@media (prefers-color-scheme:dark){:root{--bg:#121a11;--card:#1d2a1b;--card2:#1a2418;--field:#26331f;--line:#3b4434;--ink:#eef2e6;--mute:#a9b79c;--green:#9db683;--brick:#e08a68;--paper:#1d2a1b;--white:#2a3126}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR",sans-serif;-webkit-text-size-adjust:100%}
@@ -45,7 +45,7 @@ main{max-width:480px;margin:0 auto;padding:16px 16px 56px}
 .clock b{font-size:15px;font-variant-numeric:tabular-nums}
 .clock small{font-size:12px;opacity:.95}
 .clock:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.photo-txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:22px 20px 20px;color:#fff}
+.photo-txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:22px 20px 52px;color:#fff}
 .photo-txt>*{animation:rise .9s cubic-bezier(.16,1,.3,1) backwards}
 .photo-txt>:nth-child(2){animation-delay:.08s}.photo-txt>:nth-child(3){animation-delay:.16s}.photo-txt>:nth-child(4){animation-delay:.24s}
 @keyframes kb{from{transform:scale(1.09)}}
@@ -57,12 +57,7 @@ h1{margin:0 0 10px;font:600 clamp(40px,12.5vw,56px)/1.02 var(--serif);letter-spa
 .addr-btn .t{min-width:0}
 .addr-btn svg{flex:none;opacity:.9}
 .addr-btn:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:6px}
-.addr-ko{margin:10px 0 14px;font-size:13px;color:#fff;word-break:keep-all}
-.pills{display:flex;gap:8px}
-.pill{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.3);border-radius:16px;background:rgba(14,20,10,.5)}
-.pill svg{flex:none;width:20px;height:20px}
-.pill small{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.95;line-height:1.2}
-.pill b{display:block;font-size:15px;line-height:1.25;white-space:nowrap}
+.addr-ko{margin:10px 0 0;font-size:13px;color:#fff;word-break:keep-all}
 
 /* quick jump */
 .jump{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
@@ -74,7 +69,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--green);outline-offs
 section.s{padding:38px 0 6px;scroll-margin-top:8px}
 section.s+section.s{border-top:1px solid var(--sep);margin-top:30px}
 h2{position:relative;margin:0 0 20px;padding-bottom:14px;font:700 33px/1.1 var(--serif);letter-spacing:-.012em;color:var(--ink);text-wrap:balance}
-h2::after{content:"";position:absolute;left:0;bottom:0;width:44px;height:3px;border-radius:3px;background:var(--green)}
+h2::after{content:"";position:absolute;left:0;bottom:0;width:44px;height:3px;border-radius:3px;background:var(--brick)}
 p{margin:0}
 .lead{font-size:18px;line-height:1.5;max-width:34ch}
 .small{font-size:13px;color:var(--mute)}
@@ -124,7 +119,6 @@ li span{padding-top:2px}
 #toast{z-index:20;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);width:max-content;max-width:min(92vw,360px);text-align:center;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:18px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
 @media (max-width:420px){.wifi-grid{grid-template-columns:1fr}.qr{width:156px;height:156px;margin:0 auto}}
-@media (max-width:359px){.pill{padding:10px;gap:0}.pill svg{display:none}.pill b{font-size:14px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.photo .g{transition:none}#top{transition:none}.photo img,.photo-txt>*{animation:none}#toast{transition:none}}
 
 /* ── 누르는 것처럼 보이게: 진한 테두리(3:1↑)·아이콘·부드러운 그림자·눌림 반응 ── */
@@ -155,10 +149,49 @@ a.tel .ic{width:18px;height:18px;color:var(--green)}
 .addr-btn .cp .ic{width:15px;height:15px}
 .clock .hint{width:16px;height:16px;opacity:.95;margin-left:2px}
 @media (hover:hover){.btn:hover,.jump a:hover,.links a:hover,.chip:hover,.field:hover,a.tel:hover{box-shadow:0 1px 0 rgba(38,51,31,.12),0 5px 14px rgba(38,51,31,.2);transform:translateY(-1px)}.btn.primary:hover{filter:brightness(1.06)}}
-@media (max-width:359px){.photo{aspect-ratio:3/4}h2{font-size:29px}}
+@media (max-width:359px){.photo{aspect-ratio:3/4}h2{font-size:29px}.slot .ic{display:none}}
 @media (max-height:520px){.photo{aspect-ratio:auto;max-height:none;display:flex;align-items:flex-end;min-height:340px}.photo::after{background:linear-gradient(180deg,rgba(14,20,10,.25) 0,rgba(14,20,10,.8) 34%,rgba(14,20,10,.95) 100%)}.photo-txt{position:relative;width:100%;padding-top:78px}}
-@media (max-width:420px){.jump a .ic{display:none}.jump a{padding:0 14px}}
+@media (max-width:420px){.jump{display:grid;grid-template-columns:repeat(3,1fr)}.jump a{justify-content:center;padding:0 8px;font-size:14px}.jump a .ic{display:none}}
 @media (prefers-reduced-motion:reduce){.btn,.jump a,.links a,.chip,.field,a.tel{transition:none}.btn:active,.jump a:active,.links a:active,.chip:active,.field:active,a.tel:active,.addr-btn:active,.clock:active{transform:none}}
+
+/* ── 도착 카드·3단계·서울 정보 ── */
+.tag{margin:-2px 0 12px;font-size:15px;line-height:1.35;color:#fff}
+.arrive{position:relative;z-index:3;margin:-34px 12px 0;padding:14px;border-radius:22px;background:var(--paper);box-shadow:0 2px 0 rgba(28,42,25,.06),0 14px 30px rgba(28,42,25,.22)}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.slot{display:flex;align-items:center;gap:10px;min-width:0;padding:4px 4px 4px 2px}
+.slot .ic{width:26px;height:26px;color:var(--brick)}
+.slot small{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);line-height:1.2}
+.slot b{display:block;font-size:17px;line-height:1.25;white-space:nowrap}
+.go{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 18px;border-radius:16px;background:var(--green);color:var(--bg);font-size:17px;font-weight:700;text-decoration:none;box-shadow:0 1px 0 rgba(28,42,25,.12),0 6px 14px rgba(28,42,25,.22);-webkit-tap-highlight-color:transparent}
+.go .trail{position:absolute;right:18px}
+.go:active{transform:translateY(1px) scale(.985)}
+.jump{margin-top:18px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:22px}
+.steps li{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
+.steps .n{font:700 40px/1 var(--serif);color:var(--brick);text-align:center}
+.steps b{display:block;margin:2px 0 4px;font-size:18px}
+.steps p{max-width:36ch;color:var(--ink)}
+.steps .links{margin:10px 0 0}
+h3.sub{margin:22px 0 10px;font:700 13px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+h3.sub:first-of-type{margin-top:4px}
+.field .fx em{display:block;margin-top:2px;font-style:normal;font-size:13px;color:var(--mute)}
+.field .fx em i{font-style:italic}
+.sos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.call{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 14px;border:1.5px solid var(--ctl);border-radius:16px;background:var(--ctl-bg);box-shadow:var(--lift);color:var(--ink);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.call.wide{grid-column:1/-1}
+.call .ic{width:22px;height:22px;color:var(--brick)}
+.call b{display:block;font:700 22px/1.1 var(--serif)}
+.call small{display:block;font-size:13px;color:var(--mute);line-height:1.25}
+.call:active{transform:translateY(1px) scale(.985);box-shadow:none}
+.words{margin:0;display:grid;gap:0}
+.words div{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--sep)}
+.words div:first-child{border-top:0}
+.words dt{font-size:20px;font-weight:700}
+.words dd{margin:0;text-align:right;color:var(--ink)}
+.words i{display:block;font-size:13px;color:var(--mute)}
+@media (hover:hover){.go:hover,.call:hover{filter:brightness(1.07)}}
+@media (max-width:359px){.slots{grid-template-columns:1fr}.sos{grid-template-columns:1fr}.arrive{margin-inline:8px}}
+@media (prefers-reduced-motion:reduce){.go:active,.call:active{transform:none}}
 </style>
 </head>
 <body>
@@ -172,22 +205,31 @@ a.tel .ic{width:18px;height:18px;color:var(--green)}
     </button>
     <div class="photo-txt">
       <h1><span class="sr">Welcome to </span>Copen Haus</h1>
+      <p class="tag"><span lang="ko">환영합니다</span> · Your stay in Pildong, Seoul</p>
       <button class="addr addr-btn" type="button" data-copy="32-14, Pildong-ro 8-gil, Jung-gu, Seoul" data-toast="Address copied" aria-label="Copy address: 32-14, Pildong-ro 8-gil, Jung-gu, Seoul"><span class="t">32-14, <span class="nb">Pildong-ro 8-gil</span>, <span class="nb">Jung-gu</span>, Seoul</span><span class="cp"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>Copy</span></button>
       <p class="addr-ko" lang="ko">서울특별시 중구 필동로8길 32-14</p>
-      <div class="pills">
-        <div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><div><small>Check-in</small><b>After 3 PM</b></div></div>
-        <div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><div><small>Check-out</small><b>Before 11 AM</b></div></div>
-      </div>
     </div>
   </header>
 
+  <section class="arrive" aria-label="Check-in, check-out and directions">
+    <div class="slots">
+      <div class="slot"><svg class="ic big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><div><small>Check-in</small><b>After 3 PM</b></div></div>
+      <div class="slot"><svg class="ic big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><div><small>Check-out</small><b>Before 11 AM</b></div></div>
+    </div>
+    <a class="go" href="https://www.google.com/maps/dir/?api=1&amp;destination=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%99%EB%A1%9C8%EA%B8%B8%2032-14&amp;travelmode=walking"><svg class="ic lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="1.8"/><path d="M9 21l2-6-2-2 1-5 3 1 2 4 3 1M11 15l4 2 1 4M9.5 8L7 11"/></svg>Walking directions<svg class="ic trail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </section>
+
   <nav class="jump" aria-label="Jump to a section">
-    <a href="#directions">Directions<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#wifi">Wi-Fi<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#host">Host<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#rules">Rules<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+    <a href="#directions">Directions<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#wifi">Wi-Fi<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#host">Host<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#seoul">Seoul<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a href="#rules">Rules<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
   </nav>
 
-  <section class="s" aria-labelledby="h-enter">
-    <h2 id="h-enter">How to enter</h2>
-    <p class="lead">We'll send the door lock code by Airbnb message on check-in day.</p>
+  <section class="s" id="arrive" aria-labelledby="h-enter">
+    <h2 id="h-enter">Arrive in three steps</h2>
+    <ol class="steps">
+      <li><span class="n" aria-hidden="true">1</span><div><b>Find us</b><p>Follow the walking route from your hotel or the nearest station.</p><p class="links"><a href="#directions">See directions<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p></div></li>
+      <li><span class="n" aria-hidden="true">2</span><div><b>Get in</b><p>We'll send the door lock code by Airbnb message on check-in day.</p></div></li>
+      <li><span class="n" aria-hidden="true">3</span><div><b>Settle in</b><p>Join the Wi-Fi, and take a quick look at the house rules.</p><p class="links"><a href="#wifi">Wi-Fi details<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a href="#rules">House rules<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p></div></li>
+    </ol>
   </section>
 
   <section class="s" id="directions" aria-labelledby="h-dir">
@@ -233,6 +275,24 @@ a.tel .ic{width:18px;height:18px;color:var(--green)}
       <li><b>WhatsApp</b> – tap to start a chat with Lisa. It opens in the WhatsApp app or WhatsApp Web (the number is copied too).</li>
     </ul>
     <p class="small" style="margin-top:12px">Buttons not opening an app? Open this page in Safari or Chrome instead of an in-app browser (KakaoTalk, Instagram, etc.), or paste the copied ID/number into the app.</p>
+  </section>
+
+  <section class="s" id="seoul" aria-labelledby="h-seoul">
+    <h2 id="h-seoul">Handy in Seoul</h2>
+    <h3 class="sub">Taking a taxi</h3>
+    <button class="field ko" type="button" data-copy="이 주소로 가 주세요. 서울특별시 중구 필동로8길 32-14" data-toast="Copied · show it to your driver" aria-label="Copy taxi phrase: Please take me to this address, with the Korean address"><span class="fx"><span>Show this to your driver</span><b lang="ko">이 주소로 가 주세요</b><em>“Please take me to this address” · <i>i juso-ro ga juseyo</i></em></span><svg class="ic cpy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg></button>
+    <h3 class="sub">In an emergency</h3>
+    <div class="sos">
+      <a class="call" href="tel:112"><svg class="ic lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg><span><b>112</b><small>Police</small></span></a>
+      <a class="call" href="tel:119"><svg class="ic lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg><span><b>119</b><small>Fire &amp; ambulance</small></span></a>
+      <a class="call wide" href="tel:1330"><svg class="ic lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg><span><b>1330</b><small>Korea Travel Helpline · English, 24 hours</small></span></a>
+    </div>
+    <h3 class="sub">A few Korean words</h3>
+    <dl class="words">
+      <div><dt lang="ko">안녕하세요</dt><dd>Hello <i>annyeonghaseyo</i></dd></div>
+      <div><dt lang="ko">감사합니다</dt><dd>Thank you <i>gamsahamnida</i></dd></div>
+      <div><dt lang="ko">저기요</dt><dd>Excuse me <i>jeogiyo</i></dd></div>
+    </dl>
   </section>
 
   <section class="s" id="rules" aria-labelledby="h-rules">
