@@ -1,7 +1,14 @@
 {
- "updated": "2026-11-25T04:59:35+00:00",
- "date": "2026-11-25",
+ "updated": "2026-11-26T04:18:09+00:00",
+ "date": "2026-11-26",
  "items": [
+  {
+   "cat": "news",
+   "title": "방콕 코리아타운, 안전한 관광명소로··· 대사관-태국관광경찰국, 관광안전 캠페인 전개 : 아시아 한인뉴스",
+   "src": "뉴스케이",
+   "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFByTmg3eWU1Zkt3eU03OVFFMU9ldTQ3b1BHQkpFd0FIazhYVHpZd2FIWks5SVZrMzc4WUdrUE9rcVhZNnNEQlZaYWJTVFpld0dZaFRqbF9zSEJuSGNG?oc=5",
+   "ts": "2026-11-25T10:33:11+00:00"
+  },
   {
    "cat": "breaking",
    "title": "태국 휴양지 푸껫 상가서 한밤 화재…11명 사망·16명 부상 > 시애틀 뉴스/핫이슈",
@@ -10,11 +17,11 @@
    "ts": "2026-11-24T20:00:54+00:00"
   },
   {
-   "cat": "travel",
-   "title": "공항 vip입국. 태국 비자 런 : 태국통 | 뉴스케이 태국커뮤니티",
+   "cat": "safety",
+   "title": "바트체첵 외교부 장관, 남인순 국회부의장과 면담 : 한인동포신문(몽골)",
    "src": "뉴스케이",
-   "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBJY2ZFQk9lRHoxQVFHMHRueVNIeTBPWVJXNzg0S2NMaUFXOEdYLUFhZmJhX0lmV0lmM3Zma09EWjAzWDJDV0ZhOUlTTU91NUZRMWlQQlJ4dURzQQ?oc=5",
-   "ts": "2026-11-24T09:57:40+00:00"
+   "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9uZ3cyM1dYS09lODhXejY2eFJkREVrOUdidUo1TUJLRTZaeXd2eUFMNHNjVmJpUl9samtKbXIyT3ViODdFU0g4Ykx6ZmlZVl9WTldTTzRZM2wxQQ?oc=5",
+   "ts": "2026-11-25T07:39:02+00:00"
   },
   {
    "cat": "weather",
@@ -22,13 +29,6 @@
    "src": "재경일보",
    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBwVVdhQmV3Ul80YTBYMlpKVTBWTm1fOHNpbWFkOEFFNjFRNGhfbE83em5MZjJ3VVhpdlZvTzc3dHVpWGpNMFFZbExEWQ?oc=5",
    "ts": "2026-11-24T00:53:10+00:00"
-  },
-  {
-   "cat": "safety",
-   "title": "바트체첵 외교부 장관, 한성숙 국무총리 예방 : 한인동포신문(몽골)",
-   "src": "뉴스케이",
-   "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBnQ2xSWGJ3SGk3c05qZGNzbThCVGRWTUVCaXJFZXUzQVA4WEZzSjAxc3ZPVm4tNEc5X2ItSV9rTjRwNGI1dXZOdEZPb2lUWEJXQTI3enNxRWY1UQ?oc=5",
-   "ts": "2026-11-24T04:04:27+00:00"
   }
  ]
 }
